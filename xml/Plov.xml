@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Recept>
+	<Name>Плов</Name>
+	<Depart>Вторые блюда</Depart>
+	<Description>плов сварить и съесть</Description>
+    <Proportions>
+		<Proportion>
+			<Ingridient>рис</Ingridient>
+		</Proportion>
+		<Proportion>
+			<Ingridient>мясо</Ingridient>
+			<Norma>0,5 кг</Norma>
+		</Proportion>
+    </Proportions>
+	
+	<References>
+		<Reference>плов</Reference>
+	</References>
+	
+	<Tags>
+		<Tag>Мультиварка</Tag>
+	</Tags>
+</Recept>
