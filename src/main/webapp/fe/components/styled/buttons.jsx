@@ -15,3 +15,8 @@ export const ActionButton = styled.button`
 export const HeaderButton = ActionButton.extend`
         width: 100%;
 `
+
+export const SaveButton = ActionButton.extend`
+    display: block;
+    margin-left: 3px;
+`

@@ -21,9 +21,11 @@ export const ADD_TAG = 'ADD_TAG';
 export const REMOVE_TAG = 'REMOVE_TAG';
 export const ADD_REF = 'ADD_REF';
 export const REMOVE_REF = 'REMOVE_REF';
+export const ADD_DETAIL = 'ADD_DETAIL';
+export const REMOVE_DETAIL = 'REMOVE_DETAIL';
 
 export const SET_FILE_PATH = 'SET_FILE_PATH';
-
+export const REMOVE_FOTO = 'REMOVE_FOTO';
 
 export const CREATE_RECEPT = 'CREATE_RECEPT';
 export const SET_CREATED_RECEPT = 'SET_CREATED_RECEPT';

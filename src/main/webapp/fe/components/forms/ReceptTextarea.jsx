@@ -1,18 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
-const Text = styled.textarea`
-        margin: 5px 5px 5px 0;
-        margin: 0 5px 0 0;
-        background-color: ${props => props.theme.text};
-        color: ${props => props.theme.button};
-        padding-left: 3px;
-        display: inline-block;
-        vertical-align: top;
-        min-width: 400px;
-        min-height: 15rem;
-        font-size: 1.3rem;
-`
+import {Text} from "../styled/textFields.jsx";
 
 class ReceptTextarea extends React.Component {
     constructor(props) {

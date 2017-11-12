@@ -13,7 +13,7 @@ import {
     addRef,
     removeRef,
     setCreatedRecept,
-    uploadFile
+    uploadFile, addDetail, removeDetail, removeReceptFoto
 } from "../actions/CreateReceptActions";
 import {copyReceptToNew} from '../actions/EditActions';
 import {fetchIngridients} from '../actions/IngridientActions';
@@ -30,9 +30,12 @@ import ListItems from '../components/simple/ListItems.jsx';
 import Error from '../components/simple/BackendError.jsx';
 import Image from '../components/simple/Image.jsx';
 import styled from 'styled-components';
-import {ActionButton} from "../components/styled/buttons.jsx";
 
 import {withRouter} from 'react-router';
+import FileWithDescription from "../components/forms/FileWithDescription.jsx";
+import DetailItem from "../components/simple/DetailItem.jsx";
+import {RemoveIcon} from "../components/styled/icons.jsx";
+import {SaveButton} from "../components/styled/buttons.jsx";
 
 const CreateRecept = styled.div`
 `
@@ -42,6 +45,12 @@ const Column = styled.div`
     width: 50%;
     vertical-align: top;
 `
+
+const ImageWrapper = styled.section`
+    display: flex;
+    align-items: center;
+`
+
 @withRouter
 @connect(store => ({
     recept: store.newRecept,
@@ -69,7 +78,10 @@ const Column = styled.div`
     addRef,
     removeRef,
     setCreatedRecept,
-    uploadFile
+    uploadFile,
+    addDetail,
+    removeDetail,
+    removeReceptFoto
 })
 class CreateReceptPage extends React.Component {
     constructor(props) {
@@ -98,7 +110,7 @@ class CreateReceptPage extends React.Component {
 
     render() {
         const {setReceptName, setReceptDepartment, setReceptText, addProportion, removeProportion,
-            addTag, removeTag, addRef, removeRef, createRecept,
+            addTag, removeTag, addRef, removeRef, createRecept, addDetail, removeDetail, removeReceptFoto,
             uploadFile, recept, departments, ingridients, tags, error} = this.props;
         return <CreateRecept>
             <Column>
@@ -109,7 +121,10 @@ class CreateReceptPage extends React.Component {
                               onChangeSelect={setReceptDepartment}
                               initialValue={recept.department}/>
                 <ReceptFileInput onChangeInput={uploadFile}/>
-                {recept.imgPath && <Image src={recept.imgPath}/>}
+                {recept.imgPath && <ImageWrapper>
+                    <Image src={recept.imgPath}/>
+                    <RemoveIcon onClick={removeReceptFoto}/>
+                </ImageWrapper>}
 
                 <TwoInputsWithButtonForm placeholderOne='ингридиент'
                                          placeholderTwo='норма'
@@ -129,13 +144,15 @@ class CreateReceptPage extends React.Component {
                 <ListItems items={recept.refs}
                            onButtonClick={removeRef}/>
 
-// Create new component to load detail and delete button for all images
-                {/*<ReceptInput placeholder='Описание'*/}
-                             {/*onChangeInput={setReceptName}/>*/}
-                {/*<ReceptFileInput onChangeInput={uploadFile.bind(null, true)}/>*/}
-                {/*{recept.details.map(detail => <Image src={detail.imgPath}/>)}*/}
 
-                <ActionButton onClick={createRecept.bind(null, recept)}>Готово</ActionButton>
+                <FileWithDescription addDetail={addDetail}/>
+                {recept.details && recept.details.map(detail => <div key={detail.filePath}>
+                    <DetailItem item={detail} small={true}/>
+                    <RemoveIcon onClick={() => removeDetail(detail)} />
+                </div>)}
+
+
+                <SaveButton onClick={() => createRecept(recept)}>Готово</SaveButton>
                 <Error message={error}/>
             </Column>
             <Column>

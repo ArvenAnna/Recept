@@ -134,10 +134,42 @@ export function removeRef(ref) {
     }
 }
 
+
+export function addDetailWithFilePath(text, path) {
+    return {
+        type: types.ADD_DETAIL,
+        text,
+        path
+    }
+}
+
+export function addDetail(text, file) {
+    return dispatch => {
+        return http
+            .sendFile(routes.UPLOAD_FILE, file)
+            .then(result => {
+                dispatch(addDetailWithFilePath(text, result))
+            });
+    }
+}
+
+export function removeDetail(detail) {
+    return {
+        type: types.REMOVE_DETAIL,
+        filePath: detail.filePath
+    }
+}
+
 export function setFilePath(filePath) {
     return {
         type: types.SET_FILE_PATH,
         filePath
+    }
+}
+
+export function removeReceptFoto() {
+    return {
+        type: types.REMOVE_FOTO
     }
 }
 

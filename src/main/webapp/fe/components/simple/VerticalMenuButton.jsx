@@ -27,11 +27,13 @@ const Section = styled.div`
 `
 
 const VerticalMenuButton = ({onClick, to, text}) => {
-        return <Section>
-                <NavLink exact={false} to={to}>
-                    <HeaderButton onClick={onClick}>{text}</HeaderButton>
-                </NavLink>
-        </Section>;
+    return (
+        <Section>
+            <NavLink exact={true} to={to}>
+                <HeaderButton onClick={onClick}>{text}</HeaderButton>
+            </NavLink>
+        </Section>
+    );
 }
 
 // VerticalMenuButton.propTypes = {

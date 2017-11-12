@@ -8,7 +8,7 @@ const Detail = styled.div`
     
     img {
         box-sizing: border-box;
-        width: 600px;
+        width: ${({small}) => small ? '200px' : '600px'};
     }
     
     div {
@@ -19,9 +19,9 @@ const Detail = styled.div`
     }
 `
 
-const DetailItem = ({item}) => {
+const DetailItem = ({item, small}) => {
     return (
-        <Detail>
+        <Detail small={small}>
             <img src={item.filePath}/>
             <div>{item.description}</div>
         </Detail>

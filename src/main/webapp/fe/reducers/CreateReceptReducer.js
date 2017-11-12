@@ -11,7 +11,7 @@ import {
     ADD_REF,
     REMOVE_REF,
     SET_CREATED_RECEPT,
-    SET_FILE_PATH
+    SET_FILE_PATH, ADD_DETAIL, REMOVE_DETAIL, REMOVE_FOTO
 } from "../constants/ActionTypes";
 
 const receptReducer = (state = {}, action) => {
@@ -64,8 +64,26 @@ const receptReducer = (state = {}, action) => {
         case REMOVE_REF:
             newState.refs = state.refs.filter(item => item.id != action.ref.id);
             break;
+        case ADD_DETAIL:
+            const newDetail = {
+                description: action.text,
+                filePath: action.path
+            };
+            if (!state.details) {
+                newState.details = [newDetail];
+            } else {
+                newState.details = [...state.details, newDetail];
+            }
+            break;
+        case REMOVE_DETAIL:
+            newState.details = state.details.filter(item =>
+            item.filePath != action.filePath);
+            break;
         case SET_FILE_PATH:
             newState.imgPath = action.filePath;
+            break;
+        case REMOVE_FOTO:
+            newState.imgPath = null;
             break;
         default:
             return state;
