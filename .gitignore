@@ -1,5 +1,5 @@
 *.iml
 target/
 .idea/
-src/main/webapp/fe/node_modules
-src/main/webapp/foto
+app/src/main/webapp/fe/node_modules
+app/src/main/webapp/foto
