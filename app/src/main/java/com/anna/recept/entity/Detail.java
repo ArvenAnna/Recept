@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "detail")
 public class Detail {

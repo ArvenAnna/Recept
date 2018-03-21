@@ -15,11 +15,11 @@ public interface IFileService {
 
     byte[] getReceptMainFoto(Integer receptId) throws IOException;
 
-    byte[] getDetailFoto(Integer detailId) throws IOException;
+    //byte[] getDetailFoto(Integer detailId) throws IOException;
 
     void saveReceptMainFoto(MultipartFile file, Integer receptId) throws IOException;
 
-    void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException;
+    //void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException;
 
     String saveFile(MultipartFile file) throws IOException;
 

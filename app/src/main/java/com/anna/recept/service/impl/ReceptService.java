@@ -1,6 +1,8 @@
 package com.anna.recept.service.impl;
 
 import com.anna.recept.converter.DtoConverter;
+import com.anna.recept.entity.Department;
+import com.anna.recept.entity.Detail;
 import com.anna.recept.entity.Recept;
 import com.anna.recept.entity.Tag;
 import com.anna.recept.exception.Errors;
@@ -9,6 +11,7 @@ import com.anna.recept.repository.DepartmentRepository;
 import com.anna.recept.repository.ReceptRepository;
 import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IReceptService;
+import com.anna.recept.utils.MergeObjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,12 +76,27 @@ public class ReceptService implements IReceptService {
     @Override
     @Transactional
     public Integer saveRecept(Recept recept) throws IOException {
+        if (recept.getId() != null) {
+            updateRecept(recept);
+            return recept.getId();
+        }
         recept.getProportions().forEach(proportion -> proportion.setRecept(recept));
         List<Recept> refs = recept.getRefs().stream().map(ref -> receptRep.findOne(ref.getId())).collect(Collectors.toList());
         recept.setRefs(refs);
         List<Tag> tags = recept.getTags().stream().map(tag -> tagRep.findOne(tag.getId())).collect(Collectors.toList());
         recept.setTags(tags);
         tags.forEach(tag -> tag.getRecepts().add(recept));
+        recept.getDetails().stream().forEach(detail -> {
+            detail.setRecept(recept);
+            if (detail.getFilePath() != null) {
+                String fileName = departmentRep.findOne(recept.getDepartment().getId()).getName() + File.separator + recept.getName() + File.separator + recept.getName() + UUID.randomUUID().toString() + ".png";
+                try {
+                    detail.setFilePath(fileService.saveTempFile(detail.getFilePath(), fileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         String fileName = departmentRep.findOne(recept.getDepartment().getId()).getName() + File.separator + recept.getName() + File.separator + recept.getName() + ".png";
 
@@ -90,6 +110,41 @@ public class ReceptService implements IReceptService {
             return recept.getId();
         }
         throw new ReceptApplicationException(Errors.RECEPT_NAME_NOT_UNIQUE);
+    }
+
+    private void updateRecept(Recept recept) throws IOException {
+        String fileName = departmentRep.findOne(recept.getDepartment().getId()).getName() + File.separator + recept.getName() + File.separator + recept.getName() + UUID.randomUUID().toString() + ".png";
+
+        Recept newRecept = receptRep.findOne(recept.getId());
+        newRecept.setName(recept.getName());
+        newRecept.setText(recept.getText());
+
+        // department
+        if (recept.getDepartment().getId() != newRecept.getDepartment().getId()) {
+            Department d =  new Department();
+            d.setId(recept.getDepartment().getId());
+            newRecept.setDepartment(d);
+        }
+        // file path
+        if (recept.getImgPath() == null) {
+            newRecept.setImgPath(null);
+        } else if (recept.getImgPath() != newRecept.getImgPath()) {
+            newRecept.setImgPath(fileService.saveTempFile(recept.getImgPath(), fileName));
+        }
+
+        //refs
+        MergeObjects.deleteItemsNotPresentInSecond(newRecept.getRefs(), recept.getRefs());
+        List<Recept> refsToAdd = MergeObjects.getItemsNotPresentInSecond(recept.getRefs(), newRecept.getRefs());
+        refsToAdd.forEach(ref -> {
+            newRecept.getRefs().add(receptRep.findOne(ref.getId()));
+        });
+
+        //todo: not fully implemented
+        // problem with foto on fe side: we use populating with foto catalog, then copy it to new and send to update
+        // so will have /foto/foto/.../bla-bla
+        // need to remove populating with photo path
+
+        receptRep.save(newRecept);
     }
 
     @Override

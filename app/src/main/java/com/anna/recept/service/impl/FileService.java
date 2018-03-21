@@ -3,7 +3,6 @@ package com.anna.recept.service.impl;
 import com.anna.recept.entity.Recept;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.exception.ReceptApplicationException;
-import com.anna.recept.service.IDetailService;
 import com.anna.recept.service.IFileService;
 import com.anna.recept.service.IReceptService;
 import org.apache.commons.io.FileUtils;
@@ -35,8 +34,8 @@ public class FileService implements IFileService {
     @Autowired
     private IReceptService receptService;
 
-    @Autowired
-    private IDetailService detailService;
+//    @Autowired
+//    private IDetailService detailService;
 
     @Override
     public File getXsdScheme() throws IOException {
@@ -75,9 +74,9 @@ public class FileService implements IFileService {
         return receptService.getRecept(receptId).getImgPath();
     }
 
-    private String retrieveDetailFilePath(Integer detailId) {
-        return detailService.findDetail(detailId).getFilePath();
-    }
+//    private String retrieveDetailFilePath(Integer detailId) {
+//        return detailService.findDetail(detailId).getFilePath();
+//    }
 
     @Override
     public byte[] getReceptMainFoto(Integer receptId) throws IOException {
@@ -85,11 +84,11 @@ public class FileService implements IFileService {
         return FileUtils.readFileToByteArray(createReceptFotoFile(path));
     }
 
-    @Override
-    public byte[] getDetailFoto(Integer detailId) throws IOException {
-        String path = constructReceptFileUploadPath(retrieveDetailFilePath(detailId));
-        return FileUtils.readFileToByteArray(createReceptFotoFile(path));
-    }
+//    @Override
+//    public byte[] getDetailFoto(Integer detailId) throws IOException {
+//        String path = constructReceptFileUploadPath(retrieveDetailFilePath(detailId));
+//        return FileUtils.readFileToByteArray(createReceptFotoFile(path));
+//    }
 
     @Override
     public void saveReceptMainFoto(MultipartFile file, Integer receptId) throws IOException {
@@ -100,16 +99,16 @@ public class FileService implements IFileService {
         receptService.saveFilePath(receptId, path);
     }
 
-    @Override
-    public void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException {
-        Integer receptId = detailService.findReceptByDetailId(detailId).getId();
-
-        String path = constructReceptSavePath(receptId, file.getOriginalFilename());
-        File upload = new File(constructReceptFileUploadPath(path));
-        FileUtils.writeByteArrayToFile(upload, file.getBytes());
-
-        detailService.saveFilePath(path, detailId);
-    }
+//    @Override
+//    public void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException {
+//        Integer receptId = detailService.findReceptByDetailId(detailId).getId();
+//
+//        String path = constructReceptSavePath(receptId, file.getOriginalFilename());
+//        File upload = new File(constructReceptFileUploadPath(path));
+//        FileUtils.writeByteArrayToFile(upload, file.getBytes());
+//
+//        detailService.saveFilePath(path, detailId);
+//    }
 
     @Override
     public String saveFile(MultipartFile file) throws IOException {
@@ -126,10 +125,12 @@ public class FileService implements IFileService {
         File realFile = new File(context.getInitParameter(UPLOAD_LOCATION) + File.separator + name);
         File webappFile = new File(context.getRealPath("") + File.separator + "foto" + File.separator + name);
         File temp = new File(context.getRealPath("") + File.separator + tempPath);
-        FileUtils.copyFile(temp, realFile);
-        FileUtils.copyFile(temp, webappFile);
-        String tempFilePath = context.getRealPath("") + File.separator + tempPath;
-        new File(tempFilePath).delete();
+        if (!temp.getAbsolutePath().equals(webappFile.getAbsolutePath())) {
+            FileUtils.copyFile(temp, realFile);
+            FileUtils.copyFile(temp, webappFile);
+            String tempFilePath = context.getRealPath("") + File.separator + tempPath;
+            new File(tempFilePath).delete();
+        }
         return name;
     }
 

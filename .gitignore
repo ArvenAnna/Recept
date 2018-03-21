@@ -2,4 +2,5 @@
 target/
 .idea/
 app/src/main/webapp/fe/node_modules
+app/src/main/webapp/fe/bin
 app/src/main/webapp/foto

@@ -42,6 +42,18 @@ class ReceptFileInput extends React.Component {
         this.onChange = this.onChange.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.clean !== this.props.clean && nextProps.clean) {
+            this.cleanFile();
+        }
+    }
+
+    cleanFile() {
+        this.setState({
+            name: "Файл не выбран"
+        })
+    }
+
     onChange({target}) {
         this.setState({
             name: target.files[0].name

@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "recept")
 public class Recept {
