@@ -16,7 +16,12 @@ const green = {
     shadow: '#0f6b38'
 };
 
-export {
-    red,
-    green as default
-}
+
+
+
+module.exports = green;
+
+// export {
+//     red,
+//     green as default
+// }

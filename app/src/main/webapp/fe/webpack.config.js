@@ -18,7 +18,7 @@ module.exports = {
         }, {
             test: /\.less$/,
             exclude: [/node_modules/, /bin/],
-            loader: "style-loader!css-loader!autoprefixer-loader!less-loader"
+            loader: "style-loader!css-loader!autoprefixer-loader!less-loader!js-to-styles-var-loader"
         }, {
             test: /\.png$/,
             exclude: [/node_modules/, /bin/],

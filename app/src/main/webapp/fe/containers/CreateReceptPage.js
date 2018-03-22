@@ -132,12 +132,14 @@ class CreateReceptPage extends React.Component {
                                          onButtonClick={addProportion}/>
                 <ProportionList items={recept.proportions} onButtonClick={removeProportion} buttonText="Удалить"/>
                 <InputWithButtonForm placeholder='тэг'
+                                     suggestionsRequired={true}
                                      suggestions={tags}
                                      suggestionExcludes={recept.tags}
                                      onButtonClick={addTag}/>
                 <ListItems items={recept.tags}
                            onButtonClick={removeTag}/>
                 <InputWithButtonForm placeholder='ссылка'
+                                     suggestionsRequired={true}
                                      suggestions={this.refers}
                                      suggestionExcludes={recept.refs}
                                      onButtonClick={addRef}/>

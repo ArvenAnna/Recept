@@ -19,6 +19,7 @@ interface InputWithButtonFormProps {
     onButtonClick: (value: any) => void;
     suggestions: Array<Suggestion>;
     suggestionExcludes: Array<Suggestion>;
+    suggestionsRequired: boolean;
 }
 
 interface InputWithButtonFormState {
@@ -48,11 +49,11 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
     }
 
     getValue() {
-        const {suggestions, onButtonClick} = this.props;
+        const {suggestions, onButtonClick, suggestionsRequired} = this.props;
         const {value} = this.state;
         if (value) {
             const sendingValue = (!suggestions || !suggestions.length)
-                ? value
+                ? (suggestionsRequired ? null : value)
                 : suggestions.find((item: Suggestion) => item.name == value);
             if (sendingValue) {
                 onButtonClick(sendingValue);
