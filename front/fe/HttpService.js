@@ -1,0 +1,36 @@
+import axios from 'axios';
+
+class HttpService {
+    constructor() {
+        this.http = axios.create({
+            headers: {"Content-Type": "application/json"},
+            responseType: 'json',
+            transformFromResponse: [result =>  result.data],
+            transformRequest: [(data, headers) => {
+                return data instanceof FormData ? data : JSON.stringify(data);
+            }]
+        });
+    }
+
+    doGet(route, transformResponse) {
+        return this.http
+            .get(route)
+            .then(result =>  transformResponse ? transformResponse(result.data) : result.data);
+    }
+
+    doPost(route, request) {
+        return this.http.post(route, request);
+    }
+
+    sendFile(route, file) {
+        let fd = new FormData();
+        fd.append('file', file);
+        //fd.append('receptId', receptId);
+        return this.http
+            .post(route, fd, {
+                headers: {'Content-Type': undefined}
+            });
+    }
+}
+
+export default new HttpService();
