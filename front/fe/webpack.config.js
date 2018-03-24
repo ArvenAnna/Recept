@@ -53,9 +53,24 @@ module.exports = {
         }]
     },
 
-    devtool: "source-map"
+    devtool: "source-map",
     // watch: true,
     // watchOptions: {
     //     aggregateTimeout: 100
     // }
+
+    devServer: {
+        historyApiFallback: true,
+        hot: true,
+        inline: true,
+        host: 'localhost', // Defaults to `localhost`
+        port: 3004, // Defaults to 8080
+        proxy: {
+            '/api/*': {
+                target: 'http://localhost:4003/',
+                secure: false,
+                changeOrigin: true
+            }
+        }
+    },
 };

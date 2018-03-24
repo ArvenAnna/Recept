@@ -21,19 +21,4 @@ public class FileController {
     public String saveReceptFile(MultipartFile file) throws IOException {
         return fileService.saveFile(file);
     }
-
-//
-//    @RequestMapping(value = {"/detail_file.req"}, method = RequestMethod.POST)
-//    @ResponseBody
-//    public void saveDetailFile(Integer detailId, MultipartFile file, HttpServletResponse response) throws IOException {
-//        fileService.saveDetailFoto(file, detailId);
-//        writeResponse(response, file.getBytes());
-//    }
-
-//
-//    private void writeResponse(HttpServletResponse response, byte[] file) throws IOException {
-//        OutputStream outStream = response.getOutputStream();
-//        outStream.write(file);
-//        outStream.close();
-//    }
 }
