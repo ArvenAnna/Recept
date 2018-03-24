@@ -46,7 +46,7 @@ class FileWithDescription extends React.Component {
             <SmallText value={this.state.text}
                       placeholder={this.props.placeholder}
                       onChange={this.onChangeText}/>
-            <ReceptFileInput onChangeInput={this.onChangeFile}/>
+            <ReceptFileInput onChangeInput={this.onChangeFile} clean={!this.state.file}/>
             <AddIcon onClick={this.add}/>
         </Section>;
     }

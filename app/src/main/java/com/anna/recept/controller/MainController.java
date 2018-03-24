@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 public class MainController {
+
     @Autowired
     private IReceptService receptService;
 
@@ -21,8 +22,6 @@ public class MainController {
     @RequestMapping(value = {"/departs.req"}, method = RequestMethod.GET,
             headers = "Accept=application/json")
     public List<Department> departsList() {
-        Object o = null;
-        System.out.println(o);
         return departServ.findAllDepartments();
     }
 
@@ -47,6 +46,12 @@ public class MainController {
     @RequestMapping(value = {"/recept.req"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
     public Integer saveUniqueRecept(@RequestBody Recept recept) throws IOException {
+        return receptService.saveRecept(recept);
+    }
+
+    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.PUT,
+            headers = "Accept=application/json")
+    public Integer updateRecept(@RequestBody Recept recept) throws IOException {
         return receptService.saveRecept(recept);
     }
 

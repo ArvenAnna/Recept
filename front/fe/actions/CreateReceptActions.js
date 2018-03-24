@@ -61,6 +61,7 @@ function preProcessRecept(recept) {
     cutRecept.proportions = [];
     recept.proportions && recept.proportions.forEach(proportion => cutRecept.proportions.push(
         {ingridient: {id: proportion.ingridient.id}, norma: proportion.norma}));
+    cutRecept.details = recept.details;
     return cutRecept;
 }
 

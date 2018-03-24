@@ -4,3 +4,4 @@ target
 .idea
 *.iml
 .gitignore
+fe/package-lock.js
