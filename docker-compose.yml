@@ -1,6 +1,16 @@
 version: '2'
 
 services:
+#  recept_front:
+#      container_name: recept_front
+#      build: ./front
+#      ports:
+#          - "3004:3004"
+#      depends_on:
+#        - recept_app
+#      volumes:
+#        - ./front/fe:/usr/src/app/fe
+
   recept_app:
     container_name: recept_app
     restart: always

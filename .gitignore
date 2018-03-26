@@ -4,3 +4,9 @@ app/target/
 app/src/main/webapp/fe/node_modules
 app/src/main/webapp/fe/bin
 app/src/main/webapp/foto
+
+front/fe/node_modules
+front/fe/bin
+
+front/fe/node_modules
+front/fe/bin

@@ -1,7 +1,3 @@
 **/node_modules/
 **/bin/
-target
-.idea
-*.iml
-.gitignore
 fe/package-lock.js
