@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        return <ControlPanel items={this.props.departments} vertical={true}/>;
+        return <ControlPanel items={this.props.departments} vertical={true} className={this.props.className}/>;
     }
 
 }

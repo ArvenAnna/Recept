@@ -10,7 +10,7 @@
     "build-watch": "npx webpack --watch",
     "dev-server": "npx webpack-dev-server --hot --inline",
     "node-server": "npx nodemon --max-old-space-size=4192 dev-server.js",
-    "docker-start": "npx npm-run-all --parallel build-watch dev-server node-server"
+    "dev-start": "npx npm-run-all --parallel build-watch dev-server node-server"
   },
   "repository": {
     "type": "git",

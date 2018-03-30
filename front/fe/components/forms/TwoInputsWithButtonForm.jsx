@@ -47,7 +47,7 @@ class TwoInputsWithButtonForm extends React.Component {
     render() {
         const {placeholderOne, placeholderTwo, suggestions} = this.props;
         const {first, second} = this.state;
-        return <TwoFieldsAndButton>
+        return <TwoFieldsAndButton className={this.props.className}>
             <TextField list={placeholderOne + placeholderTwo}
                    placeholder={placeholderOne}
                    value={first}

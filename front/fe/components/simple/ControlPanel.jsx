@@ -2,9 +2,9 @@ import React from 'react';
 import HorizontalMenuButton from './HorizontalMenuButton.tsx';
 import VerticalMenuButton from './VerticalMenuButton.jsx';
 
-const ControlPanel = ({vertical, items}) => {
+const ControlPanel = ({vertical, items, className}) => {
         const Button = vertical ? VerticalMenuButton : HorizontalMenuButton;
-        return <div>
+        return <div className={`${vertical ? 'vertical_menu' : 'horizontal_menu'} ${className ? className : ''}`}>
             {items.map(item => <Button
                 key={item.id}
                 text={item.name}

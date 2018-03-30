@@ -62,7 +62,7 @@ class ReceptFileInput extends React.Component {
     }
 
     render() {
-        return <FileChooser>
+        return <FileChooser className={this.props.className}>
             <SearchIcon/>
             <input type='file' onChange={this.onChange}/>
             <div>{this.state.name}</div>

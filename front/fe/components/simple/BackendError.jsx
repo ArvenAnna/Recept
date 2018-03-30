@@ -11,8 +11,8 @@ const Error = styled.div`
     margin: 10px 20px 10px 0px;
 `
 
-const BackendError = ({message}) => {
-    return message ? (<Error>{message}</Error>) : null;
+const BackendError = ({message, className}) => {
+    return message ? (<Error className={className}>{message}</Error>) : null;
 }
 
 // BackendError.propTypes = {

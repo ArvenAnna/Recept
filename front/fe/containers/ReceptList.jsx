@@ -7,11 +7,9 @@ import ReceptItem from '../components/simple/ReceptItem.jsx';
 }))
 
 class ReceptListPage extends React.Component {
-
     render() {
-        return <div>
-            {this.props.receptList.map(item => <ReceptItem key={item.id} item={item}/>)}
-        </div>;
+        return this.props.receptList.map(item => <ReceptItem key={item.id} item={item}/>)
+
     }
 }
 

@@ -42,7 +42,7 @@ class FileWithDescription extends React.Component {
     }
 
     render() {
-        return <Section>
+        return <Section className={this.props.className}>
             <SmallText value={this.state.text}
                       placeholder={this.props.placeholder}
                       onChange={this.onChangeText}/>

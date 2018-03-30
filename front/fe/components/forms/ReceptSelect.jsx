@@ -62,7 +62,7 @@ class ReceptSelect extends React.Component {
     }
 
     render() {
-        return this.state.value && (<ReceiptSelect>
+        return this.state.value && (<ReceiptSelect className={this.props.className}>
             <select value={this.state.value}
                     onChange={this.onSelect}>
                 {this.props.items.map(item =>

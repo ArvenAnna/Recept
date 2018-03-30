@@ -37,15 +37,6 @@ import DetailItem from "../components/simple/DetailItem.jsx";
 import {RemoveIcon} from "../components/styled/icons.jsx";
 import {SaveButton} from "../components/styled/buttons.jsx";
 
-const CreateRecept = styled.div`
-`
-
-const Column = styled.div`
-    display: inline-block;
-    width: 50%;
-    vertical-align: top;
-`
-
 const ImageWrapper = styled.section`
     display: flex;
     align-items: center;
@@ -112,57 +103,65 @@ class CreateReceptPage extends React.Component {
         const {setReceptName, setReceptDepartment, setReceptText, addProportion, removeProportion,
             addTag, removeTag, addRef, removeRef, createRecept, addDetail, removeDetail, removeReceptFoto,
             uploadFile, recept, departments, ingridients, tags, error} = this.props;
-        return <CreateRecept>
-            <Column>
+        return <div className='create_receipt_page'>
                 <ReceptInput placeholder='Название рецепта'
+                             className='receipt_name'
                              onChangeInput={setReceptName}
                              initialValue={recept.name}/>
                 <ReceptSelect items={departments}
+                              className='receipt_depart'
                               onChangeSelect={setReceptDepartment}
                               initialValue={recept.department}/>
-                <ReceptFileInput onChangeInput={uploadFile}/>
-                {recept.imgPath && <ImageWrapper>
+                <ReceptFileInput onChangeInput={uploadFile} className='receipt_main_foto_input'/>
+                {recept.imgPath && <ImageWrapper className='receipt_main_foto'>
                     <Image src={recept.imgPath}/>
                     <RemoveIcon onClick={removeReceptFoto}/>
                 </ImageWrapper>}
 
                 <TwoInputsWithButtonForm placeholderOne='ингридиент'
                                          placeholderTwo='норма'
+                                         className='receipt_proportions_field'
                                          suggestions={ingridients}
                                          onButtonClick={addProportion}/>
-                <ProportionList items={recept.proportions} onButtonClick={removeProportion} buttonText="Удалить"/>
+                <ProportionList items={recept.proportions}
+                                className='receipt_proportions_list'
+                                onButtonClick={removeProportion} buttonText="Удалить"/>
                 <InputWithButtonForm placeholder='тэг'
+                                     className='receipt_tags_field'
                                      suggestionsRequired={true}
                                      suggestions={tags}
                                      suggestionExcludes={recept.tags}
                                      onButtonClick={addTag}/>
                 <ListItems items={recept.tags}
+                           className='receipt_tags_list'
                            onButtonClick={removeTag}/>
                 <InputWithButtonForm placeholder='ссылка'
+                                     className='receipt_refs_field'
                                      suggestionsRequired={true}
                                      suggestions={this.refers}
                                      suggestionExcludes={recept.refs}
                                      onButtonClick={addRef}/>
                 <ListItems items={recept.refs}
+                           className='receipt_refs_list'
                            onButtonClick={removeRef}/>
 
 
-                <FileWithDescription addDetail={addDetail}/>
-                {recept.details && recept.details.map(detail => <div key={detail.filePath}>
+                <FileWithDescription addDetail={addDetail} className='recept_details_field'/>
+                {recept.details && recept.details.map(detail => <div key={detail.filePath} className='recept_details_list'>
                     <DetailItem item={detail} small={true}/>
                     <RemoveIcon onClick={() => removeDetail(detail)} />
                 </div>)}
 
 
-                <SaveButton onClick={() => createRecept(recept)}>Готово</SaveButton>
-                <Error message={error}/>
-            </Column>
-            <Column>
+                <SaveButton onClick={() => createRecept(recept)} className='receipt_save_button'>Готово</SaveButton>
+                <Error message={error} className='receipt_error'/>
+
                 <ReceptTextarea placeholder='Описание рецепта'
+                                className='receipt_description_field'
                                 onChangeTextarea={setReceptText}
                                 initialValue={recept.text}/>
-            </Column>
-        </CreateRecept>;
+
+        </div>;
     }
 }
 

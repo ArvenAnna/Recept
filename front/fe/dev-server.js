@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
-var proxy = require('http-proxy-middleware');
-
+const proxy = require('http-proxy-middleware');
+const path = require('path');
 
 // proxy middleware options
-var options = {
+const options = {
     target: 'http://0.0.0.0:8080', // target host
     changeOrigin: true,               // needed for virtual hosted sites
     // ws: true,                         // proxy websockets
@@ -21,9 +21,14 @@ var options = {
 };
 
 // create the proxy (without context)
-var exampleProxy = proxy(options);
+const exampleProxy = proxy(options);
 
 app.use('/api', exampleProxy);
+
+app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')));
+app.get('/favicon.ico', (req, res) => res.sendFile(path.join(__dirname + '/favicon.ico')));
+
+app.use('/bin', express.static('bin'));
 
 app.set('port', 4003);
 

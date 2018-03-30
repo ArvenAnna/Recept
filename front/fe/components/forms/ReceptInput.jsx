@@ -31,6 +31,7 @@ class ReceptInput extends React.Component {
         return (
             <TextField value={this.state.value}
                        placeholder={this.props.placeholder}
+                       className={this.props.className}
                        onChange={this.onChange}/>
         );
     }

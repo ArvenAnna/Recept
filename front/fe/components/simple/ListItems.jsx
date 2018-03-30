@@ -19,10 +19,10 @@ const Item = styled.li`
     }
 `
 
-const ListItems = ({items, onButtonClick}) => {
+const ListItems = ({items, onButtonClick, className}) => {
     return (items && items.length)
         ? (
-            <List>
+            <List className={className}>
                 {items.map((item, index) => <Item key={index}>
                     <div>{item.name}</div>
                     {onButtonClick ?

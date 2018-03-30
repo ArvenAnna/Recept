@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {ChangeEvent} from "react";
-import {AddIcon} from "../styled/icons.jsx";
-import {TextField} from "../styled/textFields.jsx";
+import {ChangeEvent} from 'react';
+import {AddIcon} from '../styled/icons.jsx';
+import {TextField} from '../styled/textFields.jsx';
 
 //noinspection TypeScriptUnresolvedVariable
 const FieldAndButton = styled.div`
@@ -20,6 +20,7 @@ interface InputWithButtonFormProps {
     suggestions: Array<Suggestion>;
     suggestionExcludes: Array<Suggestion>;
     suggestionsRequired: boolean;
+    className: string;
 }
 
 interface InputWithButtonFormState {
@@ -74,7 +75,7 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
         const {placeholder, suggestions} = this.props;
         const {value} = this.state;
         return (
-            <FieldAndButton>
+            <FieldAndButton className={this.props.className}>
                 <TextField list={placeholder}
                        placeholder={placeholder || 'enter text'}
                        value={value}

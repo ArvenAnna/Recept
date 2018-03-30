@@ -8,7 +8,7 @@ const Item = styled.div`
     }
 `
 
-const ProportionList = ({items, onButtonClick}) => {
+const ProportionList = ({items, onButtonClick, className}) => {
         if(!items || !items.length) {
             return null;
         }
@@ -23,6 +23,7 @@ const ProportionList = ({items, onButtonClick}) => {
             return item;
         });
         return <ListItems items={itemsForList}
+                          className={className}
                           onButtonClick={onButtonClick}/>;
 }
 
