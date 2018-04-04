@@ -25,9 +25,6 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app/
 
-RUN cd /usr/src/app/src/main/webapp/fe && npm install
-RUN cd /usr/src/app/src/main/webapp/fe && ./node_modules/.bin/webpack
-
 RUN cd /usr/src/app && mvn clean install
 RUN mv /usr/src/app/target/Recept-1.0-SNAPSHOT /usr/local/tomcat/webapps/ROOT
 
