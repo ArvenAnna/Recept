@@ -1,7 +1,5 @@
 require("./constants/themes.js");
 
-@import "_create_receipt_page";
-
 input::-webkit-calendar-picker-indicator {
   display: none;
 }
@@ -10,12 +8,9 @@ a {
   text-decoration: none;
 }
 
-select:focus {
+select, textarea, input, button, select:focus, textarea:focus, input:focus, button:focus {
   outline: none;
-}
-
-input:focus {
-  outline: none;
+  border: none;
 }
 
 body {

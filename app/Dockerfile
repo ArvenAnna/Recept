@@ -19,13 +19,11 @@ RUN curl --silent --location https://deb.nodesource.com/setup_9.x | bash -
 RUN apt-get install --yes nodejs
 RUN apt-get install --yes build-essential
 
-RUN npm -v
-
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app/
 
-RUN cd /usr/src/app && mvn clean install
+RUN mvn clean install
 RUN mv /usr/src/app/target/Recept-1.0-SNAPSHOT /usr/local/tomcat/webapps/ROOT
 
 ENV DEBIAN_FRONTEND teletype

@@ -2,6 +2,14 @@ const red = {
     light: 'red'
 };
 
+//const shadowRadius = '3px';
+
+const greenBase = {
+    shadowRadius: '3px',
+    buttonColor: '#24ea7b',
+    buttonShadowColor: '#0f6b38'
+}
+
 const green = {
     border: 'mediumseagreen',
     border_2: '#189e53',
@@ -11,15 +19,16 @@ const green = {
     body: '#2aabd2',
     content: '#17954e',
     recept: 'green',
-    button: '#24ea7b',
+    button: greenBase.buttonColor,
     text: '#0a2713',
-    shadow: '#0f6b38'
+    buttonShadow: `0px 0px ${greenBase.shadowRadius} ${greenBase.shadowRadius} ${greenBase.buttonShadowColor}`,
+    fieldShadow: `0px 0px ${greenBase.shadowRadius} ${greenBase.shadowRadius} ${greenBase.buttonColor}`,
+    shadow: '#0f6b38',
+    fieldHeight: '1.3rem'
 };
 
 
-
-
-module.exports = green;
+module.exports = Object.assign({}, greenBase, green);
 
 // export {
 //     red,

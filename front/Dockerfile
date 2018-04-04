@@ -12,6 +12,6 @@ RUN cd /usr/src/app/fe && ./node_modules/.bin/webpack
 
 WORKDIR /usr/src/app/fe
 
-EXPOSE 4004
+EXPOSE 4003
 
-CMD ["npm", "run", "docker-start"]
+CMD ["npm", "run", "node-server"]

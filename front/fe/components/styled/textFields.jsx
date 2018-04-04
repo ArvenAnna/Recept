@@ -1,26 +1,21 @@
 import styled from 'styled-components';
 
 export const TextField = styled.input`
-    margin: 0 5px 0 0;
-    height: 1.3rem;
+    height: ${props => props.theme.fieldHeight};
     background-color: ${props => props.theme.text};
-    padding-left: 3px;
+    padding-left: 0.5rem;
     color: ${props => props.theme.button};
-    display: inline-block;
-    vertical-align: middle;
+    box-shadow: ${props => props.theme.fieldShadow};
+    margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`}
 `
 
 export const Text = styled.textarea`
-        margin: 5px 5px 5px 0;
-        margin: 0 5px 0 0;
+        box-shadow: ${props => props.theme.fieldShadow};
         background-color: ${props => props.theme.text};
         color: ${props => props.theme.button};
-        padding-left: 3px;
-        display: inline-block;
-        vertical-align: top;
-        min-width: 400px;
-        min-height: 15rem;
+        padding: 0.5rem;
         font-size: 1.3rem;
+        resize: none;
 `
 
 export const SmallText = Text.extend`

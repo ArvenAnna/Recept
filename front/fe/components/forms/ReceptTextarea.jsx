@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import {Text} from "../styled/textFields.jsx";
+import {Text} from '../styled/textFields.jsx';
 
 class ReceptTextarea extends React.Component {
     constructor(props) {

@@ -7,6 +7,7 @@ import {ThemeProvider} from 'styled-components';
 import AppContainer from './containers/App.jsx';
 const theme = require('./constants/themes');
 import './main.less';
+import './_create_receipt_page.less'
 import store from './Store.js';
 
 ReactDOM.render(
