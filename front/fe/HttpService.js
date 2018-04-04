@@ -29,7 +29,7 @@ class HttpService {
         return this.http
             .post(route, fd, {
                 headers: {'Content-Type': undefined}
-            });
+            }).then(response => response.data);
     }
 }
 

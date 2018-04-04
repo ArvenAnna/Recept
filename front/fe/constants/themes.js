@@ -24,7 +24,10 @@ const green = {
     buttonShadow: `0px 0px ${greenBase.shadowRadius} ${greenBase.shadowRadius} ${greenBase.buttonShadowColor}`,
     fieldShadow: `0px 0px ${greenBase.shadowRadius} ${greenBase.shadowRadius} ${greenBase.buttonColor}`,
     shadow: '#0f6b38',
-    fieldHeight: '1.3rem'
+    fieldHeight: '1.3rem',
+    fieldFontSize: '0.8rem',
+    iconColor: '#0a2713',
+    iconHoverColor: '#24ea7b'
 };
 
 

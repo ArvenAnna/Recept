@@ -17,6 +17,7 @@ services:
     build: ./app
     ports:
       - "8080:8080"
+      - "8000:8000"
 
     depends_on:
       - recept_db
@@ -25,9 +26,11 @@ services:
 #          condition: service_healthy
     links:
           - recept_db:recept_db
-#    volumes:
+    volumes:
 #      - ./foto:/usr/src/app/foto
-#      - ./tempfiles:/usr/src/app/tempfiles
+      - ./tempfiles:/usr/local/tomcat/webapps/ROOT/tempfiles
+    environment:
+      - TEMP_LOCATION=tempfiles
 
   recept_db:
     container_name: recept_db

@@ -3,34 +3,21 @@ import styled from 'styled-components';
 import {SearchIcon} from "../styled/icons.jsx";
 
 const FileChooser = styled.div`
-     margin: 5px 5px 5px 0;
-     
+     margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
+     padding: 0.5rem;
      position: relative;
-     overflow: hidden;
-     display: inline-block;
-     vertical-align: middle;
-    
-    svg {
-        display: inline-block;
-        vertical-align: middle;
-    }
-    
-    div {
-        display: inline-block;
-        vertical-align: middle;
-    }
-     
+     box-shadow: ${props => props.theme.buttonShadow};
+     display: flex;
+     align-items: center;
+ 
      input {
         position: absolute;
         left: 0;
         top: 0;
+        opacity: 0;
+        cursor: pointer;
         width: 100%;
         height: 100%;
-        transform: scale(20);
-        letter-spacing: 10em;     /* IE 9 fix */
-        -ms-transform: scale(20); /* IE 9 fix */
-        opacity: 0;
-        cursor: pointer
      }
 `
 

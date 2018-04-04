@@ -18,7 +18,7 @@ public class WebInitializer implements WebApplicationInitializer {
 
         servletContext.setInitParameter("upload.location", "C:/D/Java/Recept/src/main/webapp/foto");
         servletContext.setInitParameter("resource.xml.location", "C:/D/Java/Recept/xml");
-        servletContext.setInitParameter("resource.temp.location", "C:/D/Java/Recept/src/main/webapp/temp");
+        servletContext.setInitParameter("resource.temp.location", "tempfiles");
 
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(WebConfig.class);

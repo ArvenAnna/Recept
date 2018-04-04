@@ -1,5 +1,9 @@
 require("./constants/themes.js");
 
+html {
+    font-size: 18px;
+}
+
 input::-webkit-calendar-picker-indicator {
   display: none;
 }
@@ -11,11 +15,13 @@ a {
 select, textarea, input, button, select:focus, textarea:focus, input:focus, button:focus {
   outline: none;
   border: none;
+  font-size: @fieldFontSize;
 }
 
 body {
   background-color: @shadow;
   background-color: @text;
+  font-size: 1rem;
 }
 
 

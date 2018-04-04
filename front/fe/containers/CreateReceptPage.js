@@ -36,6 +36,7 @@ import FileWithDescription from "../components/forms/FileWithDescription.jsx";
 import DetailItem from "../components/simple/DetailItem.jsx";
 import {RemoveIcon} from "../components/styled/icons.jsx";
 import {SaveButton} from "../components/styled/buttons.jsx";
+import ReceptDropdown from "../components/forms/ReceptDropdown.jsx";
 
 const ImageWrapper = styled.section`
     display: flex;
@@ -108,10 +109,10 @@ class CreateReceptPage extends React.Component {
                              className='receipt_name'
                              onChangeInput={setReceptName}
                              initialValue={recept.name}/>
-                <ReceptSelect items={departments}
-                              className='receipt_depart'
-                              onChangeSelect={setReceptDepartment}
-                              initialValue={recept.department}/>
+                <ReceptDropdown items={departments}
+                                onChangeDropdown={setReceptDepartment}
+                                className='receipt_depart'
+                                selectedItemIndex={0}/>
                 <ReceptFileInput onChangeInput={uploadFile} className='receipt_main_foto_input'/>
                 {recept.imgPath && <ImageWrapper className='receipt_main_foto'>
                     <Image src={recept.imgPath}/>

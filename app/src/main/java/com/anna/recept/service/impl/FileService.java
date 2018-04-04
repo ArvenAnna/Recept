@@ -22,7 +22,7 @@ public class FileService implements IFileService {
     private static final String RESOURCE_LOCATION = "resource.xml.location";
     private static final String RESOURCE_ROOT_LOCATION = "resource.root.location";
 
-    private static final String TEMP_LOCATION = "resource.temp.location";
+    private static final String TEMP_LOCATION_ENV = "TEMP_LOCATION";
     private static final String ALTERNATIVE_IMAGE = "alt.png";
     private static final String RECEPT_SCHEME = "recept_scheme.xsd";
     private static final String RECEPT_XSL = "recept.xsl";
@@ -112,9 +112,9 @@ public class FileService implements IFileService {
 
     @Override
     public String saveFile(MultipartFile file) throws IOException {
-        String newPath = "temp" + File.separator + UUID.randomUUID().toString() +
-            File.separator + file.getOriginalFilename();
-        String filePath = context.getRealPath("") + File.separator + newPath;
+        String newPath = System.getenv(TEMP_LOCATION_ENV) + File.separator + UUID.randomUUID().toString() +
+            "_" + file.getOriginalFilename();
+        String filePath = context.getRealPath("") + newPath;
         File upload = new File(filePath);
         FileUtils.writeByteArrayToFile(upload, file.getBytes());
         return newPath;

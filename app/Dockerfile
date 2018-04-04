@@ -1,5 +1,8 @@
 From touchvie/tomcat8-jdk8:latest
 
+ENV JPDA_ADDRESS=8000
+ENV JPDA_TRANSPORT=dt_socket
+
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 
@@ -25,5 +28,8 @@ COPY . /usr/src/app/
 
 RUN mvn clean install
 RUN mv /usr/src/app/target/Recept-1.0-SNAPSHOT /usr/local/tomcat/webapps/ROOT
+
+EXPOSE 8080 13333 8000
+ENTRYPOINT ["catalina.sh", "jpda", "run"]
 
 ENV DEBIAN_FRONTEND teletype
