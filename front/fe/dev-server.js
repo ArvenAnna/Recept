@@ -10,6 +10,7 @@ const options = {
     // ws: true,                         // proxy websockets
     pathRewrite: {
         '^/api' : '/',
+        '^/tempfiles': '/tempfiles'
         // '^/api/old-path' : '/api/new-path',     // rewrite path
         // '^/api/remove/path' : '/path'           // remove base path
     },
@@ -24,6 +25,8 @@ const options = {
 const exampleProxy = proxy(options);
 
 app.use('/api', exampleProxy);
+app.use('/tempfiles', exampleProxy);
+
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')));
 app.get('/favicon.ico', (req, res) => res.sendFile(path.join(__dirname + '/favicon.ico')));

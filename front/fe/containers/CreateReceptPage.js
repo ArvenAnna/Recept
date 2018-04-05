@@ -18,7 +18,6 @@ import {
 import {copyReceptToNew} from '../actions/EditActions';
 import {fetchIngridients} from '../actions/IngridientActions';
 import {fetchAllRecepts, fetchReceptsByDepart} from '../actions/MainActions';
-import ReceptSelect from "../components/forms/ReceptSelect.jsx";
 import TwoInputsWithButtonForm from "../components/forms/TwoInputsWithButtonForm.jsx";
 import ReceptInput from "../components/forms/ReceptInput.jsx";
 import ReceptTextarea from "../components/forms/ReceptTextarea.jsx";
@@ -113,11 +112,9 @@ class CreateReceptPage extends React.Component {
                                 onChangeDropdown={setReceptDepartment}
                                 className='receipt_depart'
                                 selectedItemIndex={0}/>
-                <ReceptFileInput onChangeInput={uploadFile} className='receipt_main_foto_input'/>
-                {recept.imgPath && <ImageWrapper className='receipt_main_foto'>
-                    <Image src={recept.imgPath}/>
-                    <RemoveIcon onClick={removeReceptFoto}/>
-                </ImageWrapper>}
+                {recept.imgPath
+                    ? <Image src={recept.imgPath} onRemove={removeReceptFoto} className='receipt_main_foto'/>
+                    : <ReceptFileInput onChangeInput={uploadFile} className='receipt_main_foto'/>}
 
                 <TwoInputsWithButtonForm placeholderOne='ингридиент'
                                          placeholderTwo='норма'

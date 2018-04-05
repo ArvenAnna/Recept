@@ -7,7 +7,8 @@ const red = {
 const greenBase = {
     shadowRadius: '3px',
     buttonColor: '#24ea7b',
-    buttonShadowColor: '#0f6b38'
+    buttonShadowColor: '#0f6b38',
+    overlayColor: 'rgba(0,0,0,0.7)'
 }
 
 const green = {
@@ -27,7 +28,10 @@ const green = {
     fieldHeight: '1.3rem',
     fieldFontSize: '0.8rem',
     iconColor: '#0a2713',
-    iconHoverColor: '#24ea7b'
+    iconHoverColor: '#24ea7b',
+    overlayColor: greenBase.overlayColor,
+    overlayShadow: `0px 0px ${greenBase.shadowRadius} ${greenBase.shadowRadius} ${greenBase.overlayColor}`,
+    buttonColor: greenBase.buttonColor,
 };
 
 

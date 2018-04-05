@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import {ChangeEvent} from 'react';
 import {AddIcon} from '../styled/icons.jsx';
-import {TextField} from '../styled/textFields.jsx';
+import {TextField, DropdownList} from '../styled/textFields.jsx';
 
 //noinspection TypeScriptUnresolvedVariable
 const FieldAndButton = styled.div`
@@ -25,13 +25,15 @@ interface InputWithButtonFormProps {
 
 interface InputWithButtonFormState {
     value: string;
+    opened: boolean;
 }
 
 class InputWithButtonForm extends React.Component<InputWithButtonFormProps, InputWithButtonFormState> {
     constructor(props: InputWithButtonFormProps) {
         super(props);
         this.state = {
-            value: ''
+            value: '',
+            opened: false
         };
         this.onChangeInput = this.onChangeInput.bind(this);
         this.getValue = this.getValue.bind(this);
@@ -71,20 +73,41 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
         return suggestions;
     }
 
+    componentDidMount() {
+        document.addEventListener('click', (e) => this.clickOutside(e), true)
+    }
+
+    clickOutside(e: any) {
+        if (!this.isDescendantOf(e.target, this.container)) {
+            this.setState({opened: false});
+        }
+    }
+
+    isDescendantOf(element: any, parent: any) {
+        let node = element;
+        while (node != null) {
+            if (node == parent) {
+                return true;
+            }
+            node = node.parentNode;
+        }
+        return false;
+    }
+
     render() {
         const {placeholder, suggestions} = this.props;
         const {value} = this.state;
         return (
             <FieldAndButton className={this.props.className}>
-                <TextField list={placeholder}
+                <TextField
                        placeholder={placeholder || 'enter text'}
                        value={value}
                        onChange={this.onChangeInput}/>
                 {suggestions &&
-                <datalist id={placeholder}>
+                <DropdownList ref={r => this.container=r}>
                     {this.filterSuggestions().map(item =>
-                        <option key={item.id}>{item.name}</option>)}
-                </datalist>
+                        <div key={item.id}>{item.name}</div>)}
+                </DropdownList>
                 }
                 <AddIcon onClick={this.getValue}/>
             </FieldAndButton>

@@ -1,17 +1,8 @@
 import React from "react";
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import {Dropdown} from '../styled/textFields.jsx';
 import {ArrowUp, ArrowDown} from '../styled/icons.jsx';
-
-const DropdownList = styled.div`
-    margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
-    padding: 0 0.5rem;
-    cursor: pointer;
-    box-shadow: ${props => props.theme.fieldShadow};
-    position: absolute;
-    font-size: ${props => props.theme.fieldFontSize};
-`
+import {DropdownList} from '../styled/textFields';
 
 class ReceptDropdown extends React.Component {
 

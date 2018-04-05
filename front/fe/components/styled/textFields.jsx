@@ -35,3 +35,12 @@ export const SmallText = Text.extend`
         font-size: 1rem;
 `
 
+export const DropdownList = styled.div`
+    margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
+    padding: 0 0.5rem;
+    cursor: pointer;
+    box-shadow: ${props => props.theme.fieldShadow};
+    position: absolute;
+    font-size: ${props => props.theme.fieldFontSize};
+`
+
