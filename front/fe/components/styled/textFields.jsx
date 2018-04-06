@@ -42,5 +42,6 @@ export const DropdownList = styled.div`
     box-shadow: ${props => props.theme.fieldShadow};
     position: absolute;
     font-size: ${props => props.theme.fieldFontSize};
+    background-color: ${props => props.theme.content};
 `
 

@@ -6,7 +6,12 @@ import {TextField, DropdownList} from '../styled/textFields.jsx';
 
 //noinspection TypeScriptUnresolvedVariable
 const FieldAndButton = styled.div`
-    margin: 5px 5px 5px 0;
+    display: flex;
+    align-items: center;
+    
+    .flex_input {
+        flex: 1;
+    }
 `
 
 interface Suggestion {
@@ -28,7 +33,14 @@ interface InputWithButtonFormState {
     opened: boolean;
 }
 
-class InputWithButtonForm extends React.Component<InputWithButtonFormProps, InputWithButtonFormState> {
+interface InputWithButtonFormI {
+    container: any;
+}
+
+class InputWithButtonForm extends React.Component<InputWithButtonFormProps, InputWithButtonFormState> implements InputWithButtonFormI {
+
+    container: any = null;
+
     constructor(props: InputWithButtonFormProps) {
         super(props);
         this.state = {
@@ -96,21 +108,24 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
 
     render() {
         const {placeholder, suggestions} = this.props;
-        const {value} = this.state;
+        const {value, opened} = this.state;
         return (
-            <FieldAndButton className={this.props.className}>
-                <TextField
+            <div className={this.props.className}>
+                <FieldAndButton>
+                    <TextField className='flex_input'
                        placeholder={placeholder || 'enter text'}
                        value={value}
+                       onClick={() => this.setState({opened: !this.state.opened})}
                        onChange={this.onChangeInput}/>
-                {suggestions &&
-                <DropdownList ref={r => this.container=r}>
+                    <AddIcon onClick={this.getValue}/>
+                </FieldAndButton>
+                {suggestions && opened &&
+                <DropdownList ref={(r: any) => this.container = r}>
                     {this.filterSuggestions().map(item =>
                         <div key={item.id}>{item.name}</div>)}
                 </DropdownList>
                 }
-                <AddIcon onClick={this.getValue}/>
-            </FieldAndButton>
+            </div>
         );
     }
 }

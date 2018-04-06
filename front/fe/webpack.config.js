@@ -63,19 +63,19 @@ module.exports = {
     //     aggregateTimeout: 100
     // }
 
-    devServer: {
-        historyApiFallback: true,
-        hot: true,
-        inline: true,
-        host: 'localhost', // Defaults to `localhost`
-        port: 3004, // Defaults to 8080
-        proxy: {
-    //        '/api/*': {
-            '/': {
-                target: 'http://localhost:4003/',
-                secure: false,
-                changeOrigin: true
-            }
-        }
-    },
+    // devServer: {
+    //     historyApiFallback: true,
+    //     hot: true,
+    //     inline: true,
+    //     host: 'localhost', // Defaults to `localhost`
+    //     port: 3004, // Defaults to 8080
+    //     proxy: {
+    // //        '/api/*': {
+    //         '/': {
+    //             target: `http://localhost:4003`,
+    //             secure: false,
+    //             changeOrigin: true
+    //         }
+    //     }
+    // },
 };

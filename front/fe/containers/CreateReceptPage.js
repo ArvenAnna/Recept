@@ -113,7 +113,7 @@ class CreateReceptPage extends React.Component {
                                 className='receipt_depart'
                                 selectedItemIndex={0}/>
                 {recept.imgPath
-                    ? <Image src={recept.imgPath} onRemove={removeReceptFoto} className='receipt_main_foto'/>
+                    ? <div className='receipt_main_foto'><Image src={recept.imgPath} onRemove={removeReceptFoto}/></div>
                     : <ReceptFileInput onChangeInput={uploadFile} className='receipt_main_foto'/>}
 
                 <TwoInputsWithButtonForm placeholderOne='ингридиент'

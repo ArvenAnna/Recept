@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import {Dropdown} from '../styled/textFields.jsx';
 import {ArrowUp, ArrowDown} from '../styled/icons.jsx';
 import {DropdownList} from '../styled/textFields';
+import styled from 'styled-components';
+
+const DropdownContainer = styled.div`
+    position: relative;
+    z-index: 10;
+`
 
 class ReceptDropdown extends React.Component {
 
@@ -53,7 +59,11 @@ class ReceptDropdown extends React.Component {
         const {items, className} = this.props;
         const {selectedItemIndex} = this.state;
 
-        return <div className={className}>
+        if (!items || items.length == 0) {
+            return null;
+        }
+
+        return <DropdownContainer className={className}>
             <Dropdown ref={r => this.container = r} onClick={() => this.setState({opened: !this.state.opened})}>
                 <div>
                     {selectedItemIndex != -1 ? items[selectedItemIndex].name + ' ' : ' '}
@@ -64,7 +74,7 @@ class ReceptDropdown extends React.Component {
                 {items.map((item, index) =>
                     <div key={index} onClick={() => this.onSelect(item)}>{item.name}</div>)}
             </DropdownList>}
-        </div>;
+        </DropdownContainer>;
     }
 }
 
