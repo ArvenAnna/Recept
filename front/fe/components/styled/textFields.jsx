@@ -28,13 +28,6 @@ export const Dropdown = styled.button`
         cursor: pointer;
 `
 
-export const SmallText = Text.extend`
-        min-width: 0;
-        min-height: 0;
-        height: 3rem;
-        font-size: 1rem;
-`
-
 export const DropdownList = styled.div`
     margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
     padding: 0 0.5rem;

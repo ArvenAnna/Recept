@@ -1,5 +1,5 @@
 import * as types from '../constants/ActionTypes';
-import http from '../HttpService';
+import http from '../utils/HttpService';
 import routes from '../constants/Routes';
 
 export function receptsRequest(id) {

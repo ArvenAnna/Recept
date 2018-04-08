@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {RemoveIcon} from "../styled/icons";
 import PropTypes from 'prop-types';
+import {Overlay} from '../styled/overlay';
 
 const ImageContainer = styled.div`
         max-width: 100%;
@@ -26,30 +27,13 @@ const ImageContainer = styled.div`
             position: absolute;
             top: 0;
         }
-        
-        .base_overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            visibility: hidden;
-            text-align: right;
-            background-color: ${props => props.theme.overlayColor};
-        }
-        
-        .del_icon {
-            width: 1.5rem;
-            height: 1.5rem;
-            margin: 0.5rem;
-            fill: ${props => props.theme.buttonColor};
-        }
 `
 
 const Image = ({src, onRemove, className}) => <ImageContainer className={className ? className : ''}>
     <img src={src} className='base_image'/>
-    <div className='base_overlay'>
-        <RemoveIcon onClick={onRemove ? onRemove : () => {}} className='del_icon'/>
-    </div>
+    {onRemove && <Overlay className='base_overlay'>
+        <RemoveIcon onClick={onRemove} className='del_icon'/>
+    </Overlay>}
 </ImageContainer>
 
 Image.propTypes = {

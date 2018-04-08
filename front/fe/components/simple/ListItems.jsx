@@ -2,35 +2,29 @@ import React from "react";
 import styled from 'styled-components';
 import {RemoveIcon} from "../styled/icons.jsx";
 
-const List = styled.ul`
-    padding: 5px;
-    margin: 10px;
+const List = styled.section`
+   
 `
 
-const Item = styled.li`
+const Item = styled.div`
     list-style-type: none;
     font-style: italic;
     font-weight: bold;
-    margin: 5px 0 5px 0;
-    
-    & > * {
-        display: inline-block;
-        vertical-align: middle;
-    }
+    display: flex;
+    align-items:center;
+    margin: 0.5rem;
 `
 
 const ListItems = ({items, onButtonClick, className}) => {
-    return (items && items.length)
-        ? (
+    return items && items.length != 0 ? (
             <List className={className}>
                 {items.map((item, index) => <Item key={index}>
                     <div>{item.name}</div>
-                    {onButtonClick ?
-                        <RemoveIcon onClick={onButtonClick.bind(null, item)}/> : null}
+                    {onButtonClick &&
+                        <RemoveIcon onClick={onButtonClick.bind(null, item)}/>}
                 </Item>)}
             </List>
-        )
-        : null;
+        ) : null;
 }
 
 // ListItems.propTypes = {

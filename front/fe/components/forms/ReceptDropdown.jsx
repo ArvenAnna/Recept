@@ -1,13 +1,17 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 import {Dropdown} from '../styled/textFields.jsx';
 import {ArrowUp, ArrowDown} from '../styled/icons.jsx';
 import {DropdownList} from '../styled/textFields';
 import styled from 'styled-components';
+import {isDescendantOf} from '../../utils/domUtils';
 
 const DropdownContainer = styled.div`
-    position: relative;
-    z-index: 10;
+    
+    .outlined {
+        color: ${props => props.theme.button};
+        font-weight: 600;
+    }
 `
 
 class ReceptDropdown extends React.Component {
@@ -16,6 +20,7 @@ class ReceptDropdown extends React.Component {
         super(props);
         this.state = {
             opened: false,
+            outlined: props.selectedItemIndex,
             selectedItemIndex: props.selectedItemIndex
         };
     }
@@ -27,52 +32,73 @@ class ReceptDropdown extends React.Component {
     }
 
     componentDidMount() {
-        // svg tag has null parentNode, it is not detected as descendant of container
-        // to avoid this we need to set capture phase true in order this event handler will be overriden by onClick on container's element
-        document.addEventListener('click', (e) => this.clickOutside(e), true)
+        document.addEventListener('click', (e) => this.clickOutside(e));
+        document.addEventListener('keydown', (e) => this.onKeyPress(e.key));
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', (e) => this.clickOutside(e));
+        document.removeEventListener('keydown', (e) => this.onKeyPress(e.key));
+    }
+
+    onKeyPress(key) {
+        if(this.state.opened) {
+            const {items} = this.props;
+            const {outlined} = this.state;
+            if (key == 'ArrowDown') {
+                if(outlined == items.length - 1) {
+                    this.setState({outlined: 0});
+                } else {
+                    this.setState({outlined: outlined + 1});
+                }
+            }
+            if (key == 'ArrowUp') {
+                if(outlined == 0) {
+                    this.setState({outlined: items.length - 1});
+                } else {
+                    this.setState({outlined: outlined - 1});
+                }
+            }
+            if (key == 'Enter') {
+                this.onSelect(items[outlined], outlined);
+            }
+        }
     }
 
     clickOutside(e) {
-        if (!this.isDescendantOf(e.target, this.container)) {
+        if (isDescendantOf(e.target, this.container)) {
+            this.setState({opened: !this.state.opened});
+        } else {
             this.setState({opened: false});
         }
     }
 
-    isDescendantOf(element, parent) {
-        let node = element;
-        while (node != null) {
-            if (node == parent) {
-                return true;
-            }
-            node = node.parentNode;
-        }
-        return false;
-    }
-
-    onSelect(item) {
+    onSelect(item, index) {
         const {items} = this.props;
-        this.setState({selectedItemIndex: items.indexOf(item)},
+        this.setState({selectedItemIndex: items.indexOf(item), outlined: index},
             () => this.props.onChangeDropdown(item));
     }
 
     render() {
         const {items, className} = this.props;
-        const {selectedItemIndex} = this.state;
+        const {selectedItemIndex, outlined} = this.state;
 
         if (!items || items.length == 0) {
             return null;
         }
 
         return <DropdownContainer className={className}>
-            <Dropdown ref={r => this.container = r} onClick={() => this.setState({opened: !this.state.opened})}>
+            <Dropdown innerRef={r => this.container = r}>
                 <div>
                     {selectedItemIndex != -1 ? items[selectedItemIndex].name + ' ' : ' '}
-                    {this.state.opened ? <ArrowUp/> : <ArrowDown/>}
+                    {this.state.opened ? <ArrowUp className='ArrowUp'/> : <ArrowDown className='ArrowDown'/>}
                 </div>
             </Dropdown>
             {this.state.opened && <DropdownList>
                 {items.map((item, index) =>
-                    <div key={index} onClick={() => this.onSelect(item)}>{item.name}</div>)}
+                    <div key={index}
+                         className={outlined == index ? 'outlined' : ''}
+                         onClick={() => this.onSelect(item, index)}>{item.name}</div>)}
             </DropdownList>}
         </DropdownContainer>;
     }
@@ -84,7 +110,7 @@ ReceptDropdown.propTypes = {
     })).isRequired,
     onChangeDropdown: PropTypes.func,
     selectedItemIndex: PropTypes.number.isRequired,
-    className: PropTypes.string.isRequired
+    className: PropTypes.string
 }
 
 export default ReceptDropdown;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {ChangeEvent} from 'react';
 import {AddIcon} from '../styled/icons.jsx';
 import {TextField, DropdownList} from '../styled/textFields.jsx';
+import {isDescendantOf} from '../../utils/domUtils';
 
 //noinspection TypeScriptUnresolvedVariable
 const FieldAndButton = styled.div`
@@ -11,6 +12,15 @@ const FieldAndButton = styled.div`
     
     .flex_input {
         flex: 1;
+    }
+    
+    
+`
+//noinspection TypeScriptUnresolvedVariable
+const Container = styled.div`
+    .outlined {
+        color: ${props => props.theme.button};
+        font-weight: 600;
     }
 `
 
@@ -31,6 +41,7 @@ interface InputWithButtonFormProps {
 interface InputWithButtonFormState {
     value: string;
     opened: boolean;
+    outlined: number;
 }
 
 interface InputWithButtonFormI {
@@ -45,22 +56,57 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
         super(props);
         this.state = {
             value: '',
-            opened: false
+            opened: false,
+            outlined: 0
         };
         this.onChangeInput = this.onChangeInput.bind(this);
         this.getValue = this.getValue.bind(this);
     }
 
-    onChangeInput({target}: ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            value: (target as HTMLInputElement).value
-        });
+    componentDidMount() {
+        document.addEventListener('click', (e: Event) => this.clickOutside(e));
+        document.addEventListener('keydown', (e) => this.onKeyPress(e.key));
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('click', (e) => this.clickOutside(e));
+        document.removeEventListener('keydown', (e) => this.onKeyPress(e.key));
+    }
+
+    onKeyPress(key: string) {
+        if(this.state.opened) {
+            const suggestions = this.filterSuggestions();
+            const {outlined} = this.state;
+            if (key == 'ArrowDown') {
+                if(outlined == suggestions.length - 1) {
+                    this.setState({outlined: 0});
+                } else {
+                    this.setState({outlined: outlined + 1});
+                }
+            }
+            if (key == 'ArrowUp') {
+                if(outlined == 0) {
+                    this.setState({outlined: suggestions.length - 1});
+                } else {
+                    this.setState({outlined: outlined - 1});
+                }
+            }
+            if (key == 'Enter') {
+                this.setState({value: suggestions[outlined].name, opened: false})
+            }
+        }
+    }
+
+    onSelect(item: Suggestion, index: number) {
+        this.setState({value: item.name, outlined: index});
+    }
+
+    onChangeInput(value:string) {
+        this.setState({value});
     }
 
     clearInput() {
-        this.setState({
-            value: ''
-        });
+        this.setState({value: ''});
     }
 
     getValue() {
@@ -85,47 +131,37 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
         return suggestions;
     }
 
-    componentDidMount() {
-        document.addEventListener('click', (e) => this.clickOutside(e), true)
-    }
-
-    clickOutside(e: any) {
-        if (!this.isDescendantOf(e.target, this.container)) {
+    clickOutside(e: Event) {
+        if (isDescendantOf(e.target, this.container)) {
+            this.setState({opened: !this.state.opened});
+        } else {
             this.setState({opened: false});
         }
     }
 
-    isDescendantOf(element: any, parent: any) {
-        let node = element;
-        while (node != null) {
-            if (node == parent) {
-                return true;
-            }
-            node = node.parentNode;
-        }
-        return false;
-    }
-
     render() {
-        const {placeholder, suggestions} = this.props;
-        const {value, opened} = this.state;
+        const {placeholder, className} = this.props;
+        const {value, opened, outlined} = this.state;
+        const suggestions = this.filterSuggestions();
         return (
-            <div className={this.props.className}>
+            <Container className={className}>
                 <FieldAndButton>
-                    <TextField className='flex_input'
+                    <TextField className='flex_input' innerRef={(r: any) => this.container = r}
                        placeholder={placeholder || 'enter text'}
                        value={value}
-                       onClick={() => this.setState({opened: !this.state.opened})}
-                       onChange={this.onChangeInput}/>
+                       size={1}
+                       onChange={(e:ChangeEvent<HTMLInputElement>) => this.onChangeInput(e.target.value)}/>
                     <AddIcon onClick={this.getValue}/>
                 </FieldAndButton>
-                {suggestions && opened &&
-                <DropdownList ref={(r: any) => this.container = r}>
-                    {this.filterSuggestions().map(item =>
-                        <div key={item.id}>{item.name}</div>)}
+                {suggestions && suggestions.length != 0 && opened &&
+                <DropdownList>
+                    {this.filterSuggestions().map((item, index) =>
+                        <div key={item.id}
+                             onClick={() => this.onSelect(item, index)}
+                             className={outlined == index ? 'outlined' : ''}>{item.name}</div>)}
                 </DropdownList>
                 }
-            </div>
+            </Container>
         );
     }
 }

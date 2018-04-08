@@ -4,6 +4,12 @@ const red = {
 
 //const shadowRadius = '3px';
 
+const screenParameters = {
+    middleWidth: '1100px',
+    smallWidth: '750px',
+    ultraSmallWidth: '550px'
+}
+
 const greenBase = {
     shadowRadius: '3px',
     buttonColor: '#24ea7b',
@@ -32,6 +38,9 @@ const green = {
     overlayColor: greenBase.overlayColor,
     overlayShadow: `0px 0px ${greenBase.shadowRadius} ${greenBase.shadowRadius} ${greenBase.overlayColor}`,
     buttonColor: greenBase.buttonColor,
+    middleWidth: screenParameters.middleWidth,
+    smallWidth: screenParameters.smallWidth,
+    ultraSmallWidth: screenParameters.ultraSmallWidth
 };
 
 

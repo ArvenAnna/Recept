@@ -2,23 +2,33 @@ import React from 'react';
 import styled from 'styled-components';
 import {RemoveIcon} from '../styled/icons';
 import Image from './Image';
+import {Overlay} from '../styled/overlay';
 
 const Wrapper = styled.section`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
+    position: relative;
+    box-shadow: ${props => props.theme.fieldShadow};
+    margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
     
-   
-    
+    &:hover .base_overlay {
+           visibility: visible;
+    }
 `
 
-const FileWithDescription = ({detail, removeDetail}) => {
+const Text = styled.div`
+    margin: 0.5rem;
+`
+
+const FileWithDescriptionItem = ({detail, removeDetail, className}) => {
     return (
-        <Wrapper>
+        <Wrapper className={className ? className : ''}>
             <Image src={detail.filePath} className='description_img'/>
-            <div>
-                <div>{detail.description}</div>
-                {removeDetail && <RemoveIcon onClick={() => removeDetail(detail)} />}
-            </div>
+            <Text>{detail.description}</Text>
+
+            <Overlay className='base_overlay'>
+                {removeDetail && <RemoveIcon onClick={removeDetail} className='del_icon'/>}
+            </Overlay>
         </Wrapper>
     );
 }
@@ -30,4 +40,4 @@ const FileWithDescription = ({detail, removeDetail}) => {
 //     })
 // }
 
-export default FileWithDescription;
+export default FileWithDescriptionItem;

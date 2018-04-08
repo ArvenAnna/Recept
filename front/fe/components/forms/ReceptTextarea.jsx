@@ -29,6 +29,7 @@ class ReceptTextarea extends React.Component {
 
     render() {
         return <Text value={this.state.value}
+                     size='1'
                      className={this.props.className}
                       placeholder={this.props.placeholder}
                       onChange={this.onChange}/>;

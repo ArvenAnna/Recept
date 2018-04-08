@@ -5,15 +5,7 @@ import {ActionButton} from "../styled/buttons.jsx";
 
 //noinspection TypeScriptUnresolvedVariable
 const Section = styled.div`
-    display: inline;
-    margin: 0 5px 0 5px;
-    
-    &:last-of-type {
-        margin: 0 0 0 5px;
-    }
-    &:first-of-type {
-        margin: 0 5px 0 0;
-    }
+    margin: 0.3rem;
     
     .active {
         button {

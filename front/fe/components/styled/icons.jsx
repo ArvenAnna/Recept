@@ -29,13 +29,15 @@ export const AddIcon = styled(Add)`
 `
 
 export const RemoveIcon = styled(Remove)`
-    ${Icon}
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
     
     margin-left: 10px;
-    fill: ${props => props.theme.button};
+    fill: ${props => props.theme.text}; 
     
     &:hover {
-        fill: ${props => props.theme.text};
+        fill: ${props => props.theme.button};
     }
 `
 

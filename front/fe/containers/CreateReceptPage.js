@@ -32,15 +32,9 @@ import styled from 'styled-components';
 
 import {withRouter} from 'react-router';
 import FileWithDescription from "../components/forms/FileWithDescription.jsx";
-import DetailItem from "../components/simple/DetailItem.jsx";
-import {RemoveIcon} from "../components/styled/icons.jsx";
 import {SaveButton} from "../components/styled/buttons.jsx";
 import ReceptDropdown from "../components/forms/ReceptDropdown.jsx";
-
-const ImageWrapper = styled.section`
-    display: flex;
-    align-items: center;
-`
+import FileWithDescriptionItem from '../components/simple/FileWithDescriptionItem';
 
 @withRouter
 @connect(store => ({
@@ -114,12 +108,18 @@ class CreateReceptPage extends React.Component {
                                 selectedItemIndex={0}/>
                 {recept.imgPath
                     ? <div className='receipt_main_foto'><Image src={recept.imgPath} onRemove={removeReceptFoto}/></div>
-                    : <ReceptFileInput onChangeInput={uploadFile} className='receipt_main_foto'/>}
+                    : <ReceptFileInput onChangeInput={uploadFile}
+                                       title='Главное фото'
+                                       className='receipt_main_foto'/>}
 
                 <TwoInputsWithButtonForm placeholderOne='ингридиент'
                                          placeholderTwo='норма'
                                          className='receipt_proportions_field'
+                                         firstInputClassName='firstInput'
+                                         secondInputClassName='secondInput'
+                                         inputWithButtonClassName='inputWithButton'
                                          suggestions={ingridients}
+                                         suggestionExcludes={recept.proportions ? recept.proportions.map(p => p.ingridient) : []}
                                          onButtonClick={addProportion}/>
                 <ProportionList items={recept.proportions}
                                 className='receipt_proportions_list'
@@ -144,11 +144,14 @@ class CreateReceptPage extends React.Component {
                            onButtonClick={removeRef}/>
 
 
-                <FileWithDescription addDetail={addDetail} className='recept_details_field'/>
-                {recept.details && recept.details.map(detail => <div key={detail.filePath} className='recept_details_list'>
-                    <DetailItem item={detail} small={true}/>
-                    <RemoveIcon onClick={() => removeDetail(detail)} />
-                </div>)}
+                <FileWithDescription addDetail={addDetail}
+                                     placeholder='Комментарий'
+                                     className='recept_details_field'/>
+                {recept.details && recept.details.map(detail =>
+                    <FileWithDescriptionItem key={detail.filePath}
+                                         detail={detail}
+                                         removeDetail={() => removeDetail(detail)}
+                                         className='recept_details_list'/>)}
 
 
                 <SaveButton onClick={() => createRecept(recept)} className='receipt_save_button'>Готово</SaveButton>

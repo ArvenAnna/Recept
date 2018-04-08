@@ -9,6 +9,7 @@ const FileChooser = styled.div`
      box-shadow: ${props => props.theme.buttonShadow};
      display: flex;
      align-items: center;
+     justify-content: center;
  
      input {
         position: absolute;
@@ -25,7 +26,7 @@ class ReceptFileInput extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {name: "Файл не выбран"};
+        this.state = {name: "Главное фото"};
         this.onChange = this.onChange.bind(this);
     }
 
@@ -49,10 +50,11 @@ class ReceptFileInput extends React.Component {
     }
 
     render() {
-        return <FileChooser className={this.props.className}>
+        const {className, title} = this.props;
+        return <FileChooser className={className}>
             <SearchIcon/>
             <input type='file' onChange={this.onChange}/>
-            <div>{this.state.name}</div>
+            <div>{title ? title : this.state.name}</div>
         </FileChooser>;
     }
 }

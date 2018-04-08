@@ -2,18 +2,41 @@ import React from 'react';
 import styled from 'styled-components';
 import ReceptFileInput from "./ReceptFileInput.jsx";
 import {AddIcon} from "../styled/icons.jsx";
-import {SmallText} from "../styled/textFields.jsx";
+import {Text} from "../styled/textFields.jsx";
+import Image from '../simple/Image';
 
 const Section = styled.div`
-    display: inline-block;
-    margin: 5px 0;
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   
+   .description_file_field {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        align-self: stretch;
+   }
+`
+
+const FlexWrapper = styled.div`
+    grid-column-start: 2;
+    grid-column-end: 3;
+    
+    display: flex;
+    align-items: center;
+    
+   
+    .description_field {
+        flex: 1;
+        align-self: stretch;
+        justify-self: stretch;
+        width: 2px; //just hack for small screens
+    }
 `
 
 class FileWithDescription extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {file: null, text: ''};
+        this.state = {file: null, text: '', fileUrl: null};
         this.onChangeText = this.onChangeText.bind(this);
         this.onChangeFile = this.onChangeFile.bind(this);
         this.add = this.add.bind(this);
@@ -26,9 +49,14 @@ class FileWithDescription extends React.Component {
     }
 
     onChangeFile(file) {
-        this.setState({
-            file
-        });
+        this.getFileUrl(file);
+        this.setState({file});
+    }
+
+    getFileUrl(file) {
+        let reader = new FileReader();
+        reader.onload = (e) => this.setState({fileUrl: e.target.result});
+        reader.readAsDataURL(file);
     }
 
     add() {
@@ -36,18 +64,31 @@ class FileWithDescription extends React.Component {
             this.props.addDetail(this.state.text, this.state.file);
             this.setState({
                 file: null,
-                text: ''
+                text: '',
+                fileUrl: null
             });
         }
     }
 
     render() {
+        const {fileUrl, file, text} = this.state;
         return <Section className={this.props.className}>
-            <SmallText value={this.state.text}
-                      placeholder={this.props.placeholder}
-                      onChange={this.onChangeText}/>
-            <ReceptFileInput onChangeInput={this.onChangeFile} clean={!this.state.file}/>
-            <AddIcon onClick={this.add}/>
+            {fileUrl
+                ? <Image src={fileUrl}
+                         className='description_file_field'
+                         onRemove={() => this.setState({fileUrl: null})}/>
+                : <ReceptFileInput onChangeInput={this.onChangeFile}
+                             className='description_file_field'
+                             title='Добавить фото'
+                             clean={!file}/>}
+            <FlexWrapper>
+                <Text value={text}
+                      size='1'
+                       className='description_field'
+                       placeholder={this.props.placeholder}
+                       onChange={this.onChangeText}/>
+                <AddIcon onClick={this.add}/>
+            </FlexWrapper>
         </Section>;
     }
 }

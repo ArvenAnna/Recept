@@ -1,36 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
 import {NavLink} from 'react-router-dom';
-import {HeaderButton} from "../styled/buttons.jsx";
 
 const Section = styled.div`
-    margin: 8px 0;
+
+    background-color: ${props => props.theme.button};
+    box-shadow: ${props => props.theme.buttonShadow};
+    margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
+    display: flex;
+    justify-content: center;
+        
+    &:hover {
+            background-color: ${props => props.theme.border};
+            cursor: pointer;
+    }
+    
     
     a {
         color: ${props => props.theme.text}
     }
-    
-    &:last-of-type {
-        margin: 8px 0 0 0;
-    }
-    
-    &:first-of-type {
-        margin: 0 0 8px 0;
-    }
-    
-    .active {
-        button {
-            background-color: ${props => props.theme.text};
-            color: ${props => props.theme.button};
-        }
+   
+    &.active {
+         background-color: ${props => props.theme.text};
+         color: ${props => props.theme.button};
     }
 `
 
 const VerticalMenuButton = ({onClick, to, text}) => {
     return (
-        <Section>
+        <Section onClick={onClick}>
             <NavLink exact={true} to={to}>
-                <HeaderButton onClick={onClick}>{text}</HeaderButton>
+                {text}
             </NavLink>
         </Section>
     );

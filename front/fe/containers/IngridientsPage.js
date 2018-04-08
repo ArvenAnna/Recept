@@ -5,10 +5,16 @@ import {addIngridient} from "../actions/IngridientActions";
 import Error from "../components/simple/BackendError.jsx";
 import styled from 'styled-components';
 
+const Wrapper = styled.div`
+    .ingridients_input {
+        margin-bottom: 0.5rem;
+    }
+`
+
 const Item = styled.div`
     font-style: italic;
     font-weight: bold;
-    margin: 5px 0 5px 0;s
+    margin: 0 1rem;
 `
 
 @connect(store => ({
@@ -22,12 +28,13 @@ class IngridientsPage extends React.Component {
     render() {
         const {error, addIngridient, ingridients} = this.props;
         return (
-            <div>
+            <Wrapper>
                 <InputWithButtonForm placeholder='новый ингридиент'
+                                     className='ingridients_input'
                                      onButtonClick={addIngridient}/>
                 <Error message={error}/>
                 {ingridients.map(ing => <Item key={ing.id}>{ing.name}</Item>)}
-            </div>
+            </Wrapper>
         );
     }
 }
