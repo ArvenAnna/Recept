@@ -4,6 +4,7 @@ app/target/
 database
 
 front/fe/node_modules
+front/fe/package-lock.json
 front/fe/bin
 
 tempfiles

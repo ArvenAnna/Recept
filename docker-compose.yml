@@ -11,7 +11,18 @@ services:
       depends_on:
         - recept_app
       volumes:
-        - ./front/fe:/usr/src/app/fe
+        - ./front/fe/actions:/usr/src/app/fe/actions
+        - ./front/fe/components:/usr/src/app/fe/components
+        - ./front/fe/constants:/usr/src/app/fe/constants
+        - ./front/fe/containers:/usr/src/app/fe/containers
+        - ./front/fe/reducers:/usr/src/app/fe/reducers
+        - ./front/fe/styles:/usr/src/app/fe/styles
+        - ./front/fe/svg:/usr/src/app/fe/svg
+        - ./front/fe/utils:/usr/src/app/fe/utils
+        - ./front/fe/app.js:/usr/src/app/fe/app.js
+        - ./front/fe/Store.js:/usr/src/app/fe/Store.js
+        - ./front/fe/dev-server.js:/usr/src/app/fe/dev-server.js
+        - ./front/fe/bin:/usr/src/app/fe/bin
 
   recept_app:
     container_name: recept_app
