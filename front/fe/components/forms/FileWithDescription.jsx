@@ -43,19 +43,16 @@ class FileWithDescription extends React.Component {
     }
 
     onChangeText({target}) {
-        this.setState({
-            text: target.value
-        });
+        this.setState({text: target.value});
     }
 
     onChangeFile(file) {
         this.getFileUrl(file);
-        this.setState({file});
     }
 
     getFileUrl(file) {
         let reader = new FileReader();
-        reader.onload = (e) => this.setState({fileUrl: e.target.result});
+        reader.onload = (e) => this.setState({fileUrl: e.target.result, file});
         reader.readAsDataURL(file);
     }
 

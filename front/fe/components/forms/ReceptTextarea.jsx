@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text} from '../styled/textFields.jsx';
+import PropTypes from 'prop-types';
 
 class ReceptTextarea extends React.Component {
     constructor(props) {
@@ -36,15 +37,10 @@ class ReceptTextarea extends React.Component {
     }
 }
 
-// ReceptTextarea.propTypes = {
-//     placeholder: React.PropTypes.string,
-//     onChangeTextarea: React.PropTypes.func,
-//     initialValue: React.PropTypes.string
-// }
-//
-// ReceptTextarea.defaultProps = {
-//     placeholder: 'enter text',
-//     initialValue: ''
-// }
+ReceptTextarea.propTypes = {
+    placeholder: PropTypes.string,
+    onChangeTextarea: PropTypes.func,
+    initialValue: PropTypes.string
+}
 
 export default ReceptTextarea;

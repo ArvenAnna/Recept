@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {NavLink} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const Section = styled.div`
 
@@ -15,7 +16,6 @@ const Section = styled.div`
             cursor: pointer;
     }
     
-    
     a {
         color: ${props => props.theme.text}
     }
@@ -26,9 +26,9 @@ const Section = styled.div`
     }
 `
 
-const VerticalMenuButton = ({onClick, to, text}) => {
+const VerticalMenuButton = ({to, text}) => {
     return (
-        <Section onClick={onClick}>
+        <Section>
             <NavLink exact={true} to={to}>
                 {text}
             </NavLink>
@@ -36,13 +36,9 @@ const VerticalMenuButton = ({onClick, to, text}) => {
     );
 }
 
-// VerticalMenuButton.propTypes = {
-//     text: React.PropTypes.string,
-//     to: React.PropTypes.string,
-//     onClick: React.PropTypes.func
-// }
-//
-// VerticalMenuButton.defaultProps = {
-//     text: 'button'
-// }
+VerticalMenuButton.propTypes = {
+    text: PropTypes.string,
+    to: PropTypes.string.required
+}
+
 export default VerticalMenuButton;

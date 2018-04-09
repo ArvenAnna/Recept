@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import {SearchIcon} from "../styled/icons.jsx";
+import {SearchIcon} from '../styled/icons.jsx';
+import PropTypes from 'prop-types';
 
 const FileChooser = styled.div`
      margin: ${props => `${(parseFloat(props.theme.shadowRadius) + 2)}px`};
@@ -58,9 +59,11 @@ class ReceptFileInput extends React.Component {
         </FileChooser>;
     }
 }
-//
-// ReceptFileInput.propTypes = {
-//     onChangeInput: React.PropTypes.func
-// }
+
+ReceptFileInput.propTypes = {
+    onChangeInput: PropTypes.func,
+    title: PropTypes.string,
+    className: PropTypes.string
+}
 
 export default ReceptFileInput;

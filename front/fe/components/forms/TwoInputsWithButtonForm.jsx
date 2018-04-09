@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react';
 import styled from 'styled-components';
-import {TextField} from "../styled/textFields.jsx";
-import {AddIcon} from "../styled/icons.jsx";
+import {TextField} from '../styled/textFields.jsx';
+import {AddIcon} from '../styled/icons.jsx';
 import {DropdownList} from '../styled/textFields';
 import {isDescendantOf} from '../../utils/domUtils';
+import PropTypes from 'prop-types';
 
 const TwoFieldsAndButton = styled.div`
     .outlined {
@@ -147,21 +148,16 @@ class TwoInputsWithButtonForm extends React.Component {
     }
 }
 
-// TwoInputsWithButtonForm.propTypes = {
-//     placeholderOne: React.PropTypes.string,
-//     placeholderTwo: React.PropTypes.string,
-//     buttonText: React.PropTypes.string,
-//     onButtonClick: React.PropTypes.func,
-//     suggestions: React.PropTypes.arrayOf(React.PropTypes.shape({
-//         id: React.PropTypes.number,
-//         name: React.PropTypes.string
-//     }))
-// }
-//
-// TwoInputsWithButtonForm.defaultProps = {
-//     placeholderOne: 'enter text',
-//     placeholderTwo: 'enter text',
-//     buttonText: 'button',
-//     suggestions: []
-// }
+TwoInputsWithButtonForm.propTypes = {
+    placeholderOne: PropTypes.string,
+    placeholderTwo: PropTypes.string,
+    buttonText: PropTypes.string,
+    onButtonClick: PropTypes.func,
+    suggestions: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string
+    })),
+    className: PropTypes.string
+}
+
 export default TwoInputsWithButtonForm;

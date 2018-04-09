@@ -1,5 +1,6 @@
-import React from "react";
-import {TextField} from "../styled/textFields.jsx";
+import React from 'react';
+import {TextField} from '../styled/textFields.jsx';
+import PropTypes from 'prop-types';
 
 class ReceptInput extends React.Component {
     constructor(props) {
@@ -37,14 +38,10 @@ class ReceptInput extends React.Component {
     }
 }
 
-// ReceptInput.propTypes = {
-//     placeholder: React.PropTypes.string,
-//     onChangeInput: React.PropTypes.func,
-//     initialValue: React.PropTypes.string
-// }
-//
-// ReceptInput.defaultProps = {
-//     placeholder: 'enter text',
-//     initialValue: ''
-// }
+ReceptInput.propTypes = {
+    placeholder: PropTypes.string,
+    onChangeInput: PropTypes.func,
+    initialValue: PropTypes.string
+}
+
 export default ReceptInput;

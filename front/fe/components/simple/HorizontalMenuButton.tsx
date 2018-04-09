@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {NavLink} from 'react-router-dom';
 import styled from 'styled-components';
-import {ActionButton} from "../styled/buttons.jsx";
+import {ActionButton} from '../styled/buttons.jsx';
 
 //noinspection TypeScriptUnresolvedVariable
 const Section = styled.div`

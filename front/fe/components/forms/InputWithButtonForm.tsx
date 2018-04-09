@@ -13,8 +13,6 @@ const FieldAndButton = styled.div`
     .flex_input {
         flex: 1;
     }
-    
-    
 `
 //noinspection TypeScriptUnresolvedVariable
 const Container = styled.div`
@@ -74,7 +72,7 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
     }
 
     onKeyPress(key: string) {
-        if(this.state.opened) {
+        if (this.state.opened) {
             const suggestions = this.filterSuggestions();
             const {outlined} = this.state;
             if (key == 'ArrowDown') {
@@ -101,7 +99,7 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
         this.setState({value: item.name, outlined: index});
     }
 
-    onChangeInput(value:string) {
+    onChangeInput(value: string) {
         this.setState({value});
     }
 
