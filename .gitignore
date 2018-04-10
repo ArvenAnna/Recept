@@ -7,4 +7,6 @@ front/fe/node_modules
 front/fe/package-lock.json
 front/fe/bin
 
+__snapshots__
+
 tempfiles

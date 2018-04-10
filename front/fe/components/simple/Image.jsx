@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {RemoveIcon} from "../styled/icons";
+import {RemoveIcon} from '../styled/icons';
 import PropTypes from 'prop-types';
 import {Overlay} from '../styled/overlay';
 
@@ -38,7 +38,8 @@ const Image = ({src, onRemove, className}) => <ImageContainer className={classNa
 
 Image.propTypes = {
     src: PropTypes.string,
-    onRemove: PropTypes.func
+    onRemove: PropTypes.func,
+    className: PropTypes.string
 }
 
 export default Image;

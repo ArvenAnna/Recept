@@ -1,9 +1,10 @@
 import React from 'react';
 import connect from 'redux-connect-decorator';
-import ControlPanel from '../components/simple/ControlPanel.jsx';
 import {fetchDepartments} from '../actions/SidebarActions';
-import VerticalMenuButton from '../components/simple/VerticalMenuButton';
+import NavButton from '../components/simple/NavButton';
+import {withRouter} from 'react-router-dom';
 
+@withRouter
 @connect(store => ({
     departments: store.departments
 }), {
@@ -20,10 +21,9 @@ class Sidebar extends React.Component {
     render() {
         const {className, departments} = this.props;
         return <div className={`vertical_menu ${className ? className : ''}`}>
-            {departments.map(item => <VerticalMenuButton
+            {departments.map(item => <NavButton
                 key={item.id}
-                text={item.name}
-                to={item.to}/>)}
+                item={item}/>)}
         </div>
     }
 

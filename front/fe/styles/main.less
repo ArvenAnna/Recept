@@ -92,4 +92,26 @@ body {
             grid-row-gap: 0.5rem;
         }
     }
+
+    .nav_button {
+        background-color: @button;
+        box-shadow: @buttonShadow;
+        margin: @shadowRadius + 2;
+        display: flex;
+        justify-content: center;
+
+        &:hover {
+            background-color: @border;
+            cursor: pointer;
+        }
+
+        a, a:active {
+            color: @text
+        }
+
+        &.active {
+            background-color: @text;
+            color: @button;
+        }
+    }
 }
