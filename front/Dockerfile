@@ -10,6 +10,8 @@ COPY ./fe /usr/src/app/fe
 
 RUN cd /usr/src/app/fe && ./node_modules/.bin/webpack
 
+RUN cd /usr/src/app/fe && npm test
+
 WORKDIR /usr/src/app/fe
 
 EXPOSE 4003

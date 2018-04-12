@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 
-jest.mock('react-router-dom', () => 'NavLink');
+jest.mock('react-router-dom', () => ({NavLink: 'nav-link'}));
 
 import NavButton from '../../components/simple/NavButton';
 
@@ -15,8 +15,8 @@ describe('NavButton', () => {
     });
 
     it('should render text', () => {
-        const mockText = "mock text";
-        const mockLink = "/link";
+        const mockText = 'mock text';
+        const mockLink = '/link';
         const item = {
             name: mockText,
             to: mockLink
@@ -25,7 +25,7 @@ describe('NavButton', () => {
             <NavButton item={item}/>
         );
 
-        const innerHtml = navMenuButton.find(`.nav_button`);
+        const innerHtml = navMenuButton.find('.nav_button');
 
         expect(innerHtml.length).toBe(1);
         expect(innerHtml.text()).toBe(mockText);
@@ -34,8 +34,8 @@ describe('NavButton', () => {
 
 describe('NavButton match snapshot', () => {
     it('should render correctly', () => {
-        const mockText = "mock text";
-        const mockLink = "/link";
+        const mockText = 'mock text';
+        const mockLink = '/link';
         const item = {
             name: mockText,
             to: mockLink
