@@ -15,19 +15,55 @@ describe('Image', () => {
         image.unmount();
     });
 
-    it('should render image', () => {
+    it('should render image with overlay and remove icon', () => {
         const onRemove = () => {};
         const src = '/src';
         image = mount(
             <Image onRemove={onRemove} src={src}/>
         );
 
-        console.log(image.debug())
-
-        const innerHtml = image.find(`.nav_button`);
-
+        const innerHtml = image.find('img');
         expect(innerHtml.length).toBe(1);
-        expect(innerHtml.text()).toBe(mockText);
+
+        expect(innerHtml.find('img').prop('src')).toEqual(src);
+
+        expect(image.find('overlay').length).toEqual(1);
+        expect(image.find('remove-icon').length).toEqual(1);
+
+        //expect(innerHtml.filterWhere(item => item.prop('src') === src).length).toBe(1);
+
+        console.log(image.debug());
+    });
+
+    it('should call onClick when click remove icon', () => {
+        let d =5 ;
+        const onRemove = () => { d++};
+
+        image = mount(
+            <Image onRemove={onRemove} src={'/src'}/>
+        );
+
+        expect(image.find('remove-icon').length).toEqual(1);
+
+        expect(d).toEqual(5);
+        image.find('remove-icon').simulate('click');
+        expect(d).toEqual(6);
+
+    });
+
+    it('should render image without overlay and remove icon', () => {
+        const src = '/src';
+        image = mount(
+            <Image src={src}/>
+        );
+
+        const innerHtml = image.find('img');
+        expect(innerHtml.length).toBe(1);
+
+        expect(innerHtml.find('img').prop('src')).toEqual(src);
+
+        expect(image.find('overlay').length).toEqual(0);
+        expect(image.find('remove-icon').length).toEqual(0);
     });
 });
 

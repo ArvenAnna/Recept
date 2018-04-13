@@ -40,7 +40,8 @@ const green = {
     buttonColor: greenBase.buttonColor,
     middleWidth: screenParameters.middleWidth,
     smallWidth: screenParameters.smallWidth,
-    ultraSmallWidth: screenParameters.ultraSmallWidth
+    ultraSmallWidth: screenParameters.ultraSmallWidth,
+    minTextareaHeight: 50
 };
 
 

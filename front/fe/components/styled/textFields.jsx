@@ -16,6 +16,7 @@ export const Text = styled.textarea`
         color: ${props => props.theme.button};
         padding: 0.5rem;
         resize: none;
+        overflow: hidden;
 `
 
 export const Dropdown = styled.button`
