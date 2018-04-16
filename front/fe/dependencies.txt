@@ -1,61 +1,37 @@
 --------------------------------------
-04_15_2018_21:16:39
+04_16_2018_19:47:07
 --------------------------------------
-@types/react: 16.0.10, actual: 16.3.5, available: 16.3.10
-@types/react-dom: 16.0.1, actual: 16.0.4, available: 16.0.5
-@types/react-redux: 5.0.10, actual: 5.0.15, available: 5.0.16
-@types/react-router: 4.0.15, actual: 4.0.23, available: 4.0.23
-@types/react-router-dom: 4.0.8, actual: 4.2.6, available: 4.2.6
+@types/react: 16.3.10, actual: 16.3.5, available: 16.3.11
+@types/react-dom: 16.0.5, actual: 16.0.4, available: 16.0.5
+@types/react-redux: 5.0.16, actual: 5.0.15, available: 5.0.16
 axios: 0.15.3, actual: npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json
 0.15.3, available: 0.18.0
-express: 4.16.2, actual: 4.16.2, available: 4.16.3
-react: 16.2.0, actual: 16.2.0, available: 16.3.1
-react-dom: 16.2.0, actual: 16.2.0, available: 16.3.1
+express: 4.16.3, actual: 4.16.2, available: 4.16.3
+react: 16.3.1, actual: 16.2.0, available: 16.3.2
+react-dom: 16.3.1, actual: 16.2.0, available: 16.3.2
+react-redux: 5.0.16, actual: 5.0.7, available: 5.0.7
 react-svg-loader: 1.1.1, actual: 1.1.1, available: 2.1.0
 redux: 3.6.0, actual: 3.7.2, available: 3.7.2
 redux-connect-decorator: 0.1.0, actual: 0.1.0, available: 0.2.0
-redux-logger: 3.0.1, actual: 3.0.6, available: 3.0.6
-styled-components: 2.1.2, actual: 2.4.0, available: 3.2.5
-awesome-typescript-loader: 3.2.3, actual: 3.2.3, available: 5.0.0
+styled-components: 2.4.0, actual: 2.4.0, available: 3.2.5
+awesome-typescript-loader: 3.5.0, actual: 3.2.3, available: 5.0.0
 babel-loader: 7.1.4, actual: 6.4.1, available: 7.1.4
 css-loader: 0.22.0, actual: 0.22.0, available: 0.28.11
 file-loader: 0.10.1, actual: 0.10.1, available: 1.1.11
-less: 2.7.2, actual: 2.7.3, available: 3.0.1
-less-loader: 4.0.2, actual: 4.1.0, available: 4.1.0
-nodemon: 1.17.2, actual: 1.17.3, available: 1.17.3
-source-map-loader: 0.2.2, actual: 0.2.3, available: 0.2.3
-style-loader: 0.13.0, actual: 0.13.2, available: 0.20.3
-typescript: 2.5.3, actual: 2.8.1, available: 2.8.1
-url-loader: 0.5.6, actual: 0.5.9, available: 1.0.1
-webpack: 3.10.0, actual: 3.10.0, available: 4.5.0
-webpack-dev-server: 2.11.1, actual: 2.11.1, available: 3.1.3
+less: 2.7.3, actual: 2.7.3, available: 3.0.1
+style-loader: 0.13.2, actual: 0.13.2, available: 0.20.3
+url-loader: 0.5.9, actual: 0.5.9, available: 1.0.1
+webpack: 3.11.0, actual: 3.10.0, available: 4.5.0
+webpack-dev-server: 2.11.2, actual: 2.11.1, available: 3.1.3
 --------------------------------------
-04_16_2018_06:20:53
+04_16_2018_19:54:44
 --------------------------------------
-@types/react: 16.3.5, actual: 16.3.10, available: 16.3.10
-@types/react-dom: 16.0.4, actual: 16.0.5, available: 16.0.5
-@types/react-redux: 5.0.15, actual: 5.0.16, available: 5.0.16
-@types/react-router: 4.0.15, actual: 4.0.23, available: 4.0.23
-@types/react-router-dom: 4.0.8, actual: 4.2.6, available: 4.2.6
-axios: 0.15.3, actual: npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json
-0.15.3, available: 0.18.0
-express: 4.16.2, actual: 4.16.3, available: 4.16.3
-react: 16.2.0, actual: 16.3.1, available: 16.3.1
-react-dom: 16.2.0, actual: 16.3.1, available: 16.3.1
 react-svg-loader: 1.1.1, actual: 1.1.1, available: 2.1.0
-redux: 3.6.0, actual: 3.7.2, available: 3.7.2
 redux-connect-decorator: 0.1.0, actual: 0.1.0, available: 0.2.0
-redux-logger: 3.0.1, actual: 3.0.6, available: 3.0.6
-styled-components: 2.1.2, actual: 2.4.0, available: 3.2.5
-awesome-typescript-loader: 3.2.3, actual: 3.5.0, available: 5.0.0
-css-loader: 0.22.0, actual: 0.22.0, available: 0.28.11
+styled-components: 2.4.0, actual: 2.4.0, available: 3.2.5
+awesome-typescript-loader: 3.5.0, actual: 3.5.0, available: 5.0.0
 file-loader: 0.10.1, actual: 0.10.1, available: 1.1.11
-less: 2.7.2, actual: 2.7.3, available: 3.0.1
-less-loader: 4.0.2, actual: 4.1.0, available: 4.1.0
-nodemon: 1.17.2, actual: 1.17.3, available: 1.17.3
-source-map-loader: 0.2.2, actual: 0.2.3, available: 0.2.3
-style-loader: 0.13.0, actual: 0.13.2, available: 0.20.3
-typescript: 2.5.3, actual: 2.8.1, available: 2.8.1
-url-loader: 0.5.6, actual: 0.5.9, available: 1.0.1
-webpack: 3.10.0, actual: 3.11.0, available: 4.5.0
-webpack-dev-server: 2.11.1, actual: 2.11.2, available: 3.1.3
+less: 2.7.3, actual: 2.7.3, available: 3.0.1
+url-loader: 0.5.9, actual: 0.5.9, available: 1.0.1
+webpack: 3.11.0, actual: 3.11.0, available: 4.5.0
+webpack-dev-server: 2.11.2, actual: 2.11.2, available: 3.1.3

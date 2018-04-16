@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+//const webpack = require('webpack');
 
 module.exports = {
     entry: './app.js',
@@ -6,31 +6,42 @@ module.exports = {
         path: __dirname + '/bin',
         filename: 'app.bundle.js'
     },
+	mode: 'development',
     module: {
-        loaders: [{
+        rules: [{
             test: /\.js$/,
             exclude: [/node_modules/, /bin/],
-            loader: 'babel-loader',
+            use: 'babel-loader',
         }, {
             test: /\.css$/,
             exclude: [/node_modules/, /bin/],
-            loader: "style-loader!css-loader!autoprefixer-loader"
+            use: [{loader: "style-loader"},
+                {loader: "css-loader"},
+                {loader: "postcss-loader"}]
         }, {
             test: /\.less$/,
             exclude: [/node_modules/, /bin/],
-            loader: "style-loader!css-loader!autoprefixer-loader!less-loader!js-to-styles-var-loader"
+			use: [{loader: "style-loader"},
+				{loader: "css-loader"},
+				{loader: "postcss-loader"},
+                {loader: "less-loader"},
+                {loader: "js-to-styles-var-loader"}]
         }, {
             test: /\.png$/,
             exclude: [/node_modules/, /bin/],
-            loader: "url-loader?limit=1000000&mimetype=image/png"
+            use: [{loader: "url-loader",
+                options: {
+                    "limit": 1000000,
+                    "mimetype": "image/png"
+                }}]
         }, {
             test: /\.jsx$/,
             exclude: [/node_modules/, /bin/],
-            loader: "babel-loader"
+            use: "babel-loader"
         }, {
             test: /\.tsx$/,
             exclude: [/node_modules/, /bin/],
-            loader: "awesome-typescript-loader"
+            use: "awesome-typescript-loader"
         }, {
             test: /\.svg$/,
             use: [
