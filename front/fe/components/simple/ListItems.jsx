@@ -1,10 +1,7 @@
-import React from "react";
+import React from 'react';
 import styled from 'styled-components';
-import {RemoveIcon} from "../styled/icons.jsx";
-
-const List = styled.section`
-   
-`
+import {RemoveIcon} from '../styled/icons.jsx';
+import PropTypes from 'prop-types';
 
 const Item = styled.div`
     list-style-type: none;
@@ -17,29 +14,23 @@ const Item = styled.div`
 
 const ListItems = ({items, onButtonClick, className}) => {
     return items && items.length != 0 ? (
-            <List className={className}>
+            <div className={className}>
                 {items.map((item, index) => <Item key={index}>
                     <div>{item.name}</div>
-                    {onButtonClick &&
-                        <RemoveIcon onClick={onButtonClick.bind(null, item)}/>}
+                    {onButtonClick && <RemoveIcon onClick={onButtonClick.bind(null, item)}/>}
                 </Item>)}
-            </List>
+            </div>
         ) : null;
 }
 
-// ListItems.propTypes = {
-//     items: React.PropTypes.arrayOf(
-//         React.PropTypes.shape({
-//             id: React.PropTypes.number,
-//             name: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object])
-//         })
-//     ),
-//     buttonText: React.PropTypes.string,
-//     onButtonClick: React.PropTypes.func
-// }
-//
-// ListItems.defaultProps = {
-//     buttonText: 'delete'
-// }
+ListItems.propTypes = {
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            name: PropTypes.string
+        })
+    ),
+    buttonText: PropTypes.string,
+    onButtonClick: PropTypes.func
+}
 
 export default ListItems;

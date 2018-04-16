@@ -30,14 +30,10 @@ describe('Image', () => {
         expect(image.find('overlay').length).toEqual(1);
         expect(image.find('remove-icon').length).toEqual(1);
 
-        //expect(innerHtml.filterWhere(item => item.prop('src') === src).length).toBe(1);
-
-        console.log(image.debug());
     });
 
     it('should call onClick when click remove icon', () => {
-        let d =5 ;
-        const onRemove = () => { d++};
+        const onRemove = jest.fn();
 
         image = mount(
             <Image onRemove={onRemove} src={'/src'}/>
@@ -45,9 +41,9 @@ describe('Image', () => {
 
         expect(image.find('remove-icon').length).toEqual(1);
 
-        expect(d).toEqual(5);
         image.find('remove-icon').simulate('click');
-        expect(d).toEqual(6);
+
+        expect(onRemove.mock.calls.length).toEqual(1);
 
     });
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReceptFileInput from "./ReceptFileInput.jsx";
-import {AddIcon} from "../styled/icons.jsx";
-import {Text} from "../styled/textFields.jsx";
+import ReceptFileInput from './ReceptFileInput.jsx';
+import {AddIcon} from '../styled/icons.jsx';
+import {Text} from '../styled/textFields.jsx';
 import Image from '../simple/Image';
 
 const Section = styled.div`
@@ -23,7 +23,6 @@ const FlexWrapper = styled.div`
     display: flex;
     align-items: center;
     
-   
     .description_field {
         flex: 1;
         align-self: stretch;
@@ -75,15 +74,15 @@ class FileWithDescription extends React.Component {
                          className='description_file_field'
                          onRemove={() => this.setState({fileUrl: null})}/>
                 : <ReceptFileInput onChangeInput={this.onChangeFile}
-                             className='description_file_field'
-                             title='Добавить фото'
-                             clean={!file}/>}
+                         className='description_file_field'
+                         title='Добавить фото'
+                         clean={!file}/>}
             <FlexWrapper>
                 <Text value={text}
                       size='1'
-                       className='description_field'
-                       placeholder={this.props.placeholder}
-                       onChange={this.onChangeText}/>
+                      className='description_field'
+                      placeholder={this.props.placeholder}
+                      onChange={this.onChangeText}/>
                 <AddIcon onClick={this.add}/>
             </FlexWrapper>
         </Section>;

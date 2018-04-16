@@ -1,8 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
-export function copyReceptToNew(recept) {
-    return {
+export const copyReceptToNew = (recept) => ({
         type: types.COPY_RECEPT,
         recept
-    }
-}
+    })

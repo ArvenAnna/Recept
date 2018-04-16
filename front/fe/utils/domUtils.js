@@ -1,4 +1,7 @@
 export const isDescendantOf = (element, parent) => {
+    if(!parent || !element) {
+        return false;
+    }
     if (parent.isSameNode(element)) {
         return true;
     }

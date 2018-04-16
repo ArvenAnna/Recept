@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {RemoveIcon} from '../styled/icons';
 import Image from './Image';
 import {Overlay} from '../styled/overlay';
+import PropTypes from 'prop-types';
 
 const Wrapper = styled.section`
     display: grid;
@@ -26,18 +27,20 @@ const FileWithDescriptionItem = ({detail, removeDetail, className}) => {
             <Image src={detail.filePath} className='description_img'/>
             <Text>{detail.description}</Text>
 
-            <Overlay className='base_overlay'>
-                {removeDetail && <RemoveIcon onClick={removeDetail} className='del_icon'/>}
-            </Overlay>
+            {removeDetail && <Overlay className='base_overlay'>
+               <RemoveIcon onClick={removeDetail} className='del_icon'/>
+            </Overlay>}
         </Wrapper>
     );
 }
 
-// DetailItem.propTypes = {
-//     item: React.PropTypes.shape({
-//         filePath: React.PropTypes.string,
-//         description: React.PropTypes.string
-//     })
-// }
+FileWithDescriptionItem.propTypes = {
+    className: PropTypes.string,
+    removeDetail: PropTypes.func,
+    detail: PropTypes.shape({
+        filePath: PropTypes.string,
+        description: PropTypes.string
+    })
+}
 
 export default FileWithDescriptionItem;

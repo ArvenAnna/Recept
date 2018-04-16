@@ -3,12 +3,12 @@ import {connect} from 'react-redux';
 import {Switch, Route} from "react-router-dom";
 import {withRouter} from 'react-router';
 
-import ControlPanel from '../components/simple/ControlPanel.jsx';
 import Sidebar from './Sidebar';
 import IngridientsPage from './IngridientsPage';
 import ReceptListPage from './ReceptList.jsx';
 import ReceptPage from './ReceptPage';
 import EditReceptPage from './CreateReceptPage';
+import HorizontalMenuButton from '../components/simple/HorizontalMenuButton.tsx';
 
 import {copyReceptToNew} from '../actions/EditActions';
 import MyRoute from "./MyRoute.jsx";
@@ -24,7 +24,13 @@ class App extends React.Component {
         const {headerButtons} = this.props;
         return (
             <div className='app_container'>
-                <ControlPanel items={headerButtons} className='nav_menu'/>
+                <div className='horizontal_menu nav_menu'>
+                    {headerButtons.map(item => <HorizontalMenuButton
+                        key={item.id}
+                        text={item.name}
+                        to={item.to}
+                        onClick={item.onClick}/>)}
+                </div>
                 <div className='app_body'>
                     <div className='app_body_content'>
                         <Switch>

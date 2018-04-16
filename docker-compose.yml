@@ -23,6 +23,7 @@ services:
         - ./front/fe/Store.js:/usr/src/app/fe/Store.js
         - ./front/fe/dev-server.js:/usr/src/app/fe/dev-server.js
         - ./front/fe/bin:/usr/src/app/fe/bin
+        - ./front/fe/dependencies.txt:/usr/src/app/fe/dependencies.txt
 
   recept_app:
     container_name: recept_app
