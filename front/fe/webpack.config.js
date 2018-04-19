@@ -14,7 +14,10 @@ module.exports = {
             use: 'babel-loader',
         }, {
             test: /\.css$/,
-            exclude: [/node_modules/, /bin/],
+			include(filepath) {
+			    if (filepath.includes('react-s-alert')) return true;
+			    return false;
+			},
             use: [{loader: "style-loader"},
                 {loader: "css-loader"},
                 {loader: "postcss-loader"}]

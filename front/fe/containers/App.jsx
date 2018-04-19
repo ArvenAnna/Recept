@@ -15,6 +15,10 @@ import MyRoute from "./MyRoute.jsx";
 import {fetchRecept, fetchReceptsByDepart} from "../actions/MainActions";
 import {fetchIngridients} from "../actions/IngridientActions";
 
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/genie.css';
+import Alert from 'react-s-alert';
+
 @withRouter
 @connect(store => ({
     headerButtons: store.headerButtons
@@ -22,7 +26,7 @@ import {fetchIngridients} from "../actions/IngridientActions";
 class App extends React.Component {
     render() {
         const {headerButtons} = this.props;
-        return (
+        return ([
             <div className='app_container'>
                 <div className='horizontal_menu nav_menu'>
                     {headerButtons.map(item => <HorizontalMenuButton
@@ -58,8 +62,14 @@ class App extends React.Component {
                     </div>
                     <Sidebar className='side_menu'/>
                 </div>
-            </div>
-        );
+            </div>,
+			<Alert stack={{limit: 6}}
+				   key='alert'
+				   effect='genie'
+				   timeout={5000}
+				   position='bottom-right'
+			/>
+        ]);
     }
 }
 
