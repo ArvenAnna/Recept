@@ -42,6 +42,7 @@ class FileWithDescription extends React.Component {
             text: '',
             fileUrl: null
         };
+        this.reader = new FileReader();
     }
 
     onChangeText = ({target}) => {
@@ -49,9 +50,16 @@ class FileWithDescription extends React.Component {
     }
 
     getFileUrl = (file) => {
-        let reader = new FileReader();
-        reader.onload = (e) => this.setState({fileUrl: e.target.result, file});
-        reader.readAsDataURL(file);
+        this.reader.onload = (e) => {
+            console.log('_____________________');
+            console.log(e.target.result);
+            this.reader && this.setState({fileUrl: e.target.result, file});
+        }
+        this.reader.readAsDataURL(file);
+    }
+
+    componentWillUnmount() {
+        this.reader = null;
     }
 
     add = () => {

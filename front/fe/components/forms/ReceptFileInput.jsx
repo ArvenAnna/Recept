@@ -31,6 +31,10 @@ class ReceptFileInput extends React.Component {
         this.onChange = this.onChange.bind(this);
     }
 
+    componentWillUnmount() {
+        this.onChange = null;
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.clean !== this.props.clean && nextProps.clean) {
             this.cleanFile();
@@ -46,8 +50,7 @@ class ReceptFileInput extends React.Component {
     onChange({target}) {
         this.setState({
             name: target.files[0].name
-        })
-        this.props.onChangeInput(target.files[0]);
+        }, () => this.props.onChangeInput(target.files[0]));
     }
 
     render() {
@@ -63,7 +66,8 @@ class ReceptFileInput extends React.Component {
 ReceptFileInput.propTypes = {
     onChangeInput: PropTypes.func,
     title: PropTypes.string,
-    className: PropTypes.string
+    className: PropTypes.string,
+    clean: PropTypes.bool
 }
 
 export default ReceptFileInput;
