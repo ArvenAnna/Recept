@@ -23,98 +23,111 @@ import FileWithDescription from '../../components/forms/FileWithDescription';
 describe('FileWithDescription', () => {
 
 	let component;
+	let addDetail;
+	const fileUrl = 'myFile';
+	const file = new File([], 'myFile');
 
-	afterEach(() => {
-		component.unmount();
-	});
+	// beforeAll(() => {
+	// 	//return initializeCityDatabase();
+	// });
 
-	xit('should not call add detail and show alert if file is not chosen', () => {
-		const addDetail = jest.fn();
+	beforeEach(() => {
+		addDetail = jest.fn();
+
 		component = mount(
 			<FileWithDescription addDetail={addDetail}/>
 		);
+		component.instance().reader = {
+			readAsDataURL: () => component.instance().reader.onload({target: {result: fileUrl}})
+		}
+	});
+
+	afterEach(() => {
+		Alert.info.mockClear();
+		Alert.error.mockClear();
+		component.unmount();
+	});
+
+	it('should not call add detail and show alert if file is not chosen', () => {
+		const text = 'someText';
 
 		expect(component.find('text').length).toBe(1);
-        component.find('text').simulate('change', 'someText');
+		expect(component.state().text).toBe('');
 
-        //console.log(component.debug());
+        component.find('text').simulate('change', {target: {value: text}});
+
+		expect(component.state().text).toBe(text);
 
         expect(component.find('add-icon').length).toBe(1);
         component.find('add-icon').simulate('click');
         expect(addDetail.mock.calls.length).toEqual(0);
         expect(Alert.info).toBeCalled();
-        //expect(Alert.info.mock.calls.length).toEqual(1);
-		// expect(component.find('img').prop('src')).toEqual(detail.filePath);
-		// expect(component.filterWhere(item => item.text() == detail.description).length).toBe(1);
-		// expect(component.find('overlay').length).toEqual(1);
-		// expect(component.find('remove-icon').length).toEqual(1);
 	});
 
 	it('should call add detail if file is chosen', () => {
-		const addDetail = jest.fn();
-		component = mount(
-			<FileWithDescription addDetail={addDetail}/>
-		);
-
-        expect(component.find('add-icon').length).toBe(1);
-        component.find('add-icon').simulate('click');
         expect(component.find('input').length).toBe(1);
-
-        const fileUrl = 'myFile';
-
-        const readerOnLoadPromise = Promise.resolve({target: {result: fileUrl}});
-        component.reader = {
-            onload: readerOnLoadPromise,
-            readAsDataURL: data => {}
-		}
-
-		const file = new File([], 'myFile');
-
 
         component.find('input').simulate('change', {target: {files: [file]}});
 
-        return readerOnLoadPromise.then(() => {
+		expect(component.state().fileUrl).toBe(fileUrl);
+		expect(component.state().file).toBe(file);
+		expect(component.find('img').length).toBe(1);
+		expect(component.find('input').length).toBe(0);
+		expect(component.find('img').prop('src')).toBe(fileUrl);
 
-            expect(component.find('add-icon').length).toBe(1);
-            component.find('add-icon').simulate('click');
+		//console.log(component.debug());
 
+		expect(component.find('add-icon').length).toBe(1);
+		component.find('add-icon').simulate('click');
 
-            console.log(component.state());
-            expect(component.state().fileUrl).toBe(fileUrl);
-			//expect(addDetail.mock.calls.length).toEqual(1);
-			//expect(Alert.info).not.toBeCalled();
+		expect(addDetail.mock.calls.length).toEqual(1);
+		expect(addDetail).toBeCalledWith('', file);
+		expect(Alert.info).not.toBeCalled();
+		expect(component.state().fileUrl).toBe(null);
+		expect(component.state().file).toBe(null);
 
-
-            console.log(component.debug())
-
-            expect(component.state()).to.have.property('fileUrl', true);
-		})
+		//jest.useFakeTimers();
+		//setTimeout(() => {
+			//component.update();
+		//}, 500);
+		//jest.runAllTimers();
 
 	});
 
-    xit('should load multiple files', () => {
-        const addDetail = jest.fn();
-        component = mount(
-			<FileWithDescription addDetail={addDetail}/>
-        );
-    });
+	it('should remove chosen file and dont add detail after that', () => {
+		expect(component.find('input').length).toBe(1);
 
-	xit('should show correct image after it was loaded', () => {
-		const addDetail = jest.fn();
-		component = mount(
-			<FileWithDescription addDetail={addDetail}/>
-		);
+		component.find('input').simulate('change', {target: {files: [file]}});
+
+		expect(component.find('img').length).toBe(1);
+		expect(component.find('img').prop('src')).toBe(fileUrl);
+
+		expect(component.find('remove-icon').length).toBe(1);
+		component.find('remove-icon').simulate('click');
+
+		expect(component.find('img').length).toBe(0);
+		expect(component.find('input').length).toBe(1);
+		expect(component.state().file).toBe(null);
+
+		expect(component.find('add-icon').length).toBe(1);
+		component.find('add-icon').simulate('click');
+
+		expect(addDetail.mock.calls.length).toEqual(0);
+		expect(Alert.info).toBeCalled();
 	});
 
-	xit('should show alert if image can not be loaded by url', () => {
-		const addDetail = jest.fn();
-		component = mount(
-			<FileWithDescription addDetail={addDetail}/>
-		);
+	it('should show alert if image can not be loaded by url', () => {
+		component.instance().reader = {
+			readAsDataURL: () => component.instance().reader.onerror()
+		}
+		expect(component.find('input').length).toBe(1);
+
+		component.find('input').simulate('change', {target: {files: [file]}});
+		expect(Alert.error).toBeCalled();
 	});
 });
 
-xdescribe('FileWithDescriptionItem match snapshot', () => {
+describe('FileWithDescriptionItem match snapshot', () => {
 	it('should render correctly', () => {
 		const output = shallow(
 			<FileWithDescription/>

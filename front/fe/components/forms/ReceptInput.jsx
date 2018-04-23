@@ -11,6 +11,10 @@ class ReceptInput extends React.Component {
         this.onChange = this.onChange.bind(this);
     }
 
+    componentWillUnmount() {
+        this.onChange = null;
+    }
+
     componentWillReceiveProps(nextProps) {
         const {initialValue: prevInitialValue} = this.props;
         const {initialValue: nextInitialValue} = nextProps;

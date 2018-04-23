@@ -50,11 +50,9 @@ class FileWithDescription extends React.Component {
     }
 
     getFileUrl = (file) => {
-        this.reader.onload = (e) => {
-            console.log('_____________________');
-            console.log(e.target.result);
+		this.reader.onload = (e) =>
             this.reader && this.setState({fileUrl: e.target.result, file});
-        }
+		this.reader.onerror = () => Alert.error('К сожалению, файл не может быть загружен', {});
         this.reader.readAsDataURL(file);
     }
 
@@ -82,7 +80,7 @@ class FileWithDescription extends React.Component {
             {fileUrl
                 ? <Image src={fileUrl}
                          className='description_file_field'
-                         onRemove={() => this.setState({fileUrl: null})}/>
+                         onRemove={() => this.setState({fileUrl: null, file: null})}/>
                 : <ReceptFileInput onChangeInput={this.getFileUrl}
                          className='description_file_field'
                          title='Добавить фото'

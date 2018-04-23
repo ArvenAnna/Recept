@@ -13,6 +13,10 @@ class ReceptTextarea extends React.Component {
         this.onChange = this.onChange.bind(this);
     }
 
+    componentWillUnmount() {
+        this.onChange = null;
+    }
+
     componentWillReceiveProps(nextProps) {
         const {initialValue: prevInitialValue} = this.props;
         const {initialValue: nextInitialValue} = nextProps;
@@ -44,6 +48,10 @@ class ReceptTextarea extends React.Component {
         const style = element.currentStyle || window.getComputedStyle(element);
 
         const rect = element.getBoundingClientRect();
+
+        console.log('--------------');
+        console.log(rect.height);
+		console.log(rect.scrollHeight);
 
         if (rect.height < element.scrollHeight || rect.height > minHeight) {
             if (style.boxSizing === 'content-box') {
