@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Dropdown} from '../styled/textFields.jsx';
+import {Dropdown, DropdownList} from '../styled/textFields.jsx';
 import {ArrowUp, ArrowDown} from '../styled/icons.jsx';
-import {DropdownList} from '../styled/textFields';
 import styled from 'styled-components';
 import {isDescendantOf} from '../../utils/domUtils';
 

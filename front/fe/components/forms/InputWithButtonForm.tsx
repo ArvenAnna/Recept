@@ -27,7 +27,7 @@ interface Suggestion {
     name: string;
 }
 
-interface InputWithButtonFormProps {
+export interface InputWithButtonFormProps {
     placeholder: string;
     onButtonClick: (value: any) => void;
     suggestions: Array<Suggestion>;
@@ -111,9 +111,10 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
         const {suggestions, onButtonClick, suggestionsRequired} = this.props;
         const {value} = this.state;
         if (value) {
+            console.log(suggestions);
             const sendingValue = (!suggestions || !suggestions.length)
                 ? (suggestionsRequired ? null : value)
-                : suggestions.find((item: Suggestion) => item.name == value);
+                : this.filterSuggestions().find((item: Suggestion) => item.name == value);
             if (sendingValue) {
                 onButtonClick(sendingValue);
             }
@@ -124,7 +125,7 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
     filterSuggestions() {
         const {suggestionExcludes, suggestions} = this.props;
         if (suggestionExcludes && suggestionExcludes.length) {
-            return suggestions.filter((sug: Suggestion) => !suggestionExcludes.includes(sug));
+            return suggestions.filter((sug: Suggestion, i) =>  !suggestionExcludes.find(s => s.name == sug.name));
         }
         return suggestions;
     }

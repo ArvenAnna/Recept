@@ -31,7 +31,6 @@ class TwoInputsWithButtonForm extends React.Component {
             outlined: 0
         };
         this.onChangeInput = this.onChangeInput.bind(this);
-        this.getValues = this.getValues.bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +41,7 @@ class TwoInputsWithButtonForm extends React.Component {
     componentWillUnmount() {
         document.removeEventListener('click', (e) => this.clickOutside(e));
         document.removeEventListener('keydown', (e) => this.onKeyPress(e.key));
+        this.onChangeInput = null;
     }
 
     onKeyPress(key) {
@@ -78,7 +78,7 @@ class TwoInputsWithButtonForm extends React.Component {
         });
     }
 
-    getValues() {
+    getValues = () => {
         const {onButtonClick} = this.props;
         const suggestions = this.filterSuggestions();
         const {first, second} = this.state;
@@ -110,7 +110,7 @@ class TwoInputsWithButtonForm extends React.Component {
     filterSuggestions() {
         const {suggestionExcludes, suggestions} = this.props;
         if (suggestionExcludes && suggestionExcludes.length) {
-            return suggestions.filter((sug) => !suggestionExcludes.includes(sug));
+            return suggestions.filter(sug => !suggestionExcludes.find(s => s.name == sug.name));
         }
         return suggestions;
     }
@@ -151,13 +151,20 @@ class TwoInputsWithButtonForm extends React.Component {
 TwoInputsWithButtonForm.propTypes = {
     placeholderOne: PropTypes.string,
     placeholderTwo: PropTypes.string,
+    firstInputClassName: PropTypes.string,
+    secondInputClassName: PropTypes.string,
+    inputWithButtonClassName: PropTypes.string,
+    className: PropTypes.string,
     buttonText: PropTypes.string,
     onButtonClick: PropTypes.func,
     suggestions: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string
     })),
-    className: PropTypes.string
+    suggestionExcludes: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string
+    }))
 }
 
 export default TwoInputsWithButtonForm;
