@@ -26,7 +26,7 @@ const ListItems = ({items, onButtonClick, className}) => {
 ListItems.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            name: PropTypes.string
+            name: PropTypes.oneOfType(PropTypes.string, PropTypes.object)
         })
     ),
     buttonText: PropTypes.string,
