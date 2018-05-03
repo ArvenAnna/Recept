@@ -93,6 +93,8 @@ class CreateReceptPage extends React.Component {
         }
     }
 
+
+
     render() {
         const {setReceptName, setReceptDepartment, setReceptText, addProportion, removeProportion,
             addTag, removeTag, addRef, removeRef, createRecept, addDetail, removeDetail, removeReceptFoto,

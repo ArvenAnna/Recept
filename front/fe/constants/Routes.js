@@ -11,6 +11,7 @@ const routes = {
     POST_CREATE_RECEPT: httpPrefix + '/recept.req',
 
     UPLOAD_FILE: httpPrefix + '/file.req',
+    DELETE_TEMP_FILE: (fileUrl) => `${httpPrefix}/${fileUrl}/file.req`,
 
     IMAGE_CATALOG: httpPrefix + '/foto/'
 };

@@ -18,6 +18,12 @@ class HttpService {
             .then(result =>  transformResponse ? transformResponse(result.data) : result.data);
     }
 
+    doDelete(route, transformResponse) {
+        return this.http
+            .delete(route)
+            .then(result =>  transformResponse ? transformResponse(result.data) : result.data);
+    }
+
     doPost(route, request) {
         return this.http.post(route, request);
     }

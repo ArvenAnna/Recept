@@ -168,10 +168,12 @@ export function setFilePath(filePath) {
     }
 }
 
+export const removeReceptFotoComplete = () => ({
+    type: types.REMOVE_FOTO
+})
+
 export function removeReceptFoto() {
-    return {
-        type: types.REMOVE_FOTO
-    }
+    return (dispatch, getState) => http.doDelete(routes.DELETE_TEMP_FILE(getState().newRecept.imgPath)).then(data => dispatch(removeReceptFotoComplete()))
 }
 
 export function uploadFile(file) {
