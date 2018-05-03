@@ -28,10 +28,12 @@ describe('ReceptDropdown', () => {
 
 });
 
-describe('TwoInputsWithButtonForm match snapshot', () => {
+describe('ReceptDropdown should match snapshot', () => {
     it('should render correctly', () => {
+		const onChangeDropdown = jest.fn();
         const items = [{name: 'one'}, {name: 'two'}];
         const output = mount(<ReceptDropdown items={items}
+											 onChangeDropdown={onChangeDropdown}
                                              selectedItemIndex={0}/>);
         expect(shallowToJson(output)).toMatchSnapshot();
     });

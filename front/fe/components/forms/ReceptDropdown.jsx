@@ -22,6 +22,7 @@ class ReceptDropdown extends React.Component {
             outlined: props.selectedItemIndex,
             selectedItemIndex: props.selectedItemIndex
         };
+		this.props.onChangeDropdown(props.items[props.selectedItemIndex])
     }
 
     componentWillReceiveProps(nextProps) {
