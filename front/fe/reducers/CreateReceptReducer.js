@@ -24,7 +24,7 @@ const receptReducer = (state = {}, action) => {
             newState.name = action.name;
             break;
         case SET_RECEPT_DEPARTMENT:
-            newState.department = {id: action.id};
+            newState.department = action.depart;
             break;
         case SET_RECEPT_TEXT:
             newState.text = action.text;

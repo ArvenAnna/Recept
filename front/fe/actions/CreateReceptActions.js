@@ -11,10 +11,10 @@ export function setReceptName(name) {
     }
 }
 
-export function setReceptDepartment(id) {
+export function setReceptDepartment(depart) {
     return {
         type: types.SET_RECEPT_DEPARTMENT,
-        id
+        depart
     }
 }
 
