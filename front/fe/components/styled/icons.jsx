@@ -48,8 +48,6 @@ export const SearchIcon = styled(SearchFile)`
 
 export const NoImgIcon = styled(Dish)`
     
-    width: 600px;
-    
     fill: ${props => props.theme.text};
     
     &:hover {

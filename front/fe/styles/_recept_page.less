@@ -1,0 +1,71 @@
+require("../constants/themes.js");
+
+.recept_page {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+
+  &_caption {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    text-align: center;
+    font-size: 1.6rem;
+    width: 100%;
+    background-color: @content;
+    margin: 0 0 20px 0;
+    box-shadow: 0px 0px 3px 3px @shadow;
+    color: @text;
+  }
+
+  &_main_foto {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    width: 100%;
+  }
+
+  &_proportions {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+
+  &_refs {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+
+  &_description {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 4;
+
+    //padding: 10px;
+    //margin: 10px;
+    font-size: 1.1rem;
+    text-align: justify;
+  }
+
+  &_details {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 4;
+    grid-row-end: 5;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+
+    img {
+      width: 100%;
+    }
+
+  }
+
+}

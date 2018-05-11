@@ -4,65 +4,9 @@ import {copyReceptToNew} from '../actions/EditActions';
 
 import ProportionsList from '../components/specific/ProportionList.jsx';
 import ReceptItem from '../components/simple/ReceptItem.jsx';
-import DetailItem from '../components/simple/DetailItem.jsx';
-import styled from 'styled-components';
-import {addHeaderButton, removeHeaderButton} from "../actions/CommonActions";
-import {NoImgIcon} from "../components/styled/icons.jsx";
-
-const Receipt = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    & > img {
-        display: inline-block;
-        box-sizing: border-box;
-        width: 600px;
-    }
-`
-
-const ReceiptCaption = styled.div`
-    text-align: center;
-    font-size: 1.6rem;
-    width: 100%;
-    background-color: ${props => props.theme.content};
-    margin: 0 0 20px 0;
-    box-shadow: 0px 0px 3px 3px ${props => props.theme.shadow};
-    color: ${props => props.theme.text};
-`
-
-const ReceptDescription = styled.div`
-    display: grid;
-    grid-template-columns: repeat(${props => props.columns}, 1fr);
-`
-
-const Proportions = styled.div`
-    display: inline-block;
-    box-sizing: border-box;
-    margin-left: 100px;
-    vertical-align: top;
-`
-
-const RefList = styled.div`
-    display: inline-block;
-    box-sizing: border-box;
-    vertical-align: top;
-
-`
-
-
-const Description = styled.div`
-    padding: 10px;
-    background-color: ${props => props.theme.border_2};
-    margin: 10px;
-    font-size: 1.1rem;
-    text-align: justify;
-`
-
-const DetailList = styled.div`
-    padding: 5px;
-    margin: 10px;
-`
+import {addHeaderButton, removeHeaderButton} from '../actions/CommonActions';
+import {NoImgIcon} from '../components/styled/icons.jsx';
+import '../styles/_recept_page.less';
 
 @connect(store => ({
     recept: store.chosenRecept
@@ -89,35 +33,24 @@ class ReceptPage extends React.Component {
         if (!recept.id) {
             return null;
         }
-        let columns = 0;
-        if (recept.proportions) {
-            columns++;
-        }
-        if (recept.refs) {
-            columns++;
-        }
-        if (recept.details) {
-            columns++;
-        }
         return (
-            <Receipt>
-                <ReceiptCaption>{recept.name}</ReceiptCaption>
+            <div className='recept_page'>
+                <div className='recept_page_caption'>{recept.name}</div>
+                <div className='recept_page_proportions'>
+                    <ProportionsList items={recept.proportions}/>
+                </div>
                 {recept.imgPath
-                    ? <img src={recept.imgPath}/>
-                    : <NoImgIcon/>}
-                {recept.text && <Description>{recept.text}</Description>}
-                <ReceptDescription columns={columns}>
-                    <Proportions>
-                        <ProportionsList items={recept.proportions}/>
-                    </Proportions>
-                    {recept.refs && <RefList>
-                        {recept.refs.map(ref => <ReceptItem key={ref.id} item={ref}/>)}
-                    </RefList>}
-                    {recept.details && <DetailList>
-                        {recept.details.map(detail => <DetailItem key={detail.id} item={detail}/>)}
-                    </DetailList>}
-                </ReceptDescription>
-            </Receipt>
+                    ? <img src={recept.imgPath} className='recept_page_main_foto'/>
+                    : <NoImgIcon className='recept_page_main_foto'/>}
+                {recept.text && <div className='recept_page_description'>{recept.text}</div>}
+                {recept.refs && <div className='recept_page_refs'>
+                    {recept.refs.map(ref => <ReceptItem key={ref.id} item={ref}/>)}
+                </div>}
+                {recept.details && <div className='recept_page_details'>
+                    {recept.details.map(detail => [<img src={detail.filePath} key={`img${detail.id}`}/>,
+                    <div key={`desc${detail.id}`}>{detail.description}</div>])}
+                </div>}
+            </div>
         );
     }
 }

@@ -1,15 +1,23 @@
 import React from 'react';
 import connect from 'redux-connect-decorator';
-import ReceptItem from '../components/simple/ReceptItem.jsx';
+import {Link} from 'react-router-dom';
+import {NoImgIcon} from '../components/styled/icons';
+import '../styles/_recept_list_page.less';
 
 @connect(store => ({
     receptList: store.receptList
 }))
-
 class ReceptListPage extends React.Component {
-    render() {
-        return this.props.receptList.map(item => <ReceptItem key={item.id} item={item}/>)
 
+    render() {
+        return <div className='recept_list_page'>
+            {this.props.receptList.map(item =>
+                <Link to={item.to} className='recept_list_page_item'>
+                    {item.imgPath ? <img src={item.imgPath}/> : <NoImgIcon/>}
+                    <div className='recept_list_page_item_name'>{item.name}</div>
+                    <div className='recept_list_page_item_divider'/>
+                </Link>)}
+        </div>
     }
 }
 

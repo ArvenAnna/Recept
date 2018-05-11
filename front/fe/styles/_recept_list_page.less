@@ -1,0 +1,41 @@
+require("../constants/themes.js");
+
+@item_width: 200px;
+
+.recept_list_page {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(@item_width, 1fr));
+    justify-items: center;
+
+    &_item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        max-width: @item_width;
+        min-width: 80%;
+
+        img, svg {
+            width: 100%;
+        }
+
+        img:hover {
+            opacity: 0.5;
+        }
+
+       &_name {
+          text-align: center;
+          padding: 5px;
+          color: @text;
+          font-size: medium;
+          font-weight: 600;
+       }
+
+      &_divider {
+          border-bottom: 1px solid @text;
+          width: 80%;
+      }
+    }
+
+
+}
