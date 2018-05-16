@@ -14,9 +14,9 @@ import javax.servlet.ServletRegistration;
 public class WebInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         //map to properties file
-        servletContext.setInitParameter("resource.root.location", "C:/D/Java/Recept/src/main/webapp");
+        //servletContext.setInitParameter("resource.root.location", "C:/D/Java/Recept/src/main/webapp");
 
-        servletContext.setInitParameter("upload.location", "C:/D/Java/Recept/src/main/webapp/foto");
+        //servletContext.setInitParameter("upload.location", System.getenv("FOTO_LOCATION"));
         servletContext.setInitParameter("resource.xml.location", "C:/D/Java/Recept/xml");
         servletContext.setInitParameter("resource.temp.location", "tempfiles");
 

@@ -10,7 +10,7 @@ import ReceptPage from './ReceptPage';
 import EditReceptPage from './CreateReceptPage';
 import HorizontalMenuButton from '../components/simple/HorizontalMenuButton.tsx';
 
-import {copyReceptToNew} from '../actions/EditActions';
+import {copyReceptToNew} from '../actions/CreateReceptActions';
 import MyRoute from "./MyRoute.jsx";
 import {fetchRecept, fetchReceptsByDepart} from "../actions/MainActions";
 import {fetchIngridients} from "../actions/IngridientActions";
@@ -27,7 +27,7 @@ class App extends React.Component {
     render() {
         const {headerButtons} = this.props;
         return ([
-            <div className='app_container'>
+            <div className='app_container' key='app_container'>
                 <div className='horizontal_menu nav_menu'>
                     {headerButtons.map(item => <HorizontalMenuButton
                         key={item.id}
@@ -49,7 +49,10 @@ class App extends React.Component {
                                      component={EditReceptPage}
                                      action={copyReceptToNew}
                                      args={[{arg: {}}]}/>
-                            <Route path='/editRecept' component={EditReceptPage}/>
+                            <MyRoute path='/recept/:id/edit'
+                                     action={fetchRecept}
+                                     args={[{router: 'id'}]}
+                                     component={EditReceptPage}/>
                             <MyRoute path='/recept/:id'
                                      component={ReceptPage}
                                      action={fetchRecept}

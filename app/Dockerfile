@@ -16,12 +16,6 @@ RUN apt-get update -y && apt-get install maven -y
 RUN mv -f /etc/alternatives/java8 /etc/alternatives/java
 RUN ls -l /usr/bin/java && java -version
 
-# Install Node.js
-RUN apt-get install --yes curl
-RUN curl --silent --location https://deb.nodesource.com/setup_9.x | bash -
-RUN apt-get install --yes nodejs
-RUN apt-get install --yes build-essential
-
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app/

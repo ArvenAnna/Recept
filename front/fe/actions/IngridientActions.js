@@ -1,30 +1,22 @@
 import * as types from '../constants/ActionTypes';
 import http from '../utils/HttpService';
 import routes from '../constants/Routes';
-import {ERROR_SHOWING_TIME} from "../constants/appConstants";
-import {toggleError} from './CommonActions';
 
-export function ingridientsRequest() {
-    return {
+export const ingridientsRequest = () => ({
         type: types.REQ_INGRIDIENTS,
-    }
-}
+    })
 
-export function setIngridients(ingridients) {
-    return {
+export const setIngridients = (ingridients) => ({
         type: types.SET_INGRIDIENTS,
         ingridients
-    };
-}
+    })
 
-export function fetchIngridients() {
-    return dispatch => {
+export const fetchIngridients = () => dispatch => {
         dispatch(ingridientsRequest());
         return http
             .doGet(routes.GET_INGRIDIENTS, sortIngridients)
             .then(result => dispatch(setIngridients(result)));
     }
-}
 
 function sortIngridients(ingridients) {
     return ingridients.sort((a, b) => {
@@ -38,25 +30,15 @@ function sortIngridients(ingridients) {
     });
 }
 
-export function addIngridientRequest(name) {
-    return {
+export const addIngridientRequest = (name) => ({
         type: types.REQ_ADD_INGRIDIENT,
         name
-    };
-}
+    })
 
-export function addIngridient(name) {
-    return dispatch => {
+export const addIngridient = (name) => dispatch => {
         dispatch(addIngridientRequest(name));
         const ingridient = {name};
         return http
             .doPost(routes.POST_INGRIDIENTS, ingridient)
-            .then(result => dispatch(fetchIngridients()))
-            .catch(error => {
-                setTimeout(() => {
-                    dispatch(toggleError());
-                }, ERROR_SHOWING_TIME);
-                dispatch(toggleError(error.response.data.message));
-            });
+            .then(result => dispatch(fetchIngridients()));
     }
-}

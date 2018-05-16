@@ -10,7 +10,10 @@ COPY ./fe /usr/src/app/fe
 
 WORKDIR /usr/src/app/fe
 
-RUN ./node_modules/.bin/webpack
+ARG fotoLocation
+ARG templocation
+
+RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=$fotoLocation --env.TEMP_CATALOG=$fotoLocation
 
 RUN npm test
 

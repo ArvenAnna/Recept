@@ -10,9 +10,8 @@ import {
     REMOVE_TAG,
     ADD_REF,
     REMOVE_REF,
-    SET_CREATED_RECEPT,
     SET_FILE_PATH, ADD_DETAIL, REMOVE_DETAIL, REMOVE_FOTO
-} from "../constants/ActionTypes";
+} from '../constants/ActionTypes';
 
 const receptReducer = (state = {}, action) => {
     let newState = Object.assign({}, state);
@@ -100,19 +99,9 @@ const tagsReducer = (state = [], action) => {
     }
 }
 
-const createdReceptReducer = (state = 0, action) => {
-    switch (action.type) {
-        case SET_CREATED_RECEPT:
-            return action.id;
-        default:
-            return state;
-    }
-}
-
 const CreateReceptReducer = {
     newRecept: receptReducer,
-    tags: tagsReducer,
-    successfullyCreatedRecept: createdReceptReducer
+    tags: tagsReducer
 }
 
 export default CreateReceptReducer;

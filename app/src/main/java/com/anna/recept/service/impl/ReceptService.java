@@ -2,7 +2,6 @@ package com.anna.recept.service.impl;
 
 import com.anna.recept.converter.DtoConverter;
 import com.anna.recept.entity.Department;
-import com.anna.recept.entity.Detail;
 import com.anna.recept.entity.Recept;
 import com.anna.recept.entity.Tag;
 import com.anna.recept.exception.Errors;
@@ -20,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -91,7 +89,7 @@ public class ReceptService implements IReceptService {
             if (detail.getFilePath() != null) {
                 String fileName = departmentRep.findOne(recept.getDepartment().getId()).getName() + File.separator + recept.getName() + File.separator + recept.getName() + UUID.randomUUID().toString() + ".png";
                 try {
-                    detail.setFilePath(fileService.saveTempFile(detail.getFilePath(), fileName));
+                    detail.setFilePath(fileService.saveRealFile(detail.getFilePath(), fileName));                                          detail.setRecept(recept);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -101,12 +99,13 @@ public class ReceptService implements IReceptService {
         String fileName = departmentRep.findOne(recept.getDepartment().getId()).getName() + File.separator + recept.getName() + File.separator + recept.getName() + ".png";
 
         if (recept.getImgPath() != null) {
-            recept.setImgPath(fileService.saveTempFile(recept.getImgPath(), fileName));
+            recept.setImgPath(fileService.saveRealFile(recept.getImgPath(), fileName));
         }
 
         if ((recept.getId() == null && isUniqueReceptName(recept.getName()))
                 || recept.getId() != null) {
             receptRep.save(recept);
+            fileService.cleanTempFiles();
             return recept.getId();
         }
         throw new ReceptApplicationException(Errors.RECEPT_NAME_NOT_UNIQUE);
@@ -129,7 +128,7 @@ public class ReceptService implements IReceptService {
         if (recept.getImgPath() == null) {
             newRecept.setImgPath(null);
         } else if (recept.getImgPath() != newRecept.getImgPath()) {
-            newRecept.setImgPath(fileService.saveTempFile(recept.getImgPath(), fileName));
+            newRecept.setImgPath(fileService.saveRealFile(recept.getImgPath(), fileName));
         }
 
         //refs

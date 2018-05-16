@@ -21,9 +21,7 @@ class Sidebar extends React.Component {
     render() {
         const {className, departments} = this.props;
         return <div className={`vertical_menu ${className ? className : ''}`}>
-            {departments.map(item => <NavButton
-                key={item.id}
-                item={item}/>)}
+            {departments.map(item => <NavButton key={item.id} item={item}/>)}
         </div>
     }
 

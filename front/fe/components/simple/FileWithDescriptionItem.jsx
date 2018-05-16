@@ -4,6 +4,7 @@ import {RemoveIcon} from '../styled/icons';
 import Image from './Image';
 import {Overlay} from '../styled/overlay';
 import PropTypes from 'prop-types';
+import routes from "../../constants/Routes";
 
 const Wrapper = styled.section`
     display: grid;
@@ -24,7 +25,7 @@ const Text = styled.div`
 const FileWithDescriptionItem = ({detail, removeDetail, className}) => {
     return (
         <Wrapper className={className ? className : ''}>
-            <Image src={detail.filePath} className='description_img'/>
+            <Image src={detail.filePath.startsWith(routes.TEMP_CATALOG) ? detail.filePath : routes.IMAGE_CATALOG + detail.filePath} className='description_img'/>
             <Text>{detail.description}</Text>
 
             {removeDetail && <Overlay className='base_overlay'>

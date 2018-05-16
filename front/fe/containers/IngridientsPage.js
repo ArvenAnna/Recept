@@ -4,6 +4,7 @@ import InputWithButtonForm from "../components/forms/InputWithButtonForm.tsx";
 import {addIngridient} from "../actions/IngridientActions";
 import Error from "../components/simple/BackendError.jsx";
 import styled from 'styled-components';
+import {ERROR_SHOWING_TIME} from "../constants/appConstants";
 
 const Wrapper = styled.div`
     .ingridients_input {
@@ -19,19 +20,36 @@ const Item = styled.div`
 
 @connect(store => ({
     ingridients: store.ingridients,
-    error: store.error
 }), {
     addIngridient
 })
 
 class IngridientsPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: null
+        }
+    }
+
+    submit = (ing) => {
+        this.props.addIngridient(ing)
+            .catch(error => {
+                this.setState({error: error.response.data.message})
+                setTimeout(() => {
+                    this.setState({error: null})
+                }, ERROR_SHOWING_TIME);
+        });
+    }
+
     render() {
-        const {error, addIngridient, ingridients} = this.props;
+        const {ingridients} = this.props;
+        const {error} = this.state;
         return (
             <Wrapper>
                 <InputWithButtonForm placeholder='новый ингридиент'
                                      className='ingridients_input'
-                                     onButtonClick={addIngridient}/>
+                                     onButtonClick={this.submit}/>
                 <Error message={error}/>
                 {ingridients.map(ing => <Item key={ing.id}>{ing.name}</Item>)}
             </Wrapper>

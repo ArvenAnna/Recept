@@ -10,8 +10,6 @@ export const SET_INGRIDIENTS = 'SET_INGRIDIENTS';
 export const REQ_INGRIDIENTS = 'REQ_INGRIDIENTS';
 export const REQ_ADD_INGRIDIENT = 'REQ_ADD_INGRIDIENT';
 
-export const TOGGLE_ERROR = 'TOGGLE_ERROR';
-
 export const SET_RECEPT_NAME = 'SET_RECEPT_NAME';
 export const SET_RECEPT_DEPARTMENT = 'SET_RECEPT_DEPARTMENT';
 export const SET_RECEPT_TEXT = 'SET_RECEPT_TEXT';
@@ -28,11 +26,9 @@ export const SET_FILE_PATH = 'SET_FILE_PATH';
 export const REMOVE_FOTO = 'REMOVE_FOTO';
 
 export const CREATE_RECEPT = 'CREATE_RECEPT';
-export const SET_CREATED_RECEPT = 'SET_CREATED_RECEPT';
 
 export const SET_TAGS = 'SET_TAGS';
 export const REQ_TAGS = 'REQ_TAGS';
-
 
 export const COPY_RECEPT = 'COPY_RECEPT';
 export const ADD_HEADER_BUTTON = 'ADD_HEADER_BUTTON';

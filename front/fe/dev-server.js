@@ -3,12 +3,16 @@ const app = express();
 const proxy = require('http-proxy-middleware');
 const path = require('path');
 
+const morgan = require('morgan');
+
 const tempLocation = process.env.TEMP_LOCATION;
+const fotoLocation = process.env.FOTO_LOCATION;
 
 let pathRewriteObj = {
     '^/api' : '/'
 }
 pathRewriteObj[`^/${tempLocation}`] = '/' + tempLocation;
+pathRewriteObj[`^/${fotoLocation}`] = '/' + fotoLocation;
 // proxy middleware options
 const options = {
     target: `http://recept_app:${process.env.API_PORT}`, // target host
@@ -25,8 +29,11 @@ const options = {
 // create the proxy (without context)
 const exampleProxy = proxy(options);
 
+app.use(morgan('combined'));
+
 app.use('/api', exampleProxy);
 app.use('/' + tempLocation, exampleProxy);
+app.use('/' + fotoLocation, exampleProxy);
 
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')));

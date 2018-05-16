@@ -19,9 +19,9 @@ public class MergeObjects {
     }
 
     public static <T> List<T> getItemsNotPresentInSecond(List<T> first, List<T> second) {
-        Predicate<T> isInSecond = (fi) ->
-            second.stream().filter(si -> fi.equals(si)).findAny().isPresent();
+        Predicate<T> isNotInSecond = (fi) ->
+            !second.stream().filter(si -> fi.equals(si)).findAny().isPresent();
 
-        return first.stream().filter(isInSecond).collect(Collectors.toList());
+        return first.stream().filter(isNotInSecond).collect(Collectors.toList());
     }
 }

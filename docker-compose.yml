@@ -3,7 +3,11 @@ version: '2'
 services:
   recept_front:
       container_name: recept_front
-      build: ./front
+      build:
+        context: ./front
+        args:
+          - fotoLocation=${FOTO_LOCATION}
+          - templocation=${TEMP_LOCATION}
       env_file:
         - '.env'
       ports:
@@ -37,7 +41,7 @@ services:
 #    links:
 #          - recept_db:recept_db
     volumes:
-#      - ./foto:/usr/src/app/foto
+       - ./${FOTO_LOCATION}:/usr/local/tomcat/webapps/ROOT/${FOTO_LOCATION}
        - ./${TEMP_LOCATION}:/usr/local/tomcat/webapps/ROOT/${TEMP_LOCATION}
     env_file:
        - '.env'

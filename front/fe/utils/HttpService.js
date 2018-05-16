@@ -25,7 +25,8 @@ class HttpService {
     }
 
     doPost(route, request, transformResponse) {
-        return this.http.post(route, request).then(result =>  transformResponse ? transformResponse(result.data) : result.data);
+        return this.http.post(route, request)
+            .then(result =>  transformResponse ? transformResponse(result.data) : result.data);
     }
 
     sendFile(route, file) {

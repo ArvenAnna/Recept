@@ -1,4 +1,3 @@
-import {copyReceptToNew} from "../actions/EditActions";
 import {ADD_HEADER_BUTTON, REMOVE_HEADER_BUTTON} from "../constants/ActionTypes";
 
 const items = [

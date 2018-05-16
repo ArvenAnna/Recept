@@ -2,13 +2,11 @@ import * as types from '../constants/ActionTypes';
 import http from '../utils/HttpService';
 import routes from '../constants/Routes';
 
-export function departmentsRequest() {
-    return {
+export const departmentsRequest = () => ({
         type: types.REQ_DEPARTMENTS,
-    }
-}
+    })
 
-export function setDepartments(departments) {
+export const setDepartments = (departments) => {
     return {
         type: types.SET_DEPARTMENTS,
         departments
