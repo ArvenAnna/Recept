@@ -25,5 +25,7 @@ public interface IFileService {
 
     String saveRealFile(String tempPath, String name) throws IOException;
 
+    void deleteRealFile(String path) throws IOException;
+
     void cleanTempFiles() throws IOException;
 }

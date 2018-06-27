@@ -1,17 +1,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
+import routes from '../../constants/Routes';
 
 jest.mock('../../components/styled/icons', () => ({RemoveIcon: 'remove-icon'}));
 jest.mock('../../components/styled/overlay', () => ({Overlay: 'overlay'}));
-window.FOTO_CATALOG = 'foto';
 
 import FileWithDescriptionItem from '../../components/simple/FileWithDescriptionItem';
 
-xdescribe('FileWithDescriptionItem', () => {
+describe('FileWithDescriptionItem', () => {
 
     let component;
     const detail = {filePath: 'path', description: 'description'};
+
 
     afterEach(() => {
         component.unmount();
@@ -24,7 +25,7 @@ xdescribe('FileWithDescriptionItem', () => {
         );
 
         expect(component.find('img').length).toBe(1);
-        expect(component.find('img').prop('src')).toEqual(detail.filePath);
+        expect(component.find('img').prop('src')).toEqual(routes.IMAGE_CATALOG + detail.filePath);
         expect(component.filterWhere(item => item.text() == detail.description).length).toBe(1);
         expect(component.find('overlay').length).toEqual(1);
         expect(component.find('remove-icon').length).toEqual(1);
@@ -52,14 +53,14 @@ xdescribe('FileWithDescriptionItem', () => {
 
         expect(component.find('img').length).toBe(1);
 
-        expect(component.find('img').prop('src')).toEqual(detail.filePath);
+        expect(component.find('img').prop('src')).toEqual(routes.IMAGE_CATALOG + detail.filePath);
 
         expect(component.find('overlay').length).toEqual(0);
         expect(component.find('remove-icon').length).toEqual(0);
     });
 });
 
-xdescribe('FileWithDescriptionItem match snapshot', () => {
+describe('FileWithDescriptionItem match snapshot', () => {
     it('should render correctly', () => {
         const detail = {filePath: 'path', description: 'description'};
         const output = shallow(

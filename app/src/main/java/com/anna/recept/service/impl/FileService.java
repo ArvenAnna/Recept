@@ -120,6 +120,13 @@ public class FileService implements IFileService {
     }
 
     @Override
+    public void deleteRealFile(String path) throws IOException {
+        String dir = context.getRealPath("") + File.separator + System.getenv(FOTO_LOCATION_ENV) + File.separator + path;
+        File dirFile = new File(dir);
+        dirFile.delete();
+    }
+
+    @Override
     public void cleanTempFiles() throws IOException {
         String tempDir = context.getRealPath("") + File.separator + System.getenv(TEMP_LOCATION_ENV);
         File tempDirFile = new File(tempDir);

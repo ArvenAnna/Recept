@@ -13,11 +13,11 @@ WORKDIR /usr/src/app/fe
 ARG fotoLocation
 ARG templocation
 
-RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=$fotoLocation --env.TEMP_CATALOG=$fotoLocation
+RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=${fotoLocation} --env.TEMP_CATALOG=${templocation}
 
 RUN npm test
 
-RUN ./dependenciesCheck.sh
+#RUN ./dependencies/dependenciesCheck.sh
 
 EXPOSE 4003
 

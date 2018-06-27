@@ -1,11 +1,10 @@
 const webpack = require('webpack');
 
-// setFotoCatalog(env.FOTO_CATALOG);
-// setTempCatalog(env.TEMP_CATALOG);
-
 module.exports = env => {
 
-    // console.dir(env);
+    console.dir(env);
+    console.dir(__dirname);
+
     return {
         entry: './app.js',
         output: {
@@ -76,8 +75,10 @@ module.exports = env => {
         },
         plugins: [
             new webpack.DefinePlugin({
-                FOTO_CATALOG: JSON.stringify(env.FOTO_CATALOG),
-                TEMP_CATALOG: JSON.stringify(env.TEMP_CATALOG)
+                'process.env': {
+                    'FOTO_CATALOG': JSON.stringify(env.FOTO_CATALOG),
+                    'TEMP_CATALOG': JSON.stringify(env.TEMP_CATALOG)
+                }
             })
         ],
 

@@ -20,7 +20,7 @@ jest.mock('react-s-alert');
 
 import FileWithDescription from '../../components/forms/FileWithDescription';
 
-xdescribe('FileWithDescription', () => {
+describe('FileWithDescription', () => {
 
 	let component;
 	let addDetail;
@@ -127,7 +127,7 @@ xdescribe('FileWithDescription', () => {
 	});
 });
 
-xdescribe('FileWithDescriptionItem match snapshot', () => {
+describe('FileWithDescriptionItem match snapshot', () => {
 	it('should render correctly', () => {
 		const output = shallow(
 			<FileWithDescription/>

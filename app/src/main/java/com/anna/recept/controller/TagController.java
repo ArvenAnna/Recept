@@ -20,7 +20,6 @@ public class TagController {
     }
 
 
-
 //    @RequestMapping(value = {"/categories.req"}, method = RequestMethod.GET,
 //            headers = "Accept=application/json")
 //    public List<Tag> fetchTags(@RequestParam("receptId") Integer receptId) {

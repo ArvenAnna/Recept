@@ -1,8 +1,5 @@
 const httpPrefix = '/api';
 
-let FOTO_CATALOG;
-let TEMP_CATALOG;
-
 const routes = {
     GET_DEPARTMENTS: httpPrefix + '/departs.req',
     GET_RECEPTS: (departId) => `${httpPrefix}/recept_list.req?departId=${departId}`,
@@ -14,13 +11,9 @@ const routes = {
     POST_CREATE_RECEPT: httpPrefix + '/recept.req',
 
     UPLOAD_FILE: httpPrefix + '/file.req',
-    DELETE_TEMP_FILE: (fileUrl) => `${httpPrefix}/${fileUrl}/file.req`,
 
-    // IMAGE_CATALOG: '/foto/',
-    // TEMP_CATALOG: '/tempfiles/',
-
-    IMAGE_CATALOG: `/${FOTO_CATALOG}/`,
-    TEMP_CATALOG: `/${TEMP_CATALOG}/`
+    IMAGE_CATALOG: `/${process.env.FOTO_CATALOG}/`,
+    TEMP_CATALOG: `/${process.env.TEMP_CATALOG}/`
 
 };
 

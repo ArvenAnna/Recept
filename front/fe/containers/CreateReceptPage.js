@@ -112,7 +112,7 @@ class CreateReceptPage extends React.Component {
             .doPost(routes.POST_CREATE_RECEPT, proccessedRecept)
             .then(id => this.props.history.push(`/recept/${id}`))
             .catch(error => {
-                this.setState({error: error.response ? error.response.data.message : error.message, loading: false})
+                this.setState({error: error ? (error.response && error.response.data ? error.response.data.message : error.message) : 'Unknown error', loading: false})
                 setTimeout(() => {
                     this.setState({error: null});
                 }, ERROR_SHOWING_TIME);
@@ -137,7 +137,7 @@ class CreateReceptPage extends React.Component {
                             selectedItemIndex={0}/>
             {recept.imgPath
                 ? <div className='receipt_main_foto'>
-                    <Image src={recept.imgPath.startsWith(routes.TEMP_CATALOG) ? recept.imgPath : routes.IMAGE_CATALOG + recept.imgPath}
+                    <Image src={recept.imgPath.startsWith(routes.TEMP_CATALOG.slice(1)) ? recept.imgPath : routes.IMAGE_CATALOG + recept.imgPath}
                            onRemove={removeReceptFoto}/>
                 </div>
                 : <ReceptFileInput onChangeInput={uploadFile}

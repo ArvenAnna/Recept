@@ -10,9 +10,10 @@
     "test": "NODE_ENV=test jest --config ./test/jest.config.js",
     "test:watch": "jest --watch --config ./test/jest.config.js",
     "test:coverage": "jest --coverage --config ./test/jest.config.js",
-    "build-watch": "npx webpack --watch",
+    "build-watch": "webpack --env.FOTO_CATALOG=foto --env.TEMP_CATALOG=tempfiles --watch",
     "dev-server": "npx webpack-dev-server --hot --inline",
-    "node-server": "npx nodemon --max-old-space-size=4192 dev-server.js"
+    "node-server": "npx nodemon --max-old-space-size=4192 dev-server.js",
+    "dev": "webpack --env.FOTO_CATALOG=foto --env.TEMP_CATALOG=tempfiles"
   },
   "repository": {
     "type": "git",

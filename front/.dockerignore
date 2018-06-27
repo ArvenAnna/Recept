@@ -1,4 +1,4 @@
-**/node_modules/
-**/bin/
+fe/node_modules/
+fe/bin/
 fe/package-lock.js
 **/__snapshots__/
