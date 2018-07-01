@@ -51,7 +51,7 @@ services:
     image: postgres:9.6
     volumes:
       - ./database/db:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/recept_plain.sql:/docker-entrypoint-initdb.d/recept_plain.sql
     ports:
         - "5432:5432"
     environment:

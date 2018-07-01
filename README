@@ -2,8 +2,14 @@ To start application you need:
 
 1. Clone app
 2. Run in terminal from project's root: docker-compose build, then: docker-compose up
-3. For correct work you need to fill dapart table in db, so go inside postgres container and fill table dapart in db recept1 with some values
-
+3. Go inside postgres container, run :
+   psql -Upostgres
+   create database recept;
+   \c recept
+   \i docker-entrypoint.init.d/recept_plain.sql
+4. Run docker-compose down && docker-compose up
+5. To make dump use inside postgres container
+    pg_dump -U postgres recept > docker-entrypoint-initdb.d/recept_plain.sql
 
 
 
