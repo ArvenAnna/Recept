@@ -109,10 +109,12 @@ class TwoInputsWithButtonForm extends React.Component {
 
     filterSuggestions() {
         const {suggestionExcludes, suggestions} = this.props;
-        if (suggestionExcludes && suggestionExcludes.length) {
-            return suggestions.filter(sug => !suggestionExcludes.find(s => s.name == sug.name));
-        }
-        return suggestions;
+        const {first} = this.state;
+        const filteredSuggestions = suggestionExcludes && suggestionExcludes.length
+            ? suggestions.filter(sug => !suggestionExcludes.find(s => s.name == sug.name))
+            : suggestions;
+
+        return filteredSuggestions.filter(sug => sug.name.includes(first));
     }
 
     render() {
