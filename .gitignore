@@ -2,7 +2,7 @@
 app/target/
 .idea/
 database
-!database/recept_plain.sql
+!*/recept_plain.sql
 
 front/fe/node_modules
 front/fe/package-lock.json
