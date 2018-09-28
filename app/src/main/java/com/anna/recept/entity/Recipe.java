@@ -10,8 +10,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
-@Table(name = "recept")
-public class Recept {
+@Table(name = "receipt")
+public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,17 +30,17 @@ public class Recept {
     @Column(name = "file")
     private String imgPath;
 
-    @OneToMany(mappedBy = "recept", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Detail> details = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recept", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Proportion> proportions = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "recepts", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "receipts", fetch = FetchType.LAZY)
     private List<Tag> tags = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "reference", joinColumns = {@JoinColumn(name = "recept_id", nullable = false, updatable = false)},
             inverseJoinColumns = {@JoinColumn(name = "recept_reference_id", nullable = false, updatable = false)})
-    private List<Recept> refs = new ArrayList<>();
+    private List<Receipt> refs = new ArrayList<>();
 }

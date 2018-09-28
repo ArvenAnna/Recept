@@ -1,12 +1,13 @@
 package com.anna.recept.repository;
 
-import com.anna.recept.entity.Recept;
+import com.anna.recept.entity.Recipe;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ReceptRepository extends JpaRepository<Recept, Integer> {
+public interface ReceptRepository extends JpaRepository<Recipe, Integer> {
 
    // @Query("select distinct room.type from Room room")
-    List<Recept> findByName(String name);
+    List<Recipe> findByName(String name);
 }

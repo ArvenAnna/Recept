@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
-@Table(name = "ingridient")
-public class Ingridient {
+@Table(name = "ingredient")
+public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,6 +21,4 @@ public class Ingridient {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "ingridient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Proportion> proportions = new ArrayList<>();
 }
