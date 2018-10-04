@@ -29,6 +29,11 @@ class HttpService {
             .then(result =>  transformResponse ? transformResponse(result.data) : result.data);
     }
 
+    doPut(route, request, transformResponse) {
+        return this.http.put(route, request)
+            .then(result =>  transformResponse ? transformResponse(result.data) : result.data);
+    }
+
     sendFile(route, file) {
         let fd = new FormData();
         fd.append('file', file);

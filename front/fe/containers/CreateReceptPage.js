@@ -69,7 +69,7 @@ class CreateReceptPage extends React.Component {
         super(props);
         this.props.fetchIngridients();
         this.props.fetchTags();
-        this.props.fetchReceptsByDepart(-1);
+        this.props.fetchReceptsByDepart();
         this.refers = this.props.recepts;
 
         this.state = {
@@ -108,9 +108,11 @@ class CreateReceptPage extends React.Component {
     submitForm = () => {
         const proccessedRecept = this.preProcessRecept(this.props.recept);
         this.setState({loading: true});
-        return http
-            .doPost(routes.POST_CREATE_RECEPT, proccessedRecept)
-            .then(id => this.props.history.push(`/recept/${id}`))
+        const httpCall = proccessedRecept
+            ? http.doPost(routes.POST_CREATE_RECIPE, proccessedRecept)
+            : http.doPut(routes.POST_CREATE_RECIPE, proccessedRecept);
+        return httpCall
+            .then(receipt => this.props.history.push(`/recept/${receipt.id}`))
             .catch(error => {
                 this.setState({error: error
                         ? (error.response && error.response.data ? error.response.data.message : error.message)

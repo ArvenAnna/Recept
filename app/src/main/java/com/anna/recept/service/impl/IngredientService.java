@@ -2,7 +2,7 @@ package com.anna.recept.service.impl;
 
 import com.anna.recept.entity.Ingredient;
 import com.anna.recept.exception.Errors;
-import com.anna.recept.exception.ReceptApplicationException;
+import com.anna.recept.exception.RecipeApplicationException;
 import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.service.IIngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class IngredientService implements IIngredientService {
         if (isUniqueIngredientName(ingredient.getName())) {
             return ingRep.saveAndFlush(ingredient);
         }
-        throw new ReceptApplicationException(Errors.INGRIDIENT_NAME_NOT_UNIQUE);
+        throw new RecipeApplicationException(Errors.INGREDIENT_NAME_NOT_UNIQUE);
     }
 
 

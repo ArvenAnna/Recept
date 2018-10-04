@@ -13,7 +13,7 @@ public interface IFileService {
 
     File getLangConfig() throws IOException;
 
-    byte[] getReceptMainFoto(Integer receptId) throws IOException;
+    byte[] getReceptMainFoto(Long receptId) throws IOException;
 
     //byte[] getDetailFoto(Integer detailId) throws IOException;
 

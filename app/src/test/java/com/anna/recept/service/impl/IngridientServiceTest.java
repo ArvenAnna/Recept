@@ -1,7 +1,7 @@
 package com.anna.recept.service.impl;
 
-import com.anna.recept.entity.Ingridient;
-import com.anna.recept.repository.IngridientRepository;
+import com.anna.recept.entity.Ingredient;
+import com.anna.recept.repository.IngredientRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,80 +22,72 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class IngridientServiceTest {
 
-    private static final Integer INGRIDIENT_ID = 34;
+    private static final Integer INGREDIENT_ID = 34;
 
     @InjectMocks
-    private IngridientService sut;
+    private IngredientService sut;
 
     @Mock
-    private IngridientRepository ingRep;
+    private IngredientRepository ingRep;
 
     private static Integer LIST_SIZE = 1;
 
     @Before
     public void setUp() {
-        when(ingRep.findOne(anyInt())).thenReturn(new Ingridient());
+        when(ingRep.findOne(anyInt())).thenReturn(new Ingredient());
         when(ingRep.findAll()).thenReturn(constructIngridientList(LIST_SIZE));
-        when(ingRep.save(any(Ingridient.class))).thenReturn(constructIngridient());
+        when(ingRep.save(any(Ingredient.class))).thenReturn(constructIngridient());
     }
 
-    private Ingridient constructIngridient() {
-        Ingridient ingridient = new Ingridient();
-        ingridient.setId(INGRIDIENT_ID);
-        return ingridient;
+    private Ingredient constructIngridient() {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(INGREDIENT_ID);
+        return ingredient;
     }
 
     @Test
     public void shouldShowIngridients() {
-        List<Ingridient> ingridientList = sut.showAllIngridients();
+        List<Ingredient> ingredientList = sut.showAllIngredients();
 
-        assertNotNull(ingridientList);
-        assertThat(ingridientList.size(), is(LIST_SIZE));
+        assertNotNull(ingredientList);
+        assertThat(ingredientList.size(), is(LIST_SIZE));
         verify(ingRep).findAll();
     }
 
     @Test
     public void shouldDeleteIngridient() {
-        sut.deleteIngridient(INGRIDIENT_ID);
+        sut.deleteIngredient(INGREDIENT_ID);
 
-        verify(ingRep).delete(INGRIDIENT_ID);
-    }
-
-    @Test
-    public void shouldSaveIngridient() {
-        Integer ingId = sut.saveIngridient(new Ingridient());
-
-        //verify(ingRep).save(any());
-        //assertThat(ingId, is(INGRIDIENT_ID));
+        verify(ingRep).delete(INGREDIENT_ID);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotSaveIngridient() {
-        Ingridient ingridientDto = new Ingridient();
-        ingridientDto.setId(INGRIDIENT_ID);
-        Integer ingId = sut.saveIngridient(ingridientDto);
+        Ingredient ingredientDto = new Ingredient();
+        ingredientDto.setId(INGREDIENT_ID);
+        Integer ingId = sut.saveIngredient(ingredientDto).getId();
     }
 
     //@Test
     //public void shouldSaveUniqueIngridient() {
     //    when(ingRep.findByNameIgnoreCase(any())).thenReturn(new ArrayList<>());
-    //    Integer ingId = sut.saveUniqueIngridient(new Ingridient());
+    //    Integer ingId = sut.saveUniqueIngridient(new Ingredient());
 
         //verify(ingRep).save(any());
-        //assertThat(ingId, is(INGRIDIENT_ID));
+        //assertThat(ingId, is(INGREDIENT_ID));
 
     //}
 
-    //@Test(expected = ReceptApplicationException.class)
+    //@Test(expected = RecipeApplicationException.class)
     //public void shouldNotSaveNotUniqueIngridient() {
     //    when(ingRep.findByNameIgnoreCase(any())).thenReturn(constructIngridientList(LIST_SIZE));
-    //    sut.saveUniqueIngridient(new Ingridient());
+    //    sut.saveUniqueIngridient(new Ingredient());
     //}
 
-    private List<Ingridient> constructIngridientList(int number) {
-        List<Ingridient> ingList = new ArrayList<>();
+    private List<Ingredient> constructIngridientList(int number) {
+        List<Ingredient> ingList = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            ingList.add(new Ingridient());
+            ingList.add(new Ingredient());
         }
         return ingList;
     }

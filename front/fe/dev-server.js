@@ -9,7 +9,7 @@ const tempLocation = process.env.TEMP_LOCATION;
 const fotoLocation = process.env.FOTO_LOCATION;
 
 let pathRewriteObj = {
-    '^/api' : '/'
+    //'^/api' : '/'  - for now proxying with cutting api prefix not needed
 }
 pathRewriteObj[`^/${tempLocation}`] = '/' + tempLocation;
 pathRewriteObj[`^/${fotoLocation}`] = '/' + fotoLocation;

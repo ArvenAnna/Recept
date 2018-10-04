@@ -1,10 +1,16 @@
 package com.anna.recept.controller;
 
-import com.anna.recept.entity.Department;
-import com.anna.recept.entity.Recept;
-import com.anna.recept.service.IDepartService;
-import com.anna.recept.service.IReceptService;
+import com.anna.recept.entity.Recipe;
+import com.anna.recept.service.IRecipeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -14,50 +20,49 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private IReceptService receptService;
+    private IRecipeService recipeService;
 
-    @Autowired
-    private IDepartService departServ;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    @RequestMapping(value = {"/departs.req"}, method = RequestMethod.GET,
-            headers = "Accept=application/json")
-    public List<Department> departsList() {
-        return departServ.findAllDepartments();
+    @RequestMapping(value = {"/recipes"}, method = RequestMethod.GET,
+            headers = "Accept=application/json", produces="application/json")
+    public JsonNode getRecipesList() throws IOException {
+
+        final List<Recipe> books = recipeService.showRecipes();
+        final SimpleFilterProvider filter = new SimpleFilterProvider();
+        filter.addFilter("Recipe", SimpleBeanPropertyFilter.serializeAllExcept("details", "proportions", "tags", "refs"));
+        return objectMapper.readTree(objectMapper.writer(filter).withDefaultPrettyPrinter().writeValueAsString(books));
+        //return recipeService.showRecipes();
     }
 
-    @RequestMapping(value = {"/recept_list.req"}, method = RequestMethod.GET,
+
+    @RequestMapping(value = {"/recipes/{recipeId}"}, method = RequestMethod.GET,
             headers = "Accept=application/json")
-    public List<Recept> receptList(@RequestParam("departId") Integer departId) {
-        return receptService.showReceptDtos(departId);
+    public Recipe getRecipe(@PathVariable("recipeId") Long recipeId) {
+        return recipeService.getRecipe(recipeId);
     }
 
-    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.GET,
+    @RequestMapping(value = {"/recipes/{recipeId}"}, method = RequestMethod.DELETE,
             headers = "Accept=application/json")
-    public Recept receptShow(@RequestParam("receptId") Integer receptId) {
-        return receptService.showRecept(receptId);
+    public void removeRecipe(@PathVariable("recipeId") Long recipeId) {
+        recipeService.removeRecipe(recipeId);
     }
 
-//    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.DELETE,
-//            headers = "Accept=application/json")
-//    public void receptDelete(@RequestParam("receptId") Integer receptId) {
-//        receptService.deleteRecept(receptId);
-//    }
-
-    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.POST,
+    @RequestMapping(value = {"/recipes"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
-    public Integer saveUniqueRecept(@RequestBody Recept recept) throws IOException {
-        return receptService.saveRecept(recept);
+    public Recipe saveUniqueRecipe(@RequestBody Recipe recipe) throws IOException {
+        return recipeService.saveRecipe(recipe);
     }
 
-    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.PUT,
+    @RequestMapping(value = {"/recipes"}, method = RequestMethod.PUT,
             headers = "Accept=application/json")
-    public Integer updateRecept(@RequestBody Recept recept) throws IOException {
-        return receptService.saveRecept(recept);
+    public Recipe updateRecept(@RequestBody Recipe recipe) throws IOException {
+        return recipeService.saveRecipe(recipe);
     }
 
 //    @RequestMapping(value = {"/recept_list_tag.req"}, method = RequestMethod.GET,
 //            headers = "Accept=application/json")
-//    public List<Recept> receptListByTag(@RequestParam("tagId") Integer tagId) {
+//    public List<Recipe> receptListByTag(@RequestParam("tagId") Integer tagId) {
 //        return receptService.showReceptsByTag(tagId);
 //    }
 }

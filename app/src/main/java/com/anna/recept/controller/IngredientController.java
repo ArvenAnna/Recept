@@ -4,35 +4,30 @@ import com.anna.recept.entity.Ingredient;
 import com.anna.recept.service.IIngredientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-public class IngridientController {
+@RestController
+public class IngredientController {
 
     @Autowired
     private IIngredientService ingredientService;
 
-    @RequestMapping(value = {"/ing_list.req"}, method = RequestMethod.GET,
-            headers = "Accept=application/json")
-    @ResponseBody
-    public List<Ingredient> showIngridients() {
+    @RequestMapping(value = {"/ingredients"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<Ingredient> showIngredients() {
         return ingredientService.showAllIngredients();
     }
 
-    @RequestMapping(value = {"/ingredient.req"}, method = RequestMethod.POST,
+    @RequestMapping(value = {"/ingredient"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
-    @ResponseBody
     public Ingredient saveIngredient(@RequestBody Ingredient ingredient) {
         return ingredientService.saveIngredient(ingredient);
     }
 
-    @RequestMapping(value = {"/ingredient.req"}, method = RequestMethod.DELETE,
+    @RequestMapping(value = {"/ingredient/{ingId}"}, method = RequestMethod.DELETE,
             headers = "Accept=application/json")
-    @ResponseBody
-    public void deleteIngredient(@RequestParam("ingId") Integer ingId) {
+    public void deleteIngredient(@PathVariable("ingId") Integer ingId) {
         ingredientService.deleteIngredient(ingId);
     }
 

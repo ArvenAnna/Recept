@@ -18,9 +18,9 @@ public class Detail {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "recept_id")
-    private Recept recept;
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "recept_id")
+//    private Recipe recipe;
 
     @Column(name = "file")
     private String filePath;

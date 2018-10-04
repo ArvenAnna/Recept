@@ -29,7 +29,7 @@ public class XmlController {
 
     @RequestMapping(value = {"/pdfFile.req"}, method = RequestMethod.GET)
     @ResponseBody
-    public void getPdfFile(Integer receptId, HttpServletResponse response) throws IOException, ParserConfigurationException, SAXException, TransformerException, ConfigurationException {
+    public void getPdfFile(Long receptId, HttpServletResponse response) throws IOException, ParserConfigurationException, SAXException, TransformerException, ConfigurationException {
         byte[] file = xmlService.getPdfFromRecept(receptId);
         if (file != null) {
             OutputStream outStream = response.getOutputStream();

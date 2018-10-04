@@ -9,28 +9,28 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DtoConverter {
 
-    public static Recept toReceptDto(Recept recept) {
-        Recept dto = new Recept();
-        dto.setId(recept.getId());
-        dto.setName(recept.getName());
-        dto.setImgPath(recept.getImgPath());
+    public static Recipe toReceptDto(Recipe recipe) {
+        Recipe dto = new Recipe();
+        dto.setId(recipe.getId());
+        dto.setName(recipe.getName());
+        dto.setImgPath(recipe.getImgPath());
         return dto;
     }
 
-    public static Recept withChildren(Recept recept) {
-        Recept dto = toReceptDto(recept);
-        dto.setText(recept.getText());
-        dto.setProportions(recept.getProportions().stream()
+    public static Recipe withChildren(Recipe recipe) {
+        Recipe dto = toReceptDto(recipe);
+        dto.setText(recipe.getText());
+        dto.setProportions(recipe.getProportions().stream()
                 .map(DtoConverter::toProportionDto)
                 .collect(Collectors.toList()));
-        dto.setDepartment(toDepartmentDto(recept.getDepartment()));
-        dto.setDetails(recept.getDetails().stream()
+        dto.setDepartment(toDepartmentDto(recipe.getDepartment()));
+        dto.setDetails(recipe.getDetails().stream()
                 .map(DtoConverter::toDetailDto)
                 .collect(Collectors.toList()));
-        dto.setRefs(recept.getRefs().stream()
+        dto.setRefs(recipe.getRefs().stream()
                 .map(DtoConverter::toReceptDto)
                 .collect(Collectors.toList()));
-        dto.setTags(recept.getTags().stream()
+        dto.setTags(recipe.getTags().stream()
                 .map(DtoConverter::toTagDto)
                 .collect(Collectors.toList()));
         return dto;
@@ -62,14 +62,14 @@ public class DtoConverter {
         Proportion dto = new Proportion();
         dto.setId(proportion.getId());
         dto.setNorma(proportion.getNorma());
-        dto.setIngridient(toIngridientDto(proportion.getIngridient()));
+        dto.setIngredient(toIngridientDto(proportion.getIngredient()));
         return dto;
     }
 
-    public static Ingridient toIngridientDto(Ingridient ingridient) {
-        Ingridient dto = new Ingridient();
-        dto.setId(ingridient.getId());
-        dto.setName(ingridient.getName());
+    public static Ingredient toIngridientDto(Ingredient ingredient) {
+        Ingredient dto = new Ingredient();
+        dto.setId(ingredient.getId());
+        dto.setName(ingredient.getName());
         return dto;
     }
 }

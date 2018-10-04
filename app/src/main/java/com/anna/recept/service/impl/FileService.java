@@ -1,10 +1,10 @@
 package com.anna.recept.service.impl;
 
-import com.anna.recept.entity.Recept;
 import com.anna.recept.exception.Errors;
-import com.anna.recept.exception.ReceptApplicationException;
+import com.anna.recept.exception.RecipeApplicationException;
 import com.anna.recept.service.IFileService;
-import com.anna.recept.service.IReceptService;
+import com.anna.recept.service.IRecipeService;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +26,14 @@ public class FileService implements IFileService {
 
     private static final String ALTERNATIVE_IMAGE = "alt.png";
     private static final String RECEPT_SCHEME = "recept_scheme.xsd";
-    private static final String RECEPT_XSL = "recept.xsl";
+    private static final String RECEPT_XSL = "recipe.xsl";
     private static final String LANG_CONFIG = "Lang.xml";
 
     @Autowired
     ServletContext context;
 
     @Autowired
-    private IReceptService receptService;
+    private IRecipeService receptService;
 
 
     @Override
@@ -61,12 +61,12 @@ public class FileService implements IFileService {
     }
 
 
-    private String retrieveFilePath(Integer receptId) {
+    private String retrieveFilePath(Long receptId) {
         return receptService.getRecept(receptId).getImgPath();
     }
 
     @Override
-    public byte[] getReceptMainFoto(Integer receptId) throws IOException {
+    public byte[] getReceptMainFoto(Long receptId) throws IOException {
         String path = constructReceptFileUploadPath(retrieveFilePath(receptId));
         return FileUtils.readFileToByteArray(createReceptFotoFile(path));
     }
@@ -141,7 +141,7 @@ public class FileService implements IFileService {
         if (!file.exists()) {
             file = new File(constructReceptFileUploadPath(ALTERNATIVE_IMAGE));
             if (!file.exists()) {
-                throw new ReceptApplicationException(Errors.FILE_NOT_FOUND);
+                throw new RecipeApplicationException(Errors.FILE_NOT_FOUND);
             }
         }
         return file;

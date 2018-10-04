@@ -31,7 +31,7 @@ const ProportionList = ({items, onButtonClick, className}) => {
 //     items: React.PropTypes.arrayOf(
 //         React.PropTypes.shape({
 //             id: React.PropTypes.number,
-//             ingridient: React.PropTypes.shape({
+//             ingredient: React.PropTypes.shape({
 //                 id: React.PropTypes.number,
 //                 name: React.PropTypes.string
 //             }),
