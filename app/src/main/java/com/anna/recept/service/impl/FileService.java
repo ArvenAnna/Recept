@@ -1,7 +1,5 @@
 package com.anna.recept.service.impl;
 
-import com.anna.recept.exception.Errors;
-import com.anna.recept.exception.RecipeApplicationException;
 import com.anna.recept.service.IFileService;
 import com.anna.recept.service.IRecipeService;
 
@@ -51,51 +49,9 @@ public class FileService implements IFileService {
         return new File(constructXmlResourcePath(LANG_CONFIG));
     }
 
-    private String constructReceptFileUploadPath(String path) {
-        return context.getInitParameter(UPLOAD_LOCATION) + File.separator + path;
-    }
-
-
     private String constructXmlResourcePath(String path) {
         return context.getInitParameter(RESOURCE_LOCATION) + File.separator + path;
     }
-
-
-    private String retrieveFilePath(Long receptId) {
-        return receptService.getRecept(receptId).getImgPath();
-    }
-
-    @Override
-    public byte[] getReceptMainFoto(Long receptId) throws IOException {
-        String path = constructReceptFileUploadPath(retrieveFilePath(receptId));
-        return FileUtils.readFileToByteArray(createReceptFotoFile(path));
-    }
-
-//    @Override
-//    public byte[] getDetailFoto(Integer detailId) throws IOException {
-//        String path = constructReceptFileUploadPath(retrieveDetailFilePath(detailId));
-//        return FileUtils.readFileToByteArray(createReceptFotoFile(path));
-//    }
-
-//    @Override
-//    public void saveReceptMainFoto(MultipartFile file, Integer receptId) throws IOException {
-//        String path = constructReceptSavePath(receptId, file.getOriginalFilename());
-//        File upload = new File(constructReceptFileUploadPath(path));
-//        FileUtils.writeByteArrayToFile(upload, file.getBytes());
-//
-//        receptService.saveFilePath(receptId, path);
-//    }
-
-//    @Override
-//    public void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException {
-//        Integer receptId = detailService.findReceptByDetailId(detailId).getId();
-//
-//        String path = constructReceptSavePath(receptId, file.getOriginalFilename());
-//        File upload = new File(constructReceptFileUploadPath(path));
-//        FileUtils.writeByteArrayToFile(upload, file.getBytes());
-//
-//        detailService.saveFilePath(path, detailId);
-//    }
 
     @Override
     public String saveTemporaryFile(MultipartFile file) throws IOException {
@@ -120,30 +76,19 @@ public class FileService implements IFileService {
     }
 
     @Override
-    public void deleteRealFile(String path) throws IOException {
+    public void deleteRealFile(String path) {
         String dir = context.getRealPath("") + File.separator + System.getenv(FOTO_LOCATION_ENV) + File.separator + path;
         File dirFile = new File(dir);
         dirFile.delete();
     }
 
     @Override
-    public void cleanTempFiles() throws IOException {
+    public void cleanTempFiles() {
         String tempDir = context.getRealPath("") + File.separator + System.getenv(TEMP_LOCATION_ENV);
         File tempDirFile = new File(tempDir);
         for (String s: tempDirFile.list()) {
             File currentFile = new File(tempDirFile.getPath(), s);
             currentFile.delete();
         }
-    }
-
-    private File createReceptFotoFile(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            file = new File(constructReceptFileUploadPath(ALTERNATIVE_IMAGE));
-            if (!file.exists()) {
-                throw new RecipeApplicationException(Errors.FILE_NOT_FOUND);
-            }
-        }
-        return file;
     }
 }

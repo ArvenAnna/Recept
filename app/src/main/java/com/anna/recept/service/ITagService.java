@@ -1,6 +1,6 @@
 package com.anna.recept.service;
 
-import com.anna.recept.entity.Recipe;
+import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.entity.Tag;
 
 import java.util.List;
@@ -9,15 +9,15 @@ public interface ITagService {
 
     List<Tag> findTags();
 
-    List<Tag> findTagsByRecipe(Long recipeId);
+    List<RecipeDto.TagDto> findTagsByRecipe(Long recipeId);
 
-    List<Recipe> findRecipesByTag(Integer tagId);
+    List<RecipeDto> findRecipesByTag(Integer tagId);
 
     Tag createTag(Tag tag);
 
     void removeTag(Integer tagId);
 
-    Recipe addTagsToRecipe(Long recipeId, List<Integer> tagId);
+    RecipeDto addTagsToRecipe(Long recipeId, List<Integer> tagId);
 
-    Recipe deleteTagsFromRecipe(Long recipeId, List<Integer> tagIds);
+    RecipeDto deleteTagsFromRecipe(Long recipeId, List<Integer> tagIds);
 }

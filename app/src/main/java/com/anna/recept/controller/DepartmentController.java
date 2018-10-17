@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.entity.Department;
-import com.anna.recept.entity.Recipe;
 import com.anna.recept.service.IDepartService;
 
 @RestController
@@ -39,7 +39,7 @@ public class DepartmentController {
 
 	@RequestMapping(value = {"/departs/{id}/recipes"}, method = RequestMethod.GET,
 			headers = "Accept=application/json")
-	public List<Recipe> getRecipesByDepart(@PathVariable("id") Integer id) {
+	public List<RecipeDto> getRecipesByDepart(@PathVariable("id") Integer id) {
 		return departServ.findRecipesByDepart(id);
 	}
 

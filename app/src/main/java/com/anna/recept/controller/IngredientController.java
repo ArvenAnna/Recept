@@ -19,16 +19,21 @@ public class IngredientController {
         return ingredientService.showAllIngredients();
     }
 
-    @RequestMapping(value = {"/ingredient"}, method = RequestMethod.POST,
+    @RequestMapping(value = {"/ingredients"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
     public Ingredient saveIngredient(@RequestBody Ingredient ingredient) {
         return ingredientService.saveIngredient(ingredient);
     }
 
-    @RequestMapping(value = {"/ingredient/{ingId}"}, method = RequestMethod.DELETE,
+    @RequestMapping(value = {"/ingredients/{ingId}"}, method = RequestMethod.DELETE,
             headers = "Accept=application/json")
-    public void deleteIngredient(@PathVariable("ingId") Integer ingId) {
+    public void deleteIngredient(@PathVariable("ingId") Long ingId) {
         ingredientService.deleteIngredient(ingId);
+    }
+
+    @RequestMapping(value = {"/ingredients/search"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<Ingredient> findIngredientsBySearchString(@RequestParam("str") String str) {
+        return ingredientService.searchIngredients(str);
     }
 
 }

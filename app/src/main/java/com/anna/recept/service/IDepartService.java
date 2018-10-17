@@ -1,5 +1,6 @@
 package com.anna.recept.service;
 
+import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.entity.Department;
 import com.anna.recept.entity.Recipe;
 
@@ -9,5 +10,5 @@ public interface IDepartService {
     List<Department> findAllDepartments();
     Department createNewDepartment(Department department);
     void deleteDepartment(Integer id);
-    List<Recipe> findRecipesByDepart(Integer id);
+    List<RecipeDto> findRecipesByDepart(Integer id);
 }

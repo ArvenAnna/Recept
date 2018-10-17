@@ -1,15 +1,15 @@
 package com.anna.recept.service.impl;
 
-import com.anna.recept.converter.DtoConverter;
+import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.entity.Recipe;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.exception.RecipeApplicationException;
 import com.anna.recept.repository.DepartmentRepository;
+import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.repository.RecipeRepository;
 import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IRecipeService;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +19,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public class RecipeService implements IRecipeService
 {
 
-	private static final Integer ALL_RECEPTS_FETCH_FLAG = -1;
-
+	public static final String DEFAULT_EXTENSION = "png";
 	@Autowired
 	private RecipeRepository recipeRep;
+
+	@Autowired
+	private IngredientRepository ingRep;
 
 	@Autowired
 	private TagRepository tagRep;
@@ -38,198 +43,176 @@ public class RecipeService implements IRecipeService
 	@Autowired
 	private FileService fileService;
 
-	//    @Autowired
-	//    private IAutoCompleteService autocompleteService;
-
 	@Override
-	@Transactional
-	public Recipe getRecipe(Long receptId) {
-		return DtoConverter.withChildren(recipeRep.findOne(receptId));
+	@Transactional // due to Lazy context
+	public RecipeDto getRecipe(Long recipeId) {
+		return recipeRep.findById(recipeId)
+				.map(RecipeDto::withAllFields)
+				.orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()));
 	}
 
 	@Override
+	@Transactional // due to check-then-act
 	public void removeRecipe(Long recipeId) {
-		recipeRep.delete(recipeId);
+		if (!recipeRep.existsById(recipeId)) {
+			throw new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause());
+		}
+		recipeRep.findById(recipeId).ifPresent(recipe -> {
+			removeAllFiles(recipe);
+			recipeRep.delete(recipe);
+		});
+	}
+
+	@Override
+	@Transactional // due to Lazy context
+	public List<RecipeDto> getRecipes() {
+		return recipeRep.findAll().stream()
+				.map(RecipeDto::withBasicFields)
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	@Transactional
-	public List<Recipe> showRecipes() {
-		return recipeRep.findAll();
-	}
-
-	@Override
-	@Transactional
-	public List<Recipe> showReceptDtos(Integer departId) {
-//		List<Recipe> recipes;
-//		//TODO: remove this logic -1
-//		if (ALL_RECEPTS_FETCH_FLAG.equals(departId)) {
-//			recipes = recipeRep.findAll();
-//		} else {
-//			recipes = departmentRep.findOne(departId).getRecipes();
-//		}
-//		return recipes.stream().map(recept -> DtoConverter.toReceptDto(recept)).collect(Collectors.toList());
-
-		return null;
-	}
-
-	@Override
-	public Recipe getRecept(Long receptId) {
-		return recipeRep.findOne(receptId);
-	}
-
-	@Override
-	@Transactional
-	public Recipe saveRecipe(Recipe recipe) throws IOException {
-		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
-		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
-		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause());
+	public RecipeDto saveRecipe(RecipeDto recipe) {
+//		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
+//		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
+//		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause()); //also check depart id is not null and existent
 		Assert.isNull(recipe.getId(), Errors.ID_MUST_BE_NULL.getCause());
 
-//		if (recipe.getId() != null) {
-//			updateRecept(recipe);
-//			return recipe.getId();
-//		}
-
-		Recipe recipeWithSameName = recipeRep.findByName(recipe.getName());
-		if (recipeWithSameName != null) {
+		if (recipeRep.existsByNameIgnoreCase(recipe.getName())) {
 			throw new RecipeApplicationException(Errors.RECIPE_NAME_NOT_UNIQUE);
 		}
 
-		return recipeRep.saveAndFlush(recipe);
-
-
-
-
-
-//		recipe.getProportions().forEach(proportion -> proportion.setRecipe(recipe));
-//		List<Recipe> refs = recipe.getRefs().stream().map(ref -> recipeRep.findOne(ref.getId())).collect(Collectors.toList());
-//		recipe.setRefs(refs);
-//		List<Tag> tags = recipe.getTags().stream().map(tag -> tagRep.findOne(tag.getId())).collect(Collectors.toList());
-//		recipe.setTags(tags);
-//		//tags.forEach(tag -> tag.getRecipes().add(recipe));
-//		recipe.getDetails().stream().forEach(detail -> {
-//			detail.setRecipe(recipe);
-//			detail.setFilePath(saveFileAndGetPath(detail.getFilePath(), recipe));
-//			detail.setRecipe(recipe);
-//		});
-//
-//		String fileName =
-//				departmentRep.findOne(recipe.getDepartment().getId()).getName() + File.separator + recipe.getName() + File.separator + recipe
-//						.getName() + ".png";
-//
-//		if (recipe.getImgPath() != null) {
-//			recipe.setImgPath(fileService.saveRealFile(recipe.getImgPath(), fileName));
-//		}
-//
-//		if ((recipe.getId() == null && isUniqueReceptName(recipe.getName()))
-//				|| recipe.getId() != null) {
-//			recipeRep.save(recipe);
-//			fileService.cleanTempFiles();
-//			return recipe.getId();
-//		}
-		//throw new RecipeApplicationException(Errors.RECIPE_NAME_NOT_UNIQUE);
+		return convertAndSave(recipe);
 	}
 
-	private void updateRecept(Recipe recipe) throws IOException {
-//		String fileName =
-//				departmentRep.findOne(recipe.getDepartment().getId()).getName() + File.separator + recipe.getName() + File.separator + recipe
-//						.getName() + UUID.randomUUID().toString() + ".png";
-//
-//		Recipe newRecipe = recipeRep.findOne(recipe.getId());
-//		newRecipe.setName(recipe.getName());
-//		newRecipe.setText(recipe.getText());
-//
-//		// department
-//		if (recipe.getDepartment().getId() != newRecipe.getDepartment().getId()) {
-//			Department d = new Department();
-//			d.setId(recipe.getDepartment().getId());
-//			newRecipe.setDepartment(d);
-//		}
-//		// file path
-//		if (recipe.getImgPath() == null) {
-//			newRecipe.setImgPath(null);
-//		} else if (!recipe.getImgPath().equals(newRecipe.getImgPath())) {
-//			newRecipe.setImgPath(fileService.saveRealFile(recipe.getImgPath(), fileName));
-//		}
-//
-//		//refs
-//		MergeObjects.deleteItemsNotPresentInSecond(newRecipe.getRefs(), recipe.getRefs());
-//		List<Recipe> refsToAdd = MergeObjects.getItemsNotPresentInSecond(recipe.getRefs(), newRecipe.getRefs());
-//		refsToAdd.forEach(ref -> {
-//			newRecipe.getRefs().add(recipeRep.findOne(ref.getId()));
-//		});
-//
-//		//tags
-//		MergeObjects.deleteItemsNotPresentInSecond(newRecipe.getTags(), recipe.getTags());
-//		List<Tag> tagsToAdd = MergeObjects.getItemsNotPresentInSecond(recipe.getTags(), newRecipe.getTags());
-//		tagsToAdd.forEach(tag -> {
-//			newRecipe.getTags().add(tagRep.findOne(tag.getId()));
-//		});
-//
-//		//proportions
-//
-//		MergeObjects.deleteItemsNotPresentInSecond(newRecipe.getProportions(), recipe.getProportions());
-//		List<Proportion> proportionsToAdd = MergeObjects.getItemsNotPresentInSecond(recipe.getProportions(), newRecipe.getProportions());
-//		proportionsToAdd.forEach(prop -> {
-//			prop.setRecipe(newRecipe);
-//			newRecipe.getProportions().add(prop);
-//		});
-//
-//		//details
-//		List<Detail> detailsToDelete = MergeObjects.getItemsNotPresentInSecond(newRecipe.getDetails(), recipe.getDetails());
-//		for (Detail detail : detailsToDelete) {
-//			fileService.deleteRealFile(detail.getFilePath());
-//		}
-//		MergeObjects.deleteItemsNotPresentInSecond(newRecipe.getDetails(), recipe.getDetails());
-//		List<Detail> detailsToAdd = MergeObjects.getItemsNotPresentInSecond(recipe.getDetails(), newRecipe.getDetails());
-//		detailsToAdd.forEach(detail -> {
-//			detail.setFilePath(saveFileAndGetPath(detail.getFilePath(), recipe));
-//			detail.setRecipe(recipe);
-//			detail.setRecipe(newRecipe);
-//			newRecipe.getDetails().add(detail);
-//		});
-//
-//		recipeRep.saveAndFlush(newRecipe);
+	@Override
+	@Transactional
+	public RecipeDto updateRecipe(RecipeDto recipe) {
+//		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
+//		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
+//		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause()); //also check depart id is not null and existent
+		Assert.notNull(recipe.getId(), Errors.ID_MUST_NOT_BE_NULL.getCause());
+
+		Recipe recipeWithSameName = recipeRep.findByNameIgnoreCase(recipe.getName());
+		if (recipeWithSameName != null && recipeWithSameName.getId() != recipe.getId()) {
+			throw new RecipeApplicationException(Errors.RECIPE_NAME_NOT_UNIQUE);
+		}
+
+		return convertAndSave(recipe);
 	}
 
-	private String saveFileAndGetPath(String tempPath, Recipe recipe) {
-		if (tempPath != null) {
-			String detailFileName =
-					departmentRep.findOne(recipe.getDepartment().getId()).getName() + File.separator + recipe.getName() + File.separator + recipe
-							.getName() + UUID.randomUUID().toString() + ".png";
+	private RecipeDto convertAndSave(RecipeDto recipe) {
+		Recipe recipeEntity = Recipe.of(recipe);
+
+		setPersistentBounds(recipeEntity);
+		saveAllFiles(recipeEntity);
+
+		return RecipeDto.withAllFields(recipeRep.saveAndFlush(recipeEntity));
+	}
+
+	private void setPersistentBounds(Recipe recipeEntity) {
+		recipeEntity.setDepartment(departmentRep.findById(recipeEntity.getDepartment().getId())
+				.orElseThrow(() -> new EntityNotFoundException(Errors.DEPART_NOT_EXISTS.getCause())));
+
+		recipeEntity.getProportions().stream().forEach(prop ->
+			prop.setIngredient(ingRep.findById(prop.getIngredient().getId())
+					.orElseThrow(() -> new EntityNotFoundException(Errors.INGREDIENT_NOT_FOUND.getCause())))
+		);
+		recipeEntity.setRefs(recipeEntity.getRefs().stream().map(ref ->
+				recipeRep.findById(ref.getId())
+						.orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()))
+		).collect(Collectors.toList()));
+
+		recipeEntity.setTags(recipeEntity.getTags().stream().map(tag ->
+				tagRep.findById(tag.getId())
+						.orElseThrow(() -> new EntityNotFoundException(Errors.TAG_NOT_FOUND.getCause()))
+		).collect(Collectors.toList()));
+	}
+
+	private void saveAllFiles(Recipe recipe) {
+		recipe.setImgPath(saveRecipeFile(recipe.getImgPath(), recipe));
+		recipe.getDetails().stream().forEach(detail -> {
+			detail.setFilePath(saveRecipeFile(detail.getFilePath(), recipe));
+		});
+	}
+
+	private void removeAllFiles(Recipe recipe) {
+		fileService.deleteRealFile(recipe.getImgPath());
+		recipe.getDetails().stream().forEach(detail -> {
+			fileService.deleteRealFile(detail.getFilePath());
+		});
+	}
+
+	private String saveRecipeFile(String tempPath, Recipe recipe) {
+		Assert.notNull(recipe.getDepartment(), "department should be fetched before accessing it");
+		Assert.notNull(recipe.getDepartment().getName(), "department should be fetched before accessing it");
+
+		String name = constructFullFileName(tempPath, recipe);
+
+		return isRealPath(tempPath, recipe)
+				? tempPath
+				: saveFileAndGetPath(tempPath, name);
+	}
+
+	private boolean isRealPath(String path, Recipe recipe) {
+		return path == null || path.contains(constructConstantFileNamePart(recipe));
+	}
+
+	private String saveFileAndGetPath(String tempPath, String newFileName) {
 			try {
-				return fileService.saveRealFile(tempPath, detailFileName);
+				return fileService.saveRealFile(tempPath, newFileName);
 			}
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		return null;
+			return null;
+	}
+
+	private String constructFullFileName(String tempPath, Recipe recipe) {
+		String[] pathFragments = tempPath.split("\\.");
+		String extension = pathFragments.length <= 1
+				? DEFAULT_EXTENSION
+				: pathFragments[pathFragments.length - 1];
+		return constructConstantFileNamePart(recipe) + UUID.randomUUID().toString() + "." + extension;
+	}
+
+	private String constructConstantFileNamePart(Recipe recipe) {
+		String catalogName = recipe.getDepartment().getName();
+		String subCatalogName = recipe.getName();
+		return catalogName + File.separator
+				+ subCatalogName + File.separator
+				+ subCatalogName;
 	}
 
 	@Override
 	@Transactional
-	public void saveFilePath(Long receptId, String path) {
-		Recipe recipe = recipeRep.findOne(receptId);
-		recipe.setImgPath(path);
-		recipeRep.save(recipe);
+	public RecipeDto addRefsToRecipe(Long recipeId, List<Long> refIds) {
+		Recipe recipe = recipeRep.findById(recipeId).orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()));
+		List<Recipe> recipes = recipeRep.findAllById(refIds);
+		recipe.getRefs().addAll(recipes);
+		return RecipeDto.withAllFields(recipeRep.saveAndFlush(recipe));
 	}
 
 	@Override
 	@Transactional
-	public List<Recipe> showReceptsByTag(Integer tagId) {
-		throw new UnsupportedOperationException();
-		//return tagRep.findOne(tagId).getRecipes();
+	public RecipeDto deleteRefsFromRecipe(Long recipeId, List<Long> refIds) {
+		Recipe recipe = recipeRep.findById(recipeId).orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()));
+		List<Recipe> recipesToRemove = recipe.getRefs().stream()
+				.filter(ref -> refIds.contains(ref.getId())).collect(Collectors.toList());
+
+		recipe.getRefs().removeAll(recipesToRemove);
+		return RecipeDto.withAllFields(recipeRep.saveAndFlush(recipe));
 	}
 
 	@Override
-	public Recipe getRecept(String name) {
-		return recipeRep.findByName(name);
+	public List<RecipeDto> findRecipesByIngredients(List<Long> ingIds) {
+		return recipeRep.findByIngredients(ingIds).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
 
-	private boolean isUniqueReceptName(String name) {
-		//return recipeRep.findByName(name).isEmpty();
-		return false;
+	@Override
+	public List<RecipeDto> findRecipesByKeyword(String keyword) {
+		return recipeRep.findByKeyword(keyword).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
+
 }

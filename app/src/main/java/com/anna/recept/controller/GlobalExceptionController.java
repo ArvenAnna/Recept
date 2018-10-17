@@ -59,7 +59,7 @@ public class GlobalExceptionController {
     private String getStringStackTrace(StackTraceElement[] stackTraceElements) {
         String stack = "";
         for(StackTraceElement el : stackTraceElements) {
-            stack += el.toString() + "\n";
+            stack += el.toString() + "\\n";
         }
         return stack;
     }

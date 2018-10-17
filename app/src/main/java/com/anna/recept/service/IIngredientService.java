@@ -8,7 +8,9 @@ public interface IIngredientService {
 
     Ingredient saveIngredient(Ingredient ingredient);
 
-    void deleteIngredient(Integer ingId);
+    void deleteIngredient(Long ingId);
 
     List<Ingredient> showAllIngredients();
+
+    List<Ingredient> searchIngredients(String str);
 }

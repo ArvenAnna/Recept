@@ -4,8 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.anna.recept.dto.RecipeDto;
 
 @Getter
 @Setter
@@ -21,4 +20,11 @@ public class Tag {
 
     @Column(name = "name")
     private String name;
+
+    public static Tag of(RecipeDto.TagDto dto) {
+        Tag tag = new Tag();
+        tag.setId(dto.getId());
+        tag.setName(dto.getName());
+        return tag;
+    }
 }

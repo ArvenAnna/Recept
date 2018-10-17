@@ -1,20 +1,17 @@
 package com.anna.recept.controller;
 
-import com.anna.recept.entity.Recipe;
+import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.exception.Errors;
 import com.anna.recept.service.IRecipeService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 public class MainController {
@@ -22,23 +19,16 @@ public class MainController {
     @Autowired
     private IRecipeService recipeService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     @RequestMapping(value = {"/recipes"}, method = RequestMethod.GET,
             headers = "Accept=application/json", produces="application/json")
-    public JsonNode getRecipesList() throws IOException {
-
-        final List<Recipe> books = recipeService.showRecipes();
-        final SimpleFilterProvider filter = new SimpleFilterProvider();
-        filter.addFilter("Recipe", SimpleBeanPropertyFilter.serializeAllExcept("details", "proportions", "tags", "refs"));
-        return objectMapper.readTree(objectMapper.writer(filter).withDefaultPrettyPrinter().writeValueAsString(books));
-        //return recipeService.showRecipes();
+    public List<RecipeDto> getRecipesList() {
+        return recipeService.getRecipes();
     }
 
 
     @RequestMapping(value = {"/recipes/{recipeId}"}, method = RequestMethod.GET,
             headers = "Accept=application/json")
-    public Recipe getRecipe(@PathVariable("recipeId") Long recipeId) {
+    public RecipeDto getRecipe(@PathVariable("recipeId") Long recipeId) {
         return recipeService.getRecipe(recipeId);
     }
 
@@ -50,19 +40,34 @@ public class MainController {
 
     @RequestMapping(value = {"/recipes"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
-    public Recipe saveUniqueRecipe(@RequestBody Recipe recipe) throws IOException {
+    public RecipeDto saveUniqueRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) throws IOException {
         return recipeService.saveRecipe(recipe);
     }
 
     @RequestMapping(value = {"/recipes"}, method = RequestMethod.PUT,
             headers = "Accept=application/json")
-    public Recipe updateRecept(@RequestBody Recipe recipe) throws IOException {
-        return recipeService.saveRecipe(recipe);
+    public RecipeDto updateRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) throws IOException {
+        return recipeService.updateRecipe(recipe);
     }
 
-//    @RequestMapping(value = {"/recept_list_tag.req"}, method = RequestMethod.GET,
-//            headers = "Accept=application/json")
-//    public List<Recipe> receptListByTag(@RequestParam("tagId") Integer tagId) {
-//        return receptService.showReceptsByTag(tagId);
-//    }
+    @RequestMapping(value = {"/recipes/{recipeId}/refs"}, method = RequestMethod.POST, headers = "Accept=application/json")
+    public RecipeDto addTagsToRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody List<Long> refIds) {
+        return recipeService.addRefsToRecipe(recipeId, refIds);
+    }
+
+    @RequestMapping(value = {"/recipes/{recipeId}/refs"}, method = RequestMethod.DELETE, headers = "Accept=application/json")
+    public RecipeDto deleteTagsFromRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody List<Long> refIds) {
+        return recipeService.deleteRefsFromRecipe(recipeId, refIds);
+    }
+
+    @RequestMapping(value = {"/recipes/by-ingredients"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesByIngredients(@RequestParam("ingIds") List<Long> ingIds) {
+        return recipeService.findRecipesByIngredients(ingIds);
+    }
+
+    @RequestMapping(value = {"/recipes/by-keyword"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesByIngredients(@RequestParam("str") String keyword) {
+        return recipeService.findRecipesByKeyword(keyword);
+    }
+
 }

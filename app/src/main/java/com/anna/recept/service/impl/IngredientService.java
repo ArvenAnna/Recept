@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,20 +31,26 @@ public class IngredientService implements IIngredientService {
         throw new RecipeApplicationException(Errors.INGREDIENT_NAME_NOT_UNIQUE);
     }
 
-
     private boolean isUniqueIngredientName(String name) {
         return !name.isEmpty() && ingRep.findByNameIgnoreCase(name).isEmpty();
     }
 
     @Override
     @Transactional
-    public void deleteIngredient(Integer ingId) {
-        ingRep.delete(ingId);
+    public void deleteIngredient(Long ingId) {
+        ingRep.deleteById(ingId);
     }
 
     @Override
     public List<Ingredient> showAllIngredients() {
         return ingRep.findAll();
+    }
+
+    @Override
+    public List<Ingredient> searchIngredients(String str) {
+        return str.trim().isEmpty() || str.trim().length() < 2
+                ? new ArrayList<>()
+                : ingRep.findByNameIgnoreCaseContaining(str.trim());
     }
 
 }

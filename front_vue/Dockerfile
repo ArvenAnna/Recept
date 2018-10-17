@@ -19,6 +19,6 @@ RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=${fotoLocation} --env.TEMP_CA
 
 #RUN ./dependencies/dependenciesCheck.sh
 
-EXPOSE 4003
+EXPOSE 4004
 
 CMD ["npm", "run", "node-server"]

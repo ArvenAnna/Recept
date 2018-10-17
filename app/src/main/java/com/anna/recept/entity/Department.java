@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import com.anna.recept.dto.RecipeDto;
+
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
@@ -17,5 +19,12 @@ public class Department {
 
     @Column(name = "name")
     private String name;
+
+    public static Department of(RecipeDto.DepartmentDto dto) {
+        Department department = new Department();
+        department.setId(dto.getId());
+        department.setName(dto.getName());
+        return department;
+    }
 
 }

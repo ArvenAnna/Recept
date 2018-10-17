@@ -1,27 +1,26 @@
 package com.anna.recept.service;
 
-import com.anna.recept.entity.Recipe;
+import com.anna.recept.dto.RecipeDto;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface IRecipeService {
 
-    List<Recipe> showRecipes();
+    List<RecipeDto> getRecipes();
 
-    List<Recipe> showReceptDtos(Integer departId);
-
-    Recipe getRecept(Long receptId);
-
-    Recipe saveRecipe(Recipe recipe) throws IOException;
-
-    void saveFilePath(Long receptId, String path);
-
-    List<Recipe> showReceptsByTag(Integer tagId);
-
-    Recipe getRecept(String name);
-
-    Recipe getRecipe(Long recipeId);
+    RecipeDto getRecipe(Long recipeId);
 
     void removeRecipe(Long recipeId);
+
+    RecipeDto saveRecipe(RecipeDto recipe);
+
+    RecipeDto updateRecipe(RecipeDto recipe);
+
+    RecipeDto addRefsToRecipe(Long recipeId, List<Long> refIds);
+
+    RecipeDto deleteRefsFromRecipe(Long recipeId, List<Long> refIds);
+
+    List<RecipeDto> findRecipesByIngredients(List<Long> ingIds);
+
+    List<RecipeDto> findRecipesByKeyword(String keyword);
 }

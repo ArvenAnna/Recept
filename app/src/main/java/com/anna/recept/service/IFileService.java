@@ -13,14 +13,6 @@ public interface IFileService {
 
     File getLangConfig() throws IOException;
 
-    byte[] getReceptMainFoto(Long receptId) throws IOException;
-
-    //byte[] getDetailFoto(Integer detailId) throws IOException;
-
-    //void saveReceptMainFoto(MultipartFile file, Integer receptId) throws IOException;
-
-    //void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException;
-
     String saveTemporaryFile(MultipartFile file) throws IOException;
 
     String saveRealFile(String tempPath, String name) throws IOException;
