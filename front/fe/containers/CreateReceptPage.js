@@ -100,7 +100,7 @@ class CreateReceptPage extends React.Component {
         recept.tags && recept.tags.forEach(tag => cutRecept.tags.push({id: tag.id}));
         cutRecept.proportions = [];
         recept.proportions && recept.proportions.forEach(proportion => cutRecept.proportions.push(
-            {ingridient: {id: proportion.ingridient.id}, norma: proportion.norma}));
+            {ingredientId: proportion.ingredientId, norma: proportion.norma}));
         cutRecept.details = recept.details;
         return cutRecept;
     }
@@ -108,7 +108,7 @@ class CreateReceptPage extends React.Component {
     submitForm = () => {
         const proccessedRecept = this.preProcessRecept(this.props.recept);
         this.setState({loading: true});
-        const httpCall = proccessedRecept
+        const httpCall = !proccessedRecept.id
             ? http.doPost(routes.POST_CREATE_RECIPE, proccessedRecept)
             : http.doPut(routes.POST_CREATE_RECIPE, proccessedRecept);
         return httpCall
@@ -155,7 +155,7 @@ class CreateReceptPage extends React.Component {
                                      secondInputClassName='secondInput'
                                      inputWithButtonClassName='inputWithButton'
                                      suggestions={ingridients}
-                                     suggestionExcludes={recept.proportions ? recept.proportions.map(p => p.ingridient) : []}
+                                     suggestionExcludes={recept.proportions || []}
                                      onButtonClick={addProportion}/>
             <ProportionList items={recept.proportions}
                             className='receipt_proportions_list'

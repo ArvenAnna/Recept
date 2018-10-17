@@ -25,7 +25,7 @@ const Text = styled.div`
 const FileWithDescriptionItem = ({detail, removeDetail, className}) => {
     return (
         <Wrapper className={className ? className : ''}>
-            <Image src={detail.filePath.startsWith(routes.TEMP_CATALOG.slice(1)) ? detail.filePath : routes.IMAGE_CATALOG + detail.filePath} className='description_img'/>
+            {detail.filePath &&<Image src={detail.filePath.startsWith(routes.TEMP_CATALOG.slice(1)) ? detail.filePath : routes.IMAGE_CATALOG + detail.filePath} className='description_img'/>}
             <Text>{detail.description}</Text>
 
             {removeDetail && <Overlay className='base_overlay'>

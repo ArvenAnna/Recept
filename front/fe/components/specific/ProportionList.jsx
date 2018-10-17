@@ -15,7 +15,7 @@ const ProportionList = ({items, onButtonClick, className}) => {
         let itemsForList = items.map(item => {
             item.name = (
                 <Item>
-                    <div key='name'>{item.ingridient.name}</div>
+                    <div key='name'>{item.ingredientName}</div>
                     <div key='separator'>&nbsp;-&nbsp;</div>
                     <div key='norma'>{item.norma}</div>
                 </Item>

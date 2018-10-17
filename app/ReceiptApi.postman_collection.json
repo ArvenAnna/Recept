@@ -1,0 +1,524 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ReceiptApi",
+		"_postman_id": "eafefffa-b509-1c83-124d-aa9da152b22f",
+		"description": "API for receipt application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get list of ingredients",
+			"request": {
+				"url": "{{url}}/ingredients",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Find ingredients by keyword",
+			"request": {
+				"url": {
+					"raw": "{{url}}/ingredients/search?str=ing",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"ingredients",
+						"search"
+					],
+					"query": [
+						{
+							"key": "str",
+							"value": "ing",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create new ingredient",
+			"request": {
+				"url": "{{url}}/ingredients",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"firstIngredient\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete ingredient",
+			"request": {
+				"url": "{{url}}/ingredients/1",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all tags",
+			"request": {
+				"url": "{{url}}/tags",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get tags of recipe",
+			"request": {
+				"url": "{{url}}/recipes/24/tags",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get recipes by tag",
+			"request": {
+				"url": "{{url}}/tags/4/recipes",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create new tag",
+			"request": {
+				"url": "{{url}}/tags",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"tag1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove tag",
+			"request": {
+				"url": "{{url}}/tags/1",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add tags to recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/tags",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[4]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove tags from recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/tags",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[3]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all departments",
+			"request": {
+				"url": "{{url}}/departs",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove department",
+			"request": {
+				"url": "{{url}}/departs/3",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create new department",
+			"request": {
+				"url": "{{url}}/departs",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"depart1\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get recipes of department",
+			"request": {
+				"url": "{{url}}/departs/4/recipes",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get all recipes",
+			"request": {
+				"url": "{{url}}/recipes",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get recipe by id",
+			"request": {
+				"url": "{{url}}/recipes/21",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Find recipes by keyword",
+			"request": {
+				"url": {
+					"raw": "{{url}}/recipes/by-keyword?str=recipe6",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"recipes",
+						"by-keyword"
+					],
+					"query": [
+						{
+							"key": "str",
+							"value": "recipe6",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Find recipes by ingredients",
+			"request": {
+				"url": {
+					"raw": "{{url}}/recipes/by-ingredients?ingIds=4&ingIds=2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"recipes",
+						"by-ingredients"
+					],
+					"query": [
+						{
+							"key": "ingIds",
+							"value": "4",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "ingIds",
+							"value": "2",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove recipe",
+			"request": {
+				"url": "{{url}}/recipes/22",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create new recipe",
+			"request": {
+				"url": "{{url}}/recipes",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n    \"name\": \"recipe1\",\n\t\"imgPath\": \"tempfiles/c1403e71-8bc3-4334-9e0d-2e3a04a572e3_favicon.ico\",\n\t\"department\": {\n\t\t\"id\": 7,\n\t\t\"name\": \"ass\"\n\t},\n\t\"details\": [{\n\t\t\"description\": \"description4\",\n\t\t\"filePath\": \"/bla-bla\"\n\t}],\n\t\"refs\": [{\n\t\t\"id\": 21\n\t}],\n\t\"tags\": [{\n\t\t\"id\": 3\n\t}],\n\t\"proportions\": [{\n\t\t\"norma\": \"20hvostov\",\n\t\t\"ingredientId\": 2,\n\t\t\"ingredientName\": \"vas\"\n\t}]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update recipe",
+			"request": {
+				"url": "{{url}}/recipes",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"recipe13\",\n    \"id\": 21,\n\t\"imgPath\": \"tempfiles/56aa8570-ed9c-4f2c-af7d-336804b6c2fb_favicon.ico\",\n\t\"department\": {\n\t\t\"id\": 7,\n\t\t\"name\": \"ass\"\n\t},\n\t\"details\": [{\n\t\t\"description\": \"description43333\",\n\t\t\"filePath\": \"/bla-bla\"\n\t}],\n\t\"refs\": [{\n\t\t\"id\": 21\n\t}],\n\t\"tags\": [],\n\t\"proportions\": [{\n\t\t\"norma\": \"20hvostov\",\n\t\t\"ingredientId\": 2,\n\t\t\"ingredientName\": \"vas\"\n\t}]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Save temp file",
+			"request": {
+				"url": "{{url}}/file",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "undefined",
+						"description": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add proportions to recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/proportions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n       {\n            \"norma\": \"444488\",\n            \"ingredientId\": 4,\n            \"ingredientName\": \"firstIngredient\"\n        } \n        \n]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove proportions from recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/proportions",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[29, 30]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add details to recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/details",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"description\": \"descr\"\n}]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove detail from recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/details",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[34,35]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add references to recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/refs",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[24,25]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove references from recipe",
+			"request": {
+				"url": "{{url}}/recipes/21/refs",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[21]"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

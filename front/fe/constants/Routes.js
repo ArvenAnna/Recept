@@ -1,14 +1,13 @@
 const httpPrefix = '/api';
 
 const routes = {
-    GET_DEPARTMENTS: httpPrefix + '/departs',
-    GET_RECIPES: (departId) => departId ? `${httpPrefix}departs/${departId}/recipes`: `${httpPrefix}recipes`,
-    GET_RECIPE: (recipe) => `${httpPrefix}/recipe/${recipe}`,
-    GET_INGREDIENTS: httpPrefix + '/ingredients',
+    GET_DEPARTMENTS: `${httpPrefix}/departs`,
+    GET_RECIPES: (departId) => departId ? `${httpPrefix}/departs/${departId}/recipes`: `${httpPrefix}/recipes`,
+    GET_RECIPE: (recipe) => `${httpPrefix}/recipes/${recipe}`,
+    INGREDIENTS: `${httpPrefix}/ingredients`,
     GET_TAGS: httpPrefix + '/tags',
 
-    POST_INGREDIENTS: httpPrefix + '/ingredient',
-    POST_CREATE_RECIPE: httpPrefix + '/recipe',
+    POST_CREATE_RECIPE: httpPrefix + '/recipes',
 
     UPLOAD_FILE: httpPrefix + '/file',
 

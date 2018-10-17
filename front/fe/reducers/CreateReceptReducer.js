@@ -31,7 +31,8 @@ const receptReducer = (state = {}, action) => {
         case ADD_RECEPT_PROPORTION:
             const newProportion = {
                 norma: action.norma,
-                ingridient: action.ingridient
+                ingredientId: action.ingredient.id,
+                ingredientName: action.ingredient.name
             };
             if (!state.proportions) {
                 newState.proportions = [newProportion];

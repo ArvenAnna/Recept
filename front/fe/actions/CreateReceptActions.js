@@ -17,9 +17,9 @@ export const setReceptText = (text) => ({
         text
     })
 
-export const addProportion = (ingridient, norma) => ({
+export const addProportion = (ingredient, norma) => ({
         type: types.ADD_RECEPT_PROPORTION,
-        ingridient,
+        ingredient,
         norma
     })
 
@@ -75,7 +75,7 @@ export const addDetailWithFilePath = (text, path) => ({
 export const addDetail = (text, file) => dispatch => {
         return http
             .sendFile(routes.UPLOAD_FILE, file)
-            .then(result => dispatch(addDetailWithFilePath(text, result)));
+            .then(result => dispatch(addDetailWithFilePath(text, result.path)));
     }
 
 export const removeDetail = (detail) => ({
@@ -93,7 +93,7 @@ export const removeReceptFoto = () => ({
 })
 
 export const uploadFile = file => dispatch =>
-    http.sendFile(routes.UPLOAD_FILE, file).then(result => dispatch(setFilePath(result)))
+    http.sendFile(routes.UPLOAD_FILE, file).then(result => dispatch(setFilePath(result.path)))
 
 export const copyReceptToNew = (recept) => ({
     type: types.COPY_RECEPT,

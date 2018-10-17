@@ -14,7 +14,7 @@ export const setIngridients = (ingridients) => ({
 export const fetchIngridients = () => dispatch => {
         dispatch(ingridientsRequest());
         return http
-            .doGet(routes.GET_INGREDIENTS, sortIngridients)
+            .doGet(routes.INGREDIENTS, sortIngridients)
             .then(result => dispatch(setIngridients(result)));
     }
 
@@ -39,6 +39,6 @@ export const addIngridient = (name) => dispatch => {
         dispatch(addIngridientRequest(name));
         const ingridient = {name};
         return http
-            .doPost(routes.POST_INGREDIENTS, ingridient)
+            .doPost(routes.INGREDIENTS, ingridient)
             .then(result => dispatch(fetchIngridients()));
     }
