@@ -4,8 +4,8 @@ To start application you need:
 2. Run in terminal from project's root: docker-compose build, then: docker-compose up
 3. Go inside postgres container, run :
    psql -Upostgres
-   create database recipe;
-   \c recipe
+   create database recept;
+   \c recept
    \i docker-entrypoint.init.d/recept_plain.sql
 4. Run docker-compose down && docker-compose up
 5. To make dump use inside postgres container
