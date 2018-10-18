@@ -41,8 +41,8 @@ app.get('/favicon.ico', (req, res) => res.sendFile(path.join(__dirname + '/favic
 
 app.use('/bin', express.static('bin'));
 
-app.set('port', process.env.NODE_PORT);
+app.set('port', process.env.NODE_PORT_VUE);
 
 app.listen(app.get('port'), function() {
-    console.log('Node App Started on port ' + process.env.NODE_PORT);
+    console.log('Node App Started on port ' + process.env.NODE_PORT_VUE);
 });

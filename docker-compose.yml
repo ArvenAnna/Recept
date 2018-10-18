@@ -31,6 +31,25 @@ services:
         - ./front/fe/bin:/usr/src/app/fe/bin
         - ./front/fe/dependencies:/usr/src/app/fe/dependencies
 
+  recept_front_vue:
+        container_name: front_vue
+        build:
+          context: ./front_vue
+          args:
+            - fotoLocation=${FOTO_LOCATION}
+            - templocation=${TEMP_LOCATION}
+        env_file:
+          - '.env'
+        ports:
+          - "${NODE_PORT_VUE}:${NODE_PORT_VUE}"
+        depends_on:
+          - recept_app
+        links:
+          - recept_app
+        volumes:
+          - ./front_vue/fe/src:/usr/src/app/fe/src
+          - ./front_vue/fe/bin:/usr/src/app/fe/bin
+
   recept_app:
     container_name: recept_app
     restart: always
