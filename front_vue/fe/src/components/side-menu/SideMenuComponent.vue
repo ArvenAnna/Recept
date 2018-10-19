@@ -7,7 +7,9 @@
         v-for="department in departments"
         :key="department.id"
         class="side-menu__list-item">
-        {{ department.name }}
+        <router-link :to="{path: `/departments/${department.id}/recipes`}">
+          {{ department.name }}
+        </router-link>
       </li>
     </ul>
     <div v-show="!departments.length">loading ...</div>
