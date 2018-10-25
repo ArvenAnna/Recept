@@ -2,7 +2,7 @@
   <div>
     <div
       v-for="recipe in recipes"
-      :key="recipe.id">{{ recipe.name }}
+      :key="recipe.id"><router-link :to="{path: `/recipes/${recipe.id}`}">{{ recipe.name }}</router-link>
     </div>
   </div>
 </template>

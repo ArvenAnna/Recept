@@ -40,13 +40,13 @@ public class MainController {
 
     @RequestMapping(value = {"/recipes"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
-    public RecipeDto saveUniqueRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) throws IOException {
+    public RecipeDto saveUniqueRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) {
         return recipeService.saveRecipe(recipe);
     }
 
     @RequestMapping(value = {"/recipes"}, method = RequestMethod.PUT,
             headers = "Accept=application/json")
-    public RecipeDto updateRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) throws IOException {
+    public RecipeDto updateRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) {
         return recipeService.updateRecipe(recipe);
     }
 

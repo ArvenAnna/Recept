@@ -28,6 +28,9 @@ public class RecipeService implements IRecipeService
 {
 
 	public static final String DEFAULT_EXTENSION = "png";
+	private static final String FOTO_LOCATION_ENV = "FOTO_LOCATION";
+
+
 	@Autowired
 	private RecipeRepository recipeRep;
 
@@ -148,11 +151,9 @@ public class RecipeService implements IRecipeService
 		Assert.notNull(recipe.getDepartment(), "department should be fetched before accessing it");
 		Assert.notNull(recipe.getDepartment().getName(), "department should be fetched before accessing it");
 
-		String name = constructFullFileName(tempPath, recipe);
-
 		return isRealPath(tempPath, recipe)
 				? tempPath
-				: saveFileAndGetPath(tempPath, name);
+				: saveFileAndGetPath(tempPath, constructFullFileName(tempPath, recipe));
 	}
 
 	private boolean isRealPath(String path, Recipe recipe) {
@@ -180,7 +181,7 @@ public class RecipeService implements IRecipeService
 	private String constructConstantFileNamePart(Recipe recipe) {
 		String catalogName = recipe.getDepartment().getName();
 		String subCatalogName = recipe.getName();
-		return catalogName + File.separator
+		return System.getenv(FOTO_LOCATION_ENV) + File.separator + catalogName + File.separator
 				+ subCatalogName + File.separator
 				+ subCatalogName;
 	}

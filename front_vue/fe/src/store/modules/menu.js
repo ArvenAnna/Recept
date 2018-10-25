@@ -1,6 +1,7 @@
 // initial state
 const state = {
-    isMenuVisible: false
+    isMenuVisible: false,
+    createRecipePopupOpened: false
 }
 
 // getters
@@ -9,11 +10,17 @@ const getters = {
 
 // actions
 const actions = {
-    openMenu ({ commit, state }) {
+    openMenu ({ commit }) {
         commit('triggerMenu', true)
     },
     closeMenu ({ commit }) {
         commit('triggerMenu', false)
+    },
+    openCreateRecipePopup ({ commit }) {
+        commit('triggerCreateRecipePopup', true)
+    },
+    closeCreateRecipePopup ({ commit }) {
+        commit('triggerCreateRecipePopup', false)
     }
 }
 
@@ -21,6 +28,9 @@ const actions = {
 const mutations = {
     triggerMenu (state, open) {
         state.isMenuVisible = open
+    },
+    triggerCreateRecipePopup (state, open) {
+        state.createRecipePopupOpened = open
     }
 }
 

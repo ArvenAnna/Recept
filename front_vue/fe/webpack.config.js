@@ -17,7 +17,9 @@ module.exports = env => {
         entry: './src/app.js',
         output: {
             path: __dirname + '/bin',
-            filename: 'app.bundle.js'
+            filename: '[name].bundle.js',
+            chunkFilename: '[name].bundle.js',
+            publicPath: '/bin/'
         },
         mode: 'development',
         module: {
