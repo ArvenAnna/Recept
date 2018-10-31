@@ -3,7 +3,9 @@ import routes from '../../constants/routes'
 // initial state
 // shape: [{ id, quantity }]
 const state = {
-    recipe: {}
+    recipe: {},
+    error: '',
+    loading: false
 }
 
 // getters
@@ -13,19 +15,34 @@ const getters = {
 // actions
 const actions = {
     getRecipe ({ commit }, id) {
-        http.doGet(routes.RECIPE(id), (recipe) => commit('setRecipe', recipe))
+        return http.doGet(routes.RECIPE(id)).then((recipe) => commit('setRecipe', recipe))
     },
     updateRecipe ({ commit }, recipe) {
-        http.doPut(routes.RECIPE_MODIFY, recipe, (recipe) => commit('setRecipe', recipe))
+        commit('setLoadingStart')
+        return http.doPut(routes.RECIPE_MODIFY, recipe)
+            .then(recipe => commit('setRecipe', recipe))
+            .catch(e => commit('setError', e.error))
+            .then(() => commit('setLoadingStop'))
     },
     updateRecipePhoto ({ commit }, updateRecipeRequest) {
-        http.sendFile(routes.FILE, updateRecipeRequest.file).then(f => {
+        commit('setLoadingStart')
+        return http.sendFile(routes.FILE, updateRecipeRequest.file).then(f => {
             updateRecipeRequest.recipe.imgPath = f.path
-            http.doPut(routes.RECIPE_MODIFY, updateRecipeRequest.recipe, (recipe) => commit('setRecipe', recipe))
-        })
+            return http.doPut(routes.RECIPE_MODIFY, updateRecipeRequest.recipe)
+                .then((recipe) => commit('setRecipe', recipe))
+                // .catch((e) => {
+                //     commit('setError', e.error)
+                // })
+                // .then(() => commit('setLoadingStop'))
+        }).catch(e => commit('setError', e.error))
+            .then(() => commit('setLoadingStop'))
     },
     createRecipe ({ commit }, recipe) {
-        http.doPost(routes.RECIPE_MODIFY, recipe, (recipe) => commit('setRecipe', recipe))
+        commit('setLoadingStart')
+        return http.doPost(routes.RECIPE_MODIFY, recipe)
+            .then((recipe) => commit('setRecipe', recipe))
+            .catch(e => commit('setError', e.error))
+            .then(() => commit('setLoadingStop'))
     }
 }
 
@@ -33,6 +50,16 @@ const actions = {
 const mutations = {
     setRecipe (state, recipe) {
         state.recipe = recipe
+    },
+    setLoadingStart (state) {
+        state.error = ''
+        state.loading = true
+    },
+    setLoadingStop (state) {
+        state.loading = false
+    },
+    setError (state, error) {
+        state.error = error.message
     }
 }
 

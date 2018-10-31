@@ -13,7 +13,7 @@ const getters = {
 // actions
 const actions = {
     getRecipesByDepartment ({ commit }, id) {
-        http.doGet(routes.RECIPES_BY_DEPARTMENT(id), (recipes) => commit('setRecipes', recipes))
+        http.doGet(routes.RECIPES_BY_DEPARTMENT(id)).then((recipes) => commit('setRecipes', recipes))
     }
 }
 

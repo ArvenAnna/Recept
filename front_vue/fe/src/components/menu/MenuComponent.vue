@@ -14,7 +14,9 @@
         @click="closeMenu()"
         v-html="require('./../../assets/svg/close.svg')"/>
       <div class="menu__header">CookingBook</div>
-      <div @click="openPopup">create new recipe</div>
+      <div
+        class="menu-item"
+        @click="openPopup">create new recipe</div>
     </div>
   </section>
 </template>

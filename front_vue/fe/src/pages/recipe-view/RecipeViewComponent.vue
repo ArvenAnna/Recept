@@ -1,11 +1,19 @@
 <template>
-  <div>
+  <div class="recipe-view">
+    <div
+      v-if="loading"
+      class="loader">
+      loading ...
+    </div>
+    <div
+      v-if="error"
+      class="error_container">{{ error }}</div>
     <div
       v-show="!editState.name"
       @dblclick="changeEdit('name')">{{ recipe.name }}</div>
     <input
       v-show="editState.name"
-      v-model="recipe.name"
+      v-model="recipeForEdit.name"
       @dblclick="updateRecipe('name')">
 
     <div
@@ -13,7 +21,7 @@
       @dblclick="changeEdit('text')">{{ recipe.text }}</div>
     <textarea
       v-show="editState.text"
-      v-model="recipe.text"
+      v-model="recipeForEdit.text"
       @dblclick="updateRecipe('text')"/>
     <button
       v-show="!editState.text && !recipe.text"
@@ -43,6 +51,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import './recipeView.less'
 
 export default {
     name: 'RecipeViewComponent',
@@ -57,12 +66,15 @@ export default {
                 ingredientId: 3,
                 ingredientName: 'ggg',
                 norma: 'gggg'
-            }
+            },
+            recipeForEdit: {}
         }
     },
     computed: {
         ...mapState({
-            recipe: state => state.recipe.recipe
+            recipe: state => state.recipe.recipe,
+            loading: state => state.recipe.loading,
+            error: state => state.recipe.error
         })
     },
     created: function () {
@@ -70,10 +82,14 @@ export default {
     },
     methods: {
         getRecipe (id) {
-            this.$store.dispatch('recipe/getRecipe', id)
+            return this.$store.dispatch('recipe/getRecipe', id).then(() => {
+                this.recipeForEdit = JSON.parse(JSON.stringify(this.recipe))
+            })
         },
         updateRecipe (field) {
-            this.$store.dispatch('recipe/updateRecipe', this.recipe)
+            this.$store.dispatch('recipe/updateRecipe', this.recipeForEdit).then(() => {
+                this.recipeForEdit = JSON.parse(JSON.stringify(this.recipe))
+            })
             this.changeEdit(field)
         },
         changeEdit (field) {
@@ -87,10 +103,12 @@ export default {
                 return
             }
             const updateRecipeRequest = {
-                recipe: this.recipe,
+                recipe: this.recipeForEdit,
                 file: files[0]
             }
-            this.$store.dispatch('recipe/updateRecipePhoto', updateRecipeRequest)
+            this.$store.dispatch('recipe/updateRecipePhoto', updateRecipeRequest).then(() => {
+                this.recipeForEdit = JSON.parse(JSON.stringify(this.recipe))
+            })
         },
         addProportion () {
             console.dir(this.proportion)

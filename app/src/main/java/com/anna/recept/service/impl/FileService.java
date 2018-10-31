@@ -65,7 +65,7 @@ public class FileService implements IFileService {
 
     @Override
     public String saveRealFile(String tempPath, String name) throws IOException {
-        File webappFile = new File(context.getRealPath("") + File.separator + System.getenv(FOTO_LOCATION_ENV) + File.separator + name);
+        File webappFile = new File(context.getRealPath("") + File.separator + name);
         File temp = new File(context.getRealPath("") + File.separator + tempPath);
         if (!temp.getAbsolutePath().equals(webappFile.getAbsolutePath())) {
             FileUtils.copyFile(temp, webappFile);
