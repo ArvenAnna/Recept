@@ -143,16 +143,16 @@ CREATE SEQUENCE public.ingridient_ids
 ALTER TABLE public.ingridient_ids OWNER TO postgres;
 
 --
--- Name: ingridient; Type: TABLE; Schema: public; Owner: postgres
+-- Name: ingredient; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.ingridient (
+CREATE TABLE public.ingredient (
     id integer DEFAULT nextval('public.ingridient_ids'::regclass) NOT NULL,
     name character varying(150) NOT NULL
 );
 
 
-ALTER TABLE public.ingridient OWNER TO postgres;
+ALTER TABLE public.ingredient OWNER TO postgres;
 
 --
 -- Name: proportion_ids; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -197,10 +197,10 @@ CREATE SEQUENCE public.recept_ids
 ALTER TABLE public.recept_ids OWNER TO postgres;
 
 --
--- Name: recipe; Type: TABLE; Schema: public; Owner: postgres
+-- Name: recept; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.recipe (
+CREATE TABLE public.recept (
     text text,
     name character varying(200) NOT NULL,
     depart_id integer NOT NULL,
@@ -209,7 +209,7 @@ CREATE TABLE public.recipe (
 );
 
 
-ALTER TABLE public.recipe OWNER TO postgres;
+ALTER TABLE public.recept OWNER TO postgres;
 
 --
 -- Name: reference_ids; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -537,10 +537,10 @@ SELECT pg_catalog.setval('public.file_ids', 4, true);
 
 
 --
--- Data for Name: ingridient; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: ingredient; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.ingridient (id, name) FROM stdin;
+COPY public.ingredient (id, name) FROM stdin;
 1	Вода
 2	Мясо
 3	Лук
@@ -2101,10 +2101,10 @@ SELECT pg_catalog.setval('public.proportion_ids', 1790, true);
 
 
 --
--- Data for Name: recipe; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: recept; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.recipe (text, name, depart_id, id, file) FROM stdin;
+COPY public.recept (text, name, depart_id, id, file) FROM stdin;
 Для итальянской пиццы бездрожжевое простое универсальное тесто раскатать, положить на противень,\nвыложить начинку.  Выпечь мин 40 при 180 град.   \nДрожжевую пиццу запекать при 200 град около 50 минут. В качестве начинки подойдет мысо или грибы, помидоры, болгарский перец, в качестве заливки - сметана с аджикой, сыр.	Пицца	2	21	Вторые блюда\\Пицца\\Pizza_italyanskaya.png
  Тесто вымешать, тонко раскатать. Подходит для итальянских пицц. В сладкую пиццу соли меньше.    	Тесто простое универсальное	4	9	Тесто\\Тесто простое универсальное\\IMG_0831.png
  Варёные мясо, картофель, морковь, яйца, солёные огурцы порезать, добавить горошек или кукурузу, \r\nприправить майонезом.        	Оливье	6	47	Салаты\\Оливье\\Olivye.png
@@ -2402,10 +2402,10 @@ ALTER TABLE ONLY public.detail
 
 
 --
--- Name: ingridient primary_ingridient; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: ingredient primary_ingridient; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.ingridient
+ALTER TABLE ONLY public.ingredient
     ADD CONSTRAINT primary_ingridient PRIMARY KEY (id);
 
 
@@ -2418,10 +2418,10 @@ ALTER TABLE ONLY public.proportion
 
 
 --
--- Name: recipe primary_recept; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: recept primary_recept; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.recipe
+ALTER TABLE ONLY public.recept
     ADD CONSTRAINT primary_recept PRIMARY KEY (id);
 
 
@@ -2446,7 +2446,7 @@ ALTER TABLE ONLY public.tag
 --
 
 ALTER TABLE ONLY public.detail
-    ADD CONSTRAINT fk1nw5i835yc8al8cimjje2kgpg FOREIGN KEY (recept_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fk1nw5i835yc8al8cimjje2kgpg FOREIGN KEY (recept_id) REFERENCES public.recept(id);
 
 
 --
@@ -2454,7 +2454,7 @@ ALTER TABLE ONLY public.detail
 --
 
 ALTER TABLE ONLY public.proportion
-    ADD CONSTRAINT fk2strn2h4rxkv7que68nb1s6o7 FOREIGN KEY (recept_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fk2strn2h4rxkv7que68nb1s6o7 FOREIGN KEY (recept_id) REFERENCES public.recept(id);
 
 
 --
@@ -2462,7 +2462,7 @@ ALTER TABLE ONLY public.proportion
 --
 
 ALTER TABLE ONLY public.category
-    ADD CONSTRAINT fk60vnusk94bxjo51usk10i7vqj FOREIGN KEY (recept_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fk60vnusk94bxjo51usk10i7vqj FOREIGN KEY (recept_id) REFERENCES public.recept(id);
 
 
 --
@@ -2478,7 +2478,7 @@ ALTER TABLE ONLY public.category
 --
 
 ALTER TABLE ONLY public.reference
-    ADD CONSTRAINT fkirvg7n3ugo1mj18pabd3yyuc7 FOREIGN KEY (recept_reference_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fkirvg7n3ugo1mj18pabd3yyuc7 FOREIGN KEY (recept_reference_id) REFERENCES public.recept(id);
 
 
 --
@@ -2486,7 +2486,7 @@ ALTER TABLE ONLY public.reference
 --
 
 ALTER TABLE ONLY public.reference
-    ADD CONSTRAINT fkl5hdlt5ceo0a1tgt9m7ccblws FOREIGN KEY (recept_id) REFERENCES public.recipe(id);
+    ADD CONSTRAINT fkl5hdlt5ceo0a1tgt9m7ccblws FOREIGN KEY (recept_id) REFERENCES public.recept(id);
 
 
 --
@@ -2494,14 +2494,14 @@ ALTER TABLE ONLY public.reference
 --
 
 ALTER TABLE ONLY public.proportion
-    ADD CONSTRAINT fklw4037uoshx59vewhsacr797l FOREIGN KEY (ingridient_id) REFERENCES public.ingridient(id);
+    ADD CONSTRAINT fklw4037uoshx59vewhsacr797l FOREIGN KEY (ingridient_id) REFERENCES public.ingredient(id);
 
 
 --
--- Name: recipe fklyedlwlg09k4qlqerp5hngq9s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: recept fklyedlwlg09k4qlqerp5hngq9s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.recipe
+ALTER TABLE ONLY public.recept
     ADD CONSTRAINT fklyedlwlg09k4qlqerp5hngq9s FOREIGN KEY (depart_id) REFERENCES public.dapart(id);
 
 
@@ -2510,7 +2510,7 @@ ALTER TABLE ONLY public.recipe
 --
 
 ALTER TABLE ONLY public.category
-    ADD CONSTRAINT foreign_category_to_recept FOREIGN KEY (recept_id) REFERENCES public.recipe(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT foreign_category_to_recept FOREIGN KEY (recept_id) REFERENCES public.recept(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2526,7 +2526,7 @@ ALTER TABLE ONLY public.category
 --
 
 ALTER TABLE ONLY public.detail
-    ADD CONSTRAINT foreign_detail_to_recept FOREIGN KEY (recept_id) REFERENCES public.recipe(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT foreign_detail_to_recept FOREIGN KEY (recept_id) REFERENCES public.recept(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2534,7 +2534,7 @@ ALTER TABLE ONLY public.detail
 --
 
 ALTER TABLE ONLY public.proportion
-    ADD CONSTRAINT foreign_proportion_to_ingridient FOREIGN KEY (ingridient_id) REFERENCES public.ingridient(id);
+    ADD CONSTRAINT foreign_proportion_to_ingridient FOREIGN KEY (ingridient_id) REFERENCES public.ingredient(id);
 
 
 --
@@ -2542,14 +2542,14 @@ ALTER TABLE ONLY public.proportion
 --
 
 ALTER TABLE ONLY public.proportion
-    ADD CONSTRAINT foreign_proportion_to_recept FOREIGN KEY (recept_id) REFERENCES public.recipe(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT foreign_proportion_to_recept FOREIGN KEY (recept_id) REFERENCES public.recept(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
--- Name: recipe foreign_recept_to_depart; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: recept foreign_recept_to_depart; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.recipe
+ALTER TABLE ONLY public.recept
     ADD CONSTRAINT foreign_recept_to_depart FOREIGN KEY (depart_id) REFERENCES public.dapart(id);
 
 
@@ -2558,7 +2558,7 @@ ALTER TABLE ONLY public.recipe
 --
 
 ALTER TABLE ONLY public.reference
-    ADD CONSTRAINT foreign_reference_to_recept FOREIGN KEY (recept_id) REFERENCES public.recipe(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT foreign_reference_to_recept FOREIGN KEY (recept_id) REFERENCES public.recept(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -2566,7 +2566,7 @@ ALTER TABLE ONLY public.reference
 --
 
 ALTER TABLE ONLY public.reference
-    ADD CONSTRAINT foreign_reference_to_recept_reference FOREIGN KEY (recept_reference_id) REFERENCES public.recipe(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT foreign_reference_to_recept_reference FOREIGN KEY (recept_reference_id) REFERENCES public.recept(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
