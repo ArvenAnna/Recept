@@ -2,7 +2,7 @@ import * as types from '../constants/ActionTypes';
 import http from '../utils/HttpService';
 import routes from '../constants/Routes';
 
-//------------ Fetch all available receipts by departmant ------------------------
+//------------ Fetch all available recipes by departmant ------------------------
 
 export const receptsRequest = (id) => ({
         type: types.REQ_RECEPT_LIST,
@@ -17,7 +17,7 @@ export const setReceptsByDepart = (recepts) => ({
 export const fetchReceptsByDepart = (id, isCut = false) => dispatch => {
         dispatch(receptsRequest(id));
         return http
-            .doGet(routes.GET_RECEPTS(id), isCut ? processCutReceptList : r => r)
+            .doGet(routes.GET_RECIPES(id), isCut ? processCutReceptList : r => r)
             .then(result => dispatch(setReceptsByDepart(result)));
     }
 
@@ -28,7 +28,8 @@ function processCutReceptList(recepts) {
     return recepts;
 }
 
-//------------ Fetch receipt by id ------------------------
+
+//------------ Fetch recipe by id ------------------------
 
 export const receptRequest = (id) => ({
         type: types.REQ_RECEPT,
@@ -43,6 +44,6 @@ export const setChosenRecept = (recept) => ({
 export const fetchRecept = (id) => dispatch => {
         dispatch(receptRequest(id));
         return http
-            .doGet(routes.GET_RECEPT(id))
+            .doGet(routes.GET_RECIPE(id))
             .then(result => dispatch(setChosenRecept(result)));
     }

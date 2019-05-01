@@ -33,7 +33,7 @@ public class TagServiceTest {
     @Before
     public void setUp() {
         when(tagRep.findAll()).thenReturn(constructTagList(LIST_SIZE));
-        when(tagRep.findOne(anyInt())).thenReturn(new Tag());
+        //when(tagRep.findById((anyInt())).thenReturn(new Tag());
     }
 
     @Test

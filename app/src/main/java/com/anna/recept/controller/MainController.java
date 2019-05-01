@@ -1,63 +1,73 @@
 package com.anna.recept.controller;
 
-import com.anna.recept.entity.Department;
-import com.anna.recept.entity.Recept;
-import com.anna.recept.service.IDepartService;
-import com.anna.recept.service.IReceptService;
+import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.exception.Errors;
+import com.anna.recept.service.IRecipeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @RestController
 public class MainController {
 
     @Autowired
-    private IReceptService receptService;
+    private IRecipeService recipeService;
 
-    @Autowired
-    private IDepartService departServ;
-
-    @RequestMapping(value = {"/departs.req"}, method = RequestMethod.GET,
-            headers = "Accept=application/json")
-    public List<Department> departsList() {
-        return departServ.findAllDepartments();
+    @RequestMapping(value = {"/recipes"}, method = RequestMethod.GET,
+            headers = "Accept=application/json", produces="application/json")
+    public List<RecipeDto> getRecipesList() {
+        return recipeService.getRecipes();
     }
 
-    @RequestMapping(value = {"/recept_list.req"}, method = RequestMethod.GET,
+
+    @RequestMapping(value = {"/recipes/{recipeId}"}, method = RequestMethod.GET,
             headers = "Accept=application/json")
-    public List<Recept> receptList(@RequestParam("departId") Integer departId) {
-        return receptService.showReceptDtos(departId);
+    public RecipeDto getRecipe(@PathVariable("recipeId") Long recipeId) {
+        return recipeService.getRecipe(recipeId);
     }
 
-    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.GET,
+    @RequestMapping(value = {"/recipes/{recipeId}"}, method = RequestMethod.DELETE,
             headers = "Accept=application/json")
-    public Recept receptShow(@RequestParam("receptId") Integer receptId) {
-        return receptService.showRecept(receptId);
+    public void removeRecipe(@PathVariable("recipeId") Long recipeId) {
+        recipeService.removeRecipe(recipeId);
     }
 
-//    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.DELETE,
-//            headers = "Accept=application/json")
-//    public void receptDelete(@RequestParam("receptId") Integer receptId) {
-//        receptService.deleteRecept(receptId);
-//    }
-
-    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.POST,
+    @RequestMapping(value = {"/recipes"}, method = RequestMethod.POST,
             headers = "Accept=application/json")
-    public Integer saveUniqueRecept(@RequestBody Recept recept) throws IOException {
-        return receptService.saveRecept(recept);
+    public RecipeDto saveUniqueRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) {
+        return recipeService.saveRecipe(recipe);
     }
 
-    @RequestMapping(value = {"/recept.req"}, method = RequestMethod.PUT,
+    @RequestMapping(value = {"/recipes"}, method = RequestMethod.PUT,
             headers = "Accept=application/json")
-    public Integer updateRecept(@RequestBody Recept recept) throws IOException {
-        return receptService.saveRecept(recept);
+    public RecipeDto updateRecipe(@RequestBody @Valid @NotNull(message = "Request should not be null") RecipeDto recipe) {
+        return recipeService.updateRecipe(recipe);
     }
 
-//    @RequestMapping(value = {"/recept_list_tag.req"}, method = RequestMethod.GET,
-//            headers = "Accept=application/json")
-//    public List<Recept> receptListByTag(@RequestParam("tagId") Integer tagId) {
-//        return receptService.showReceptsByTag(tagId);
-//    }
+    @RequestMapping(value = {"/recipes/{recipeId}/refs"}, method = RequestMethod.POST, headers = "Accept=application/json")
+    public RecipeDto addTagsToRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody List<Long> refIds) {
+        return recipeService.addRefsToRecipe(recipeId, refIds);
+    }
+
+    @RequestMapping(value = {"/recipes/{recipeId}/refs"}, method = RequestMethod.DELETE, headers = "Accept=application/json")
+    public RecipeDto deleteTagsFromRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody List<Long> refIds) {
+        return recipeService.deleteRefsFromRecipe(recipeId, refIds);
+    }
+
+    @RequestMapping(value = {"/recipes/by-ingredients"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesByIngredients(@RequestParam("ingIds") List<Long> ingIds) {
+        return recipeService.findRecipesByIngredients(ingIds);
+    }
+
+    @RequestMapping(value = {"/recipes/by-keyword"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesByIngredients(@RequestParam("str") String keyword) {
+        return recipeService.findRecipesByKeyword(keyword);
+    }
+
 }

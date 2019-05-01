@@ -1,8 +1,8 @@
-//package com.anna.recept.service.impl;
+//package com.anna.recipe.service.impl;
 //
-//import com.anna.recept.entity.Department;
-//import com.anna.recept.entity.Recept;
-//import com.anna.recept.service.*;
+//import com.anna.recipe.entity.Department;
+//import com.anna.recipe.entity.Recipe;
+//import com.anna.recipe.service.*;
 //import org.apache.commons.io.FileUtils;
 //import org.junit.Before;
 //import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@
 //    @Mock
 //    private IFileService fileService;
 //    @Mock
-//    private IReceptService receptService;
+//    private IRecipeService receptService;
 //    @Mock
 //    private IDepartService departService;
 //    @Mock
@@ -39,7 +39,7 @@
 //    @Mock
 //    private IReferenceService refService;
 //    @Mock
-//    private IIngridientService ingService;
+//    private IIngredientService ingService;
 //    @Mock
 //    private IProportionService propService;
 //
@@ -58,7 +58,7 @@
 //    @Before
 //    public void configureMocks() throws IOException {
 //        when(fileService.getXsdScheme()).thenReturn(new File(RECEPT_SCHEME));
-//        when(receptService.saveRecept(any())).thenReturn(RECEPT_ID);
+//        when(receptService.saveRecipe(any())).thenReturn(RECEPT_ID);
 //        when(departService.findAllDepartments()).thenReturn(constructDepart());
 //        when(fileService.getLangConfig()).thenReturn(new File(LANG_CONFIG));
 //    }
@@ -81,10 +81,10 @@
 //
 //    private MultipartFile getMultipartMockFile() throws IOException {
 //        File file = new File("test.xml");
-//        String data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Recept><Name>" + receptName + "</Name><Description>" +
-//                receptDesc + "</Description><Depart>" + receptDepart + "</Depart><Proportions><Proportion><Ingridient>" +
-//                receptIng + "</Ingridient><Norma>" + receptNorma + "</Norma></Proportion></Proportions>" +
-//                "<Tags><Tag>" + tag + "</Tag></Tags><References><Reference>" + referenceName + "</Reference></References></Recept>";
+//        String data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Recipe><Name>" + receptName + "</Name><Description>" +
+//                receptDesc + "</Description><Depart>" + receptDepart + "</Depart><Proportions><Proportion><Ingredient>" +
+//                receptIng + "</Ingredient><Norma>" + receptNorma + "</Norma></Proportion></Proportions>" +
+//                "<Tags><Tag>" + tag + "</Tag></Tags><References><Reference>" + referenceName + "</Reference></References></Recipe>";
 //        FileUtils.writeStringToFile(file, data);
 //        Path path = Paths.get(file.getAbsolutePath());
 //        byte[] mpBytes = Files.readAllBytes(path);
@@ -99,12 +99,12 @@
 //        return Arrays.asList(depart);
 //    }
 //
-//    private Recept constructReceptDto() {
-//        Recept recept = new Recept();
-//        recept.setName("name");
-//        recept.setText("text");
+//    private Recipe constructReceptDto() {
+//        Recipe recipe = new Recipe();
+//        recipe.setName("name");
+//        recipe.setText("text");
 //        Department depart = new Department();
 //        depart.setName("depart");
-//        return recept;
+//        return recipe;
 //    }
 //}

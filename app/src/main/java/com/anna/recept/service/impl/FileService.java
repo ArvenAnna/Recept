@@ -1,10 +1,8 @@
 package com.anna.recept.service.impl;
 
-import com.anna.recept.entity.Recept;
-import com.anna.recept.exception.Errors;
-import com.anna.recept.exception.ReceptApplicationException;
 import com.anna.recept.service.IFileService;
-import com.anna.recept.service.IReceptService;
+import com.anna.recept.service.IRecipeService;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +24,14 @@ public class FileService implements IFileService {
 
     private static final String ALTERNATIVE_IMAGE = "alt.png";
     private static final String RECEPT_SCHEME = "recept_scheme.xsd";
-    private static final String RECEPT_XSL = "recept.xsl";
+    private static final String RECEPT_XSL = "recipe.xsl";
     private static final String LANG_CONFIG = "Lang.xml";
 
     @Autowired
     ServletContext context;
 
     @Autowired
-    private IReceptService receptService;
+    private IRecipeService receptService;
 
 
     @Override
@@ -51,51 +49,9 @@ public class FileService implements IFileService {
         return new File(constructXmlResourcePath(LANG_CONFIG));
     }
 
-    private String constructReceptFileUploadPath(String path) {
-        return context.getInitParameter(UPLOAD_LOCATION) + File.separator + path;
-    }
-
-
     private String constructXmlResourcePath(String path) {
         return context.getInitParameter(RESOURCE_LOCATION) + File.separator + path;
     }
-
-
-    private String retrieveFilePath(Integer receptId) {
-        return receptService.getRecept(receptId).getImgPath();
-    }
-
-    @Override
-    public byte[] getReceptMainFoto(Integer receptId) throws IOException {
-        String path = constructReceptFileUploadPath(retrieveFilePath(receptId));
-        return FileUtils.readFileToByteArray(createReceptFotoFile(path));
-    }
-
-//    @Override
-//    public byte[] getDetailFoto(Integer detailId) throws IOException {
-//        String path = constructReceptFileUploadPath(retrieveDetailFilePath(detailId));
-//        return FileUtils.readFileToByteArray(createReceptFotoFile(path));
-//    }
-
-//    @Override
-//    public void saveReceptMainFoto(MultipartFile file, Integer receptId) throws IOException {
-//        String path = constructReceptSavePath(receptId, file.getOriginalFilename());
-//        File upload = new File(constructReceptFileUploadPath(path));
-//        FileUtils.writeByteArrayToFile(upload, file.getBytes());
-//
-//        receptService.saveFilePath(receptId, path);
-//    }
-
-//    @Override
-//    public void saveDetailFoto(MultipartFile file, Integer detailId) throws IOException {
-//        Integer receptId = detailService.findReceptByDetailId(detailId).getId();
-//
-//        String path = constructReceptSavePath(receptId, file.getOriginalFilename());
-//        File upload = new File(constructReceptFileUploadPath(path));
-//        FileUtils.writeByteArrayToFile(upload, file.getBytes());
-//
-//        detailService.saveFilePath(path, detailId);
-//    }
 
     @Override
     public String saveTemporaryFile(MultipartFile file) throws IOException {
@@ -109,7 +65,7 @@ public class FileService implements IFileService {
 
     @Override
     public String saveRealFile(String tempPath, String name) throws IOException {
-        File webappFile = new File(context.getRealPath("") + File.separator + System.getenv(FOTO_LOCATION_ENV) + File.separator + name);
+        File webappFile = new File(context.getRealPath("") + File.separator + name);
         File temp = new File(context.getRealPath("") + File.separator + tempPath);
         if (!temp.getAbsolutePath().equals(webappFile.getAbsolutePath())) {
             FileUtils.copyFile(temp, webappFile);
@@ -120,30 +76,19 @@ public class FileService implements IFileService {
     }
 
     @Override
-    public void deleteRealFile(String path) throws IOException {
+    public void deleteRealFile(String path) {
         String dir = context.getRealPath("") + File.separator + System.getenv(FOTO_LOCATION_ENV) + File.separator + path;
         File dirFile = new File(dir);
         dirFile.delete();
     }
 
     @Override
-    public void cleanTempFiles() throws IOException {
+    public void cleanTempFiles() {
         String tempDir = context.getRealPath("") + File.separator + System.getenv(TEMP_LOCATION_ENV);
         File tempDirFile = new File(tempDir);
         for (String s: tempDirFile.list()) {
             File currentFile = new File(tempDirFile.getPath(), s);
             currentFile.delete();
         }
-    }
-
-    private File createReceptFotoFile(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            file = new File(constructReceptFileUploadPath(ALTERNATIVE_IMAGE));
-            if (!file.exists()) {
-                throw new ReceptApplicationException(Errors.FILE_NOT_FOUND);
-            }
-        }
-        return file;
     }
 }

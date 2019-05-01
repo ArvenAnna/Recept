@@ -15,7 +15,7 @@ const ProportionList = ({items, onButtonClick, className}) => {
         let itemsForList = items.map(item => {
             item.name = (
                 <Item>
-                    <div key='name'>{item.ingridient.name}</div>
+                    <div key='name'>{item.ingredientName}</div>
                     <div key='separator'>&nbsp;-&nbsp;</div>
                     <div key='norma'>{item.norma}</div>
                 </Item>
@@ -31,7 +31,7 @@ const ProportionList = ({items, onButtonClick, className}) => {
 //     items: React.PropTypes.arrayOf(
 //         React.PropTypes.shape({
 //             id: React.PropTypes.number,
-//             ingridient: React.PropTypes.shape({
+//             ingredient: React.PropTypes.shape({
 //                 id: React.PropTypes.number,
 //                 name: React.PropTypes.string
 //             }),

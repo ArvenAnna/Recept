@@ -7,5 +7,5 @@ import java.io.IOException;
 public interface IXmlService {
     Integer getReceptFromXml(MultipartFile file) throws IOException;
 
-    byte[] getPdfFromRecept(Integer receptId) throws IOException;
+    byte[] getPdfFromRecept(Long receptId) throws IOException;
 }

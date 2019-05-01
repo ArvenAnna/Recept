@@ -41,7 +41,7 @@ class App extends React.Component {
                             <MyRoute exact path='/'
                                      component={ReceptListPage}
                                      action={fetchReceptsByDepart}
-                                     args={[{arg: '-1'}, {arg: true}]}/>
+                                     args={[{arg: null}, {arg: true}]}/>
                             <MyRoute path='/ingridients'
                                      component={IngridientsPage}
                                      action={fetchIngridients}/>

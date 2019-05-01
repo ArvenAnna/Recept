@@ -130,7 +130,7 @@ class InputWithButtonForm extends React.Component<InputWithButtonFormProps, Inpu
             ? suggestions.filter((sug: Suggestion, i) =>  !suggestionExcludes.find(s => s.name == sug.name))
             : suggestions;
 
-        return filteredSuggestions.filter(sug => sug.name.includes(value));
+        return filteredSuggestions && filteredSuggestions.filter(sug => sug.name.includes(value));
     }
 
     clickOutside(e: Event) {

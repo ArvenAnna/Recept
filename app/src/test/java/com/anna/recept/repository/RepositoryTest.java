@@ -8,18 +8,18 @@ public abstract class RepositoryTest {
 //    @Autowired
 //    protected TagRepository tagRepository;
 //    @Autowired
-//    protected ReceptRepository receptRepository;
+//    protected RecipeRepository receptRepository;
 //    @Autowired
 //    protected DepartmentRepository departRepository;
 //    @Autowired
-//    protected IngridientRepository ingridientRepository;
+//    protected IngredientRepository ingridientRepository;
 //    @Autowired
 //    protected ProportionRepository proportionRepository;
 //    @Autowired
 //    protected DetailRepository detailRepository;
 
-    public static String INGRIDIENT_NAME = "ingridient";
-    public static String RECEPT_NAME = "recept";
+    public static String INGRIDIENT_NAME = "ingredient";
+    public static String RECEPT_NAME = "recipe";
     public static String DEPART_NAME = "depart";
     public static String TAG_NAME = "tag";
 
@@ -82,17 +82,17 @@ public abstract class RepositoryTest {
 //        return proportion;
 //    }
 //
-//    public Ingridient constructIngridient() {
-//        Ingridient ingridient = new Ingridient();
-//        ingridient.setName(INGRIDIENT_NAME);
-//        return ingridient;
+//    public Ingredient constructIngridient() {
+//        Ingredient ingredient = new Ingredient();
+//        ingredient.setName(INGRIDIENT_NAME);
+//        return ingredient;
 //    }
 //
-//    public Recept constructRecept(int departId) {
-//        Recept recept = new Recept();
-//        recept.setDepartId(departId);
-//        recept.setName(RECEPT_NAME);
-//        return recept;
+//    public Recipe constructRecept(int departId) {
+//        Recipe recipe = new Recipe();
+//        recipe.setDepartId(departId);
+//        recipe.setName(RECEPT_NAME);
+//        return recipe;
 //    }
 //
 //    public Dapart constructDepart() {

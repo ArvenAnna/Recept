@@ -111,7 +111,7 @@ class TwoInputsWithButtonForm extends React.Component {
         const {suggestionExcludes, suggestions} = this.props;
         const {first} = this.state;
         const filteredSuggestions = suggestionExcludes && suggestionExcludes.length
-            ? suggestions.filter(sug => !suggestionExcludes.find(s => s.name == sug.name))
+            ? suggestions.filter(sug => !suggestionExcludes.find(s => s.ingredientName === sug.name))
             : suggestions;
 
         return filteredSuggestions.filter(sug => sug.name.includes(first));
@@ -164,8 +164,8 @@ TwoInputsWithButtonForm.propTypes = {
         name: PropTypes.string
     })),
     suggestionExcludes: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string
+        ingredientId: PropTypes.number,
+        ingredientName: PropTypes.string
     }))
 }
 

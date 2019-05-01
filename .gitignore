@@ -8,6 +8,10 @@ front/fe/node_modules
 front/fe/package-lock.json
 front/fe/bin
 
+front_vue/fe/node_modules
+front_vue/fe/package-lock.json
+front_vue/fe/bin
+
 __snapshots__
 
 tempfiles

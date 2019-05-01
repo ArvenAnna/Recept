@@ -4,8 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.anna.recept.dto.RecipeDto;
 
 @Getter
 @Setter
@@ -21,6 +20,11 @@ public class Department {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Recept> recepts = new ArrayList<>();
+    public static Department of(RecipeDto.DepartmentDto dto) {
+        Department department = new Department();
+        department.setId(dto.getId());
+        department.setName(dto.getName());
+        return department;
+    }
+
 }
