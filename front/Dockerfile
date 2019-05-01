@@ -15,7 +15,7 @@ ARG templocation
 
 RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=${fotoLocation} --env.TEMP_CATALOG=${templocation}
 
-RUN npm test
+#RUN npm test
 
 #RUN ./dependencies/dependenciesCheck.sh
 
