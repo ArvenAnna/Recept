@@ -44,7 +44,7 @@ public class RecipeService implements IRecipeService
 	private DepartmentRepository departmentRep;
 
 	@Autowired
-	private FileService fileService;
+	private com.anna.recept.service.impl.FileService fileService;
 
 	@Override
 	@Transactional // due to Lazy context
@@ -98,7 +98,7 @@ public class RecipeService implements IRecipeService
 		Assert.notNull(recipe.getId(), Errors.ID_MUST_NOT_BE_NULL.getCause());
 
 		Recipe recipeWithSameName = recipeRep.findByNameIgnoreCase(recipe.getName());
-		if (recipeWithSameName != null && recipeWithSameName.getId() != recipe.getId()) {
+		if (recipeWithSameName != null && !recipeWithSameName.getId().equals(recipe.getId())) {
 			throw new RecipeApplicationException(Errors.RECIPE_NAME_NOT_UNIQUE);
 		}
 
@@ -162,7 +162,9 @@ public class RecipeService implements IRecipeService
 
 	private String saveFileAndGetPath(String tempPath, String newFileName) {
 			try {
-				return fileService.saveRealFile(tempPath, newFileName);
+				String fileNameWithCatalog = System.getenv(FOTO_LOCATION_ENV) + File.separator + newFileName;
+				fileService.saveRealFile(tempPath, fileNameWithCatalog);
+				return newFileName;
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -181,7 +183,7 @@ public class RecipeService implements IRecipeService
 	private String constructConstantFileNamePart(Recipe recipe) {
 		String catalogName = recipe.getDepartment().getName();
 		String subCatalogName = recipe.getName();
-		return System.getenv(FOTO_LOCATION_ENV) + File.separator + catalogName + File.separator
+		return catalogName + File.separator
 				+ subCatalogName + File.separator
 				+ subCatalogName;
 	}
