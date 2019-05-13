@@ -15,7 +15,7 @@ module.exports = env => {
         module: {
             rules: [{
                 test: /\.js$/,
-                exclude: [/node_modules/, /bin/],
+                exclude: [/node_modules/, /bin/, /web-components/],
                 use: 'babel-loader',
             }, {
                 test: /\.css$/,

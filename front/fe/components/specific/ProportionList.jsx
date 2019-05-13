@@ -8,23 +8,48 @@ const Item = styled.div`
     }
 `
 
-const ProportionList = ({items, onButtonClick, className}) => {
-        if(!items || !items.length) {
-            return null;
+export default class ProportionList extends React.Component {
+
+    componentDidMount() {
+        this.r.items = this.props.items;
+        this.r.renderItem = (item) => {
+            return `
+                <div key='name'>${item.ingredientName}</div>
+                <div key='separator'>&nbsp;-&nbsp;</div>
+                <div key='norma'>${item.norma || ''}</div>
+            `;
         }
-        let itemsForList = items.map(item => {
-            item.name = (
-                <Item>
-                    <div key='name'>{item.ingredientName}</div>
-                    <div key='separator'>&nbsp;-&nbsp;</div>
-                    <div key='norma'>{item.norma}</div>
-                </Item>
-            );
-            return item;
-        });
-        return <ListItems items={itemsForList}
-                          className={className}
-                          onButtonClick={onButtonClick}/>;
+        this.r.removeItem = this.props.onButtonClick;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.items != this.props.items) {
+            this.r.items = nextProps.items;
+        }
+    }
+
+    render() {
+        const {items, className, onButtonClick} = this.props;
+        // if(!items || !items.length) {
+        //     return null;
+        // }
+        // let itemsForList = items.map(item => {
+        //     item.name = (
+        //         <Item>
+        //             <div key='name'>{item.ingredientName}</div>
+        //             <div key='separator'>&nbsp;-&nbsp;</div>
+        //             <div key='norma'>{item.norma}</div>
+        //         </Item>
+        //     );
+        //     return item;
+        // });
+        // return <ListItems items={itemsForList}
+        //                   className={className}
+        //                   onButtonClick={onButtonClick}/>;
+
+        return <recipe-list-items ref={r => this.r = r} className={className}/>
+    }
+
 }
 
 // ProportionList.propTypes = {
@@ -46,4 +71,4 @@ const ProportionList = ({items, onButtonClick, className}) => {
 //     buttonText: 'delete'
 // }
 
-export default ProportionList;
+// export default ProportionList;

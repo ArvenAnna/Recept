@@ -32,6 +32,7 @@
     "@types/react-redux": "5.0.16",
     "@types/react-router": "4.0.23",
     "@types/react-router-dom": "4.2.6",
+    "@webcomponents/webcomponentsjs": "^2.2.10",
     "axios": "0.18.0",
     "express": "4.16.3",
     "morgan": "1.9.0",

@@ -6,7 +6,6 @@ import {withRouter} from 'react-router';
 import Sidebar from './Sidebar';
 import IngridientsPage from './IngridientsPage';
 import ReceptListPage from './ReceptList.jsx';
-import ReceptPage from './ReceptPage';
 import EditReceptPage from './CreateReceptPage';
 import HorizontalMenuButton from '../components/simple/HorizontalMenuButton.tsx';
 
@@ -18,6 +17,12 @@ import {fetchIngridients} from "../actions/IngridientActions";
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/genie.css';
 import Alert from 'react-s-alert';
+import ReceptPageConnect from './ReceptPageConnect';
+
+
+import '../web-components/recipe-page';
+import '../web-components/app';
+
 
 @withRouter
 @connect(store => ({
@@ -54,7 +59,7 @@ class App extends React.Component {
                                      args={[{router: 'id'}]}
                                      component={EditReceptPage}/>
                             <MyRoute path='/recept/:id'
-                                     component={ReceptPage}
+                                     component={ReceptPageConnect}
                                      action={fetchRecept}
                                      args={[{router: 'id'}]}/>
                             <MyRoute path='/receptList/:department'

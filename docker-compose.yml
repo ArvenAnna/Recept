@@ -30,6 +30,7 @@ services:
         - ./front/fe/dev-server.js:/usr/src/app/fe/dev-server.js
         - ./front/fe/bin:/usr/src/app/fe/bin
         - ./front/fe/dependencies:/usr/src/app/fe/dependencies
+        - ./front/fe/index.html:/usr/src/app/fe/index.html
 
   recept_front_vue:
         container_name: front_vue
