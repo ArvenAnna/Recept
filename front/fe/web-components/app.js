@@ -1,15 +1,15 @@
 import './recipe-page-renderer';
 import './router';
+import './recipe-header';
 
 const template = document.createElement('template');
 template.innerHTML = `
   <div class="app_container">
-  <div class="horizontal_menu nav_menu">header</div>
-    <div>sidebar</div>
+    <recipe-header class="nav_menu"></recipe-header>
     <div class="app_body"> 
         <div class="app_body_content">
             <recipe-route path="/recipe/:id">
-                <recipe-page-renderer/>
+                <recipe-page-renderer></recipe-page-renderer>
             </recipe-route>
         </div>
         <div class="side_menu">menu</div>

@@ -73,6 +73,29 @@ template.innerHTML = `
         width: 5rem;
     }
     
+    .recipe_page_details {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 4;
+        grid-row-end: 5;
+
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+    }
+    
+    .recipe_page_details_description {
+        padding: 1rem;
+        color: var(--text-color, white);
+        font-size: medium;
+        font-weight: 600;
+    }
+    
+    .recipe_page_details_photo {
+        width: 100%;
+        padding: 0.5rem 0;
+        box-sizing: border-box;
+    }
+    
   </style>
   
   <template id='recipe_ref_template'>
@@ -80,6 +103,11 @@ template.innerHTML = `
         <img src='svg/dish-fork-and-knife.svg' class='recipe_ref_photo'/>
         <div class='recipe_page_refs_name'/>
     </recipe-link>
+  </template>
+  
+  <template id='recipe_detail_template'>
+      <img src='svg/dish-fork-and-knife.svg' class='recipe_page_details_photo'/>
+      <div class='recipe_page_details_description'></div>
   </template>
   
   <template id='recipe_template'>
@@ -90,6 +118,7 @@ template.innerHTML = `
        <img src='svg/dish-fork-and-knife.svg' class='recipe_page_main_photo'/>
        <div class='recipe_page_description'></div>  
        <div class='recipe_page_refs'></div>
+       <div class='recipe_page_details'></div>
   </template>
   
   <div id='recipe_page'></div>
@@ -105,7 +134,6 @@ class RecipePage extends HTMLElement {
     }
 
     set recipe(newRecipe) {
-        // readonly
         this.$recipe = newRecipe;
         this.setAttribute(supportedAttributes.ID, newRecipe.id);
         this.renderPage();
@@ -125,7 +153,6 @@ class RecipePage extends HTMLElement {
 
     renderPage() {
         this.$('#recipe_page').innerHTML = ""; // clear all content
-        // TODO: check if recipe changed to rerender only
         if (this.$recipe) {
 
             const template = this.$('#recipe_template').content.cloneNode(true);
@@ -156,11 +183,21 @@ class RecipePage extends HTMLElement {
                     if (ref.imgPath) {
                         refTemplate.querySelector('.recipe_ref_photo').src = ref.imgPath;
                     }
-                    refTemplate.querySelector('.recipe_page_refs_name').src = ref.name;
+                    refTemplate.querySelector('.recipe_page_refs_name').innerHTML = ref.name;
                     template.querySelector('.recipe_page_refs').appendChild(refTemplate);
                 })
             }
 
+            if (this.$recipe.details) {
+                this.$recipe.details.forEach(detail => {
+                    const detailTemplate = this.$('#recipe_detail_template').content.cloneNode(true);
+                    if (detail.imgPath) {
+                        detailTemplate.querySelector('.recipe_page_details_photo').src = detail.imgPath;
+                    }
+                    detailTemplate.querySelector('.recipe_page_details_description').innerHTML = detail.description;
+                    template.querySelector('.recipe_page_details').appendChild(detailTemplate);
+                })
+            }
 
             this.$('#recipe_page').appendChild(template);
         }

@@ -39,6 +39,15 @@ class Recipe extends Model {
         return this._recipe.imgPath && routes.IMAGE_CATALOG + this._recipe.imgPath;
     }
 
+    get proportions() {
+        return this._recipe.proportions && this._recipe.proportions.map(prop => ({...prop}));
+    }
+
+    get details() {
+        return this._recipe.details && this._recipe.details.map(({id, description, filePath}) =>
+            ({id, description, imgPath: filePath && routes.IMAGE_CATALOG + filePath}));
+    }
+
     retrieve(id) {
         fetch(routes.GET_RECIPE(id))
             .then(res => res.json())
