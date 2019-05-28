@@ -51,7 +51,7 @@ class Recipe extends Model {
     retrieve(id) {
         fetch(routes.GET_RECIPE(id))
             .then(res => res.json())
-            .then(res => this._setRecipe(res));
+            .then(this._setRecipe);
     }
 
     _setRecipe(newRecipe) {

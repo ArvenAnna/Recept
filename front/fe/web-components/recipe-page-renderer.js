@@ -1,21 +1,21 @@
 import mRecipe from './model/recipe';
 import router from './router/router-context';
+import WebElement from './abstract/web-element';
+import 'recipe-page';
 
-const template = document.createElement('template');
-template.innerHTML = `
+const template = `
   <recipe-page/>
 `;
 
 
-export default class RecipePageRenderer extends HTMLElement {
+export default class RecipePageRenderer extends WebElement {
 
     constructor() {
-        super();
+        super(template);
 
         this.currentRecipeFetched = this.currentRecipeFetched.bind(this);
         this.currentRecipeChanged = this.currentRecipeChanged.bind(this);
 
-        this.appendChild(template.content.cloneNode(true));
         mRecipe.addSubscriber(this.currentRecipeFetched);
         router.addSubscriber(this.currentRecipeChanged);
     }

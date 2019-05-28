@@ -1,5 +1,12 @@
-const template = document.createElement('template');
-template.innerHTML = `
+import WebElement from './abstract/web-element';
+import 'list-items';
+
+const CONTAINER = 'recipe_page';
+const RECIPE_TEMPLATE = 'recipe_template';
+const RECIPE_REF_TEMPLATE = 'recipe_ref_template';
+const RECIPE_DETAIL_TEMPLATE = 'recipe_detail_template';
+
+const template = `
   <style>
     #recipe_page {
         display: grid;
@@ -98,19 +105,19 @@ template.innerHTML = `
     
   </style>
   
-  <template id='recipe_ref_template'>
+  <template id='${RECIPE_REF_TEMPLATE}'>
     <recipe-link>
         <img src='svg/dish-fork-and-knife.svg' class='recipe_ref_photo'/>
         <div class='recipe_page_refs_name'/>
     </recipe-link>
   </template>
   
-  <template id='recipe_detail_template'>
+  <template id='${RECIPE_DETAIL_TEMPLATE}'>
       <img src='svg/dish-fork-and-knife.svg' class='recipe_page_details_photo'/>
       <div class='recipe_page_details_description'></div>
   </template>
   
-  <template id='recipe_template'>
+  <template id='${RECIPE_TEMPLATE}'>
        <div class='recipe_page_caption'></div>
        <div class='recipe_page_proportions'>
           <recipe-list-items/>
@@ -128,78 +135,80 @@ const supportedAttributes = {
     ID: 'recipe-id'
 }
 
-class RecipePage extends HTMLElement {
-    $(selector) {
-        return this.shadowRoot && this.shadowRoot.querySelector(selector)
-    }
+class RecipePage extends WebElement {
 
     set recipe(newRecipe) {
         this.$recipe = newRecipe;
         this.setAttribute(supportedAttributes.ID, newRecipe.id);
-        this.renderPage();
+        this._renderPage();
     }
 
     constructor() {
-        super();
+        super(template, true);
 
-        this.renderPage = this.renderPage.bind(this);
-        const root = this.attachShadow({mode: 'open'});
-        root.appendChild(template.content.cloneNode(true));
+        this.bindMethods(this._renderPage, this._initProportions);
     }
 
     connectedCallback() {
-        this.renderPage();
+        this._renderPage();
     }
 
-    renderPage() {
-        this.$('#recipe_page').innerHTML = ""; // clear all content
-        if (this.$recipe) {
+    _initProportions(proportionsListItems) {
+        proportionsListItems.items = this.$recipe.proportions;
 
-            const template = this.$('#recipe_template').content.cloneNode(true);
-
-            template.querySelector('.recipe_page_caption').innerHTML = this.$recipe.name;
-
-            const proportionListEl = template.querySelector('recipe-list-items');
-            proportionListEl.items = this.$recipe.proportions;
-
-            proportionListEl.renderItem = (item) => `
+        proportionsListItems.renderItem = (item) => `
                 <div key='name'>${item.ingredientName}</div>
                 <div key='separator'>&nbsp;-&nbsp;</div>
                 <div key='norma'>${item.norma || ''}</div>
             `;
+    }
+
+    _renderPage() {
+        this.$(`#${CONTAINER}`).innerHTML = ''; // clear all content
+
+        if (this.$recipe) {
+
+            const template = this.getTemplateById(RECIPE_TEMPLATE);
+
+            template.querySelector('.recipe_page_caption').textContent = this.$recipe.name;
+
+            if (this.$recipe.proportions) {
+                const proportionListEl = template.querySelector('recipe-list-items');
+                proportionListEl.onConstruct = this._initProportions;
+            }
 
             if (this.$recipe.imgPath) {
                 template.querySelector('.recipe_page_main_photo').src =  this.$recipe.imgPath;
             }
 
             if (this.$recipe.text) {
-                template.querySelector('.recipe_page_description').innerHTML = this.$recipe.text;
+                template.querySelector('.recipe_page_description').textContent = this.$recipe.text;
             }
 
             if (this.$recipe.refs) {
                 this.$recipe.refs.forEach(ref => {
-                    const refTemplate = this.$('#recipe_ref_template').content.cloneNode(true);
+                    const refTemplate = this.getTemplateById(RECIPE_REF_TEMPLATE);
                     refTemplate.querySelector('recipe-link').setAttribute('path', `/recipe/${ref.id}`);
                     if (ref.imgPath) {
                         refTemplate.querySelector('.recipe_ref_photo').src = ref.imgPath;
                     }
-                    refTemplate.querySelector('.recipe_page_refs_name').innerHTML = ref.name;
+                    refTemplate.querySelector('.recipe_page_refs_name').textContent = ref.name;
                     template.querySelector('.recipe_page_refs').appendChild(refTemplate);
                 })
             }
 
             if (this.$recipe.details) {
                 this.$recipe.details.forEach(detail => {
-                    const detailTemplate = this.$('#recipe_detail_template').content.cloneNode(true);
+                    const detailTemplate = this.getTemplateById(RECIPE_DETAIL_TEMPLATE);
                     if (detail.imgPath) {
                         detailTemplate.querySelector('.recipe_page_details_photo').src = detail.imgPath;
                     }
-                    detailTemplate.querySelector('.recipe_page_details_description').innerHTML = detail.description;
+                    detailTemplate.querySelector('.recipe_page_details_description').textContent = detail.description;
                     template.querySelector('.recipe_page_details').appendChild(detailTemplate);
                 })
             }
 
-            this.$('#recipe_page').appendChild(template);
+            this.$(`#${CONTAINER}`).appendChild(template);
         }
     }
 

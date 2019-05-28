@@ -1,6 +1,5 @@
 export default class Model {
 
-    // #recipe = null;
     // #subscribers = [];
 
     constructor() {

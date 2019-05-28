@@ -1,9 +1,9 @@
 import './recipe-page-renderer';
 import './router';
 import './recipe-header';
+import WebElement from './abstract/web-element';
 
-const template = document.createElement('template');
-template.innerHTML = `
+const template = `
   <div class="app_container">
     <recipe-header class="nav_menu"></recipe-header>
     <div class="app_body"> 
@@ -18,11 +18,9 @@ template.innerHTML = `
   
 `;
 
-export default class App extends HTMLElement {
+export default class App extends WebElement {
     constructor() {
-        super();
-
-        this.appendChild(template.content.cloneNode(true));
+        super(template);
     }
 }
 

@@ -1,5 +1,8 @@
-import mHeader from "./model/header";
-import WebElement from "./abstract/web-element";
+import mHeader from './model/header';
+import WebElement from './abstract/web-element';
+
+const CONTAINER = 'nav_menu';
+const BUTTON_TEMPLATE = 'header_button_template';
 
 const template = `
   <style>
@@ -14,47 +17,39 @@ const template = `
     
   </style>
   
-  <template id='header_button_template'>
+  <template id='${BUTTON_TEMPLATE}'>
     <recipe-link>
         <div class='nav_button'></div>
     </recipe-link>
   </template>
   
-  <div id='nav_menu'></div>
+  <div id='${CONTAINER}'></div>
 `;
-
-// const supportedAttributes = {
-//     ID: 'recipe-id'
-// }
 
 class RecipeHeader extends WebElement {
 
     constructor() {
         super(template, true);
 
-        this.renderHeader = this.renderHeader.bind(this);
+        this.bindMethods(this.renderHeader);
 
         this.renderHeader();
 
         //mHeader.addSubscriber(this.currentRecipeFetched);
     }
 
-    connectedCallback() {
-    }
-
     renderHeader() {
-        this.$('#nav_menu').innerHTML = ""; // clear all content
+        this.$(`#${CONTAINER}`).innerHTML = ''; // clear all content
 
         if (mHeader.buttons) {
             mHeader.buttons.forEach(button => {
-                const buttonTemplate = this.$('#header_button_template').content.cloneNode(true);
+                const buttonTemplate = this.getTemplateById(BUTTON_TEMPLATE);
                 buttonTemplate.querySelector('.nav_button').textContent = button.name;
-                this.$('#nav_menu').appendChild(buttonTemplate);
-                // after constructor and mount Callback called on children
-                const children = this.$('#nav_menu').children;
-                [...children].pop().path = button.to;
+                buttonTemplate.querySelector('recipe-link').onConstruct = (link) => {
+                    link.path = button.to;
+                };
+                this.$(`#${CONTAINER}`).appendChild(buttonTemplate);
             });
-
         }
     }
 

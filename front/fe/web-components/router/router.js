@@ -25,16 +25,3 @@ window.onload = () => {
         document.querySelector('#mount').appendChild(template);
     }
 }
-
-const config = {
-    route: '/',
-    component: App,
-    children: [{
-        route: 'recipe1/:id',
-        component: RecipePageRenderer
-    }]
-}
-
-const resolveComponent = (url) => {
-
-}

@@ -1,25 +1,18 @@
-const template = document.createElement('template');
-
-template.innerHTML = `
-`;
+import WebElement from '../abstract/web-element';
 
 const supportedAttributes = {
     PATH: 'path'
 }
 
-class RecipeLink extends HTMLElement {
+class RecipeLink extends WebElement {
 
     constructor() {
         super();
-        this.changeUrl = this.changeUrl.bind(this);
+        this.bindMethods(this.changeUrl);
     }
 
     set path(newPath) {
         this.setAttribute(supportedAttributes.PATH, newPath);
-    }
-
-    static get observedAttributes() {
-        return Object.values(supportedAttributes);
     }
 
     changeUrl() {
@@ -27,20 +20,12 @@ class RecipeLink extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log('connected link');
         this.addEventListener('click', this.changeUrl);
     }
 
     disconnectedCallback() {
         this.removeEventListener('click', this.changeUrl);
     }
-
-    // attributeChangedCallback(name, oldValue, newValue) {
-    //     switch (name) {
-    //         case supportedAttributes.PATH:
-    //             this.changeUrl();
-    //     }
-    // }
 
 }
 
