@@ -20,7 +20,7 @@ import Alert from 'react-s-alert';
 import ReceptPageConnect from './ReceptPageConnect';
 
 
-import '../web-components/recipe-page';
+import '../web-components/views/recipe/recipe-page';
 import '../web-components/app';
 
 

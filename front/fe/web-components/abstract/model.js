@@ -5,9 +5,9 @@ export default class Model {
     constructor() {
         this._subscribers = [];
 
-        this.addSubscriber = this.addSubscriber.bind(this);
-        this.removeSubscriber = this.removeSubscriber.bind(this);
-        this.notifySubscribers = this.notifySubscribers.bind(this);
+        this.bindMethods = this.bindMethods.bind(this);
+        this.bindMethods(this.addSubscriber,
+            this.removeSubscriber, this.notifySubscribers);
     }
 
     addSubscriber (subscriber) {
@@ -24,5 +24,11 @@ export default class Model {
 
     notifySubscribers() {
         this._subscribers.forEach(sub => sub(this));
+    }
+
+    bindMethods(...methods) {
+        methods.forEach(method => {
+            method = method.bind(this);
+        });
     }
 }

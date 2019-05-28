@@ -5,7 +5,7 @@ import {NoImgIcon} from '../components/styled/icons';
 import '../styles/_recept_list_page.less';
 import routes from "../constants/Routes";
 
-import '../web-components/list-items.js';
+import '../web-components/components/list-items.js';
 
 
 @connect(store => ({

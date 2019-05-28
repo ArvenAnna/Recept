@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {RemoveIcon} from '../styled/icons.jsx';
 import PropTypes from 'prop-types';
-import '../../web-components/list-items.js';
+import '../../web-components/components/list-items.js';
 
 const Item = styled.div`
     list-style-type: none;

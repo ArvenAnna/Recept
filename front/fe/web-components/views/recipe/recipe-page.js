@@ -1,5 +1,5 @@
-import WebElement from './abstract/web-element';
-import 'list-items';
+import WebElement from '../../abstract/web-element';
+import '../../components/list-items';
 
 const CONTAINER = 'recipe_page';
 const RECIPE_TEMPLATE = 'recipe_template';

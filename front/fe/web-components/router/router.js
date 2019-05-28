@@ -1,5 +1,5 @@
 import App from '../app';
-import RecipePageRenderer from '../recipe-page-renderer';
+import RecipePageRenderer from '../views/recipe/recipe-page-renderer';
 
 export const getHash = (url) => {
     return url.split('#')[1];

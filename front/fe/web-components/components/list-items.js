@@ -1,4 +1,4 @@
-import WebElement from './abstract/web-element';
+import WebElement from '../abstract/web-element';
 
 const CONTAINER = 'items_container';
 const ITEM_TEMPLATE = 'item_template';

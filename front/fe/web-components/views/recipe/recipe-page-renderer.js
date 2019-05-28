@@ -1,10 +1,10 @@
-import mRecipe from './model/recipe';
-import router from './router/router-context';
-import WebElement from './abstract/web-element';
-import 'recipe-page';
+import mRecipe from '../../model/recipe';
+import router from '../../router/router-context';
+import WebElement from '../../abstract/web-element';
+import './recipe-page';
 
 const template = `
-  <recipe-page/>
+  <recipe-page></recipe-page>
 `;
 
 
@@ -26,10 +26,6 @@ export default class RecipePageRenderer extends WebElement {
 
     currentRecipeFetched (newRecipe) {
         this.querySelector('recipe-page').recipe = newRecipe;
-    }
-
-    connectedCallback() {
-        mRecipe.retrieve(router.params.id);
     }
 
     disconnectedCallback() {

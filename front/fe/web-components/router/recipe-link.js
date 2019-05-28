@@ -20,6 +20,7 @@ class RecipeLink extends WebElement {
     }
 
     connectedCallback() {
+        super.connectedCallback();
         this.addEventListener('click', this.changeUrl);
     }
 

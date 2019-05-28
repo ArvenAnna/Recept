@@ -1,13 +1,9 @@
 import { getHash } from './router';
 import routerContext from './router-context';
 
-const template = document.createElement('template');
-template.innerHTML = `
-  <content/>
-`;
-
 const supportedAttributes = {
-    PATH: 'path'
+    PATH: 'path',
+    COMPONENT: 'component'
 }
 
 class RecipeRoute extends HTMLElement {
@@ -21,26 +17,20 @@ class RecipeRoute extends HTMLElement {
         this.matches = this.matches.bind(this);
         this.getRouteContextInfo = this.getRouteContextInfo.bind(this);
         this.updateRoute = this.updateRoute.bind(this);
+        this.renderRouteContent = this.renderRouteContent.bind(this);
 
-        const path = this.getAttribute(supportedAttributes.PATH);
-        const url = getHash(window.location.hash);
-        if (this.matches(path, url)) {
-            this.appendChild(template.content.cloneNode(true));
-
-            //set object with route info to first child (can be set to every child)
-            //initially fill private field because of constructor is not called yet: TODO: think how to do it normally
-            routerContext.context = this.getRouteContextInfo(path, url);
-            //this.children[0]._context = this.getRouteContextInfo(path, url);
-        } else {
-            // otherwise don't render children
-            this.innerHTML = '';
-        }
+        this.innerHTML = '';
+        this.renderRouteContent(window.location.hash);
     }
 
     updateRoute(e) {
+        this.renderRouteContent(e.newURL);
+    }
+
+    renderRouteContent(newURL) {
 
         const path = this.getAttribute(supportedAttributes.PATH);
-        const url = getHash(e.newURL);
+        const url = getHash(newURL);
 
         if (this.matches(path, url)) {
 
@@ -48,14 +38,22 @@ class RecipeRoute extends HTMLElement {
             if (this.innerHTML) {
 
             } else {
+                const component = this.getAttribute(supportedAttributes.COMPONENT);
+                const template = document.createElement('template');
+                template.innerHTML = `
+                <${component}></${component}>
+            `;
+                // pay attention that constructor of component will be called earlier then routerContext changes
+                // it allow us don't use connected callback for reading context in component, but instead
+                // subscribe on change context in constructor before it actually firstly changed
                 this.appendChild(template.content.cloneNode(true));
             }
 
+            //set object with route info into router context object
             // reset context anyway
-            // this.children[0].context = this.getRouteContextInfo(path, url);
             routerContext.context = this.getRouteContextInfo(path, url);
         } else {
-            // check if this route stays active, if no - kill it
+            // otherwise don't render children
             this.innerHTML = '';
         }
     }
@@ -113,9 +111,6 @@ class RecipeRoute extends HTMLElement {
 
     connectedCallback() {
         window.addEventListener('hashchange', this.updateRoute);
-        // const path = this.getAttribute(supportedAttributes.PATH);
-        // const url = getHash(window.location.hash);
-        // this.children[0].context = this.getRouteContextInfo(path, url);
     }
 
     disconnectedCallback() {
