@@ -27,6 +27,10 @@ export default class RecipesPageRenderer extends WebElement {
         this.querySelector('recipes-page').recipes = model.recipes;
     }
 
+    connectedCallback() {
+        mRecipeList.retrieve(router.params.id);
+    }
+
     disconnectedCallback() {
         mRecipeList.removeSubscriber(this._recipeListChanged);
         router.removeSubscriber(this._currentRouteChanged);

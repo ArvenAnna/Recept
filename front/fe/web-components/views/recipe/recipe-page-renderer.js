@@ -7,7 +7,6 @@ const template = `
   <recipe-page></recipe-page>
 `;
 
-
 export default class RecipePageRenderer extends WebElement {
 
     constructor() {
@@ -26,6 +25,10 @@ export default class RecipePageRenderer extends WebElement {
 
     currentRecipeFetched (newRecipe) {
         this.querySelector('recipe-page').recipe = newRecipe;
+    }
+
+    connectedCallback() {
+        mRecipe.retrieve(router.params.id);
     }
 
     disconnectedCallback() {

@@ -65,13 +65,19 @@ class RecipeListItems extends WebElement {
     constructor() {
         super(template, true);
 
-        this.bindMethods(this._removeItem, this._renderItems, this._renderItem);
+        this.bindMethods(this._removeItem);
+
+        this._renderItem = this._renderItem.bind(this);
+        this._renderItems = this._renderItems.bind(this);
+
+        this._renderItems();
     }
 
     connectedCallback() {
+        super.connectedCallback();
         const title = this.getAttribute('title') || "";
         this.$('#title').innerHTML = title;
-        this._renderItems();
+
     }
 
 

@@ -11,7 +11,7 @@ class Header extends Model {
 
         this._buttons = [
             {'name': 'Новый рецепт', 'id': 1, 'to': '/newRecept'},
-            {'name': 'Ингридиенты', 'id': 2, 'to': '/ingridients'},
+            {'name': 'Ингридиенты', 'id': 2, 'to': '/ingredients'},
         ];
 
         // this.retrieve = this.retrieve.bind(this);

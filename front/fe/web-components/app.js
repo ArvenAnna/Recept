@@ -1,5 +1,6 @@
 import './views/recipe/recipe-page-renderer';
 import './views/recipes/recipes-page-renderer';
+import './views/ingredients/ingredients-page-renderer';
 import './router';
 import './recipe-header';
 import WebElement from './abstract/web-element';
@@ -13,6 +14,8 @@ const template = `
             <recipe-route path="/recipe/:id" component="recipe-page-renderer">
             </recipe-route>
             <recipe-route path="/departments/:id/recipes" component="recipes-page-renderer">
+            </recipe-route>
+            <recipe-route path="/ingredients" component="ingredients-page-renderer">
             </recipe-route>
         </div>
         <div class="side_menu"><recipe-sidebar></recipe-sidebar></div>

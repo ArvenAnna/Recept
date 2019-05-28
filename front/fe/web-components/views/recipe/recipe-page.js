@@ -146,10 +146,10 @@ class RecipePage extends WebElement {
     constructor() {
         super(template, true);
 
-        this.bindMethods(this._renderPage, this._initProportions);
-    }
+        this.bindMethods(this._renderPage);
 
-    connectedCallback() {
+        this._initProportions = this._initProportions.bind(this);
+
         this._renderPage();
     }
 

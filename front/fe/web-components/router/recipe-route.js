@@ -34,6 +34,10 @@ class RecipeRoute extends HTMLElement {
 
         if (this.matches(path, url)) {
 
+            //set object with route info into router context object
+            // reset context anyway
+            routerContext.context = this.getRouteContextInfo(path, url);
+
             // if route was already rendered do nothing
             if (this.innerHTML) {
 
@@ -43,15 +47,12 @@ class RecipeRoute extends HTMLElement {
                 template.innerHTML = `
                 <${component}></${component}>
             `;
-                // pay attention that constructor of component will be called earlier then routerContext changes
-                // it allow us don't use connected callback for reading context in component, but instead
-                // subscribe on change context in constructor before it actually firstly changed
+
+
                 this.appendChild(template.content.cloneNode(true));
             }
 
-            //set object with route info into router context object
-            // reset context anyway
-            routerContext.context = this.getRouteContextInfo(path, url);
+
         } else {
             // otherwise don't render children
             this.innerHTML = '';
