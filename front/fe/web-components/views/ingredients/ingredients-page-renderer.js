@@ -1,5 +1,4 @@
 import mIngredients from '../../model/ingredients';
-// import router from '../../router/router-context';
 import WebElement from '../../abstract/web-element';
 import './ingredients-page';
 
@@ -7,24 +6,20 @@ const template = `
   <ingredients-page></ingredients-page>
 `;
 
-export default class IngredientsPageRenderer extends WebElement {
+class IngredientsPageRenderer extends WebElement {
 
     constructor() {
         super(template);
 
-         this._ingredientsFetched = this._ingredientsFetched.bind(this);
-        // this.currentRecipeChanged = this.currentRecipeChanged.bind(this);
-        //
-         mIngredients.addSubscriber(this._ingredientsFetched);
-        // router.addSubscriber(this.currentRecipeChanged);
+         this._ingredientsChanged = this._ingredientsChanged.bind(this);
+
+         mIngredients.addSubscriber(this._ingredientsChanged);
     }
 
-    // currentRecipeChanged() {
-    //     mRecipe.retrieve(router.params.id);
-    // }
-
-    _ingredientsFetched (model) {
-        this.querySelector('ingredients-page').ingredients = model.ingredients;
+    _ingredientsChanged (model) {
+        const ingPage = this.querySelector('ingredients-page');
+        ingPage.ingredients = model.ingredients;
+        ingPage.addIngredient = model.add; // set it once it constructed
     }
 
     connectedCallback() {
@@ -32,8 +27,7 @@ export default class IngredientsPageRenderer extends WebElement {
     }
 
     disconnectedCallback() {
-        mIngredients.removeSubscriber(this._ingredientsFetched);
-        // router.removeSubscriber(this.currentRecipeChanged);
+        mIngredients.removeSubscriber(this._ingredientsChanged);
     }
 
 }

@@ -1,5 +1,6 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/list-items';
+import '../../components/add-item';
 
 const CONTAINER = 'ingredients_page';
 const INGREDIENTS_TEMPLATE = 'ingredients_template';
@@ -11,8 +12,8 @@ const template = `
   </style>
   
   <template id='${INGREDIENTS_TEMPLATE}'>
-      <recipe-list-items>
-      </recipe-list-items>    
+      <recipe-add-item></recipe-add-item>  
+      <recipe-list-items></recipe-list-items>    
   </template>
   
   <div id='${CONTAINER}'></div>
@@ -29,14 +30,26 @@ class IngredientsPage extends WebElement {
         this._renderPage();
     }
 
+    set addIngredient(addIngredientCallback) {
+        this.$addIngredient = addIngredientCallback;
+    }
+
     constructor() {
         super(template, true);
 
         this.bindMethods(this._renderPage);
+
+        this._addIngredient = this._addIngredient.bind(this);
     }
 
     connectedCallback() {
         this._renderPage();
+    }
+
+    _addIngredient(newIngredient) {
+        if (this.$addIngredient) {
+            this.$addIngredient(newIngredient);
+        }
     }
 
     _renderPage() {
@@ -51,6 +64,13 @@ class IngredientsPage extends WebElement {
                 listItems.items = this.$ingredients;
                 listItems.renderItem = (item) => `<div>${item.name}</div>`
             };
+
+            const addIngEl = template.querySelector('recipe-add-item');
+            addIngEl.onConstruct = (addIng) => {
+                addIng.props = {
+                    addItemCallback: this._addIngredient
+                }
+            }
 
 
             this.$(`#${CONTAINER}`).appendChild(template);
