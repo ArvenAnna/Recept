@@ -101,13 +101,15 @@ class RecipeRoute extends HTMLElement {
             return false;
         }
 
+        let matches = true;
+
         url.split('/').forEach((part, i) => {
 
             if (part != fullPathParts[i] && !fullPathParts[i].startsWith(':')) {
-                return false;
+                matches = false;
             }
         });
-        return true;
+        return matches;
     }
 
     connectedCallback() {

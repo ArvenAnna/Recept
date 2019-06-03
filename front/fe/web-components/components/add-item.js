@@ -6,9 +6,6 @@ const SUGGESTION_TEMPLATE = 'suggestion_template';
 
 const template = `
   <style>
-    .dropdown {
-        
-    }
     
     #${CONTAINER} {
         display: flex;

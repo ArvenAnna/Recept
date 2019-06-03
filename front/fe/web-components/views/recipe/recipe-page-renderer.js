@@ -1,4 +1,5 @@
 import mRecipe from '../../model/recipe';
+import mHeader from '../../model/header';
 import router from '../../router/router-context';
 import WebElement from '../../abstract/web-element';
 import './recipe-page';
@@ -25,15 +26,18 @@ export default class RecipePageRenderer extends WebElement {
 
     currentRecipeFetched (newRecipe) {
         this.querySelector('recipe-page').recipe = newRecipe;
+        mHeader.addEditButton(newRecipe.id);
     }
 
     connectedCallback() {
         mRecipe.retrieve(router.params.id);
+
     }
 
     disconnectedCallback() {
         mRecipe.removeSubscriber(this.currentRecipeFetched);
         router.removeSubscriber(this.currentRecipeChanged);
+        mHeader.removeEditButton();
     }
 
 }

@@ -61,3 +61,26 @@ class Recipe extends Model {
 }
 
 export default new Recipe();
+
+class NewRecipe extends Recipe {
+
+    constructor() {
+        super();
+
+        this.setFrom = this.setFrom.bind(this);
+    }
+
+    set name(newName) {
+        this._recipe.name = newName;
+    }
+
+    setFrom(anotherRecipe) {
+        this._recipe.name = anotherRecipe.name;
+        // todo: copy recipe from argument
+
+    }
+}
+
+const mNewRecipe = new NewRecipe();
+
+export {mNewRecipe}

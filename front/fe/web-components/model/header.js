@@ -1,5 +1,9 @@
 import Model from '../abstract/model';
 
+const NEW_RECIPE_ID = 1;
+const INGREDIENTS_ID = 2;
+const EDIT_RECIPE_ID = 3;
+
 class Header extends Model {
 
     get buttons() {
@@ -10,24 +14,23 @@ class Header extends Model {
         super();
 
         this._buttons = [
-            {'name': 'Новый рецепт', 'id': 1, 'to': '/newRecept'},
-            {'name': 'Ингридиенты', 'id': 2, 'to': '/ingredients'},
+            {'name': 'Новый рецепт', 'id': NEW_RECIPE_ID, 'to': '/recipe'},
+            {'name': 'Ингридиенты', 'id': INGREDIENTS_ID, 'to': '/ingredients'},
         ];
 
-        // this.retrieve = this.retrieve.bind(this);
-        // this._setRecipe = this._setRecipe.bind(this);
+        this.addEditButton = this.addEditButton.bind(this);
+        this.removeEditButton = this.removeEditButton.bind(this);
     }
 
-    // retrieve(id) {
-    //     fetch(routes.GET_RECIPE(id))
-    //         .then(res => res.json())
-    //         .then(res => this._setRecipe(res));
-    // }
-    //
-    // _setRecipe(newRecipe) {
-    //     this._recipe = newRecipe;
-    //     this.notifySubscribers();
-    // }
+    addEditButton(id) {
+       this._buttons.push ({'name': 'Редактировать рецепт', 'id': EDIT_RECIPE_ID, 'to': `/recipe/${id}/edit`});
+       this.notifySubscribers();
+    }
+
+    removeEditButton() {
+        this._buttons = this._buttons.filter(button => button.id !== EDIT_RECIPE_ID);
+        this.notifySubscribers();
+    }
 }
 
 export default new Header();
