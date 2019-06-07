@@ -6,7 +6,7 @@ class Recipe extends Model {
     constructor() {
         super();
 
-        this._recipe = null;
+        this._recipe = {};
 
         this.retrieve = this.retrieve.bind(this);
         this._setRecipe = this._setRecipe.bind(this);
@@ -72,6 +72,11 @@ class NewRecipe extends Recipe {
 
     set name(newName) {
         this._recipe.name = newName;
+    }
+
+    set department(department) {
+        this._recipe.department.id = department.id;
+        this._recipe.department.name = department.name;
     }
 
     setFrom(anotherRecipe) {

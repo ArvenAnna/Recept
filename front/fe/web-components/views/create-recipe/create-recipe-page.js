@@ -1,6 +1,6 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/list-items';
-//import '../../components/add-item';
+import '../../components/drop-down';
 
 const CONTAINER = 'create-recipe-page';
 
@@ -19,6 +19,7 @@ const template = `
   
   <div id='${CONTAINER}'>
       <input class='recipe-name'/>
+      <recipe-drop-down></recipe-drop-down>
       <button class='save'>Save</button>
   </div>
 `;
@@ -30,14 +31,20 @@ class CreateRecipePage extends WebElement {
         this._renderPage();
     }
 
+    set departments(newDepartments) {
+        this.$departments = newDepartments;
+        this._renderPage();
+    }
+
     constructor() {
         super(template, true);
 
         this.bindMethods(this._renderPage);
-
         this._saveRecipe = this._saveRecipe.bind(this);
 
         this.$('.save').addEventListener('click', this._saveRecipe);
+
+
     }
 
     disconnectedCallback() {
@@ -53,9 +60,14 @@ class CreateRecipePage extends WebElement {
     _renderPage() {
 
         if (this.$recipe) {
-            const nameEl = this.$('.recipe-name');
-            nameEl.value = this.$recipe.name;
+            this.$('.recipe-name').value = this.$recipe.name || '';
         }
+
+        this.$('recipe-drop-down').props = {
+            items: this.$departments || [],
+            chooseItemCallback: (item) => this.$recipe.department = item,
+            renderItem: (item) => `${item.name}`
+        };
 
     }
 
