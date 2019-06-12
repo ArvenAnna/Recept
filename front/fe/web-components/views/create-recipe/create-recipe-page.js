@@ -1,5 +1,5 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/list-items';
+import '../../components/add-item';
 import '../../components/drop-down';
 
 const CONTAINER = 'create-recipe-page';
@@ -20,6 +20,7 @@ const template = `
   <div id='${CONTAINER}'>
       <input class='recipe-name'/>
       <recipe-drop-down></recipe-drop-down>
+      <recipe-add-item id='ref-add'></recipe-add-item>
       <button class='save'>Save</button>
   </div>
 `;
@@ -68,6 +69,13 @@ class CreateRecipePage extends WebElement {
             chooseItemCallback: (item) => this.$recipe.department = item,
             renderItem: (item) => `${item.name}`
         };
+
+        this.$('#ref-add').props = {
+            symbols: 3,
+            addItemCallback: (item) => this.$recipe.ref = item,
+            getSuggestions: (keyword) => ["bla", "nnnn"],
+            renderSuggestionCallback: suggestion => suggestion.name
+        }
 
     }
 

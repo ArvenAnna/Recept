@@ -13,9 +13,9 @@ const template = `
   <style>
     
     #${CONTAINER} {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*align-items: flex-start;*/
     }
     
     #${LABEL} {
@@ -26,7 +26,9 @@ const template = `
     
     #${LIST_CONTAINER} {
         display: none;
+        position: absolute;
         border: 1px solid black;
+        cursor: pointer;
     }
     
     #${CARET_ICON} {
@@ -56,35 +58,29 @@ const template = `
 `;
 
 
-const supportedAttributes = {
-    SUGGESTIONS_SYMBOLS: 'symbols'
-}
+// const supportedAttributes = {
+//     SUGGESTIONS_SYMBOLS: 'symbols'
+// }
 
 class DropDown extends WebElement {
 
-    static get observedAttributes() {
-        return Object.values(supportedAttributes);
-    }
+    // static get observedAttributes() {
+    //     return Object.values(supportedAttributes);
+    // }
 
-    set items(newItems) {
-        this.$items = newItems || [];
-        this._renderItems();
-    }
-
-    // set symbols(newSymbols) {
-    //     this.$symbols = newSymbols || 3;
-    //     this.setAttribute(supportedAttributes.SUGGESTIONS_SYMBOLS, newSymbols);
-    //     this._renderSuggestions(); // check if needed
+    // set items(newItems) {
+    //     this.$items = newItems || [];
+    //     this._renderItems();
     // }
     //
-    set renderItem(renderItemCallback) {
-        this.$renderItem = renderItemCallback;
-        this._renderItems();
-    }
-
-    set chooseItem(chooseItemCallback) {
-        this.$chooseItem = chooseItemCallback;
-    }
+    // set renderItem(renderItemCallback) {
+    //     this.$renderItem = renderItemCallback;
+    //     this._renderItems();
+    // }
+    //
+    // set chooseItem(chooseItemCallback) {
+    //     this.$chooseItem = chooseItemCallback;
+    // }
 
     set props({chooseItemCallback, items, renderItem}) {
         this.$items = items || [];
@@ -92,6 +88,7 @@ class DropDown extends WebElement {
         this.$renderItem = renderItem;
 
         if (this.$items.length) {
+            // always render first item as chosen
             this._renderItems();
         }
     }
@@ -102,16 +99,16 @@ class DropDown extends WebElement {
         //this.bindMethods(this._removeItem);
 
         this._renderItems = this._renderItems.bind(this);
+        this._closeDropdown = this._closeDropdown.bind(this);
+        this._openDropdown = this._openDropdown.bind(this);
         this._toggleDropdown = this._toggleDropdown.bind(this);
         this._toggleDropdownInner = this._toggleDropdownInner.bind(this);
 
         this._clickOutside = this._clickOutside.bind(this);
         this._onKeyPress = this._onKeyPress.bind(this);
-        // this._addItem = this._addItem.bind(this);
-        //
-        // this.$(`#${CONTAINER}`).querySelector('.add_item_icon').addEventListener('click', this._addItem);
-
-        // this._renderSuggestions();
+        this._selectItem = this._selectItem.bind(this);
+        this._onClickItem = this._onClickItem.bind(this);
+        this._changeOutlinedItem = this._changeOutlinedItem.bind(this);
 
         document.addEventListener('click', this._clickOutside);
         document.addEventListener('keydown', this._onKeyPress);
@@ -119,50 +116,59 @@ class DropDown extends WebElement {
         this.$outlinedItem = null;
     }
 
-    // connectedCallback() {
-    //     super.connectedCallback();
-    //     const title = this.getAttribute('title') || "";
-    //     this.$('#title').innerHTML = title;
-    //
-    // }
-
-    // _chooseItem(item) {
-    //
-    //     this.$chooseItem(item);
-    // }
-
-
     _renderItems() {
         this.$(`#${LIST_CONTAINER}`).innerHTML = "";
         if (this.$items.length) {
             this.$(`#${LABEL_VALUE}`).innerHTML = this.$renderItem ? this.$renderItem(this.$items[0]) : this.$items[0];
-            this.$outlinedItem = this.$items[0];
-            //this.$(`#${LABEL}`).addEventListener('click', this._toggleDropdown);
+
             this.$items.forEach(item => {
                 const template = this.getTemplateById(ITEM_TEMPLATE);
                 const itemEl = template.querySelector('.item');
                 if (this.$chooseItem) {
-                    itemEl.addEventListener('click', this.$chooseItem.bind(null, item));
+                    itemEl.addEventListener('click', this._onClickItem.bind(null, item));
                 }
 
-                if (this.$renderItem) {
-                    itemEl.innerHTML = this.$renderItem(item);
-                } else {
-                    itemEl.innerHTML = item;
-                }
+                itemEl.innerHTML = this.$renderItem ? this.$renderItem(item) : item;
 
-                if (item === this.$outlinedItem) {
-                    itemEl.classList.add('outlined')
-                }
                 this.$(`#${LIST_CONTAINER}`).appendChild(template);
             });
+
+            this._changeOutlinedItem(this.$items[0]);
         }
+    }
+
+    _onClickItem(item) {
+        this._changeOutlinedItem(item);
+        this._selectItem();
+    }
+
+    _changeOutlinedItem(item) {
+        const outlinedEl = this.$(`#${LIST_CONTAINER}`).querySelector('.outlined');
+        if (outlinedEl) {
+            outlinedEl.classList.remove('outlined');
+        }
+        this.$outlinedItem = item;
+        const newOutlinedIndex = this.$items.indexOf(this.$outlinedItem);
+        this.$(`#${LIST_CONTAINER}`).querySelectorAll('.item')[newOutlinedIndex].classList.add('outlined');
+    }
+
+    _selectItem() {
+        this.$(`#${LABEL_VALUE}`).innerHTML = this.$renderItem ? this.$renderItem(this.$outlinedItem) : this.$outlinedItem;
+        this._closeDropdown();
+        this.$chooseItem(this.$outlinedItem);
+    }
+
+    _openDropdown() {
+        this._toggleDropdownInner(true);
+    }
+
+    _closeDropdown() {
+        this._toggleDropdownInner(false);
     }
 
     _toggleDropdown() {
         const isClosed = this.$(`#${LIST_CONTAINER}`).style.display !== 'block';
         this._toggleDropdownInner(isClosed);
-
     }
 
     _toggleDropdownInner(toOpen) {
@@ -170,70 +176,37 @@ class DropDown extends WebElement {
         this.$(`#${CARET_ICON}`).setAttribute('src', toOpen ? 'svg/sort-up.svg' : 'svg/caret-down.svg');
     }
 
-    // _renderItem(item) {
-    //     const template = this.getTemplateById(ITEM_TEMPLATE);
-    //
-    //     const itemContainer = template.querySelector('.item_container');
-    //     itemContainer.querySelector('.item').innerHTML = this.$renderItem(item);
-    //     if (this.$removeItem) {
-    //         itemContainer.querySelector('.remove_item').addEventListener('click', this._removeItem.bind(this, item));
-    //     } else {
-    //         // todo remove it from layout if not needed
-    //         itemContainer.querySelector('.remove_item').style.display = 'none';
-    //     }
-    //     this.$(`#${CONTAINER}`).appendChild(template);
-    // }
 
     disconnectedCallback() {
-        //this.$(`#${LABEL}`).removeEventListener('click', this._toggleDropdown);
-
         document.removeEventListener('click', this._clickOutside);
         document.removeEventListener('keydown', this._onKeyPress);
-        // const addItems = this.$(`#${CONTAINER}`).querySelectorAll('.add_item_icon');
-        // addItems.forEach(item => item.removeEventListener('click', this._addItem));
     }
-
-    // attributeChangedCallback(name, oldValue, newValue) {
-    //     switch (name) {
-    //         case supportedAttributes.TITLE:
-    //             this.$('#title').innerHTML = newValue;
-    //     }
-    // }
-
-    // _addItem() {
-    //     if(this.$addItem) {
-    //         this.$addItem(this.$('input').value);
-    //         this.$('input').value = '';
-    //     }
-    // }
 
     _onKeyPress(e) {
         const key = e.key;
-        const currentOutlinedIndex = this.$items.indexOf(this.$outlinedItem);
 
-        this.$(`#${LIST_CONTAINER}`).querySelector('.outlined').classList.remove('outlined');
+        if (key == 'ArrowDown' || key == 'ArrowUp') {
+            const { $items } = this;
+            const currentOutlinedIndex = $items.indexOf(this.$outlinedItem);
 
-        if (key == 'ArrowDown') {
-            if (currentOutlinedIndex === items.length - 1) {
-                this.$outlinedItem = this.$items[0];
-            } else {
-                this.$outlinedItem = this.$items[currentOutlinedIndex + 1];
+            let newOutlinedItem;
+
+            if (key == 'ArrowDown') {
+                newOutlinedItem = currentOutlinedIndex === $items.length - 1
+                    ? $items[0]
+                    : $items[currentOutlinedIndex + 1];
             }
-        }
-        if (key == 'ArrowUp') {
-            if (currentOutlinedIndex === 0) {
-                this.$outlinedItem = this.$items[this.$items.length - 1];
-            } else {
-                this.$outlinedItem = this.$items[currentOutlinedIndex - 1];
+            if (key == 'ArrowUp') {
+                newOutlinedItem = currentOutlinedIndex === 0
+                    ? $items[$items.length - 1]
+                    : $items[currentOutlinedIndex - 1]
             }
+
+            this._changeOutlinedItem(newOutlinedItem);
         }
-
-        const newOutlinedIndex = this.$items.indexOf(this.$outlinedItem);
-
-        this.$(`#${LIST_CONTAINER}`).querySelectorAll('.item')[newOutlinedIndex].classList.add('outlined');
 
         if (key == 'Enter' && this.$chooseItem) {
-            this.$chooseItem(this.$outlinedItem);
+            this._selectItem();
         }
     }
 
@@ -241,7 +214,7 @@ class DropDown extends WebElement {
         if (isDescendantOf(e.composedPath()[0], this.$(`#${LABEL}`))) {
             this._toggleDropdown();
         } else {
-            this._toggleDropdownInner(false);
+            this._closeDropdown();
         }
     }
 }

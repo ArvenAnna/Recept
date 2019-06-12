@@ -75,8 +75,20 @@ class NewRecipe extends Recipe {
     }
 
     set department(department) {
+        if (!this._recipe.department) {
+            this._recipe.department = {};
+        }
         this._recipe.department.id = department.id;
         this._recipe.department.name = department.name;
+    }
+
+    set ref(ref) {
+        if (!this._recipe.refs) {
+            this._recipe.refs = [];
+        }
+        if (!this._recipe.refs.find(r => r.id === ref.id)) {
+            this._recipe.refs.push(ref);
+        }
     }
 
     setFrom(anotherRecipe) {
