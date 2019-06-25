@@ -23,4 +23,6 @@ public interface IRecipeService {
     List<RecipeDto> findRecipesByIngredients(List<Long> ingIds);
 
     List<RecipeDto> findRecipesByKeyword(String keyword);
+
+    List<RecipeDto> findRecipesNameByKeyword(String keyword);
 }

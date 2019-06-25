@@ -4,7 +4,6 @@ import './dropdown-list';
 
 const CONTAINER = 'container';
 const SUGGESTION_CONTAINER = 'dropdown';
-const SUGGESTION_TEMPLATE = 'suggestion_template';
 const INPUT = 'input';
 
 const template = `
@@ -56,11 +55,11 @@ class RecipeAddItem extends WebElement {
     //     this._renderSuggestions();
     // }
 
-    set props({addItemCallback, getSuggestions, renderSuggestionCallback}) {
+    set props({addItemCallback, getSuggestionsPromise, renderSuggestionCallback}) {
 
         // required props: renderSuggestionCallback
 
-        this.$getSuggestions = getSuggestions || [];
+        this.$getSuggestions = getSuggestionsPromise;
         this.$addItem = addItemCallback;
         this.$renderSuggestion = renderSuggestionCallback;
 
@@ -68,7 +67,7 @@ class RecipeAddItem extends WebElement {
             if (!this.$renderSuggestion) {
                 throw new Error("add-item component:  if you want to use suggestions pass please renderSuggestionCallback");
             }
-            this._renderSuggestions();
+            //this._renderSuggestions();
         }
     }
 
@@ -90,10 +89,10 @@ class RecipeAddItem extends WebElement {
         this.$(`#${INPUT}`).addEventListener('focus', this._onFocus);
     }
 
-    _renderSuggestions() {
-        if (this.$getSuggestions && this.$renderSuggestion) {
+    async _renderSuggestions() {
+        if (this.$getSuggestions && this.$renderSuggestion && this.$(`#${INPUT}`).value) {
             this.$(`#${SUGGESTION_CONTAINER}`).style.display = "block";
-            this.$suggestions = this.$getSuggestions(this.$("input").value);
+            this.$suggestions = await this.$getSuggestions(this.$("input").value);
 
             this.$('drop-down-list').props = {
                 chooseItemCallback: (item) => {
@@ -107,7 +106,7 @@ class RecipeAddItem extends WebElement {
     }
 
     _onChange() {
-        if (this.$suggestions && this.$renderSuggestion) {
+        if (this.$getSuggestions && this.$renderSuggestion && this.$(`#${INPUT}`).value) {
             this._renderSuggestions();
         }
     }

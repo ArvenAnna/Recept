@@ -31,8 +31,8 @@ public class IngredientController {
         ingredientService.deleteIngredient(ingId);
     }
 
-    @RequestMapping(value = {"/ingredients/search"}, method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<Ingredient> findIngredientsBySearchString(@RequestParam("str") String str) {
+    @RequestMapping(value = {"/ingredients/keyword/{keyword}"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<Ingredient> findIngredientsBySearchString(@PathVariable("keyword") String str) {
         return ingredientService.searchIngredients(str);
     }
 

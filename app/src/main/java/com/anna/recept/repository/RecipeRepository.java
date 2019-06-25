@@ -26,4 +26,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("select recipe from Recipe recipe where recipe.name like %:keyword% or recipe.text like %:keyword%")
     List<Recipe> findByKeyword(@Param("keyword") String keyword);
+
+    @Query("select recipe from Recipe recipe where recipe.name like %:keyword%")
+    List<Recipe> findNameByKeyword(@Param("keyword") String keyword);
 }

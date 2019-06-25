@@ -1,6 +1,7 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/add-item';
 import '../../components/drop-down';
+import routes from '../../../constants/Routes';
 
 const CONTAINER = 'create-recipe-page';
 
@@ -42,6 +43,7 @@ class CreateRecipePage extends WebElement {
 
         this.bindMethods(this._renderPage);
         this._saveRecipe = this._saveRecipe.bind(this);
+        this._retrieveRecipesByKeyword = this._retrieveRecipesByKeyword.bind(this);
 
         this.$('.save').addEventListener('click', this._saveRecipe);
 
@@ -57,6 +59,15 @@ class CreateRecipePage extends WebElement {
         //this.$recipe.department =
         //this.$recipe.notifySubscribers();
         console.dir(this.$recipe);
+    }
+
+    async _retrieveRecipesByKeyword(keyword) {
+        const recipes = await fetch(routes.GET_RECIPES_BY_KEYWORD(keyword))
+            .then(res => res.json());
+        const maxSuggestionsNumber = 10;
+        recipes.slice(0, maxSuggestionsNumber);
+        //exclude current recipe itself
+        return recipes.filter(ref => ref.id !== this.$recipe.id);
     }
 
     _renderPage() {
@@ -76,17 +87,11 @@ class CreateRecipePage extends WebElement {
         this.$('#ref-add').props = {
             symbols: 3,
             addItemCallback: (item) => {
-                // add validation of input string against existing recipes
+                // TODO: add validation of input string against existing recipes
                 this.$recipe.ref = item
             },
-            getSuggestions: (keyword) => {
-                // todo: make it as promise
-                // call to backend for recipe suggestions
-                const backend = [{name: "ffff"}, {name: "ggggg"}];
-                // TODO: exclude current recipe itself
-                const maxSuggestionsNumber = 10;
-                backend.slice(0, maxSuggestionsNumber);
-                return backend;
+            getSuggestionsPromise: (keyword) => {
+                return this._retrieveRecipesByKeyword(keyword);
 
             },
             renderSuggestionCallback: suggestion => suggestion.name

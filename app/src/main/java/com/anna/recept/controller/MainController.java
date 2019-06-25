@@ -66,7 +66,12 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/recipes/by-keyword"}, method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<RecipeDto> findRecipesByIngredients(@RequestParam("str") String keyword) {
+    public List<RecipeDto> findRecipesByKeyword(@RequestParam("str") String keyword) {
+        return recipeService.findRecipesByKeyword(keyword);
+    }
+
+    @RequestMapping(value = {"/recipes/keyword/{keyword}"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesNameByKeyword(@PathVariable("keyword") String keyword) {
         return recipeService.findRecipesByKeyword(keyword);
     }
 

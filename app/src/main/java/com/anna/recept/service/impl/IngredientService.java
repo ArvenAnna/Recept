@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class IngredientService implements IIngredientService {
@@ -48,9 +49,10 @@ public class IngredientService implements IIngredientService {
 
     @Override
     public List<Ingredient> searchIngredients(String str) {
-        return str.trim().isEmpty() || str.trim().length() < 2
+        return str.trim().isEmpty()
                 ? new ArrayList<>()
-                : ingRep.findByNameIgnoreCaseContaining(str.trim());
+                : ingRep.findByNameIgnoreCaseContaining(str.trim())
+                .stream().limit(10L).collect(Collectors.toList());
     }
 
 }

@@ -10,9 +10,9 @@ const template = `
         position: absolute;
         border: 1px solid black;
         cursor: pointer;
+        background-color: blue;
     }
-    
-    
+   
     .outlined {
         color: red;
     }
@@ -129,10 +129,14 @@ class DropDownList extends WebElement {
     }
 
     _onKeyPress(e) {
+        const { $items } = this;
+        if (!$items) {
+            return;
+        }
         const key = e.key;
 
         if (key == 'ArrowDown' || key == 'ArrowUp') {
-            const { $items } = this;
+
             const currentOutlinedIndex = $items.indexOf(this.$outlinedItem);
 
             let newOutlinedItem;

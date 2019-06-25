@@ -218,4 +218,10 @@ public class RecipeService implements IRecipeService
 		return recipeRep.findByKeyword(keyword).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
 
+	@Override
+	public List<RecipeDto> findRecipesNameByKeyword(String keyword) {
+		return recipeRep.findNameByKeyword(keyword).stream()
+				.limit(10L)
+				.map(RecipeDto::withBasicFields).collect(Collectors.toList());
+	}
 }
