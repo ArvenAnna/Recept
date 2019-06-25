@@ -68,7 +68,7 @@ class IngredientsPage extends WebElement {
             const addIngEl = template.querySelector('recipe-add-item');
             addIngEl.onConstruct = (addIng) => {
                 addIng.props = {
-                    addItemCallback: this._addIngredient
+                    addItemCallback: this._addIngredient,
                 }
             }
 

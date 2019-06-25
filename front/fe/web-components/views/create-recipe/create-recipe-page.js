@@ -54,6 +54,7 @@ class CreateRecipePage extends WebElement {
 
     _saveRecipe() {
         this.$recipe.name = this.$('.recipe-name').value;
+        //this.$recipe.department =
         //this.$recipe.notifySubscribers();
         console.dir(this.$recipe);
     }
@@ -66,14 +67,28 @@ class CreateRecipePage extends WebElement {
 
         this.$('recipe-drop-down').props = {
             items: this.$departments || [],
-            chooseItemCallback: (item) => this.$recipe.department = item,
+            chooseItemCallback: (item) => {
+                this.$recipe.department = item
+            },
             renderItem: (item) => `${item.name}`
         };
 
         this.$('#ref-add').props = {
             symbols: 3,
-            addItemCallback: (item) => this.$recipe.ref = item,
-            getSuggestions: (keyword) => ["bla", "nnnn"],
+            addItemCallback: (item) => {
+                // add validation of input string against existing recipes
+                this.$recipe.ref = item
+            },
+            getSuggestions: (keyword) => {
+                // todo: make it as promise
+                // call to backend for recipe suggestions
+                const backend = [{name: "ffff"}, {name: "ggggg"}];
+                // TODO: exclude current recipe itself
+                const maxSuggestionsNumber = 10;
+                backend.slice(0, maxSuggestionsNumber);
+                return backend;
+
+            },
             renderSuggestionCallback: suggestion => suggestion.name
         }
 
