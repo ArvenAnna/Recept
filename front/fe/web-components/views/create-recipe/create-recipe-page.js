@@ -87,8 +87,14 @@ class CreateRecipePage extends WebElement {
         this.$('#ref-add').props = {
             symbols: 3,
             addItemCallback: (item) => {
-                // TODO: add validation of input string against existing recipes
-                this.$recipe.ref = item
+                // TODO: use async await
+                this._retrieveRecipesByKeyword(item).then(recipes => {
+                    // should be one recipe only
+                    if (recipes.length === 1 && recipes[0].name === item) {
+                        this.$recipe.ref = item;
+                    }
+                })
+
             },
             getSuggestionsPromise: (keyword) => {
                 return this._retrieveRecipesByKeyword(keyword);

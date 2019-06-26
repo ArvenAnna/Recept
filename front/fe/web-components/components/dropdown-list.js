@@ -11,6 +11,7 @@ const template = `
         border: 1px solid black;
         cursor: pointer;
         background-color: blue;
+        z-index: 2;
     }
    
     .outlined {
@@ -37,10 +38,11 @@ class DropDownList extends WebElement {
 
         // required props: items, renderItem
 
-        if (this.$items.length && this.$renderItem) {
-            // always render first item as chosen
-            this._renderItems();
+        if (!this.$renderItem) {
+            throw new Error("Dropdown-list: renderItem should be defined")
         }
+        // always render first item as chosen
+        this._renderItems();
     }
 
     constructor() {

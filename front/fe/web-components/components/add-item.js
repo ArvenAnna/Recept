@@ -108,6 +108,7 @@ class RecipeAddItem extends WebElement {
     _onChange() {
         if (this.$getSuggestions && this.$renderSuggestion && this.$(`#${INPUT}`).value) {
             this._renderSuggestions();
+            this.$('drop-down-list').openDropdown();
         }
     }
 
