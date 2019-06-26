@@ -154,13 +154,14 @@ class RecipePage extends WebElement {
     }
 
     _initProportions(proportionsListItems) {
-        proportionsListItems.items = this.$recipe.proportions;
-
-        proportionsListItems.renderItem = (item) => `
+        proportionsListItems.props = {
+            items: this.$recipe.proportions,
+            renderItem: (item) => `
                 <div key='name'>${item.ingredientName}</div>
                 <div key='separator'>&nbsp;-&nbsp;</div>
                 <div key='norma'>${item.norma || ''}</div>
-            `;
+            `
+        }
     }
 
     _renderPage() {

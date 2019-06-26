@@ -61,8 +61,10 @@ class IngredientsPage extends WebElement {
 
             const ingListEl = template.querySelector('recipe-list-items');
             ingListEl.onConstruct = (listItems) => {
-                listItems.items = this.$ingredients;
-                listItems.renderItem = (item) => `<div>${item.name}</div>`
+                listItems.props = {
+                    items: this.$ingredients,
+                    renderItem: (item) => `<div>${item.name}</div>`
+                }
             };
 
             const addIngEl = template.querySelector('recipe-add-item');

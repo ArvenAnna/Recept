@@ -1,6 +1,7 @@
 package com.anna.recept.controller;
 
 import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.dto.SearchByKeywordRequest;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.service.IRecipeService;
 
@@ -70,9 +71,9 @@ public class MainController {
         return recipeService.findRecipesByKeyword(keyword);
     }
 
-    @RequestMapping(value = {"/recipes/keyword/{keyword}"}, method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<RecipeDto> findRecipesNameByKeyword(@PathVariable("keyword") String keyword) {
-        return recipeService.findRecipesByKeyword(keyword);
+    @RequestMapping(value = {"/recipes/keyword"}, method = RequestMethod.POST, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesNameByKeyword(@RequestBody @NotNull SearchByKeywordRequest request) {
+        return recipeService.findRecipesNameByKeyword(request.getKeyword());
     }
 
 }

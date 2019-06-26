@@ -125,7 +125,6 @@ class DropDownList extends WebElement {
         }
     }
 
-
     disconnectedCallback() {
         document.removeEventListener('keydown', this._onKeyPress);
     }

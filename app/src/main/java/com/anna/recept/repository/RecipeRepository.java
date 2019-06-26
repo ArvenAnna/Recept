@@ -29,4 +29,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("select recipe from Recipe recipe where recipe.name like %:keyword%")
     List<Recipe> findNameByKeyword(@Param("keyword") String keyword);
+
+    List<Recipe> findByNameContainingIgnoreCase(String name);
 }

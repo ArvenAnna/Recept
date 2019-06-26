@@ -52,12 +52,20 @@ class RecipeListItems extends WebElement {
         this._renderItems();
     }
 
+    //todo: remove this setters if not needed
     set renderItem(renderItemCallback) {
         this.$renderItem = renderItemCallback;
         this._renderItems();
     }
 
     set removeItem(removeItemCallback) {
+        this.$removeItem = removeItemCallback;
+        this._renderItems();
+    }
+
+    set props({items, renderItem, removeItemCallback}) {
+        this.$items = items || [];
+        this.$renderItem = renderItem;
         this.$removeItem = removeItemCallback;
         this._renderItems();
     }
@@ -77,9 +85,7 @@ class RecipeListItems extends WebElement {
         super.connectedCallback();
         const title = this.getAttribute('title') || "";
         this.$('#title').innerHTML = title;
-
     }
-
 
     _renderItems() {
         // simply rerender all items
@@ -116,7 +122,7 @@ class RecipeListItems extends WebElement {
     }
 
     _removeItem(item) {
-        if(this.$removeItem) {
+        if (this.$removeItem) {
             this.$removeItem(item);
         }
     }

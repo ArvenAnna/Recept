@@ -3,6 +3,7 @@ import './dropdown-list';
 import './suggestions-input';
 
 const CONTAINER = 'container';
+const SECOND_INPUT = 'second-input';
 
 const template = `
   <style>
@@ -22,12 +23,13 @@ const template = `
   
   <div id="${CONTAINER}">
     <suggestions-input></suggestions-input>
+    <input id='${SECOND_INPUT}'/>
     <img src="svg/add.svg" class="add_item_icon"/>
   </div>
   
 `;
 
-class RecipeAddItem extends WebElement {
+class TwoFieldsAddItem extends WebElement {
 
     set props({addItemCallback, getSuggestionsPromise, renderSuggestionCallback}) {
 
@@ -56,10 +58,14 @@ class RecipeAddItem extends WebElement {
 
     _addItem() {
         if (this.$addItem) {
-            this.$addItem(this.$('suggestions-input').currentValue);
+            this.$addItem({
+                first: this.$('suggestions-input').currentValue,
+                second: this.$(`#${SECOND_INPUT}`).value
+            });
             this.$('suggestions-input').clearInput();
+            this.$(`#${SECOND_INPUT}`).value = '';
         }
     }
 }
 
-customElements.define('recipe-add-item', RecipeAddItem);
+customElements.define('two-fields-add-item', TwoFieldsAddItem);

@@ -220,7 +220,7 @@ public class RecipeService implements IRecipeService
 
 	@Override
 	public List<RecipeDto> findRecipesNameByKeyword(String keyword) {
-		return recipeRep.findNameByKeyword(keyword).stream()
+		return recipeRep.findByNameContainingIgnoreCase(keyword).stream()
 				.limit(10L)
 				.map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
