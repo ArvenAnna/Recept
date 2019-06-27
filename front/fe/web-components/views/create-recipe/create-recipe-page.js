@@ -2,6 +2,7 @@ import WebElement from '../../abstract/web-element';
 import '../../components/add-item';
 import '../../components/drop-down';
 import '../../components/two-fields-add-item';
+import '../../components/file-input';
 
 import routes from '../../../constants/Routes';
 
@@ -17,6 +18,10 @@ const template = `
     
     }
     
+    #main_photo_wrapper {
+        width: 300px;
+    }
+    
   </style>
   
   
@@ -27,6 +32,7 @@ const template = `
       <recipe-list-items id='ref-list' title="List of recipe references"></recipe-list-items>
       <two-fields-add-item id='prop-add'></two-fields-add-item>
       <recipe-list-items id='prop-list' title="List of recipe proportions"></recipe-list-items>
+      <div id='main_photo_wrapper'><file-input id='main_photo'></file-input></div>
 
       <button class='save'>Save</button>
   </div>
@@ -53,8 +59,6 @@ class CreateRecipePage extends WebElement {
         this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
 
         this.$('.save').addEventListener('click', this._saveRecipe);
-
-
     }
 
     disconnectedCallback() {
@@ -158,6 +162,10 @@ class CreateRecipePage extends WebElement {
                 <div key='norma'>${item.norma || ''}</div>
             `,
             removeItemCallback: prop => this.$recipe.removeProportion(prop)
+        }
+
+        this.$('#main_photo').props = {
+            chooseFileCallback: console.log
         }
 
     }
