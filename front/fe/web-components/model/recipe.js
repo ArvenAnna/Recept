@@ -111,6 +111,10 @@ class NewRecipe extends Recipe {
         this.notifySubscribers();
     }
 
+    set imgPath(path) {
+        this._recipe.imgPath = path;
+    }
+
     removeProportion(prop) {
         if (this._recipe.proportions) {
             this._recipe.proportions = this._recipe.proportions.filter(p => p.ingredientName !== prop.ingredientName);

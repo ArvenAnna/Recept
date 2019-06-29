@@ -1,5 +1,4 @@
 import WebElement from '../abstract/web-element';
-import Alert from "react-s-alert";
 
 const CONTAINER = 'container';
 const FILE_INPUT = 'file-input';
@@ -47,7 +46,7 @@ const template = `
 
 class FileInput extends WebElement {
 
-    set props({chooseFileCallback}) {
+    set props({chooseFileCallback, }) {
 
         this.$chooseFileCallback = chooseFileCallback;
     }
@@ -61,6 +60,7 @@ class FileInput extends WebElement {
         // this._render = this._render.bind(this);
         this.cleanFile = this.cleanFile.bind(this);
         this._onChange = this._onChange.bind(this);
+        this._createFileUrl = this._createFileUrl.bind(this);
 
         this.$(`#${FILE_INPUT}`).addEventListener('change', this._onChange);
         this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
@@ -71,12 +71,12 @@ class FileInput extends WebElement {
     //     this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
     // }
 
-    getFileUrl = (file) => {
+    _createFileUrl(file) {
         this.reader.onload = (e) => {
             if (this.reader){
                 this.$fileUrl = e.target.result;
                 this.$file = file;
-                // this.setState({fileUrl: e.target.result, file});
+                this.$chooseFileCallback(file, this.$fileUrl);
             }
         }
 
@@ -87,12 +87,16 @@ class FileInput extends WebElement {
     _onChange({target}) {
         this.$fileName = target.files[0].name;
         this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
-        this.$chooseFileCallback(target.files[0]);
+        this._createFileUrl(target.files[0]);
     }
 
     cleanFile() {
         this.$fileName = "Файл не выбран";
         this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
+    }
+
+    disconnectedCallback() {
+        this.reader = null;
     }
 }
 
