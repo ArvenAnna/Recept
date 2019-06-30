@@ -4,6 +4,7 @@ import '../../components/drop-down';
 import '../../components/two-fields-add-item';
 import '../../components/file-input';
 import '../../components/upload-image';
+import '../../components/upload-images';
 
 import routes from '../../../constants/Routes';
 
@@ -31,6 +32,8 @@ const template = `
       <two-fields-add-item id='prop-add'></two-fields-add-item>
       <recipe-list-items id='prop-list' title="List of recipe proportions"></recipe-list-items>
       <upload-image id='main-photo'></upload-image>
+      
+      <upload-images id='detail-photos'></upload-images>
 
       <button class='save'>Save</button>
   </div>
@@ -165,6 +168,11 @@ class CreateRecipePage extends WebElement {
         this.$('#main-photo').props = {
             uploadUrl: routes.UPLOAD_FILE,
             uploadFileCallback: path => this.$recipe.imgPath = path
+        }
+
+        this.$('#detail-photos').props = {
+            uploadUrl: routes.UPLOAD_FILE,
+            uploadFileCallback: console.log
         }
 
     }

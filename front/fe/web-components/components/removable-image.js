@@ -80,6 +80,7 @@ class RemovableImage extends WebElement {
         super(template, true);
 
         this._onRemove = this._onRemove.bind(this);
+        this.removeCross = this.removeCross.bind(this);
 
         this.$(`#${REMOVE}`).addEventListener('click', this._onRemove);
 
@@ -105,6 +106,10 @@ class RemovableImage extends WebElement {
     _onRemove() {
         this.$removeFileCallback(this.getAttribute(supportedAttributes.SRC));
         this.setAttribute(supportedAttributes.SRC, '');
+    }
+
+    removeCross() {
+        this.$(`#${OVERLAY}`).remove();
     }
 }
 

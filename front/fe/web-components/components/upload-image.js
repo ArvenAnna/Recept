@@ -57,6 +57,7 @@ class UploadImage extends WebElement {
         this._onChoose = this._onChoose.bind(this);
         this._onRemove = this._onRemove.bind(this);
         this._uploadFile = this._uploadFile.bind(this);
+        this.notModifiable = this.notModifiable.bind(this);
 
         this.$file = null;
 
@@ -75,9 +76,6 @@ class UploadImage extends WebElement {
         fd.append('file', this.$file);
 
         const path = await fetch(this.$uploadUrl, {method: 'POST',
-            // headers: {
-            //     'Content-Type': 'multipart/form-data',
-            // },
             body: fd}).then(res => res.json()).then(json => json.path);
 
         this.$uploadFileCallback(path);
@@ -101,6 +99,10 @@ class UploadImage extends WebElement {
         this.$(`#${CONTAINER}`).querySelector('.add_item_icon').style.display = 'block';
         this.$(`#${CONTAINER}`).querySelector('#image_wrapper').style.display = 'block';
         this.$(`#${CONTAINER}`).querySelector('#input_wrapper').style.display = 'block';
+    }
+
+    notModifiable() {
+        this.$('removable-image').removeCross();
     }
 
 }
