@@ -35,7 +35,6 @@ const template = `
   
 `;
 
-
 const supportedAttributes = {
     TITLE: 'title'
 }

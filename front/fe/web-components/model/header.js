@@ -23,8 +23,10 @@ class Header extends Model {
     }
 
     addEditButton(id) {
-       this._buttons.push ({'name': 'Редактировать рецепт', 'id': EDIT_RECIPE_ID, 'to': `/recipe/${id}/edit`});
-       this.notifySubscribers();
+        if (!this._buttons.find(bt => bt.id === EDIT_RECIPE_ID)) {
+            this._buttons.push ({'name': 'Редактировать рецепт', 'id': EDIT_RECIPE_ID, 'to': `/recipe/${id}/edit`});
+            this.notifySubscribers();
+        }
     }
 
     removeEditButton() {

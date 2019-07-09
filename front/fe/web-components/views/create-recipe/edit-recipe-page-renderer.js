@@ -2,12 +2,13 @@ import mNewRecipe from '../../model/newRecipe';
 import WebElement from '../../abstract/web-element';
 import './create-recipe-page';
 import mDepartments from "../../model/departments";
+import router from '../../router/router-context';
 
 const template = `
   <create-recipe-page></create-recipe-page>
 `;
 
-class CreateRecipePageRenderer extends WebElement {
+class EditRecipePageRenderer extends WebElement {
 
     constructor() {
         super(template);
@@ -17,6 +18,10 @@ class CreateRecipePageRenderer extends WebElement {
 
         mNewRecipe.addSubscriber(this._newRecipeChanged);
         mDepartments.addSubscriber(this._departmentsChanged);
+
+        mNewRecipe.retrieve(router.params.id);
+
+        //router.addSubscriber(this._newRecipeChanged);
 
         this.querySelector('create-recipe-page').props = {
             recipe: mNewRecipe,
@@ -42,8 +47,9 @@ class CreateRecipePageRenderer extends WebElement {
     disconnectedCallback() {
         mNewRecipe.removeSubscriber(this._newRecipeChanged);
         mDepartments.removeSubscriber(this._departmentsChanged);
+        //router.removeSubscriber(this._newRecipeChanged);
     }
 
 }
 
-customElements.define('create-recipe-page-renderer', CreateRecipePageRenderer);
+customElements.define('edit-recipe-page-renderer', EditRecipePageRenderer);

@@ -44,10 +44,11 @@ const template = `
 
 class DropDown extends WebElement {
 
-    set props({chooseItemCallback, items, renderItem}) {
+    set props({chooseItemCallback, items, renderItem, chosenItemIndex}) {
         this.$items = items || [];
         this.$chooseItem = chooseItemCallback;
         this.$renderItem = renderItem;
+        this.$chosenItemIndex = chosenItemIndex;
 
         if (this.$items.length && this.$renderItem) {
             // always render first item as chosen
@@ -66,7 +67,10 @@ class DropDown extends WebElement {
 
     _renderItems() {
         if (this.$items.length && this.$renderItem) {
-            this.$(`#${LABEL_VALUE}`).innerHTML = this.$renderItem(this.$items[0]);
+            const chosenItem = this.$chosenItemIndex
+                ? this.$items[this.$chosenItemIndex]
+                : this.$items[0];
+            this.$(`#${LABEL_VALUE}`).innerHTML = this.$renderItem(chosenItem);
 
             this.$('drop-down-list').props = {
                 chooseItemCallback: (item) => {
@@ -75,6 +79,7 @@ class DropDown extends WebElement {
                 },
                 items: this.$items,
                 renderItem: this.$renderItem,
+                chosenItemIndex: this.$chosenItemIndex,
                 toggleDropdownCallback: (toOpen) => this.$(`#${CARET_ICON}`).setAttribute('src', toOpen ? 'svg/sort-up.svg' : 'svg/caret-down.svg')
             }
         }

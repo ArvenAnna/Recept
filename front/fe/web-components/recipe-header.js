@@ -1,5 +1,6 @@
 import mHeader from './model/header';
 import WebElement from './abstract/web-element';
+import mNewRecipe from './model/newRecipe';
 
 const CONTAINER = 'nav_menu';
 const BUTTON_TEMPLATE = 'header_button_template';
@@ -31,11 +32,11 @@ class RecipeHeader extends WebElement {
     constructor() {
         super(template, true);
 
-        this.bindMethods(this.renderHeader);
+        this.renderHeader = this.renderHeader.bind(this);
 
         this.renderHeader();
 
-        //mHeader.addSubscriber(this.currentRecipeFetched);
+        mHeader.addSubscriber(this.renderHeader);
     }
 
     renderHeader() {
@@ -51,6 +52,10 @@ class RecipeHeader extends WebElement {
                 this.$(`#${CONTAINER}`).appendChild(buttonTemplate);
             });
         }
+    }
+
+    disconnectedCallback() {
+        mNewRecipe.removeSubscriber(this.renderHeader);
     }
 
 }

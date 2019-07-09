@@ -1,7 +1,7 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
 
-class Recipe extends Model {
+export class Recipe extends Model {
 
     constructor() {
         super();
@@ -61,74 +61,3 @@ class Recipe extends Model {
 }
 
 export default new Recipe();
-
-class NewRecipe extends Recipe {
-
-    constructor() {
-        super();
-
-        this.setFrom = this.setFrom.bind(this);
-    }
-
-    set name(newName) {
-        this._recipe.name = newName;
-    }
-
-    set department(department) {
-        if (!this._recipe.department) {
-            this._recipe.department = {};
-        }
-        this._recipe.department.id = department.id;
-        this._recipe.department.name = department.name;
-    }
-
-    set ref(ref) {
-        if (!this._recipe.refs) {
-            this._recipe.refs = [];
-        }
-        if (!this._recipe.refs.find(r => r.id === ref.id)) {
-            this._recipe.refs.push(ref);
-            this.notifySubscribers();
-        }
-    }
-
-    removeRef(ref) {
-        if (this._recipe.refs) {
-            this._recipe.refs = this._recipe.refs.filter(r => r.id !== ref.id);
-            this.notifySubscribers();
-        }
-    }
-
-    set proportion({ingredient, norma}) {
-        if (!this._recipe.proportions) {
-            this._recipe.proportions = [];
-        }
-        this._recipe.proportions.push({
-            ingredientId: ingredient.id,
-            ingredientName: ingredient.name,
-            norma
-        });
-        this.notifySubscribers();
-    }
-
-    set imgPath(path) {
-        this._recipe.imgPath = path;
-    }
-
-    removeProportion(prop) {
-        if (this._recipe.proportions) {
-            this._recipe.proportions = this._recipe.proportions.filter(p => p.ingredientName !== prop.ingredientName);
-            this.notifySubscribers();
-        }
-    }
-
-    setFrom(anotherRecipe) {
-        this._recipe.name = anotherRecipe.name;
-        // todo: copy recipe from argument
-
-    }
-}
-
-const mNewRecipe = new NewRecipe();
-
-export {mNewRecipe}

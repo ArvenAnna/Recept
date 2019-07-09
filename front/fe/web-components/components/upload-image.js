@@ -37,10 +37,17 @@ const template = `
 
 class UploadImage extends WebElement {
 
-    set props({uploadFileCallback, uploadUrl }) {
+    set props({uploadFileCallback, uploadUrl, defaultImage }) {
 
         this.$uploadFileCallback = uploadFileCallback;
         this.$uploadUrl = uploadUrl;
+        this.$defaultImage = defaultImage;
+
+        if (this.$defaultImage) {
+            this.$(`#${CONTAINER}`).querySelector('#image_wrapper').style.display = 'block';
+            this.$(`#${CONTAINER}`).querySelector('#input_wrapper').style.display = 'none';
+            this.$('removable-image').setAttribute('src', this.$defaultImage);
+        }
 
         this.$('file-input').props = {
             chooseFileCallback: this._onChoose

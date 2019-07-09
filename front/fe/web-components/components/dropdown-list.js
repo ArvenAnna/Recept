@@ -30,11 +30,13 @@ const template = `
 
 
 class DropDownList extends WebElement {
-    set props({chooseItemCallback, items, renderItem, toggleDropdownCallback}) {
+    set props({chooseItemCallback, items, renderItem,
+                  toggleDropdownCallback, chosenItemIndex}) {
         this.$items = items || [];
         this.$chooseItem = chooseItemCallback;
         this.$renderItem = renderItem;
         this.$toggleDropdown = toggleDropdownCallback;
+        this.$chosenItemIndex = chosenItemIndex;
 
         // required props: items, renderItem
 
@@ -68,7 +70,9 @@ class DropDownList extends WebElement {
     _renderItems() {
         this.$(`#${LIST_CONTAINER}`).innerHTML = "";
         if (this.$items.length && this.$renderItem) {
-
+            const chosenItem = this.$chosenItemIndex
+                ? this.$items[this.$chosenItemIndex]
+                : this.$items[0];
             this.$items.forEach(item => {
                 const template = this.getTemplateById(ITEM_TEMPLATE);
                 const itemEl = template.querySelector('.item');
@@ -81,7 +85,7 @@ class DropDownList extends WebElement {
                 this.$(`#${LIST_CONTAINER}`).appendChild(template);
             });
 
-            this._changeOutlinedItem(this.$items[0]);
+            this._changeOutlinedItem(chosenItem);
         }
     }
 

@@ -54,22 +54,16 @@ class FileInput extends WebElement {
     constructor() {
         super(template, true);
 
-        this.$fileName = "Главное фото";
+        this.$fileName = "New photo";
         this.reader = new FileReader();
 
-        // this._render = this._render.bind(this);
         this.cleanFile = this.cleanFile.bind(this);
         this._onChange = this._onChange.bind(this);
         this._createFileUrl = this._createFileUrl.bind(this);
 
         this.$(`#${FILE_INPUT}`).addEventListener('change', this._onChange);
         this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
-        //this.$(`#${CONTAINER}`).querySelector('.add_item_icon').addEventListener('click', this._addItem);
     }
-
-    // _render() {
-    //     this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
-    // }
 
     _createFileUrl(file) {
         this.reader.onload = (e) => {
@@ -80,7 +74,7 @@ class FileInput extends WebElement {
             }
         }
 
-        this.reader.onerror = () => console.log('Ошибка загрузки файла');
+        this.reader.onerror = () => console.log('File uploading error');
         this.reader.readAsDataURL(file);
     }
 
@@ -91,7 +85,7 @@ class FileInput extends WebElement {
     }
 
     cleanFile() {
-        this.$fileName = "Файл не выбран";
+        this.$fileName = "New photo";
         this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
     }
 
