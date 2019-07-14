@@ -5,6 +5,10 @@ export default class WebElement extends HTMLElement {
         return this.shadowRoot && this.shadowRoot.querySelector(selector)
     }
 
+    $_id(id) {
+        return this.$(`#${id}`);
+    }
+
     constructor(template, isShadow) {
         super();
 
@@ -36,8 +40,19 @@ export default class WebElement extends HTMLElement {
     }
 
     getTemplateById(templateId) {
-        return this.shadowRoot
+        const template = this.shadowRoot
             ? this.$(`#${templateId}`).content.cloneNode(true)
             : this.querySelector(`#${templateId}`).content.cloneNode(true);
+
+        template.byTag = function (tagName) {
+            return this.querySelector(`${tagName}`);
+        };
+        template.byClass = function (className) {
+            return this.querySelector(`.${className}`);
+        }
+        return template;
+        // return this.shadowRoot
+        //     ? this.$(`#${templateId}`).content.cloneNode(true)
+        //     : this.querySelector(`#${templateId}`).content.cloneNode(true);
     }
 }

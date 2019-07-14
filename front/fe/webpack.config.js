@@ -2,76 +2,15 @@ const webpack = require('webpack');
 
 module.exports = env => {
 
-    console.dir(env);
-    console.dir(__dirname);
-
     return {
-        entry: './app.js',
+        entry: './web-components/app.js',
         output: {
             path: __dirname + '/bin',
             filename: 'app.bundle.js'
         },
         mode: 'development',
         module: {
-            rules: [{
-                test: /\.js$/,
-                exclude: [/node_modules/, /bin/, /web-components/],
-                use: 'babel-loader',
-            }, {
-                test: /\.css$/,
-                include(filepath) {
-                    if (filepath.includes('react-s-alert')) return true;
-                    return false;
-                },
-                use: [{loader: "style-loader"},
-                    {loader: "css-loader"},
-                    {loader: "postcss-loader"}]
-            }, {
-                test: /\.less$/,
-                exclude: [/node_modules/, /bin/],
-                use: [{loader: "style-loader"},
-                    {loader: "css-loader"},
-                    {loader: "postcss-loader"},
-                    {loader: "less-loader"},
-                    {loader: "js-to-styles-var-loader"}]
-            }, {
-                test: /\.png$/,
-                exclude: [/node_modules/, /bin/],
-                use: [{
-                    loader: "url-loader",
-                    options: {
-                        "limit": 1000000,
-                        "mimetype": "image/png"
-                    }
-                }]
-            }, {
-                test: /\.jsx$/,
-                exclude: [/node_modules/, /bin/],
-                use: "babel-loader"
-            }, {
-                test: /\.tsx$/,
-                exclude: [/node_modules/, /bin/],
-                use: "awesome-typescript-loader"
-            }, {
-                test: /\.svg$/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['es2015', 'react']
-                        }
-                    },
-                    {
-                        loader: 'react-svg-loader',
-                        // options: {
-                        //     svgo: {
-                        //         plugins: [{removeTitle: false}],
-                        //         floatPrecision: 2
-                        //     }
-                        // }
-                    }
-                ]
-            }]
+            rules: []
         },
         plugins: [
             new webpack.DefinePlugin({
@@ -83,7 +22,7 @@ module.exports = env => {
         ],
 
         resolve: {
-            extensions: ['.js', '.jsx']
+            extensions: ['.js']
         },
 
         devtool: "source-map",

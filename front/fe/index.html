@@ -6,12 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    #loader {
+        display: none;
+        height: 100%;
+        background-color: black;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    recipe-app:not(:defined) {
+        display: none;
+    }
+
+    recipe-app:not(:defined) + #loader{
+        display: flex;
+    }
+</style>
+
 <body>
-    <template class="web-c">
-        <recipe-app/>
-    </template>
-    <div id="mount"></div>
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <recipe-app></recipe-app>
+    <div id="loader">Loading...</div>
+    <!--<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>-->
     <script src="/bin/app.bundle.js" charset="utf-8"></script>
 </body>
 

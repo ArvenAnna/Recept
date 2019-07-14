@@ -12,17 +12,11 @@ module.exports = {
     },
     transform: {
         "^.+\\.js$": "babel-jest",
-        "^.+\\.jsx$": "babel-jest",
-		"^.+\\.ts$": "./ts-test-preprocessor.js",
-		"^.+\\.tsx$": "./ts-test-preprocessor.js"
     },
 	moduleFileExtensions: [
-		"ts",
-		"tsx",
-        "jsx",
 		"js"
 	],
 	testMatch: [
-		"**/test/**/*.(ts|tsx|jsx)"
+		"**/test/**/*.(js)"
 	]
 };

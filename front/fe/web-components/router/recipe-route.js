@@ -1,9 +1,12 @@
-import { getHash } from './router';
 import routerContext from './router-context';
 
 const supportedAttributes = {
     PATH: 'path',
     COMPONENT: 'component'
+}
+
+const getHash = (url) => {
+    return url.split('#')[1] || '';
 }
 
 class RecipeRoute extends HTMLElement {

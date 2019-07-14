@@ -42,6 +42,8 @@ app.get('/favicon.ico', (req, res) => res.sendFile(path.join(__dirname + '/favic
 app.use('/bin', express.static('bin'));
 
 app.use('/svg', express.static('svg'));
+app.use('/css', express.static('css'));
+
 
 app.set('port', process.env.NODE_PORT);
 
