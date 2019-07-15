@@ -1,43 +1,36 @@
-import './views/recipe/recipe-page-renderer';
-import './router';
 import mDepartments from './model/departments';
 import WebElement from './abstract/web-element';
 import './router/recipe-link';
 
 const CONTAINER = 'sidebar_menu';
 const BUTTON_TEMPLATE = 'sidebar_button_template';
+const BUTTON = 'nav_button';
 
 const template = `
     <style>
-       .side_menu {
-        grid-column-start: 2;
-        grid-column-end: 3;
-        margin: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-    }
+       #${CONTAINER} {
+            margin-left: 1rem;
+            background-color: var(--background, green);
+        }
 
-    .nav_button {
-        background-color: var(--button-color);
-        display: flex;
-        justify-content: center;
+    .${BUTTON} {
         padding: 0 0.5rem;
+        cursor: pointer;
     }
     
-    .nav_button:hover {
-        background-color: var(--bg-color);
+    .${BUTTON}:hover {
+        background-color: var(--hover-button, lightgreen);
         cursor: pointer;
     }
     </style>
 
     <template id='${BUTTON_TEMPLATE}'>
         <recipe-link>
-            <div class='nav_button'></div>
+            <div class='${BUTTON}'></div>
         </recipe-link>
     </template>
 
-    <div class="vertical_menu side_menu" id="${CONTAINER}"></div>
+    <div class="side_menu" id="${CONTAINER}"></div>
 `;
 
 class RecipeSidebar extends WebElement {
@@ -55,25 +48,26 @@ class RecipeSidebar extends WebElement {
     }
 
     _render(newDepartments) {
-        this.$(`#${CONTAINER}`).innerHTML = ''; // clear all content
+        this.$_id(CONTAINER).innerHTML = ''; // clear all content
 
         if (newDepartments.length) {
 
             newDepartments.forEach(dep => {
                 const template = this.getTemplateById(BUTTON_TEMPLATE);
 
-                const linkEl = template.querySelector('recipe-link');
+                const linkEl = template.byTag('recipe-link');
                 linkEl.onConstruct = (link) => {
-                    link.path = `/department/${dep.id}/recipes`;
+                    link.path = `/departments/${dep.id}/recipes`;
                 };
-                template.querySelector('.nav_button').textContent = dep.name;
-                this.$(`#${CONTAINER}`).appendChild(template);
+                template.byClass(BUTTON).textContent = dep.name;
+                this.$_id(CONTAINER).appendChild(template);
             });
 
         }
     }
 
     connectedCallback() {
+        super.connectedCallback();
         mDepartments.retrieve();
     }
 

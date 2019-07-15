@@ -37,6 +37,7 @@ export default class WebElement extends HTMLElement {
         if (this.onConstruct) {
             this.onConstruct(this);
         }
+        console.log(`${this.localName} is connected`);
     }
 
     getTemplateById(templateId) {

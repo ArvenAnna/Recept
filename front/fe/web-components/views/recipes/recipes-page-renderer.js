@@ -28,6 +28,7 @@ export default class RecipesPageRenderer extends WebElement {
     }
 
     connectedCallback() {
+        super.connectedCallback();
         mRecipeList.retrieve(router.params.id);
     }
 

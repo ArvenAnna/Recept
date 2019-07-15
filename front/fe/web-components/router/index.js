@@ -1,5 +1,5 @@
-import './recipe-link';
-import './recipe-route';
+// export Link from './recipe-link';
+// export Route from './recipe-route';
 import routerContext from './router-context';
 
 export {routerContext};

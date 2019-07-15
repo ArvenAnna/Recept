@@ -1,5 +1,6 @@
-@import "./variables.css";
+/*@import "./variables.css";*/
 
-recipe-header {
+recipe-header, recipe-sidebar {
     --background: var(--main-background);
+    --hover-button: var(--hover-background);
 }

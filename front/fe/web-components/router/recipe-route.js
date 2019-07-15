@@ -1,4 +1,5 @@
 import routerContext from './router-context';
+import WebElement from '../abstract/web-element';
 
 const supportedAttributes = {
     PATH: 'path',
@@ -9,7 +10,7 @@ const getHash = (url) => {
     return url.split('#')[1] || '';
 }
 
-class RecipeRoute extends HTMLElement {
+class RecipeRoute extends WebElement {
 
     static get observedAttributes() {
         return Object.values(supportedAttributes);
@@ -116,6 +117,7 @@ class RecipeRoute extends HTMLElement {
     }
 
     connectedCallback() {
+        super.connectedCallback();
         window.addEventListener('hashchange', this.updateRoute);
     }
 

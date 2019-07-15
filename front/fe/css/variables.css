@@ -1,4 +1,5 @@
 /*default variables*/
 :root {
     --main-background: red;
+    --hover-background: #8C0000; /*color(red blackness(+45%));*/
 }

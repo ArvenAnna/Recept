@@ -1,6 +1,5 @@
 import mHeader from './model/header';
 import WebElement from './abstract/web-element';
-import mNewRecipe from './model/newRecipe';
 
 const CONTAINER = 'nav_menu';
 const BUTTON_TEMPLATE = 'header_button_template';
@@ -10,7 +9,7 @@ const template = `
   <style>    
     #${CONTAINER} {
         display: flex;
-        background-color: var(--background);
+        background-color: var(--background, green);
     }
     
     .${BUTTON} {
@@ -61,7 +60,7 @@ class RecipeHeader extends WebElement {
     }
 
     disconnectedCallback() {
-        mNewRecipe.removeSubscriber(this._renderHeader);
+        mHeader.removeSubscriber(this._renderHeader);
     }
 
 }

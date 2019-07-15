@@ -1,12 +1,14 @@
+import WebElement from './abstract/web-element';
+
+import './router/recipe-route';
+
 import './views/recipe/recipe-page-renderer';
 import './views/recipes/recipes-page-renderer';
 import './views/ingredients/ingredients-page-renderer';
 import './views/create-recipe/create-recipe-page-renderer';
 import './views/create-recipe/edit-recipe-page-renderer';
 
-import './router';
 import './recipe-header';
-import WebElement from './abstract/web-element';
 import './recipe-sidebar';
 
 const CONTAINER = 'app_container';
@@ -16,8 +18,8 @@ const SIDE = 'side_menu';
 
 const template = `
   <style>
-    @import "../css/index.css";
-    @import "../css/green-theme.css";
+    /*@import "../css/index.css";*/
+    /*@import "../css/green-theme.css";*/
     
     #${CONTAINER} {
         display: grid;
@@ -46,6 +48,7 @@ const template = `
     #${CONTENT} {
         grid-column-start: 1;
         grid-column-end: 2;
+        background-color: var(--main-background);
     }
     
     #${SIDE} {
