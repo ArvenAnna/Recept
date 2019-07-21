@@ -11,9 +11,7 @@ const template = `
   <style>
     
     #${CONTAINER} {
-        /*display: flex;*/
-        /*flex-direction: column;*/
-        /*align-items: flex-start;*/
+      
     }
     
     #${LABEL} {

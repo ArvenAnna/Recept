@@ -8,6 +8,7 @@ const template = `
   <recipe-page></recipe-page>
 `;
 
+//TODO: add decorator for adding subscriber
 export default class RecipePageRenderer extends WebElement {
 
     constructor() {
@@ -18,6 +19,8 @@ export default class RecipePageRenderer extends WebElement {
 
         mRecipe.addSubscriber(this.currentRecipeFetched);
         router.addSubscriber(this.currentRecipeChanged);
+
+        mRecipe.retrieve(router.params.id);
     }
 
     currentRecipeChanged() {
@@ -27,11 +30,6 @@ export default class RecipePageRenderer extends WebElement {
     currentRecipeFetched (newRecipe) {
         this.querySelector('recipe-page').recipe = newRecipe;
         mHeader.addEditButton(newRecipe.id);
-    }
-
-    connectedCallback() {
-        mRecipe.retrieve(router.params.id);
-
     }
 
     disconnectedCallback() {

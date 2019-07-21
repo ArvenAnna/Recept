@@ -12,36 +12,74 @@ import routes from '../../../constants/Routes';
 
 const CONTAINER = 'create-recipe-page';
 
+const RECIPE_NAME_CONTAINER = 'recipe-name-container';
+const RECIPE_NAME = 'recipe-name';
+const RECIPE_DEPART_CONTAINER = 'recipe-depart-container';
+const RECIPE_REFS_CONTAINER = 'recipe-refs-container';
+const RECIPE_REFS = 'recipe-refs';
+const RECIPE_PROPORTIONS_CONTAINER = 'recipe-proportions-container';
+const RECIPE_PROPORTIONS = 'recipe-proportions';
+const RECIPE_DESCRIPTION = 'recipe-description';
+const RECIPE_PHOTO = 'recipe-photo';
+const RECIPE_DETAIL_PHOTOS = 'detail-photos';
+
+const SAVE = 'save';
+
 const template = `
   <style>
-    .recipe-name {
-        
+    #${RECIPE_NAME_CONTAINER} {
+        margin: 1rem;
     }
     
-    .save {
-    
+    #${RECIPE_NAME} {
+        margin-top: 0.5rem;
     }
+    
+    #${RECIPE_DEPART_CONTAINER}, #${RECIPE_PROPORTIONS_CONTAINER} {
+        margin: 1rem;
+    }
+   
+    #${RECIPE_REFS_CONTAINER} {
+        margin: 1rem;
+    }
+    
+    .margin-bottom {
+        margin-bottom: 0.5rem;
+    }
+    
+    
     
     
   </style>
   
   
   <div id='${CONTAINER}'>
-      <input class='recipe-name'/>
-      <recipe-drop-down></recipe-drop-down>
+      <div id='${RECIPE_NAME_CONTAINER}'>
+        <div>Recipe name:</div>
+        <input id='${RECIPE_NAME}'/>
+      </div>
       
-      <editable-list id='ref-list'></editable-list>
+      <div id='${RECIPE_DEPART_CONTAINER}'>
+        <div class='margin-bottom'>Recipe department:</div>
+        <recipe-drop-down></recipe-drop-down>
+      </div>
       
-      <editable-two-fields-list id='prop-list'></editable-two-fields-list>
+      <div id='${RECIPE_REFS_CONTAINER}'>
+        <editable-list id='${RECIPE_REFS}'></editable-list>
+      </div>
       
-      <div>Add main photo</div>
-      <upload-image id='main-photo'></upload-image>
+      <div id='${RECIPE_PROPORTIONS_CONTAINER}'>
+        <editable-two-fields-list id='${RECIPE_PROPORTIONS}'></editable-two-fields-list>
+      </div>
+      
+      <div>Add main photo:</div>
+      <upload-image id='${RECIPE_PHOTO}'></upload-image>
       <div>Add description with photo in free form</div>
-      <upload-images id='detail-photos'></upload-images>
+      <upload-images id='${RECIPE_DETAIL_PHOTOS}'></upload-images>
       
-      <textarea class='recipe-description'></textarea>
+      <textarea id='${RECIPE_DESCRIPTION}'></textarea>
 
-      <button class='save'>Save</button>
+      <button id='${SAVE}'>Save</button>
   </div>
 `;
 
@@ -66,21 +104,17 @@ class CreateRecipePage extends WebElement {
     constructor() {
         super(template, true);
 
-        this.bindMethods(this._renderPage);
+        this._renderPage = this._renderPage.bind(this);
         this._saveRecipe = this._saveRecipe.bind(this);
         this._retrieveRecipesByKeyword = this._retrieveRecipesByKeyword.bind(this);
         this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
 
-        this.$('.save').addEventListener('click', this._saveRecipe);
-    }
-
-    disconnectedCallback() {
-        this.$('.save').removeEventListener('click', this._saveRecipe);
+        this.$_id(SAVE).addEventListener('click', this._saveRecipe);
     }
 
     _saveRecipe() {
-        this.$recipe.name = this.$('.recipe-name').value;
-        this.$recipe.text = this.$('.recipe-description').value;
+        this.$recipe.name = this.$_id(RECIPE_NAME).value;
+        this.$recipe.text = this.$_id(RECIPE_DESCRIPTION).value;
 
         if (!this.$recipe.department) {
             this.$recipe.department = this.$departments.length
@@ -123,9 +157,8 @@ class CreateRecipePage extends WebElement {
 
     _renderPage() {
         if (this.$recipe) {
-            this.$('.recipe-name').value = this.$recipe.name || '';
-            this.$('.recipe-description').value = this.$recipe.text || '';
-
+            this.$_id(RECIPE_NAME).value = this.$recipe.name || '';
+            this.$_id(RECIPE_DESCRIPTION).value = this.$recipe.text || '';
         }
 
         this.$('recipe-drop-down').props = {
@@ -139,32 +172,30 @@ class CreateRecipePage extends WebElement {
                 : null
         };
 
-        this.$('#ref-list').props = {
-            title: 'List of recipe references',
+        this.$_id(RECIPE_REFS).props = {
+            title: 'List of recipe references:',
             items: this.$recipe.refs,
             renderItem: ref => ref.name,
             removeItemCallback: ref => {
                 this.$recipe.removeRef(ref);
-                this.$('#ref-list').items = this.$recipe.refs;
+                this.$_id(RECIPE_REFS).items = this.$recipe.refs;
             },
             addItemCallback: (item) => {
                 this._retrieveRecipesByKeyword(item).then(recipes => {
                     // should be one recipe only
                     if (recipes.length === 1 && recipes[0].name === item) {
                         this.$recipe.ref = recipes[0];
-                        this.$('#ref-list').items = this.$recipe.refs;
+                        this.$_id(RECIPE_REFS).items = this.$recipe.refs;
                     }
                 })
 
             },
-            getSuggestionsPromise: (keyword) => {
-                return this._retrieveRecipesByKeyword(keyword);
-            },
+            getSuggestionsPromise: this._retrieveRecipesByKeyword,
             renderSuggestionCallback: suggestion => suggestion.name
         }
 
-        this.$('#prop-list').props = {
-            title: 'List of recipe proportions',
+        this.$_id(RECIPE_PROPORTIONS).props = {
+            title: 'List of recipe proportions:',
             items: this.$recipe.proportions,
             renderItem: (item) => `
                 <div key='name'>${item.ingredientName}</div>
@@ -173,7 +204,7 @@ class CreateRecipePage extends WebElement {
             `,
             removeItemCallback: prop => {
                 this.$recipe.removeProportion(prop);
-                this.$('#prop-list').items = this.$recipe.proportions;
+                this.$_id(RECIPE_PROPORTIONS).items = this.$recipe.proportions;
             },
             addItemCallback: ({first, second}) => {
                 this._retrieveIngredientsByKeyword(first).then(ingredients => {
@@ -183,7 +214,7 @@ class CreateRecipePage extends WebElement {
                             ingredient: ingredients[0],
                             norma: second
                         };
-                        this.$('#prop-list').items = this.$recipe.proportions;
+                        this.$_id(RECIPE_PROPORTIONS).items = this.$recipe.proportions;
                     }
                 })
 
@@ -192,19 +223,18 @@ class CreateRecipePage extends WebElement {
             renderSuggestionCallback: suggestion => suggestion.name
         }
 
-        this.$('#main-photo').props = {
+        this.$_id(RECIPE_PHOTO).props = {
             uploadUrl: routes.UPLOAD_FILE,
             defaultImage: this.$recipe.imgPath,
             uploadFileCallback: path => this.$recipe.imgPath = path
         }
 
-        this.$('#detail-photos').props = {
+        this.$_id(RECIPE_DETAIL_PHOTOS).props = {
             uploadUrl: routes.UPLOAD_FILE,
             defaultFilesList: this.$recipe.details && this.$recipe.details.map(d => ({url: d.imgPath, description: d.description})),
             uploadFileCallback: detail => this.$recipe.detail = detail,
             removeFileCallback: detail => this.$recipe.removeDetail(detail)
         }
-
     }
 
 }

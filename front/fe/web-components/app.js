@@ -17,10 +17,7 @@ const CONTENT = 'app_body_content';
 const SIDE = 'side_menu';
 
 const template = `
-  <style>
-    /*@import "../css/index.css";*/
-    /*@import "../css/green-theme.css";*/
-    
+  <style>   
     #${CONTAINER} {
         display: grid;
         grid-template-columns: 1fr 5fr 1fr;

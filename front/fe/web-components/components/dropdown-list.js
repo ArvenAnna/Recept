@@ -3,25 +3,34 @@ import WebElement from '../abstract/web-element';
 const LIST_CONTAINER = 'list-container';
 const ITEM_TEMPLATE = 'item_template';
 
+const ITEM = 'item';
+const OUTLINED = 'outlined';
+
 const template = `
   <style>
     #${LIST_CONTAINER} {
         display: none;
         position: absolute;
-        border: 1px solid black;
+        border: var(--border);
         cursor: pointer;
-        background-color: blue;
         z-index: 2;
+        padding: 0.2rem;
+        font-size: small;
+        background-color: var(--background, green);
+    }
+    
+    .${ITEM} {
+        white-space: nowrap;
     }
    
-    .outlined {
-        color: red;
+    .${OUTLINED} {
+        font-weight: bold;
     }
     
   </style>
   
   <template id="${ITEM_TEMPLATE}">
-      <div class="item"></div>
+      <div class="${ITEM}"></div>
   </template>
  
   <div id="${LIST_CONTAINER}"></div>
@@ -43,7 +52,6 @@ class DropDownList extends WebElement {
         if (!this.$renderItem) {
             throw new Error("Dropdown-list: renderItem should be defined")
         }
-        // always render first item as chosen
         this._renderItems();
     }
 
@@ -67,22 +75,46 @@ class DropDownList extends WebElement {
         this.$outlinedItem = null;
     }
 
+    disconnectedCallback() {
+        document.removeEventListener('keydown', this._onKeyPress);
+    }
+
+    openDropdown() {
+        this._toggleDropdownInner(true);
+    }
+
+    closeDropdown() {
+        this._toggleDropdownInner(false);
+    }
+
+    toggleDropdown() {
+        const isClosed = this.$_id(LIST_CONTAINER).style.display !== 'block';
+        this._toggleDropdownInner(isClosed);
+    }
+
+    _toggleDropdownInner(toOpen) {
+        this.$_id(LIST_CONTAINER).style.display = toOpen ? 'block' : 'none';
+        if (this.$toggleDropdown) {
+            this.$toggleDropdown(toOpen);
+        }
+    }
+
     _renderItems() {
-        this.$(`#${LIST_CONTAINER}`).innerHTML = "";
+        this.$_id(LIST_CONTAINER).innerHTML = "";
         if (this.$items.length && this.$renderItem) {
             const chosenItem = this.$chosenItemIndex
                 ? this.$items[this.$chosenItemIndex]
                 : this.$items[0];
             this.$items.forEach(item => {
                 const template = this.getTemplateById(ITEM_TEMPLATE);
-                const itemEl = template.querySelector('.item');
+                const itemEl = template.byClass(ITEM);
                 if (this.$chooseItem) {
                     itemEl.addEventListener('click', this._onClickItem.bind(null, item));
                 }
 
                 itemEl.innerHTML = this.$renderItem(item);
 
-                this.$(`#${LIST_CONTAINER}`).appendChild(template);
+                this.$_id(LIST_CONTAINER).appendChild(template);
             });
 
             this._changeOutlinedItem(chosenItem);
@@ -95,42 +127,18 @@ class DropDownList extends WebElement {
     }
 
     _changeOutlinedItem(item) {
-        const outlinedEl = this.$(`#${LIST_CONTAINER}`).querySelector('.outlined');
+        const outlinedEl = this.$(`.${OUTLINED}`);
         if (outlinedEl) {
-            outlinedEl.classList.remove('outlined');
+            outlinedEl.classList.remove(OUTLINED);
         }
         this.$outlinedItem = item;
         const newOutlinedIndex = this.$items.indexOf(this.$outlinedItem);
-        this.$(`#${LIST_CONTAINER}`).querySelectorAll('.item')[newOutlinedIndex].classList.add('outlined');
+        this.$_id(LIST_CONTAINER).querySelectorAll(`.${ITEM}`)[newOutlinedIndex].classList.add(OUTLINED);
     }
 
     _selectItem() {
         this.closeDropdown();
         this.$chooseItem(this.$outlinedItem);
-    }
-
-    openDropdown() {
-        this._toggleDropdownInner(true);
-    }
-
-    closeDropdown() {
-        this._toggleDropdownInner(false);
-    }
-
-    toggleDropdown() {
-        const isClosed = this.$(`#${LIST_CONTAINER}`).style.display !== 'block';
-        this._toggleDropdownInner(isClosed);
-    }
-
-    _toggleDropdownInner(toOpen) {
-        this.$(`#${LIST_CONTAINER}`).style.display = toOpen ? 'block' : 'none';
-        if (this.$toggleDropdown) {
-            this.$toggleDropdown(toOpen);
-        }
-    }
-
-    disconnectedCallback() {
-        document.removeEventListener('keydown', this._onKeyPress);
     }
 
     _onKeyPress(e) {

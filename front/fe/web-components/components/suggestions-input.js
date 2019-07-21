@@ -15,10 +15,8 @@ const template = `
     }
     
     #${SUGGESTION_CONTAINER} {
-        /*display: none;*/
         position: absolute;
         top: 100%;
-        border: 1px solid black;
         cursor: pointer;
         background-color: blue;
     }
@@ -35,11 +33,6 @@ const template = `
 
 class SuggestionsInput extends WebElement {
 
-    // set suggestions(newSuggestions) {
-    //     this.$suggestions = newSuggestions || [];
-    //     this._renderSuggestions();
-    // }
-
     set props({getSuggestionsPromise, renderSuggestionCallback}) {
 
         // required props: renderSuggestionCallback
@@ -54,6 +47,10 @@ class SuggestionsInput extends WebElement {
         }
     }
 
+    get currentValue() {
+        return this.$_id(INPUT).value;
+    }
+
     constructor() {
         super(template, true);
 
@@ -66,21 +63,26 @@ class SuggestionsInput extends WebElement {
 
         document.addEventListener('click', this._clickOutside);
 
-        // this.$(`#${CONTAINER}`).querySelector('.add_item_icon').addEventListener('click', this._addItem);
-        this.$(`#${INPUT}`).addEventListener('input', this._onChange);
-        this.$(`#${INPUT}`).addEventListener('focus', this._onFocus);
+        this.$_id(INPUT).addEventListener('input', this._onChange);
+        this.$_id(INPUT).addEventListener('focus', this._onFocus);
+    }
+
+    disconnectedCallback() {
+        document.removeEventListener('click', this._clickOutside);
+    }
+
+    clearInput() {
+        this.$_id(INPUT).value = '';
     }
 
     async _renderSuggestions() {
         if (this.$getSuggestions && this.$renderSuggestion) {
-            this.$suggestions = this.$(`#${INPUT}`).value
-                ? await this.$getSuggestions(this.$(`#${INPUT}`).value)
+            this.$suggestions = this.$_id(INPUT).value
+                ? await this.$getSuggestions(this.$_id(INPUT).value)
                 : [];
 
             this.$('drop-down-list').props = {
                 chooseItemCallback: this._onSuggestionSelect,
-
-                //reset of props every time do the better way
                 items: this.$suggestions,
                 renderItem: this.$renderSuggestion,
             }
@@ -95,31 +97,19 @@ class SuggestionsInput extends WebElement {
     }
 
     _onFocus() {
-        if (this.$suggestions && this.$(`#${INPUT}`).value) {
+        if (this.$suggestions && this.$_id(INPUT).value) {
             this.$('drop-down-list').openDropdown();
         }
     }
 
-    get currentValue() {
-        return this.$('input').value;
-    }
-
-    clearInput() {
-        this.$('input').value = '';
-    }
-
-    disconnectedCallback() {
-        document.removeEventListener('click', this._clickOutside);
-    }
-
     _clickOutside(e) {
-        if (!isDescendantOf(e.composedPath()[0], this.$(`#${INPUT}`))) {
+        if (!isDescendantOf(e.composedPath()[0], this.$_id(INPUT))) {
             this.$('drop-down-list').closeDropdown();
         }
     }
 
     _onSuggestionSelect(suggestion) {
-        this.$(`#${INPUT}`).value = suggestion.name;
+        this.$_id(INPUT).value = suggestion.name;
     }
 
 }

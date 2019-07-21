@@ -15,13 +15,13 @@ class EditRecipePageRenderer extends WebElement {
 
         this._newRecipeChanged = this._newRecipeChanged.bind(this);
         this._departmentsChanged = this._departmentsChanged.bind(this);
+        this._onRouteChange = this._onRouteChange.bind(this);
 
         mNewRecipe.addSubscriber(this._newRecipeChanged);
         mDepartments.addSubscriber(this._departmentsChanged);
+        router.addSubscriber(this._onRouteChange);
 
         mNewRecipe.retrieve(router.params.id);
-
-        //router.addSubscriber(this._newRecipeChanged);
 
         this.querySelector('create-recipe-page').props = {
             recipe: mNewRecipe,
@@ -29,25 +29,24 @@ class EditRecipePageRenderer extends WebElement {
         }
     }
 
+    _onRouteChange({params: {id}}) {
+        mNewRecipe.retrieve(id);
+    }
+
     _newRecipeChanged (model) {
         const newRecipePage = this.querySelector('create-recipe-page');
         newRecipePage.recipe = model;
-        // ingPage.addIngredient = model.add; // set it once it constructed
     }
 
     _departmentsChanged (model) {
         const newRecipePage = this.querySelector('create-recipe-page');
         newRecipePage.departments = model.departments;
     }
-    //
-    // connectedCallback() {
-    //     mIngredients.retrieve();
-    // }
-    //
+
     disconnectedCallback() {
         mNewRecipe.removeSubscriber(this._newRecipeChanged);
         mDepartments.removeSubscriber(this._departmentsChanged);
-        //router.removeSubscriber(this._newRecipeChanged);
+        router.removeSubscriber(this._onRouteChange);
     }
 
 }

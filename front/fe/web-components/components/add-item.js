@@ -3,6 +3,7 @@ import './dropdown-list';
 import './suggestions-input';
 
 const CONTAINER = 'container';
+const ADD_ITEM = 'add_item_icon';
 
 const template = `
   <style>
@@ -10,9 +11,10 @@ const template = `
     #${CONTAINER} {
         display: flex;
         position: relative;
+        align-items: center;
     }
     
-    .add_item_icon {
+    #${ADD_ITEM} {
         width: 1rem;
         height: 1rem;
         cursor: pointer;
@@ -22,7 +24,7 @@ const template = `
   
   <div id="${CONTAINER}">
     <suggestions-input></suggestions-input>
-    <img src="svg/add.svg" class="add_item_icon"/>
+    <img src="svg/add.svg" id="${ADD_ITEM}"/>
   </div>
   
 `;
@@ -51,7 +53,7 @@ class RecipeAddItem extends WebElement {
 
         this._addItem = this._addItem.bind(this);
 
-        this.$(`#${CONTAINER}`).querySelector('.add_item_icon').addEventListener('click', this._addItem);
+        this.$_id(ADD_ITEM).addEventListener('click', this._addItem);
     }
 
     _addItem() {

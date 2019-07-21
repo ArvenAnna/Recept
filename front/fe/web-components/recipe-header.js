@@ -20,6 +20,10 @@ const template = `
         cursor: pointer;
     }
     
+    .${BUTTON}:hover {
+        background-color: var(--hover-button, lightgreen);
+    }
+    
   </style>
   
   <template id='${BUTTON_TEMPLATE}'>

@@ -7,11 +7,6 @@ const CONTAINER = 'container';
 const template = `
   <style>
     
-    #${CONTAINER} {
-       border: 1px solid black;
-       padding: 5px;
-    }
-    
   </style>
   
   <div id="${CONTAINER}">

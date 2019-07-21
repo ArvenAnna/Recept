@@ -27,18 +27,13 @@ class CreateRecipePageRenderer extends WebElement {
     _newRecipeChanged (model) {
         const newRecipePage = this.querySelector('create-recipe-page');
         newRecipePage.recipe = model;
-        // ingPage.addIngredient = model.add; // set it once it constructed
     }
 
     _departmentsChanged (model) {
         const newRecipePage = this.querySelector('create-recipe-page');
         newRecipePage.departments = model.departments;
     }
-    //
-    // connectedCallback() {
-    //     mIngredients.retrieve();
-    // }
-    //
+
     disconnectedCallback() {
         mNewRecipe.removeSubscriber(this._newRecipeChanged);
         mDepartments.removeSubscriber(this._departmentsChanged);

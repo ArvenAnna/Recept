@@ -4,3 +4,8 @@ recipe-header, recipe-sidebar {
     --background: var(--main-background);
     --hover-button: var(--hover-background);
 }
+
+drop-down-list {
+    --border: var(--main-border);
+    --background: var(--main-background);
+}

@@ -1,36 +1,42 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/list-items';
+import { noImage } from '../../../constants/themes';
 
 const CONTAINER = 'recipe_list_page';
 const RECIPE_TEMPLATE = 'recipe_template';
+const RECIPE = 'recipe';
+const RECIPE_NAME = 'recipe_name';
+const RECIPE_PHOTO = 'recipe_photo';
 
 const template = `
   <style>
-    #recipe_list_page {
+    #${CONTAINER} {
        display: grid;
        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
        justify-items: center;
     }
     
-    .recipe {
+    .${RECIPE} {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: flex-start;
         max-width: 200px;
         min-width: 80%;
+        cursor: pointer;
     }
     
-    .recipe_name {
-        text-align: center;
+    .${RECIPE_NAME} {
+          text-align: center;
           padding: 5px;
-          color: var(--text);
           font-size: medium;
           font-weight: 600;
     }
     
-    .recipe_photo {
+    .${RECIPE_PHOTO} {
         width: 100%;
+        height: 200px;
+        object-fit: contain;
     }
    
     
@@ -38,20 +44,16 @@ const template = `
   
   <template id='${RECIPE_TEMPLATE}'>
       <recipe-link>
-        <div class='recipe'>
-         <img src='svg/dish-fork-and-knife.svg' class='recipe_photo'/>
-         <div class='recipe_name'/>
-        </div>
+         <div class='${RECIPE}'>
+            <img src='${noImage}' class='${RECIPE_PHOTO}'/>
+            <div class='${RECIPE_NAME}'></div>
+         </div>
       </recipe-link>    
   </template>
   
   <div id='${CONTAINER}'></div>
 `;
-
-// const supportedAttributes = {
-//     ID: 'recipe-id'
-// }
-
+// TODO: move recipe on grid to separate component
 class RecipesPage extends WebElement {
 
     set recipes(newRecipes) {
@@ -62,15 +64,13 @@ class RecipesPage extends WebElement {
     constructor() {
         super(template, true);
 
-        this.bindMethods(this._renderPage);
-    }
+        this._renderPage = this._renderPage.bind(this);
 
-    connectedCallback() {
         this._renderPage();
     }
 
     _renderPage() {
-        this.$(`#${CONTAINER}`).innerHTML = ''; // clear all content
+        this.$_id(CONTAINER).innerHTML = ''; // clear all content
 
         if (this.$recipes) {
 
@@ -78,20 +78,19 @@ class RecipesPage extends WebElement {
 
                 const template = this.getTemplateById(RECIPE_TEMPLATE);
 
-                template.querySelector('.recipe_name').textContent = recipe.name;
+                template.byClass(RECIPE_NAME).textContent = recipe.name;
 
                 if (recipe.imgPath) {
-                    template.querySelector('.recipe_photo').src =  recipe.imgPath;
+                    template.byClass(RECIPE_PHOTO).src =  recipe.imgPath;
                 }
 
-                template.querySelector('recipe-link').onConstruct = (link) => {
+                template.byTag('recipe-link').onConstruct = (link) => {
                     link.path = `/recipe/${recipe.id}`
                 }
 
-                this.$(`#${CONTAINER}`).appendChild(template);
+                this.$_id(CONTAINER).appendChild(template);
 
             });
-
 
         }
     }

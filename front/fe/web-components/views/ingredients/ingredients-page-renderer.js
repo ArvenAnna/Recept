@@ -14,16 +14,15 @@ class IngredientsPageRenderer extends WebElement {
          this._ingredientsChanged = this._ingredientsChanged.bind(this);
 
          mIngredients.addSubscriber(this._ingredientsChanged);
+         mIngredients.retrieve();
     }
 
     _ingredientsChanged (model) {
         const ingPage = this.querySelector('ingredients-page');
-        ingPage.ingredients = model.ingredients;
-        ingPage.addIngredient = model.add; // set it once it constructed
-    }
-
-    connectedCallback() {
-        mIngredients.retrieve();
+        ingPage.props = {
+            ingredients: model.ingredients,
+            addIngredientCallback: model.add
+        }
     }
 
     disconnectedCallback() {

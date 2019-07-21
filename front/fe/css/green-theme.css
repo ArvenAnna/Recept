@@ -1,6 +1,7 @@
 :root {
     --main-background: gray;
     --hover-background: #585858; /*color(gray blackness(+45%))*/;
+    --main-border: 1px solid #585858;
 }
 
 body {
