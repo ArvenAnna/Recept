@@ -14,7 +14,9 @@ const CONTAINER = 'create-recipe-page';
 
 const RECIPE_NAME_CONTAINER = 'recipe-name-container';
 const RECIPE_NAME = 'recipe-name';
+const RECIPE_NAME_CAPTION = 'recipe-name-caption';
 const RECIPE_DEPART_CONTAINER = 'recipe-depart-container';
+const RECIPE_DEPART_CAPTION = 'recipe-depart-caption';
 const RECIPE_REFS_CONTAINER = 'recipe-refs-container';
 const RECIPE_REFS = 'recipe-refs';
 const RECIPE_PROPORTIONS_CONTAINER = 'recipe-proportions-container';
@@ -27,26 +29,16 @@ const SAVE = 'save';
 
 const template = `
   <style>
-    #${RECIPE_NAME_CONTAINER} {
+    
+    #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
+    #${RECIPE_PROPORTIONS_CONTAINER}, #${RECIPE_REFS_CONTAINER} {
+        display: flex;
         margin: 1rem;
     }
     
-    #${RECIPE_NAME} {
-        margin-top: 0.5rem;
+    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION} {
+        margin-right: 0.5rem;
     }
-    
-    #${RECIPE_DEPART_CONTAINER}, #${RECIPE_PROPORTIONS_CONTAINER} {
-        margin: 1rem;
-    }
-   
-    #${RECIPE_REFS_CONTAINER} {
-        margin: 1rem;
-    }
-    
-    .margin-bottom {
-        margin-bottom: 0.5rem;
-    }
-    
     
     
     
@@ -55,12 +47,12 @@ const template = `
   
   <div id='${CONTAINER}'>
       <div id='${RECIPE_NAME_CONTAINER}'>
-        <div>Recipe name:</div>
-        <input id='${RECIPE_NAME}'/>
+        <div id='${RECIPE_NAME_CAPTION}'>Recipe name:</div>
+        <input id='${RECIPE_NAME}' placeholder='Enter name'/>
       </div>
       
       <div id='${RECIPE_DEPART_CONTAINER}'>
-        <div class='margin-bottom'>Recipe department:</div>
+        <div id='${RECIPE_DEPART_CAPTION}'>Recipe department:</div>
         <recipe-drop-down></recipe-drop-down>
       </div>
       
@@ -173,8 +165,9 @@ class CreateRecipePage extends WebElement {
         };
 
         this.$_id(RECIPE_REFS).props = {
-            title: 'List of recipe references:',
+            title: this.$recipe.refs && this.$recipe.refs.length ? 'List of recipe references:' : null,
             items: this.$recipe.refs,
+            placeholder: 'Add new reference',
             renderItem: ref => ref.name,
             removeItemCallback: ref => {
                 this.$recipe.removeRef(ref);
@@ -195,7 +188,7 @@ class CreateRecipePage extends WebElement {
         }
 
         this.$_id(RECIPE_PROPORTIONS).props = {
-            title: 'List of recipe proportions:',
+            title: this.$recipe.proportions && this.$recipe.proportions.length ? 'List of recipe proportions:' : null,
             items: this.$recipe.proportions,
             renderItem: (item) => `
                 <div key='name'>${item.ingredientName}</div>

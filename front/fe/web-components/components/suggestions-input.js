@@ -33,7 +33,7 @@ const template = `
 
 class SuggestionsInput extends WebElement {
 
-    set props({getSuggestionsPromise, renderSuggestionCallback}) {
+    set props({getSuggestionsPromise, renderSuggestionCallback, placeholder}) {
 
         // required props: renderSuggestionCallback
 
@@ -45,6 +45,8 @@ class SuggestionsInput extends WebElement {
                 throw new Error("suggestion-input component:  if you want to use suggestions pass please renderSuggestionCallback");
             }
         }
+
+        this.$_id(INPUT).placeholder = placeholder || '';
     }
 
     get currentValue() {

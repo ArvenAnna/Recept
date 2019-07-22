@@ -20,7 +20,7 @@ class EditableList extends WebElement {
 
     set props({addItemCallback, getSuggestionsPromise,
                   renderSuggestionCallback, items, renderItem,
-                  removeItemCallback, title}) {
+                  removeItemCallback, title, placeholder}) {
 
         if (title) {
             this.$('recipe-list-items').setAttribute('title', title);
@@ -34,7 +34,7 @@ class EditableList extends WebElement {
 
         this.$('recipe-add-item').props = {
             getSuggestionsPromise, renderSuggestionCallback,
-            addItemCallback
+            addItemCallback, placeholder
         }
     }
 

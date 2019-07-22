@@ -10,6 +10,7 @@ const template = `
     
     #${CONTAINER} {
         display: flex;
+        align-items: center;
         position: relative;
     }
     

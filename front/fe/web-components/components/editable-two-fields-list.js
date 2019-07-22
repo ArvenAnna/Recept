@@ -7,11 +7,6 @@ const CONTAINER = 'container';
 const template = `
   <style>
     
-    #${CONTAINER} {
-       border: 1px solid black;
-       padding: 5px;
-    }
-    
   </style>
   
   <div id="${CONTAINER}">
@@ -20,7 +15,6 @@ const template = `
   </div>
   
 `;
-
 
 // TODO: parametrize by component two-fields-add-item / one field-add-item
 class EditableTwoFieldsList extends WebElement {
@@ -32,7 +26,6 @@ class EditableTwoFieldsList extends WebElement {
         if (title) {
             this.$('recipe-list-items').setAttribute('title', title);
         }
-
 
         this.$('recipe-list-items').props = {
             items, renderItem,

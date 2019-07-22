@@ -31,7 +31,7 @@ const template = `
 
 class RecipeAddItem extends WebElement {
 
-    set props({addItemCallback, getSuggestionsPromise, renderSuggestionCallback}) {
+    set props({addItemCallback, getSuggestionsPromise, renderSuggestionCallback, placeholder}) {
 
         // required props: renderSuggestionCallback
 
@@ -44,7 +44,7 @@ class RecipeAddItem extends WebElement {
         }
 
         this.$('suggestions-input').props = {
-            getSuggestionsPromise, renderSuggestionCallback
+            getSuggestionsPromise, renderSuggestionCallback, placeholder
         }
     }
 
