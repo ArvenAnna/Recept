@@ -24,6 +24,8 @@ const RECIPE_PROPORTIONS = 'recipe-proportions';
 const RECIPE_DESCRIPTION = 'recipe-description';
 const RECIPE_PHOTO = 'recipe-photo';
 const RECIPE_DETAIL_PHOTOS = 'detail-photos';
+const ADD_PHOTO_CONTAINER = 'add-photo-container';
+const UPLOAD_PHOTO_CONTAINER = 'upload-photo-container';
 
 const SAVE = 'save';
 
@@ -31,7 +33,8 @@ const template = `
   <style>
     
     #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
-    #${RECIPE_PROPORTIONS_CONTAINER}, #${RECIPE_REFS_CONTAINER} {
+    #${RECIPE_PROPORTIONS_CONTAINER}, #${RECIPE_REFS_CONTAINER}, 
+    #${ADD_PHOTO_CONTAINER} {
         display: flex;
         margin: 1rem;
     }
@@ -40,7 +43,9 @@ const template = `
         margin-right: 0.5rem;
     }
     
-    
+    #${UPLOAD_PHOTO_CONTAINER} {
+        margin-left: 1rem;
+    }
     
   </style>
   
@@ -64,8 +69,12 @@ const template = `
         <editable-two-fields-list id='${RECIPE_PROPORTIONS}'></editable-two-fields-list>
       </div>
       
-      <div>Add main photo:</div>
-      <upload-image id='${RECIPE_PHOTO}'></upload-image>
+      <div id='${ADD_PHOTO_CONTAINER}'>
+          <div>Add main photo:</div>
+          <div id='${UPLOAD_PHOTO_CONTAINER}'>
+               <upload-image id='${RECIPE_PHOTO}'></upload-image>
+          </div>
+      </div>
       <div>Add description with photo in free form</div>
       <upload-images id='${RECIPE_DETAIL_PHOTOS}'></upload-images>
       
@@ -213,7 +222,8 @@ class CreateRecipePage extends WebElement {
 
             },
             getSuggestionsPromise: this._retrieveIngredientsByKeyword,
-            renderSuggestionCallback: suggestion => suggestion.name
+            renderSuggestionCallback: suggestion => suggestion.name,
+            placeholders: {first: 'Add ingredient', second: 'Add norma'}
         }
 
         this.$_id(RECIPE_PHOTO).props = {

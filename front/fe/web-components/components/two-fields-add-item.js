@@ -4,6 +4,7 @@ import './suggestions-input';
 
 const CONTAINER = 'container';
 const SECOND_INPUT = 'second-input';
+const ADD_ITEM_ICON = 'add_item_icon';
 
 const template = `
   <style>
@@ -14,7 +15,7 @@ const template = `
         position: relative;
     }
     
-    .add_item_icon {
+    #${ADD_ITEM_ICON} {
         width: 1rem;
         height: 1rem;
         cursor: pointer;
@@ -25,14 +26,15 @@ const template = `
   <div id="${CONTAINER}">
     <suggestions-input></suggestions-input>
     <input id='${SECOND_INPUT}'/>
-    <img src="svg/add.svg" class="add_item_icon"/>
+    <img src="svg/add.svg" id="${ADD_ITEM_ICON}"/>
   </div>
   
 `;
 
 class TwoFieldsAddItem extends WebElement {
 
-    set props({addItemCallback, getSuggestionsPromise, renderSuggestionCallback}) {
+    set props({addItemCallback, getSuggestionsPromise,
+                  renderSuggestionCallback, placeholders}) {
 
         // required props: renderSuggestionCallback
 
@@ -45,8 +47,10 @@ class TwoFieldsAddItem extends WebElement {
         }
 
         this.$('suggestions-input').props = {
-            getSuggestionsPromise, renderSuggestionCallback
+            getSuggestionsPromise, renderSuggestionCallback, placeholder: placeholders.first
         }
+
+        this.$(`#${SECOND_INPUT}`).placeholder = placeholders.second;
     }
 
     constructor() {

@@ -21,7 +21,7 @@ class EditableTwoFieldsList extends WebElement {
 
     set props({addItemCallback, getSuggestionsPromise,
                   renderSuggestionCallback, items, renderItem,
-                  removeItemCallback, title}) {
+                  removeItemCallback, title, placeholders}) {
 
         if (title) {
             this.$('recipe-list-items').setAttribute('title', title);
@@ -34,7 +34,7 @@ class EditableTwoFieldsList extends WebElement {
 
         this.$('two-fields-add-item').props = {
             getSuggestionsPromise, renderSuggestionCallback,
-            addItemCallback
+            addItemCallback, placeholders
         }
     }
 

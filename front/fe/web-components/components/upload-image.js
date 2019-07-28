@@ -10,6 +10,7 @@ const template = `
     
     #${CONTAINER} {
         display: flex;
+        flex-direction: column;
     }
     
     #input_wrapper {
@@ -29,8 +30,12 @@ const template = `
   
   <div id="${CONTAINER}">
     <div id='input_wrapper'><file-input></file-input></div>
-    <div id='image_wrapper'><removable-image></removable-image></div>
-    <img src="svg/add.svg" class="add_item_icon"/>
+    <div>
+        <div id='image_wrapper'><removable-image></removable-image></div>
+        <div id=''>
+            <img src="svg/add.svg" class="add_item_icon"/>
+        </div>
+    </div>
   </div>
   
 `;
