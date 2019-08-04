@@ -19,11 +19,15 @@ const RECIPE_DEPART_CONTAINER = 'recipe-depart-container';
 const RECIPE_DEPART_CAPTION = 'recipe-depart-caption';
 const RECIPE_REFS_CONTAINER = 'recipe-refs-container';
 const RECIPE_REFS = 'recipe-refs';
+const RECIPE_REFS_CAPTION = 'recipe-refs-caption';
 const RECIPE_PROPORTIONS_CONTAINER = 'recipe-proportions-container';
 const RECIPE_PROPORTIONS = 'recipe-proportions';
+const RECIPE_PROPORTIONS_CAPTION = 'recipe-proportions-caption';
 const RECIPE_DESCRIPTION = 'recipe-description';
 const RECIPE_PHOTO = 'recipe-photo';
 const RECIPE_DETAIL_PHOTOS = 'detail-photos';
+const DETAILS_CONTAINER = 'details-container';
+const DETAILS_CAPTION = 'details-caption';
 const ADD_PHOTO_CONTAINER = 'add-photo-container';
 const UPLOAD_PHOTO_CONTAINER = 'upload-photo-container';
 
@@ -34,13 +38,22 @@ const template = `
     
     #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
     #${RECIPE_PROPORTIONS_CONTAINER}, #${RECIPE_REFS_CONTAINER}, 
-    #${ADD_PHOTO_CONTAINER} {
+    #${ADD_PHOTO_CONTAINER}, #${DETAILS_CONTAINER} {
         display: flex;
         margin: 1rem;
     }
     
-    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION} {
+    #${DETAILS_CONTAINER} {
+        flex-direction: column;
+    }
+    
+    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION}, #${RECIPE_REFS_CAPTION}, 
+    #${RECIPE_PROPORTIONS_CAPTION} {
         margin-right: 0.5rem;
+    }
+    
+    #${DETAILS_CAPTION} {
+        margin-bottom: 0.5rem;
     }
     
     #${UPLOAD_PHOTO_CONTAINER} {
@@ -62,10 +75,12 @@ const template = `
       </div>
       
       <div id='${RECIPE_REFS_CONTAINER}'>
+        <div id='${RECIPE_REFS_CAPTION}'>Add recipe reference:</div>
         <editable-list id='${RECIPE_REFS}'></editable-list>
       </div>
       
       <div id='${RECIPE_PROPORTIONS_CONTAINER}'>
+        <div id='${RECIPE_PROPORTIONS_CAPTION}'>Add recipe proportion:</div>
         <editable-two-fields-list id='${RECIPE_PROPORTIONS}'></editable-two-fields-list>
       </div>
       
@@ -75,8 +90,12 @@ const template = `
                <upload-image id='${RECIPE_PHOTO}'></upload-image>
           </div>
       </div>
-      <div>Add description with photo in free form</div>
-      <upload-images id='${RECIPE_DETAIL_PHOTOS}'></upload-images>
+      
+      <div id='${DETAILS_CONTAINER}'>
+            <div id='${DETAILS_CAPTION}'>Add description with photo in free form:</div>
+            <upload-images id='${RECIPE_DETAIL_PHOTOS}'></upload-images>
+      </div>
+      
       
       <textarea id='${RECIPE_DESCRIPTION}'></textarea>
 

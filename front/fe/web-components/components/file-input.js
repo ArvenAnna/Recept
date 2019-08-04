@@ -3,19 +3,16 @@ import WebElement from '../abstract/web-element';
 const CONTAINER = 'container';
 const FILE_INPUT = 'file-input';
 const FILE_NAME = 'file-name';
-
+const SEARCH_ICON = 'search-icon';
 
 const template = `
   <style>
     
     #${CONTAINER} {
-        margin: 0.5rem;
-        padding: 0.5rem;
         position: relative;
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        box-shadow: 0px 0px 3px 3px #0f6b38
+        cursor: pointer;
     }
     
     #${FILE_INPUT} {
@@ -28,7 +25,7 @@ const template = `
         height: 100%;
     }
     
-    .search_icon {
+    #${SEARCH_ICON} {
         width: 1rem;
         height: 1rem;
         cursor: pointer;
@@ -37,7 +34,7 @@ const template = `
   </style>
   
   <div id="${CONTAINER}">
-    <img src="svg/search-in-folder.svg" class="search_icon"/>
+    <img src="svg/search-in-folder.svg" id="${SEARCH_ICON}"/>
     <input type='file' id='${FILE_INPUT}'/>
     <div id="${FILE_NAME}"></div>
   </div>
@@ -61,32 +58,36 @@ class FileInput extends WebElement {
         this._onChange = this._onChange.bind(this);
         this._createFileUrl = this._createFileUrl.bind(this);
 
-        this.$(`#${FILE_INPUT}`).addEventListener('change', this._onChange);
-        this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
+        this.$_id(FILE_INPUT).addEventListener('change', this._onChange);
+        this.$_id(FILE_NAME).innerHTML = this.$fileName;
     }
 
     _createFileUrl(file) {
+        this.$_id(FILE_NAME).innerHTML = "loading ...";
         this.reader.onload = (e) => {
             if (this.reader){
                 this.$fileUrl = e.target.result;
                 this.$file = file;
                 this.$chooseFileCallback(file, this.$fileUrl);
+                this.$_id(FILE_NAME).innerHTML = this.$fileName;
             }
         }
 
-        this.reader.onerror = () => console.log('File uploading error');
+        this.reader.onerror = () => {
+            console.log('File uploading error'); //TODO handle error
+        }
         this.reader.readAsDataURL(file);
     }
 
     _onChange({target}) {
         this.$fileName = target.files[0].name;
-        this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
+        this.$_id(FILE_NAME).innerHTML = this.$fileName;
         this._createFileUrl(target.files[0]);
     }
 
     cleanFile() {
-        this.$fileName = "New photo";
-        this.$(`#${FILE_NAME}`).innerHTML = this.$fileName;
+        this.$fileName = "Upload photo";
+        this.$_id(FILE_NAME).innerHTML = this.$fileName;
     }
 
     disconnectedCallback() {

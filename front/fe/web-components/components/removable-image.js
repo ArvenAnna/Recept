@@ -1,18 +1,20 @@
 import WebElement from '../abstract/web-element';
+import '../svg/apply-icon';
+import '../svg/remove-icon';
 
 const CONTAINER = 'container';
 const OVERLAY = 'overlay';
 const IMAGE = 'image';
 const REMOVE = 'remove';
+const ADD = 'add';
+
 
 const template = `
   <style>
     
     #${CONTAINER} {
-        margin: 0.5rem;
         max-width: 100%;
         position: relative;
-        box-shadow: 0px 0px 3px 3px #0f6b38
     }
     
     #${CONTAINER}:before {
@@ -34,6 +36,9 @@ const template = `
         }
         
      #${OVERLAY} {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         position: absolute;
         width: 100%;
         height: 100%;
@@ -43,19 +48,17 @@ const template = `
         background-color: rgba(0,0,0,0.7);
      }
     
-    #${REMOVE} {
-        width: 1.5rem;
-        height: 1.5rem;
+    #${REMOVE}, #${ADD} {
         margin: 0.5rem;
-        fill: #24ea7b;
     }
-    
+
   </style>
   
   <div id="${CONTAINER}">
     <img src="svg/dish-fork-and-knife.svg" id="${IMAGE}"/>
     <div id="${OVERLAY}">
-       <img src="svg/cross.svg" id="${REMOVE}"/> 
+        <apply-icon id="${ADD}"></apply-icon>
+        <remove-icon id="${REMOVE}"></remove-icon>
     </div>
   </div>
   
@@ -71,35 +74,45 @@ class RemovableImage extends WebElement {
         return Object.values(supportedAttributes);
     }
 
-    set props({removeFileCallback}) {
-
+    set props({removeFileCallback, addFileCallback}) {
         this.$removeFileCallback = removeFileCallback;
+        this.$addFileCallback = addFileCallback;
     }
 
     constructor() {
         super(template, true);
 
         this._onRemove = this._onRemove.bind(this);
-        this.removeCross = this.removeCross.bind(this);
+        this._onAdd = this._onAdd.bind(this);
+        this.removeControls = this.removeControls.bind(this);
 
-        this.$(`#${REMOVE}`).addEventListener('click', this._onRemove);
+        this.$_id(REMOVE).addEventListener('click', this._onRemove);
+        this.$_id(ADD).addEventListener('click', this._onAdd);
 
         if (this.getAttribute(supportedAttributes.SRC)) {
-            this.$(`#${CONTAINER}`).style.display = 'block';
+            this.$_id(CONTAINER).style.display = 'block';
         } else {
-            this.$(`#${CONTAINER}`).style.display = 'none';
+            this.$_id(CONTAINER).style.display = 'none';
         }
 
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (supportedAttributes.SRC === name) {
-            this.$(`#${IMAGE}`).setAttribute('src', newValue);
+            this.$_id(IMAGE).setAttribute('src', newValue);
             if (!newValue) {
-                this.$(`#${CONTAINER}`).style.display = 'none';
+                this.$_id(CONTAINER).style.display = 'none';
             } else {
-                this.$(`#${CONTAINER}`).style.display = 'block';
+                this.$_id(CONTAINER).style.display = 'block';
+                this.$_id(ADD).style.display = 'block';
             }
+        }
+    }
+
+    _onAdd() {
+        if (this.$addFileCallback) {
+            this.$addFileCallback();
+            this.$_id(ADD).style.display = 'none';
         }
     }
 
@@ -108,8 +121,8 @@ class RemovableImage extends WebElement {
         this.setAttribute(supportedAttributes.SRC, '');
     }
 
-    removeCross() {
-        this.$(`#${OVERLAY}`).remove();
+    removeControls() {
+        this.$_id(OVERLAY).remove();
     }
 }
 
