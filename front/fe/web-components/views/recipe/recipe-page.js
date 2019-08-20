@@ -142,7 +142,7 @@ const template = `
   <div id='${CONTAINER}'>
       <div id='${CAPTION}'></div>
       <div id='recipe_page_proportions'>
-          <recipe-list-items/>
+          <list-items/>
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
@@ -202,7 +202,7 @@ class RecipePage extends WebElement {
             this.$_id(DESCRIPTION).textContent = this.$recipe.text || '';
 
             if (this.$recipe.proportions) {
-                this._initProportions(this.$('recipe-list-items'));
+                this._initProportions(this.$('list-items'));
             }
 
             if (this.$recipe.refs) {

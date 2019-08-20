@@ -64,4 +64,4 @@ class RecipeAddItem extends WebElement {
     }
 }
 
-customElements.define('recipe-add-item', RecipeAddItem);
+customElements.define('add-item', RecipeAddItem);

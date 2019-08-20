@@ -108,5 +108,4 @@ class RecipeListItems extends WebElement {
     }
 
 }
-//TODO: rename component to list-items
-customElements.define('recipe-list-items', RecipeListItems);
+customElements.define('list-items', RecipeListItems);

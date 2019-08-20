@@ -7,6 +7,7 @@ import '../../components/upload-image';
 import '../../components/upload-images';
 import '../../components/editable-list';
 import '../../components/editable-two-fields-list';
+import '../../styled/input-text';
 
 import routes from '../../../constants/Routes';
 
@@ -35,12 +36,16 @@ const SAVE = 'save';
 
 const template = `
   <style>
+    #${CONTAINER} {
+        color: var(--dark-dark-background-crp);
+    }
     
     #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
     #${RECIPE_PROPORTIONS_CONTAINER}, #${RECIPE_REFS_CONTAINER}, 
     #${ADD_PHOTO_CONTAINER}, #${DETAILS_CONTAINER} {
         display: flex;
         margin: 1rem;
+        align-items: center;
     }
     
     #${DETAILS_CONTAINER} {
@@ -66,12 +71,12 @@ const template = `
   <div id='${CONTAINER}'>
       <div id='${RECIPE_NAME_CONTAINER}'>
         <div id='${RECIPE_NAME_CAPTION}'>Recipe name:</div>
-        <input id='${RECIPE_NAME}' placeholder='Enter name'/>
+        <input-text id='${RECIPE_NAME}' placeholder='Enter name'/>
       </div>
       
       <div id='${RECIPE_DEPART_CONTAINER}'>
         <div id='${RECIPE_DEPART_CAPTION}'>Recipe department:</div>
-        <recipe-drop-down></recipe-drop-down>
+        <drop-down></drop-down>
       </div>
       
       <div id='${RECIPE_REFS_CONTAINER}'>
@@ -181,7 +186,7 @@ class CreateRecipePage extends WebElement {
             this.$_id(RECIPE_DESCRIPTION).value = this.$recipe.text || '';
         }
 
-        this.$('recipe-drop-down').props = {
+        this.$('drop-down').props = {
             items: this.$departments || [],
             chooseItemCallback: (item) => {
                 this.$recipe.department = item

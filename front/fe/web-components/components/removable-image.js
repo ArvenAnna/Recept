@@ -28,7 +28,8 @@ const template = `
         }
     
     #${IMAGE} {
-            object-fit: cover;
+            object-fit: contain;
+            border: 1px solid black;
             height: 100%;
             width: 100%;
             position: absolute;

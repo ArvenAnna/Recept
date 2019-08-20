@@ -1,10 +1,11 @@
 import WebElement from '../abstract/web-element';
 import {isDescendantOf} from "../../utils/domUtils";
 import './dropdown-list';
+import '../styled/input-text';
+import {textInputAttributes} from '../styled/input-text';
 
 const CONTAINER = 'container';
-const SUGGESTION_CONTAINER = 'dropdown';
-const INPUT = 'input';
+const DROP_DOWN_TEMPLATE = 'drop-down-template';
 
 const template = `
   <style>
@@ -12,20 +13,17 @@ const template = `
     #${CONTAINER} {
         display: flex;
         position: relative;
-    }
-    
-    #${SUGGESTION_CONTAINER} {
-        position: absolute;
-        top: 100%;
-        cursor: pointer;
-        background-color: blue;
+        flex-direction: column;
     }
     
   </style>
   
+  <template id="${DROP_DOWN_TEMPLATE}">
+    <drop-down-list></drop-down-list> 
+  </template>
+  
   <div id="${CONTAINER}">
-    <input type="text" id="${INPUT}"/>
-    <div id="${SUGGESTION_CONTAINER}"><drop-down-list></drop-down-list></div>
+    <input-text></input-text>
   </div>
   
 `;
@@ -46,11 +44,11 @@ class SuggestionsInput extends WebElement {
             }
         }
 
-        this.$_id(INPUT).placeholder = placeholder || '';
+        this.$('input-text').setAttribute(textInputAttributes.PLACEHOLDER, placeholder);
     }
 
     get currentValue() {
-        return this.$_id(INPUT).value;
+        return this.$('input-text').getAttribute(textInputAttributes.VALUE);
     }
 
     constructor() {
@@ -63,10 +61,16 @@ class SuggestionsInput extends WebElement {
 
         this._clickOutside = this._clickOutside.bind(this);
 
+        this._openDropdown = this._openDropdown.bind(this);
+        this._closeDropdown = this._closeDropdown.bind(this);
+
+
         document.addEventListener('click', this._clickOutside);
 
-        this.$_id(INPUT).addEventListener('input', this._onChange);
-        this.$_id(INPUT).addEventListener('focus', this._onFocus);
+        this.$('input-text').callbacks = {
+            input: this._onChange,
+            focus: this._onFocus
+        };
     }
 
     disconnectedCallback() {
@@ -74,21 +78,27 @@ class SuggestionsInput extends WebElement {
     }
 
     clearInput() {
-        this.$_id(INPUT).value = '';
+        this.$('input-text').setAttribute(textInputAttributes.VALUE, '');
     }
 
     async _renderSuggestions() {
         if (this.$getSuggestions && this.$renderSuggestion) {
-            this.$suggestions = this.$_id(INPUT).value
-                ? await this.$getSuggestions(this.$_id(INPUT).value)
+            const value = this.$('input-text').getAttribute(textInputAttributes.VALUE);
+            this.$suggestions = value
+                ? await this.$getSuggestions(value)
                 : [];
 
-            this.$('drop-down-list').props = {
-                chooseItemCallback: this._onSuggestionSelect,
-                items: this.$suggestions,
-                renderItem: this.$renderSuggestion,
+            if (this.$suggestions && this.$suggestions.length) {
+                this._openDropdown();
+
+                this.$('drop-down-list').props = {
+                    chooseItemCallback: this._onSuggestionSelect,
+                    items: this.$suggestions,
+                    renderItem: this.$renderSuggestion,
+                }
+            } else {
+                this._closeDropdown();
             }
-            this.$('drop-down-list').openDropdown();
         }
     }
 
@@ -99,19 +109,42 @@ class SuggestionsInput extends WebElement {
     }
 
     _onFocus() {
-        if (this.$suggestions && this.$_id(INPUT).value) {
-            this.$('drop-down-list').openDropdown();
+        if (this.$suggestions && this.$suggestions.length
+            && this.$('input-text').getAttribute(textInputAttributes.VALUE)) {
+            this._openDropdown();
+
+            this.$('drop-down-list').props = {
+                chooseItemCallback: this._onSuggestionSelect,
+                items: this.$suggestions,
+                renderItem: this.$renderSuggestion,
+            }
+        }
+    }
+
+    _openDropdown() {
+        const dropdown = this.$('drop-down-list');
+        if (!dropdown) {
+            const template = this.getTemplateById(DROP_DOWN_TEMPLATE);
+            // template.querySelector('drop-down-list').style.display = 'none';
+            this.$_id(CONTAINER).appendChild(template);
+        }
+    }
+
+    _closeDropdown() {
+        const dropdown = this.$('drop-down-list');
+        if (dropdown) {
+            dropdown.remove();
         }
     }
 
     _clickOutside(e) {
-        if (!isDescendantOf(e.composedPath()[0], this.$_id(INPUT))) {
-            this.$('drop-down-list').closeDropdown();
+        if (!isDescendantOf(e.composedPath()[0], this.$('input-text').getInnerRef())) {
+            this._closeDropdown();
         }
     }
 
     _onSuggestionSelect(suggestion) {
-        this.$_id(INPUT).value = suggestion.name;
+        this.$('input-text').setAttribute(textInputAttributes.VALUE, suggestion.name);
     }
 
 }

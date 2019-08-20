@@ -10,7 +10,7 @@ const template = `
   </style>
   
   <div id="${CONTAINER}">
-    <recipe-list-items></recipe-list-items>
+    <list-items></list-items>
     <two-fields-add-item></two-fields-add-item>
   </div>
   
@@ -24,10 +24,10 @@ class EditableTwoFieldsList extends WebElement {
                   removeItemCallback, title, placeholders}) {
 
         if (title) {
-            this.$('recipe-list-items').setAttribute('title', title);
+            this.$('list-items').setAttribute('title', title);
         }
 
-        this.$('recipe-list-items').props = {
+        this.$('list-items').props = {
             items, renderItem,
             removeItemCallback
         }
@@ -39,7 +39,7 @@ class EditableTwoFieldsList extends WebElement {
     }
 
     set items(items) {
-        this.$('recipe-list-items').items = items;
+        this.$('list-items').items = items;
     }
 
     constructor() {

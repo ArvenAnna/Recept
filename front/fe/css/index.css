@@ -1,11 +1,49 @@
 /*@import "./variables.css";*/
 
-recipe-header, recipe-sidebar {
-    --background: var(--main-background);
-    --hover-button: var(--hover-background);
+html {
+    font-size: 16px;
+    font-family: Arial;
+    color: black;
 }
 
-drop-down-list {
+body {
+    font-size: 1rem;
+}
+
+recipe-header, recipe-sidebar {
+    --background: var(--main-background);
+    --hover-button: var(--dark-background);
+}
+
+create-recipe-page {
     --border: var(--main-border);
     --background: var(--main-background);
+    --dark-background-crp: var(--dark-background);
+    --dark-dark-background-crp: var(--dark-dark-background);
+    --light-background-crp: var(--light-background);
+    --font-color: var(--main-font-color);
+
+    --control-width: 10rem;
+
+    /*for drop-down*/
+    --drop-down-font-color: var(--main-font-color);
+    --drop-down-bg: var(--light-background);
+    --drop-down-outlined-color: var(--light-background);
+    --drop-down-outlined-bg: var(--dark-background);
+
+    /*for input-text*/
+    --input-background: var(--light-background);
+    --input-placeholder: var(--dark-background);
 }
+
+/*create-recipe-page drop-down {*/
+    /*--drop-down-font-color: var(--main-font-color);*/
+    /*--drop-down-bg: var(--light-background);*/
+    /*--drop-down-outlined-color: var(--light-background);*/
+    /*--drop-down-outlined-bg: var(--dark-background);*/
+/*}*/
+
+/*create-recipe-page input-text {*/
+    /*--input-background: var(--light-background);*/
+    /*--input-placeholder: var(--dark-background);*/
+/*}*/

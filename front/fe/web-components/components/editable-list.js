@@ -10,8 +10,8 @@ const template = `
   </style>
   
   <div id="${CONTAINER}">
-    <recipe-list-items></recipe-list-items>
-    <recipe-add-item></recipe-add-item>
+    <list-items></list-items>
+    <add-item></add-item>
   </div>
   
 `;
@@ -23,23 +23,23 @@ class EditableList extends WebElement {
                   removeItemCallback, title, placeholder}) {
 
         if (title) {
-            this.$('recipe-list-items').setAttribute('title', title);
+            this.$('list-items').setAttribute('title', title);
         }
 
 
-        this.$('recipe-list-items').props = {
+        this.$('list-items').props = {
             items, renderItem,
             removeItemCallback
         }
 
-        this.$('recipe-add-item').props = {
+        this.$('add-item').props = {
             getSuggestionsPromise, renderSuggestionCallback,
             addItemCallback, placeholder
         }
     }
 
     set items(items) {
-        this.$('recipe-list-items').items = items;
+        this.$('list-items').items = items;
     }
 
     constructor() {

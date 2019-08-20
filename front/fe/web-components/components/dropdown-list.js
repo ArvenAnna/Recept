@@ -9,22 +9,24 @@ const OUTLINED = 'outlined';
 const template = `
   <style>
     #${LIST_CONTAINER} {
-        display: none;
+        /*display: none;*/
         position: absolute;
-        border: var(--border);
         cursor: pointer;
         z-index: 2;
         padding: 0.2rem;
-        font-size: small;
-        background-color: var(--background, green);
+        width: 100%;
+        background-color: var(--drop-down-bg);
+        box-sizing: border-box;
     }
     
     .${ITEM} {
         white-space: nowrap;
+        padding: 0 0.1rem;
     }
    
     .${OUTLINED} {
-        font-weight: bold;
+        color: var(--drop-down-outlined-color, red);
+        background-color: var(--drop-down-outlined-bg, green);
     }
     
   </style>

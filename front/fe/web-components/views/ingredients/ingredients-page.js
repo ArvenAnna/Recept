@@ -18,8 +18,8 @@ const template = `
   </style>
   
   <div id='${CONTAINER}'>
-      <div class='${ADD_ITEM}'><recipe-add-item></recipe-add-item></div>  
-      <div class='${LIST_ITEMS}'><recipe-list-items></recipe-list-items></div>
+      <div class='${ADD_ITEM}'><add-item></add-item></div>  
+      <div class='${LIST_ITEMS}'><list-items></list-items></div>
   </div>
 `;
 
@@ -40,14 +40,14 @@ class IngredientsPage extends WebElement {
     _renderPage() {
         if (this.$ingredients) {
 
-            const ingListEl = this.$('recipe-list-items');
+            const ingListEl = this.$('list-items');
             ingListEl.props = {
                 items: this.$ingredients,
                 renderItem: (item) => `<div>${item.name}</div>`
             }
 
             if (this.$addIngredient) {
-                const addIngEl = this.$('recipe-add-item');
+                const addIngEl = this.$('add-item');
                 addIngEl.props = {
                     addItemCallback: this.$addIngredient
                 }

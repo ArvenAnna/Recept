@@ -58,7 +58,7 @@ class TwoFieldsAddItem extends WebElement {
 
         this._addItem = this._addItem.bind(this);
 
-        this.$(`#${CONTAINER}`).querySelector('.add_item_icon').addEventListener('click', this._addItem);
+        this.$_id(ADD_ITEM_ICON).addEventListener('click', this._addItem);
     }
 
     _addItem() {
