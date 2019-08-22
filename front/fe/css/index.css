@@ -34,6 +34,9 @@ create-recipe-page {
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
+
+    /*for list-items*/
+    --list-background: var(--light-background);
 }
 
 /*create-recipe-page drop-down {*/

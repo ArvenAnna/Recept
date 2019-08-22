@@ -8,6 +8,7 @@ const ITEM_TEMPLATE = 'item_template';
 const ITEM_CONTAINER = 'item_container';
 const ITEM = 'item';
 const REMOVE_ITEM = 'remove_item';
+const REMOVE_ICON_SRC = 'svg/cross.svg';
 
 const template = `
   <style>
@@ -26,18 +27,20 @@ const template = `
        align-items:center;
        margin: 0.5rem;
        font-style: italic;
-       font-weight: bold;
+       background-color: var(--list-background, white);
+       display: inline-flex;
     }
     
     .${ITEM} {
-       display: flex;
+       padding: 0 0.1rem;
+       cursor: default;
     }
   </style>
   
   <template id="${ITEM_TEMPLATE}">
     <div class="${ITEM_CONTAINER}">
         <span class="${ITEM}"></span>
-        <img src="svg/cross.svg" class="${REMOVE_ITEM}"/>
+        <img src="${REMOVE_ICON_SRC}" class="${REMOVE_ITEM}"/>
     </div>
   </template>
   
@@ -63,10 +66,17 @@ class RecipeListItems extends WebElement {
         this._renderItems();
     }
 
-    set props({items, renderItem, removeItemCallback}) {
+    set title(v) {
+        this.setAttribute(supportedAttributes.TITLE, v);
+    }
+
+    set props({items, renderItem, removeItemCallback, title}) {
         this.$items = items || [];
         this.$renderItem = renderItem;
         this.$removeItem = removeItemCallback;
+        if (title) {
+            this.setAttribute(supportedAttributes.TITLE, title);
+        }
         this._renderItems();
     }
 
@@ -75,9 +85,6 @@ class RecipeListItems extends WebElement {
 
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
-
-        const title = this.getAttribute('title') || "";
-        this.$_id(TITLE).innerHTML = title;
     }
 
     _renderItems() {

@@ -5,9 +5,10 @@ import '../../components/two-fields-add-item';
 import '../../components/file-input';
 import '../../components/upload-image';
 import '../../components/upload-images';
-import '../../components/editable-list';
 import '../../components/editable-two-fields-list';
 import '../../styled/input-text';
+
+import './parts/recipe-references';
 
 import routes from '../../../constants/Routes';
 
@@ -18,9 +19,6 @@ const RECIPE_NAME = 'recipe-name';
 const RECIPE_NAME_CAPTION = 'recipe-name-caption';
 const RECIPE_DEPART_CONTAINER = 'recipe-depart-container';
 const RECIPE_DEPART_CAPTION = 'recipe-depart-caption';
-const RECIPE_REFS_CONTAINER = 'recipe-refs-container';
-const RECIPE_REFS = 'recipe-refs';
-const RECIPE_REFS_CAPTION = 'recipe-refs-caption';
 const RECIPE_PROPORTIONS_CONTAINER = 'recipe-proportions-container';
 const RECIPE_PROPORTIONS = 'recipe-proportions';
 const RECIPE_PROPORTIONS_CAPTION = 'recipe-proportions-caption';
@@ -41,7 +39,7 @@ const template = `
     }
     
     #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
-    #${RECIPE_PROPORTIONS_CONTAINER}, #${RECIPE_REFS_CONTAINER}, 
+    #${RECIPE_PROPORTIONS_CONTAINER}, 
     #${ADD_PHOTO_CONTAINER}, #${DETAILS_CONTAINER} {
         display: flex;
         margin: 1rem;
@@ -52,7 +50,7 @@ const template = `
         flex-direction: column;
     }
     
-    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION}, #${RECIPE_REFS_CAPTION}, 
+    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION}, 
     #${RECIPE_PROPORTIONS_CAPTION} {
         margin-right: 0.5rem;
     }
@@ -67,7 +65,6 @@ const template = `
     
   </style>
   
-  
   <div id='${CONTAINER}'>
       <div id='${RECIPE_NAME_CONTAINER}'>
         <div id='${RECIPE_NAME_CAPTION}'>Recipe name:</div>
@@ -79,10 +76,7 @@ const template = `
         <drop-down></drop-down>
       </div>
       
-      <div id='${RECIPE_REFS_CONTAINER}'>
-        <div id='${RECIPE_REFS_CAPTION}'>Add recipe reference:</div>
-        <editable-list id='${RECIPE_REFS}'></editable-list>
-      </div>
+      <recipe-references></recipe-references>
       
       <div id='${RECIPE_PROPORTIONS_CONTAINER}'>
         <div id='${RECIPE_PROPORTIONS_CAPTION}'>Add recipe proportion:</div>
@@ -131,7 +125,6 @@ class CreateRecipePage extends WebElement {
 
         this._renderPage = this._renderPage.bind(this);
         this._saveRecipe = this._saveRecipe.bind(this);
-        this._retrieveRecipesByKeyword = this._retrieveRecipesByKeyword.bind(this);
         this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
 
         this.$_id(SAVE).addEventListener('click', this._saveRecipe);
@@ -149,22 +142,6 @@ class CreateRecipePage extends WebElement {
         this.$recipe.save().then(id => {
            window.location.hash = '/recipe/' + id;
         });
-    }
-
-    async _retrieveRecipesByKeyword(keyword) {
-        let recipes = await fetch(routes.GET_RECIPES_BY_KEYWORD, {method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({keyword})}).then(res => res.json());
-        const maxSuggestionsNumber = 10;
-
-        //exclude current recipe itself
-        // exclude also already checked
-        recipes = recipes.filter(ref => ref.id !== this.$recipe.id)
-            .filter(ref => !this.$recipe.refs || !this.$recipe.refs.some(r => r.id === ref.id));
-        recipes.slice(0, maxSuggestionsNumber);
-        return recipes;
     }
 
     async _retrieveIngredientsByKeyword(keyword) {
@@ -197,28 +174,7 @@ class CreateRecipePage extends WebElement {
                 : null
         };
 
-        this.$_id(RECIPE_REFS).props = {
-            title: this.$recipe.refs && this.$recipe.refs.length ? 'List of recipe references:' : null,
-            items: this.$recipe.refs,
-            placeholder: 'Add new reference',
-            renderItem: ref => ref.name,
-            removeItemCallback: ref => {
-                this.$recipe.removeRef(ref);
-                this.$_id(RECIPE_REFS).items = this.$recipe.refs;
-            },
-            addItemCallback: (item) => {
-                this._retrieveRecipesByKeyword(item).then(recipes => {
-                    // should be one recipe only
-                    if (recipes.length === 1 && recipes[0].name === item) {
-                        this.$recipe.ref = recipes[0];
-                        this.$_id(RECIPE_REFS).items = this.$recipe.refs;
-                    }
-                })
-
-            },
-            getSuggestionsPromise: this._retrieveRecipesByKeyword,
-            renderSuggestionCallback: suggestion => suggestion.name
-        }
+        this.$('recipe-references').recipe = this.$recipe;
 
         this.$_id(RECIPE_PROPORTIONS).props = {
             title: this.$recipe.proportions && this.$recipe.proportions.length ? 'List of recipe proportions:' : null,

@@ -2,11 +2,14 @@ import WebElement from '../abstract/web-element';
 import {isDescendantOf} from '../../utils/domUtils';
 import './toggable-drop-down-list';
 import '../styled/input-text';
+import '../styled/input-text-with-icon';
 
 const CONTAINER = 'container';
 
 const TOGGABLE_LIST_COMPONENT = 'toggable-drop-down-list';
-const INPUT_COMPONENT = 'input-text';
+const INPUT_COMPONENT = 'input-text-with-icon';
+
+const ICON_SRC = 'svg/add.svg';
 
 const template = `
   <style>
@@ -29,7 +32,7 @@ const template = `
 
 class SuggestionsInput extends WebElement {
 
-    set props({getSuggestionsPromise, renderSuggestionCallback, placeholder}) {
+    set props({getSuggestionsPromise, renderSuggestionCallback, placeholder, addItemCallback}) {
 
         // required props: renderSuggestionCallback
 
@@ -43,6 +46,7 @@ class SuggestionsInput extends WebElement {
         }
 
         this.$(INPUT_COMPONENT).placeholder = placeholder;
+        this.$(INPUT_COMPONENT).iconClick = addItemCallback;
     }
 
     get currentValue() {
@@ -65,12 +69,15 @@ class SuggestionsInput extends WebElement {
             input: this._onChange,
             focus: this._onFocus
         };
+
+        this.$(INPUT_COMPONENT).src = ICON_SRC;
     }
 
     disconnectedCallback() {
         document.removeEventListener('click', this._clickOutside);
     }
 
+    // used in two-fields add item
     clearInput() {
         this.$(INPUT_COMPONENT).value = '';
     }
@@ -108,7 +115,7 @@ class SuggestionsInput extends WebElement {
     }
 
     _clickOutside(e) {
-        if (!isDescendantOf(e.composedPath()[0], this.$(INPUT_COMPONENT).getInnerRef())) {
+        if (!isDescendantOf(e.composedPath()[0], this.$(INPUT_COMPONENT).innerRef)) {
             this.$(TOGGABLE_LIST_COMPONENT).closeDropdown();
         }
     }

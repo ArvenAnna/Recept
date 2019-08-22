@@ -3,7 +3,8 @@ import './dropdown-list';
 import './suggestions-input';
 
 const CONTAINER = 'container';
-const ADD_ITEM = 'add_item_icon';
+
+const SUGGESTION_INPUT_COMPONENT = 'suggestions-input';
 
 const template = `
   <style>
@@ -14,28 +15,22 @@ const template = `
         align-items: center;
     }
     
-    #${ADD_ITEM} {
-        width: 1rem;
-        height: 1rem;
-        cursor: pointer;
-    }
-    
   </style>
   
   <div id="${CONTAINER}">
-    <suggestions-input></suggestions-input>
-    <img src="svg/add.svg" id="${ADD_ITEM}"/>
+    <${SUGGESTION_INPUT_COMPONENT}></${SUGGESTION_INPUT_COMPONENT}>
   </div>
   
 `;
 
+// Deprecated
 class RecipeAddItem extends WebElement {
 
     set props({addItemCallback, getSuggestionsPromise, renderSuggestionCallback, placeholder}) {
 
         // required props: renderSuggestionCallback
 
-        this.$addItem = addItemCallback;
+        // this.$addItem = addItemCallback;
 
         if (getSuggestionsPromise) {
             if (!renderSuggestionCallback) {
@@ -43,25 +38,25 @@ class RecipeAddItem extends WebElement {
             }
         }
 
-        this.$('suggestions-input').props = {
-            getSuggestionsPromise, renderSuggestionCallback, placeholder
+        this.$(SUGGESTION_INPUT_COMPONENT).props = {
+            getSuggestionsPromise, renderSuggestionCallback, placeholder, addItemCallback
         }
     }
 
     constructor() {
         super(template, true);
 
-        this._addItem = this._addItem.bind(this);
+        // this._addItem = this._addItem.bind(this);
 
-        this.$_id(ADD_ITEM).addEventListener('click', this._addItem);
+        //this.$_id(ADD_ITEM).addEventListener('click', this._addItem);
     }
 
-    _addItem() {
-        if (this.$addItem) {
-            this.$addItem(this.$('suggestions-input').currentValue);
-            this.$('suggestions-input').clearInput();
-        }
-    }
+    // _addItem() {
+    //     if (this.$addItem) {
+    //         this.$addItem(this.$(SUGGESTION_INPUT_COMPONENT).currentValue);
+    //         this.$(SUGGESTION_INPUT_COMPONENT).clearInput();
+    //     }
+    // }
 }
 
 customElements.define('add-item', RecipeAddItem);

@@ -8,12 +8,13 @@ const template = `
     #${INPUT} {
         outline: none;
         margin: 0;
-        padding: 0.1rem;
         font-weight: 500;
         background-color: var(--input-background, white);
         border: none;
         font-size: 1rem;
         width: var(--control-width, 10rem);
+        padding: 0.1rem var(--input-icon-padding, 0.1rem) 0.1rem 0.1rem;
+        box-sizing: border-box; 
     }
     
     #${INPUT}::placeholder {
@@ -59,16 +60,23 @@ class InputText extends WebElement {
         return this.getAttribute(inputTextAttributes.VALUE);
     }
 
+    set placeholder(v) {
+        this.setAttribute(inputTextAttributes.PLACEHOLDER, v || '');
+    }
+
+    get placeholder() {
+        return this.getAttribute(inputTextAttributes.PLACEHOLDER);
+    }
+
+    get innerRef() {
+        return this.$_id(INPUT);
+    }
+
     constructor() {
         super(template, true);
 
         this._onInput = this._onInput.bind(this);
-        this.getInnerRef = this.getInnerRef.bind(this);
 
-        const placeholder = this.getAttribute(inputTextAttributes.PLACEHOLDER);
-        const value = this.getAttribute(inputTextAttributes.VALUE);
-        this.$_id(INPUT).setAttribute('placeholder', placeholder || '');
-        this.$_id(INPUT).setAttribute('value', value || '');
         this.$callbacks = {};
 
         this.$_id(INPUT).addEventListener('input', this._onInput);
@@ -76,10 +84,6 @@ class InputText extends WebElement {
 
     _onInput({target}) {
         this.setAttribute(inputTextAttributes.VALUE, target.value);
-    }
-
-    getInnerRef() {
-        return this.$_id(INPUT);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
