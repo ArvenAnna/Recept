@@ -9,7 +9,6 @@ const OUTLINED = 'outlined';
 const template = `
   <style>
     #${LIST_CONTAINER} {
-        /*display: none;*/
         position: absolute;
         cursor: pointer;
         z-index: 2;
@@ -39,14 +38,12 @@ const template = `
   
 `;
 
-
 class DropDownList extends WebElement {
     set props({chooseItemCallback, items, renderItem,
                   toggleDropdownCallback, chosenItemIndex}) {
         this.$items = items || [];
         this.$chooseItem = chooseItemCallback;
         this.$renderItem = renderItem;
-        this.$toggleDropdown = toggleDropdownCallback;
         this.$chosenItemIndex = chosenItemIndex;
 
         // required props: items, renderItem
@@ -60,12 +57,7 @@ class DropDownList extends WebElement {
     constructor() {
         super(template, true);
 
-        this.closeDropdown = this.closeDropdown.bind(this);
-        this.openDropdown = this.openDropdown.bind(this);
-        this.toggleDropdown = this.toggleDropdown.bind(this);
-
         this._renderItems = this._renderItems.bind(this);
-        this._toggleDropdownInner = this._toggleDropdownInner.bind(this);
 
         this._onKeyPress = this._onKeyPress.bind(this);
         this._selectItem = this._selectItem.bind(this);
@@ -79,26 +71,6 @@ class DropDownList extends WebElement {
 
     disconnectedCallback() {
         document.removeEventListener('keydown', this._onKeyPress);
-    }
-
-    openDropdown() {
-        this._toggleDropdownInner(true);
-    }
-
-    closeDropdown() {
-        this._toggleDropdownInner(false);
-    }
-
-    toggleDropdown() {
-        const isClosed = this.$_id(LIST_CONTAINER).style.display !== 'block';
-        this._toggleDropdownInner(isClosed);
-    }
-
-    _toggleDropdownInner(toOpen) {
-        this.$_id(LIST_CONTAINER).style.display = toOpen ? 'block' : 'none';
-        if (this.$toggleDropdown) {
-            this.$toggleDropdown(toOpen);
-        }
     }
 
     _renderItems() {
@@ -139,7 +111,6 @@ class DropDownList extends WebElement {
     }
 
     _selectItem() {
-        this.closeDropdown();
         this.$chooseItem(this.$outlinedItem);
     }
 

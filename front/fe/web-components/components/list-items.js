@@ -12,7 +12,7 @@ const REMOVE_ITEM = 'remove_item';
 const template = `
   <style>
     #${TITLE} {
-        margin-bottom: 0.5rem;
+        /* don't put margin here*/
     }
     
     .${REMOVE_ITEM} {

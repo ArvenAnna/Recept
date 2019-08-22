@@ -1,11 +1,15 @@
 import WebElement from '../abstract/web-element';
 import {isDescendantOf} from "../../utils/domUtils";
-import './dropdown-list';
+import './toggable-drop-down-list';
+
+const CARET_ICON_SRC = 'svg/caret-down.svg';
 
 const CONTAINER = 'container';
 const LABEL = 'label';
 const LABEL_VALUE = 'label_value';
 const CARET_ICON = 'caret_icon';
+
+const TOGGABLE_LIST_COMPONENT = 'toggable-drop-down-list';
 
 const template = `
   <style>
@@ -39,9 +43,9 @@ const template = `
   <div id="${CONTAINER}">
     <div id="${LABEL}">
         <div id="${LABEL_VALUE}"></div>
-        <img src="svg/caret-down.svg" id="${CARET_ICON}"/>
+        <img src="${CARET_ICON_SRC}" id="${CARET_ICON}"/>
     </div>
-    <drop-down-list/>
+    <${TOGGABLE_LIST_COMPONENT}></${TOGGABLE_LIST_COMPONENT}>
   </div>
   
 `;
@@ -55,37 +59,32 @@ class DropDown extends WebElement {
         this.$chosenItemIndex = chosenItemIndex;
 
         if (this.$items.length && this.$renderItem) {
-            // always render first item as chosen
-            this._renderItems();
+            this._renderDropDown();
         }
     }
 
     constructor() {
         super(template, true);
 
-        this._renderItems = this._renderItems.bind(this);
+        this._renderDropDown = this._renderDropDown.bind(this);
         this._clickOutside = this._clickOutside.bind(this);
 
         document.addEventListener('click', this._clickOutside);
     }
 
-    _renderItems() {
-        if (this.$items.length && this.$renderItem) {
-            const chosenItem = this.$chosenItemIndex
-                ? this.$items[this.$chosenItemIndex]
-                : this.$items[0];
-            this.$_id(LABEL_VALUE).innerHTML = this.$renderItem(chosenItem);
-
-            this.$('drop-down-list').props = {
-                chooseItemCallback: (item) => {
+    _renderDropDown() {
+        const chosenItem = this.$chosenItemIndex
+            ? this.$items[this.$chosenItemIndex]
+            : this.$items[0];
+        this.$_id(LABEL_VALUE).innerHTML = this.$renderItem(chosenItem);
+        this.$(TOGGABLE_LIST_COMPONENT).props = {
+            chooseItemCallback: (item) => {
                     this.$_id(LABEL_VALUE).innerHTML = this.$renderItem(item);
                     this.$chooseItem(item);
-                },
-                items: this.$items,
-                renderItem: this.$renderItem,
-                chosenItemIndex: this.$chosenItemIndex,
-                toggleDropdownCallback: (toOpen) => this.$_id(CARET_ICON).setAttribute('src', toOpen ? 'svg/sort-up.svg' : 'svg/caret-down.svg')
-            }
+            },
+            items: this.$items,
+            renderItem: this.$renderItem,
+            chosenItemIndex: this.$chosenItemIndex
         }
     }
 
@@ -95,9 +94,9 @@ class DropDown extends WebElement {
 
     _clickOutside(e) {
         if (isDescendantOf(e.composedPath()[0], this.$_id(LABEL))) {
-            this.$('drop-down-list').toggleDropdown();
+            this.$(TOGGABLE_LIST_COMPONENT).toggleDropdown();
         } else {
-            this.$('drop-down-list').closeDropdown();
+            this.$(TOGGABLE_LIST_COMPONENT).closeDropdown();
         }
     }
 }

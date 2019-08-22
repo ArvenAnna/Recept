@@ -5,7 +5,7 @@ const INPUT = 'input';
 const template = `
   <style>
     
-    input {
+    #${INPUT} {
         outline: none;
         margin: 0;
         padding: 0.1rem;
@@ -16,7 +16,7 @@ const template = `
         width: var(--control-width, 10rem);
     }
     
-    input::placeholder {
+    #${INPUT}::placeholder {
         color: var(--input-placeholder, gray);
         font-weight: 400;
     }
@@ -27,7 +27,7 @@ const template = `
   
 `;
 
-export const textInputAttributes = {
+const inputTextAttributes = {
     PLACEHOLDER: 'placeholder',
     VALUE: 'value'
 }
@@ -35,7 +35,7 @@ export const textInputAttributes = {
 class InputText extends WebElement {
 
     static get observedAttributes() {
-        return Object.values(textInputAttributes);
+        return Object.values(inputTextAttributes);
     }
 
     set callbacks(cbs) {
@@ -52,11 +52,11 @@ class InputText extends WebElement {
     }
 
     set value(v) {
-        this.setAttribute(textInputAttributes.VALUE, v || '');
+        this.setAttribute(inputTextAttributes.VALUE, v || '');
     }
 
     get value() {
-        return this.getAttribute(textInputAttributes.VALUE);
+        return this.getAttribute(inputTextAttributes.VALUE);
     }
 
     constructor() {
@@ -65,8 +65,8 @@ class InputText extends WebElement {
         this._onInput = this._onInput.bind(this);
         this.getInnerRef = this.getInnerRef.bind(this);
 
-        const placeholder = this.getAttribute(textInputAttributes.PLACEHOLDER);
-        const value = this.getAttribute(textInputAttributes.VALUE);
+        const placeholder = this.getAttribute(inputTextAttributes.PLACEHOLDER);
+        const value = this.getAttribute(inputTextAttributes.VALUE);
         this.$_id(INPUT).setAttribute('placeholder', placeholder || '');
         this.$_id(INPUT).setAttribute('value', value || '');
         this.$callbacks = {};
@@ -75,7 +75,7 @@ class InputText extends WebElement {
     }
 
     _onInput({target}) {
-        this.setAttribute(textInputAttributes.VALUE, target.value);
+        this.setAttribute(inputTextAttributes.VALUE, target.value);
     }
 
     getInnerRef() {
@@ -84,11 +84,11 @@ class InputText extends WebElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case textInputAttributes.PLACEHOLDER:
-                this.$_id(INPUT).setAttribute('placeholder', newValue || '');
+            case inputTextAttributes.PLACEHOLDER:
+                this.$_id(INPUT).placeholder = newValue || '';
                 break;
-            case textInputAttributes.VALUE:
-                this.$_id(INPUT).setAttribute('value', newValue || '');
+            case inputTextAttributes.VALUE:
+                this.$_id(INPUT).value = newValue || '';
                 break;
         }
     }
