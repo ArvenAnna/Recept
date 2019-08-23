@@ -1,14 +1,12 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/add-item';
-import '../../components/drop-down';
-import '../../components/two-fields-add-item';
-import '../../components/file-input';
 import '../../components/upload-image';
 import '../../components/upload-images';
 import '../../styled/input-text';
 
 import './parts/recipe-references';
 import './parts/recipe-proportions';
+import './parts/recipe-department';
+import './parts/recipe-main-photo';
 
 import routes from '../../../constants/Routes';
 
@@ -17,15 +15,17 @@ const CONTAINER = 'create-recipe-page';
 const RECIPE_NAME_CONTAINER = 'recipe-name-container';
 const RECIPE_NAME = 'recipe-name';
 const RECIPE_NAME_CAPTION = 'recipe-name-caption';
-const RECIPE_DEPART_CONTAINER = 'recipe-depart-container';
-const RECIPE_DEPART_CAPTION = 'recipe-depart-caption';
 const RECIPE_DESCRIPTION = 'recipe-description';
-const RECIPE_PHOTO = 'recipe-photo';
 const RECIPE_DETAIL_PHOTOS = 'detail-photos';
 const DETAILS_CONTAINER = 'details-container';
 const DETAILS_CAPTION = 'details-caption';
-const ADD_PHOTO_CONTAINER = 'add-photo-container';
-const UPLOAD_PHOTO_CONTAINER = 'upload-photo-container';
+
+const RECIPE_DEPARTMENT_COMPONENT = 'recipe-department';
+const RECIPE_REFS_COMPONENT = 'recipe-references';
+const RECIPE_PROPORTIONS_COMPONENT = 'recipe-proportions';
+const RECIPE_MAIN_PHOTO_COMPONENT = 'recipe-main-photo';
+
+
 
 const SAVE = 'save';
 
@@ -35,8 +35,8 @@ const template = `
         color: var(--dark-dark-background-crp);
     }
     
-    #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
-    #${ADD_PHOTO_CONTAINER}, #${DETAILS_CONTAINER} {
+    #${RECIPE_NAME_CONTAINER}, 
+    #${DETAILS_CONTAINER} {
         display: flex;
         margin: 1rem;
         align-items: center;
@@ -46,16 +46,12 @@ const template = `
         flex-direction: column;
     }
     
-    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION} {
+    #${RECIPE_NAME_CAPTION} {
         margin-right: 0.5rem;
     }
     
     #${DETAILS_CAPTION} {
         margin-bottom: 0.5rem;
-    }
-    
-    #${UPLOAD_PHOTO_CONTAINER} {
-        margin-left: 1rem;
     }
     
   </style>
@@ -66,21 +62,13 @@ const template = `
         <input-text id='${RECIPE_NAME}' placeholder='Enter name'/>
       </div>
       
-      <div id='${RECIPE_DEPART_CONTAINER}'>
-        <div id='${RECIPE_DEPART_CAPTION}'>Recipe department:</div>
-        <drop-down></drop-down>
-      </div>
+      <${RECIPE_DEPARTMENT_COMPONENT}></${RECIPE_DEPARTMENT_COMPONENT}>
       
-      <recipe-references></recipe-references>
+      <${RECIPE_REFS_COMPONENT}></${RECIPE_REFS_COMPONENT}>
       
-      <recipe-proportions></recipe-proportions>
+      <${RECIPE_PROPORTIONS_COMPONENT}></${RECIPE_PROPORTIONS_COMPONENT}>
       
-      <div id='${ADD_PHOTO_CONTAINER}'>
-          <div>Add main photo:</div>
-          <div id='${UPLOAD_PHOTO_CONTAINER}'>
-               <upload-image id='${RECIPE_PHOTO}'></upload-image>
-          </div>
-      </div>
+      <${RECIPE_MAIN_PHOTO_COMPONENT}></${RECIPE_MAIN_PHOTO_COMPONENT}>
       
       <div id='${DETAILS_CONTAINER}'>
             <div id='${DETAILS_CAPTION}'>Add description with photo in free form:</div>
@@ -141,25 +129,11 @@ class CreateRecipePage extends WebElement {
             this.$_id(RECIPE_DESCRIPTION).value = this.$recipe.text || '';
         }
 
-        this.$('drop-down').props = {
-            items: this.$departments || [],
-            chooseItemCallback: (item) => {
-                this.$recipe.department = item
-            },
-            renderItem: (item) => `${item.name}`,
-            chosenItemIndex: this.$recipe.department && this.$departments
-                ? this.$departments.map(d => d.id).indexOf(this.$recipe.department.id)
-                : null
-        };
-
-        this.$('recipe-references').recipe = this.$recipe;
-        this.$('recipe-proportions').recipe = this.$recipe;
-
-        this.$_id(RECIPE_PHOTO).props = {
-            uploadUrl: routes.UPLOAD_FILE,
-            defaultImage: this.$recipe.imgPath,
-            uploadFileCallback: path => this.$recipe.imgPath = path
-        }
+        this.$(RECIPE_DEPARTMENT_COMPONENT).recipe = this.$recipe;
+        this.$(RECIPE_DEPARTMENT_COMPONENT).departments = this.$departments;
+        this.$(RECIPE_REFS_COMPONENT).recipe = this.$recipe;
+        this.$(RECIPE_PROPORTIONS_COMPONENT).recipe = this.$recipe;
+        this.$(RECIPE_MAIN_PHOTO_COMPONENT).recipe = this.$recipe;
 
         this.$_id(RECIPE_DETAIL_PHOTOS).props = {
             uploadUrl: routes.UPLOAD_FILE,
