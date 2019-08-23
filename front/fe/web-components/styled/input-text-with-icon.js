@@ -1,6 +1,5 @@
 import WebElement from '../abstract/web-element';
 import './input-text';
-import {inputTextAttributes} from "./input-text";
 
 const CONTAINER = 'container';
 const ICON = 'icon';

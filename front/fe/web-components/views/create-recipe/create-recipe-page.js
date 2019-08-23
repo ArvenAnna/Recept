@@ -5,10 +5,10 @@ import '../../components/two-fields-add-item';
 import '../../components/file-input';
 import '../../components/upload-image';
 import '../../components/upload-images';
-import '../../components/editable-two-fields-list';
 import '../../styled/input-text';
 
 import './parts/recipe-references';
+import './parts/recipe-proportions';
 
 import routes from '../../../constants/Routes';
 
@@ -19,9 +19,6 @@ const RECIPE_NAME = 'recipe-name';
 const RECIPE_NAME_CAPTION = 'recipe-name-caption';
 const RECIPE_DEPART_CONTAINER = 'recipe-depart-container';
 const RECIPE_DEPART_CAPTION = 'recipe-depart-caption';
-const RECIPE_PROPORTIONS_CONTAINER = 'recipe-proportions-container';
-const RECIPE_PROPORTIONS = 'recipe-proportions';
-const RECIPE_PROPORTIONS_CAPTION = 'recipe-proportions-caption';
 const RECIPE_DESCRIPTION = 'recipe-description';
 const RECIPE_PHOTO = 'recipe-photo';
 const RECIPE_DETAIL_PHOTOS = 'detail-photos';
@@ -39,7 +36,6 @@ const template = `
     }
     
     #${RECIPE_NAME_CONTAINER}, #${RECIPE_DEPART_CONTAINER}, 
-    #${RECIPE_PROPORTIONS_CONTAINER}, 
     #${ADD_PHOTO_CONTAINER}, #${DETAILS_CONTAINER} {
         display: flex;
         margin: 1rem;
@@ -50,8 +46,7 @@ const template = `
         flex-direction: column;
     }
     
-    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION}, 
-    #${RECIPE_PROPORTIONS_CAPTION} {
+    #${RECIPE_NAME_CAPTION}, #${RECIPE_DEPART_CAPTION} {
         margin-right: 0.5rem;
     }
     
@@ -78,10 +73,7 @@ const template = `
       
       <recipe-references></recipe-references>
       
-      <div id='${RECIPE_PROPORTIONS_CONTAINER}'>
-        <div id='${RECIPE_PROPORTIONS_CAPTION}'>Add recipe proportion:</div>
-        <editable-two-fields-list id='${RECIPE_PROPORTIONS}'></editable-two-fields-list>
-      </div>
+      <recipe-proportions></recipe-proportions>
       
       <div id='${ADD_PHOTO_CONTAINER}'>
           <div>Add main photo:</div>
@@ -125,7 +117,6 @@ class CreateRecipePage extends WebElement {
 
         this._renderPage = this._renderPage.bind(this);
         this._saveRecipe = this._saveRecipe.bind(this);
-        this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
 
         this.$_id(SAVE).addEventListener('click', this._saveRecipe);
     }
@@ -142,19 +133,6 @@ class CreateRecipePage extends WebElement {
         this.$recipe.save().then(id => {
            window.location.hash = '/recipe/' + id;
         });
-    }
-
-    async _retrieveIngredientsByKeyword(keyword) {
-        let ingredients = await fetch(routes.GET_INGREDIENTS_BY_KEYWORD, {method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({keyword})}).then(res => res.json());
-        const maxSuggestionsNumber = 10;
-        // exclude also already checked
-        ingredients = ingredients.filter(ing => !this.$recipe.proportions || !this.$recipe.proportions.some(p => p.ingredientId === ing.id));
-        ingredients.slice(0, maxSuggestionsNumber);
-        return ingredients;
     }
 
     _renderPage() {
@@ -175,36 +153,7 @@ class CreateRecipePage extends WebElement {
         };
 
         this.$('recipe-references').recipe = this.$recipe;
-
-        this.$_id(RECIPE_PROPORTIONS).props = {
-            title: this.$recipe.proportions && this.$recipe.proportions.length ? 'List of recipe proportions:' : null,
-            items: this.$recipe.proportions,
-            renderItem: (item) => `
-                <div key='name'>${item.ingredientName}</div>
-                <div key='separator'>&nbsp;-&nbsp;</div>
-                <div key='norma'>${item.norma || ''}</div>
-            `,
-            removeItemCallback: prop => {
-                this.$recipe.removeProportion(prop);
-                this.$_id(RECIPE_PROPORTIONS).items = this.$recipe.proportions;
-            },
-            addItemCallback: ({first, second}) => {
-                this._retrieveIngredientsByKeyword(first).then(ingredients => {
-                    // should be one ingredient only
-                    if (ingredients.length === 1 && ingredients[0].name === first) {
-                        this.$recipe.proportion = {
-                            ingredient: ingredients[0],
-                            norma: second
-                        };
-                        this.$_id(RECIPE_PROPORTIONS).items = this.$recipe.proportions;
-                    }
-                })
-
-            },
-            getSuggestionsPromise: this._retrieveIngredientsByKeyword,
-            renderSuggestionCallback: suggestion => suggestion.name,
-            placeholders: {first: 'Add ingredient', second: 'Add norma'}
-        }
+        this.$('recipe-proportions').recipe = this.$recipe;
 
         this.$_id(RECIPE_PHOTO).props = {
             uploadUrl: routes.UPLOAD_FILE,

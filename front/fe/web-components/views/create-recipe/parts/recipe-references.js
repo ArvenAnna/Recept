@@ -2,7 +2,7 @@ import WebElement from '../../../abstract/web-element';
 
 import routes from '../../../../constants/Routes';
 
-import '../../../components/suggestions-input';
+import '../../../components/suggestions-chooser';
 import '../../../components/list-items';
 
 const CONTAINER = 'container';
@@ -10,7 +10,7 @@ const CAPTION = 'caption';
 const INPUT_CONTAINER = 'input-container';
 const LIST_CONTAINER = 'list-container';
 
-const SUGGESTION_INPUT_COMPONENT = 'suggestions-input';
+const SUGGESTION_INPUT_COMPONENT = 'suggestions-chooser';
 const LIST_COMPONENT = 'list-items';
 
 const template = `

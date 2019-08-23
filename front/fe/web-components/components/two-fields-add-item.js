@@ -1,10 +1,13 @@
 import WebElement from '../abstract/web-element';
 import './dropdown-list';
 import './suggestions-input';
+import '../styled/input-text-with-icon';
 
 const CONTAINER = 'container';
-const SECOND_INPUT = 'second-input';
 const ADD_ITEM_ICON = 'add_item_icon';
+
+const INGREDIENT_INPUT_COMPONENT = 'suggestions-input';
+const NORMA_INPUT_COMPONENT = 'input-text-with-icon';
 
 const template = `
   <style>
@@ -15,18 +18,11 @@ const template = `
         position: relative;
     }
     
-    #${ADD_ITEM_ICON} {
-        width: 1rem;
-        height: 1rem;
-        cursor: pointer;
-    }
-    
   </style>
   
   <div id="${CONTAINER}">
-    <suggestions-input></suggestions-input>
-    <input id='${SECOND_INPUT}'/>
-    <img src="svg/add.svg" id="${ADD_ITEM_ICON}"/>
+    <${INGREDIENT_INPUT_COMPONENT}></${INGREDIENT_INPUT_COMPONENT}>
+    <${NORMA_INPUT_COMPONENT}></${NORMA_INPUT_COMPONENT}>
   </div>
   
 `;
@@ -46,11 +42,13 @@ class TwoFieldsAddItem extends WebElement {
             }
         }
 
-        this.$('suggestions-input').props = {
+        this.$(INGREDIENT_INPUT_COMPONENT).props = {
             getSuggestionsPromise, renderSuggestionCallback, placeholder: placeholders.first
         }
 
-        this.$(`#${SECOND_INPUT}`).placeholder = placeholders.second;
+        this.$(NORMA_INPUT_COMPONENT).placeholder = placeholders.second;
+        this.$(NORMA_INPUT_COMPONENT).iconClick = this._addItem;
+        this.$(NORMA_INPUT_COMPONENT).src = 'svg/add.svg';
     }
 
     constructor() {
@@ -64,11 +62,11 @@ class TwoFieldsAddItem extends WebElement {
     _addItem() {
         if (this.$addItem) {
             this.$addItem({
-                first: this.$('suggestions-input').currentValue,
-                second: this.$(`#${SECOND_INPUT}`).value
+                first: this.$(INGREDIENT_INPUT_COMPONENT).currentValue,
+                second: this.$(NORMA_INPUT_COMPONENT).value
             });
-            this.$('suggestions-input').clearInput();
-            this.$(`#${SECOND_INPUT}`).value = '';
+            this.$(INGREDIENT_INPUT_COMPONENT).clearInput();
+            this.$(NORMA_INPUT_COMPONENT).value = '';
         }
     }
 }
