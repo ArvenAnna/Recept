@@ -45,7 +45,7 @@ export class Recipe extends Model {
 
     get details() {
         return this._recipe.details && this._recipe.details.map(({id, description, filePath}) =>
-            ({id, description, imgPath: filePath && routes.IMAGE_CATALOG + filePath}));
+            ({id, description, imgPath: filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG) ? filePath : routes.IMAGE_CATALOG + filePath}));
     }
 
     retrieve(id) {

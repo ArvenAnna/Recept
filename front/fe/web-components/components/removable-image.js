@@ -1,12 +1,12 @@
 import WebElement from '../abstract/web-element';
-import '../svg/apply-icon';
-import '../svg/remove-icon';
 
 const CONTAINER = 'container';
 const OVERLAY = 'overlay';
 const IMAGE = 'image';
 const REMOVE = 'remove';
-const ADD = 'add';
+
+const ICON_REMOVE_SRC = 'svg/cross.svg';
+const DEFAULT_SRC = 'svg/dish-fork-and-knife.svg';
 
 
 const template = `
@@ -38,8 +38,8 @@ const template = `
         
      #${OVERLAY} {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: flex-end;
         position: absolute;
         width: 100%;
         height: 100%;
@@ -49,17 +49,18 @@ const template = `
         background-color: rgba(0,0,0,0.7);
      }
     
-    #${REMOVE}, #${ADD} {
-        margin: 0.5rem;
+    #${REMOVE} {
+        width: 4rem;
+        height: 4rem;
+        cursor: pointer;
     }
 
   </style>
   
   <div id="${CONTAINER}">
-    <img src="svg/dish-fork-and-knife.svg" id="${IMAGE}"/>
+    <img src="${DEFAULT_SRC}" id="${IMAGE}"/>
     <div id="${OVERLAY}">
-        <apply-icon id="${ADD}"></apply-icon>
-        <remove-icon id="${REMOVE}"></remove-icon>
+        <img src="${ICON_REMOVE_SRC}" id="${REMOVE}"/>
     </div>
   </div>
   
@@ -75,55 +76,40 @@ class RemovableImage extends WebElement {
         return Object.values(supportedAttributes);
     }
 
-    set props({removeFileCallback, addFileCallback}) {
+    set props({removeFileCallback, src}) {
         this.$removeFileCallback = removeFileCallback;
-        this.$addFileCallback = addFileCallback;
+
+        if (src) {
+            this.setAttribute(supportedAttributes.SRC, src);
+        }
+    }
+
+    set src(newSrc) {
+        this.setAttribute(supportedAttributes.SRC, newSrc);
     }
 
     constructor() {
         super(template, true);
 
         this._onRemove = this._onRemove.bind(this);
-        this._onAdd = this._onAdd.bind(this);
-        this.removeControls = this.removeControls.bind(this);
+        this.clean = this.clean.bind(this);
 
         this.$_id(REMOVE).addEventListener('click', this._onRemove);
-        this.$_id(ADD).addEventListener('click', this._onAdd);
-
-        if (this.getAttribute(supportedAttributes.SRC)) {
-            this.$_id(CONTAINER).style.display = 'block';
-        } else {
-            this.$_id(CONTAINER).style.display = 'none';
-        }
-
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (supportedAttributes.SRC === name) {
-            this.$_id(IMAGE).setAttribute('src', newValue);
-            if (!newValue) {
-                this.$_id(CONTAINER).style.display = 'none';
-            } else {
-                this.$_id(CONTAINER).style.display = 'block';
-                this.$_id(ADD).style.display = 'block';
-            }
-        }
-    }
-
-    _onAdd() {
-        if (this.$addFileCallback) {
-            this.$addFileCallback();
-            this.$_id(ADD).style.display = 'none';
+            this.$_id(IMAGE).src = newValue;
         }
     }
 
     _onRemove() {
-        this.$removeFileCallback(this.getAttribute(supportedAttributes.SRC));
-        this.setAttribute(supportedAttributes.SRC, '');
+        this.$removeFileCallback();
+        this.clean();
     }
 
-    removeControls() {
-        this.$_id(OVERLAY).remove();
+    clean() {
+        this.src = DEFAULT_SRC;
     }
 }
 

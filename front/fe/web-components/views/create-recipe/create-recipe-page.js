@@ -1,14 +1,11 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/upload-image';
-import '../../components/upload-images';
 import '../../styled/input-text';
 
 import './parts/recipe-references';
 import './parts/recipe-proportions';
 import './parts/recipe-department';
 import './parts/recipe-main-photo';
-
-import routes from '../../../constants/Routes';
+import './parts/recipe-details';
 
 const CONTAINER = 'create-recipe-page';
 
@@ -16,14 +13,12 @@ const RECIPE_NAME_CONTAINER = 'recipe-name-container';
 const RECIPE_NAME = 'recipe-name';
 const RECIPE_NAME_CAPTION = 'recipe-name-caption';
 const RECIPE_DESCRIPTION = 'recipe-description';
-const RECIPE_DETAIL_PHOTOS = 'detail-photos';
-const DETAILS_CONTAINER = 'details-container';
-const DETAILS_CAPTION = 'details-caption';
 
 const RECIPE_DEPARTMENT_COMPONENT = 'recipe-department';
 const RECIPE_REFS_COMPONENT = 'recipe-references';
 const RECIPE_PROPORTIONS_COMPONENT = 'recipe-proportions';
 const RECIPE_MAIN_PHOTO_COMPONENT = 'recipe-main-photo';
+const RECIPE_DETAILS_COMPONENT = 'recipe-details';
 
 
 
@@ -35,23 +30,14 @@ const template = `
         color: var(--dark-dark-background-crp);
     }
     
-    #${RECIPE_NAME_CONTAINER}, 
-    #${DETAILS_CONTAINER} {
+    #${RECIPE_NAME_CONTAINER}{
         display: flex;
         margin: 1rem;
         align-items: center;
     }
     
-    #${DETAILS_CONTAINER} {
-        flex-direction: column;
-    }
-    
     #${RECIPE_NAME_CAPTION} {
         margin-right: 0.5rem;
-    }
-    
-    #${DETAILS_CAPTION} {
-        margin-bottom: 0.5rem;
     }
     
   </style>
@@ -70,11 +56,7 @@ const template = `
       
       <${RECIPE_MAIN_PHOTO_COMPONENT}></${RECIPE_MAIN_PHOTO_COMPONENT}>
       
-      <div id='${DETAILS_CONTAINER}'>
-            <div id='${DETAILS_CAPTION}'>Add description with photo in free form:</div>
-            <upload-images id='${RECIPE_DETAIL_PHOTOS}'></upload-images>
-      </div>
-      
+      <${RECIPE_DETAILS_COMPONENT}></${RECIPE_DETAILS_COMPONENT}>
       
       <textarea id='${RECIPE_DESCRIPTION}'></textarea>
 
@@ -134,13 +116,7 @@ class CreateRecipePage extends WebElement {
         this.$(RECIPE_REFS_COMPONENT).recipe = this.$recipe;
         this.$(RECIPE_PROPORTIONS_COMPONENT).recipe = this.$recipe;
         this.$(RECIPE_MAIN_PHOTO_COMPONENT).recipe = this.$recipe;
-
-        this.$_id(RECIPE_DETAIL_PHOTOS).props = {
-            uploadUrl: routes.UPLOAD_FILE,
-            defaultFilesList: this.$recipe.details && this.$recipe.details.map(d => ({url: d.imgPath, description: d.description})),
-            uploadFileCallback: detail => this.$recipe.detail = detail,
-            removeFileCallback: detail => this.$recipe.removeDetail(detail)
-        }
+        this.$(RECIPE_DETAILS_COMPONENT).recipe = this.$recipe;
     }
 
 }

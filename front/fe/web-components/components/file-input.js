@@ -5,6 +5,8 @@ const FILE_INPUT = 'file-input';
 const FILE_NAME = 'file-name';
 const SEARCH_ICON = 'search-icon';
 
+const ICON_SRC = 'svg/search-in-folder.svg';
+
 const template = `
   <style>
     
@@ -34,7 +36,7 @@ const template = `
   </style>
   
   <div id="${CONTAINER}">
-    <img src="svg/search-in-folder.svg" id="${SEARCH_ICON}"/>
+    <img src="${ICON_SRC}" id="${SEARCH_ICON}"/>
     <input type='file' id='${FILE_INPUT}'/>
     <div id="${FILE_NAME}"></div>
   </div>
@@ -43,9 +45,10 @@ const template = `
 
 class FileInput extends WebElement {
 
-    set props({chooseFileCallback, }) {
+    set props({chooseFileCallback, isAutoUpload}) {
 
         this.$chooseFileCallback = chooseFileCallback;
+        this.$isAutoUpload = isAutoUpload;
     }
 
     constructor() {
@@ -67,13 +70,13 @@ class FileInput extends WebElement {
         this.reader.onload = (e) => {
             if (this.reader){
                 this.$fileUrl = e.target.result;
-                this.$file = file;
                 this.$chooseFileCallback(file, this.$fileUrl);
                 this.$_id(FILE_NAME).innerHTML = this.$fileName;
             }
         }
 
         this.reader.onerror = () => {
+            this.$_id(FILE_NAME).innerHTML = "error, try again ...";
             console.log('File uploading error'); //TODO handle error
         }
         this.reader.readAsDataURL(file);
@@ -81,8 +84,12 @@ class FileInput extends WebElement {
 
     _onChange({target}) {
         this.$fileName = target.files[0].name;
-        this.$_id(FILE_NAME).innerHTML = this.$fileName;
-        this._createFileUrl(target.files[0]);
+        if (this.$isAutoUpload) {
+            this.$_id(FILE_NAME).innerHTML = this.$fileName;
+            this.$chooseFileCallback(target.files[0]);
+        } else {
+            this._createFileUrl(target.files[0]);
+        }
     }
 
     cleanFile() {

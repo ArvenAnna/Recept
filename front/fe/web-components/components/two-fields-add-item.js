@@ -4,7 +4,6 @@ import './suggestions-input';
 import '../styled/input-text-with-icon';
 
 const CONTAINER = 'container';
-const ADD_ITEM_ICON = 'add_item_icon';
 
 const INGREDIENT_INPUT_COMPONENT = 'suggestions-input';
 const NORMA_INPUT_COMPONENT = 'input-text-with-icon';
@@ -55,8 +54,6 @@ class TwoFieldsAddItem extends WebElement {
         super(template, true);
 
         this._addItem = this._addItem.bind(this);
-
-        this.$_id(ADD_ITEM_ICON).addEventListener('click', this._addItem);
     }
 
     _addItem() {
