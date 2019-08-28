@@ -15,7 +15,7 @@ const template = `
       #${CONTAINER} {
          display: flex;
          margin: 1rem;
-         align-items: center;
+         align-items: flex-start;
          flex-direction: column;
       }
       
@@ -51,7 +51,7 @@ class RecipeDetails extends WebElement {
             items: this.$recipe.details,
             renderItem: item => {
                 return `
-                <img src="${item.imgPath}"/>
+                <img src="${item.imgPath}" style="width: 10rem;"/>
                 <div>${item.description || ''}</div>
             `;},
             removeItemCallback: detail => {

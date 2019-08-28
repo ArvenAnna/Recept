@@ -7,6 +7,8 @@ const SEARCH_ICON = 'search-icon';
 
 const ICON_SRC = 'svg/search-in-folder.svg';
 
+const INITIAL_TEXT = 'upload photo';
+
 const template = `
   <style>
     
@@ -31,6 +33,7 @@ const template = `
         width: 1rem;
         height: 1rem;
         cursor: pointer;
+        margin-right: 0.1rem;
     }
     
   </style>
@@ -54,7 +57,7 @@ class FileInput extends WebElement {
     constructor() {
         super(template, true);
 
-        this.$fileName = "New photo";
+        this.$fileName = INITIAL_TEXT;
         this.reader = new FileReader();
 
         this.cleanFile = this.cleanFile.bind(this);
@@ -93,7 +96,7 @@ class FileInput extends WebElement {
     }
 
     cleanFile() {
-        this.$fileName = "Upload photo";
+        this.$fileName = INITIAL_TEXT;
         this.$_id(FILE_NAME).innerHTML = this.$fileName;
     }
 

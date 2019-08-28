@@ -1,11 +1,16 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/list-items';
-import '../../components/add-item';
+import '../../styled/input-text-with-icon';
 
 const CONTAINER = 'ingredients_page';
 
 const ADD_ITEM = 'add_item';
 const LIST_ITEMS = 'list_items';
+
+const INPUT_COMPONENT = 'input-text-with-icon';
+const LIST_COMPONENT = 'list-items';
+
+const ICON_SRC = 'svg/add.svg';
 
 const template = `
   <style>
@@ -18,8 +23,8 @@ const template = `
   </style>
   
   <div id='${CONTAINER}'>
-      <div class='${ADD_ITEM}'><add-item></add-item></div>  
-      <div class='${LIST_ITEMS}'><list-items></list-items></div>
+      <div class='${ADD_ITEM}'><${INPUT_COMPONENT}></${INPUT_COMPONENT}></div>  
+      <div class='${LIST_ITEMS}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
   </div>
 `;
 
@@ -40,17 +45,15 @@ class IngredientsPage extends WebElement {
     _renderPage() {
         if (this.$ingredients) {
 
-            const ingListEl = this.$('list-items');
-            ingListEl.props = {
+            this.$(LIST_COMPONENT).props = {
                 items: this.$ingredients,
                 renderItem: (item) => `<div>${item.name}</div>`
             }
 
             if (this.$addIngredient) {
-                const addIngEl = this.$('add-item');
-                addIngEl.props = {
-                    addItemCallback: this.$addIngredient
-                }
+                this.$(INPUT_COMPONENT).src = ICON_SRC;
+                this.$(INPUT_COMPONENT).placeholder = 'Add new ingredient';
+                this.$(INPUT_COMPONENT).iconClick = this.$addIngredient;
             }
         }
     }

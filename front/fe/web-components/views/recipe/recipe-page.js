@@ -45,10 +45,10 @@ const template = `
     }
     
     #${MAIN_PHOTO} {
-        grid-column-start: 1;
-        grid-column-end: 2;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
         width: 100%;
         padding: 0 1rem;
         box-sizing: border-box;
@@ -57,8 +57,8 @@ const template = `
     #${DESCRIPTION} {
         grid-column-start: 1;
         grid-column-end: 4;
-        grid-row-start: 3;
-        grid-row-end: 4;
+        grid-row-start: 4;
+        grid-row-end: 5;
 
         font-size: 1.1rem;
         text-align: justify;
@@ -92,8 +92,8 @@ const template = `
     #${DETAILS} {
         grid-column-start: 1;
         grid-column-end: 4;
-        grid-row-start: 4;
-        grid-row-end: 5;
+        grid-row-start: 5;
+        grid-row-end: 6;
 
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -177,9 +177,9 @@ class RecipePage extends WebElement {
         proportionsListItems.props = {
             items: this.$recipe.proportions,
             renderItem: (item) => `
-                <div key='name'>${item.ingredientName}</div>
-                <div key='separator'>&nbsp;-&nbsp;</div>
-                <div key='norma'>${item.norma || ''}</div>
+                <span>${item.ingredientName}</span>
+                <span>${item.norma ? '&nbsp;-&nbsp;' : ''}</div>
+                <span>${item.norma || ''}</div>
             `
         }
     }

@@ -8,19 +8,20 @@ const BUTTON = 'nav_button';
 
 const template = `
     <style>
-       #${CONTAINER} {
+        #${CONTAINER} {
             margin-left: 1rem;
             background-color: var(--background, green);
+            padding: 0.5rem 0;
         }
 
-    .${BUTTON} {
-        padding: 0 0.5rem;
-        cursor: pointer;
-    }
+        .${BUTTON} {
+            padding: 0 0.5rem;
+            cursor: pointer;
+        }
     
-    .${BUTTON}:hover {
-        background-color: var(--hover-button, lightgreen);
-    }
+        .${BUTTON}:hover {
+            background-color: var(--hover-button, lightgreen);
+        }
     </style>
 
     <template id='${BUTTON_TEMPLATE}'>

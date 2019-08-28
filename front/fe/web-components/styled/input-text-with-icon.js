@@ -14,6 +14,7 @@ const template = `
   
     #${CONTAINER} {
         position: relative;
+        width: var(--control-width, 10rem);
     }
   
     #${ICON} {

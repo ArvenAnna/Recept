@@ -16,12 +16,15 @@ const template = `
         padding: 0.1rem var(--input-icon-padding, 0.1rem) 0.1rem 0.1rem;
         box-sizing: border-box; 
         resize: none;
+        height: 4rem;
     }
     
     #${INPUT}::placeholder {
         color: var(--input-placeholder, gray);
         font-weight: 400;
     }
+    
+    
     
   </style>
   

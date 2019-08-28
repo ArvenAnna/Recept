@@ -22,7 +22,10 @@ export default class RecipesPageRenderer extends WebElement {
     }
 
     _currentRouteChanged() {
-        mRecipeList.retrieve(router.params.id);
+        if (router.component == 'recipes-page-renderer') {
+            mRecipeList.retrieve(router.params.id);
+        }
+
     }
 
     _recipeListChanged (model) {

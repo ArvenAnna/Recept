@@ -37,6 +37,19 @@ create-recipe-page {
 
     /*for list-items*/
     --list-background: var(--light-background);
+
+    /*for removable-image*/
+    --image-border: 2px solid var(--input-background);
+}
+
+ingredients-page {
+    /*for list-items*/
+    --list-background: var(--light-background);
+}
+
+recipe-page {
+    /*for list-items*/
+    --list-background: var(--light-background);
 }
 
 /*create-recipe-page drop-down {*/

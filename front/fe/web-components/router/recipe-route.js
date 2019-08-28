@@ -38,15 +38,16 @@ class RecipeRoute extends WebElement {
 
         if (this.matches(path, url)) {
 
+            const component = this.getAttribute(supportedAttributes.COMPONENT);
+
             //set object with route info into router context object
             // reset context anyway
-            routerContext.context = this.getRouteContextInfo(path, url);
+            routerContext.context = this.getRouteContextInfo(path, url, component);
 
             // if route was already rendered do nothing
             if (this.innerHTML) {
 
             } else {
-                const component = this.getAttribute(supportedAttributes.COMPONENT);
                 const template = document.createElement('template');
                 template.innerHTML = `
                 <${component}></${component}>
@@ -63,7 +64,7 @@ class RecipeRoute extends WebElement {
         }
     }
 
-    getRouteContextInfo(route, url) {
+    getRouteContextInfo(route, url, component) {
         //todo: set params including parents
         const routeParts = route.split('/');
 
@@ -71,7 +72,8 @@ class RecipeRoute extends WebElement {
             url,
             pathVariables: {
 
-            }
+            },
+            component
         };
 
         url.split('/').forEach((part, i) => {

@@ -1,5 +1,6 @@
 import WebElement from '../../abstract/web-element';
 import '../../styled/input-text';
+import '../../styled/text-area';
 
 import './parts/recipe-references';
 import './parts/recipe-proportions';
@@ -19,7 +20,7 @@ const RECIPE_REFS_COMPONENT = 'recipe-references';
 const RECIPE_PROPORTIONS_COMPONENT = 'recipe-proportions';
 const RECIPE_MAIN_PHOTO_COMPONENT = 'recipe-main-photo';
 const RECIPE_DETAILS_COMPONENT = 'recipe-details';
-
+const RECIPE_DESCRIPTION_COMPONENT = 'text-area';
 
 
 const SAVE = 'save';
@@ -40,6 +41,12 @@ const template = `
         margin-right: 0.5rem;
     }
     
+    ${RECIPE_DESCRIPTION_COMPONENT} {
+        --control-width: 100%;
+        width: 100%;
+        
+    }
+    
   </style>
   
   <div id='${CONTAINER}'>
@@ -58,7 +65,9 @@ const template = `
       
       <${RECIPE_DETAILS_COMPONENT}></${RECIPE_DETAILS_COMPONENT}>
       
-      <textarea id='${RECIPE_DESCRIPTION}'></textarea>
+      <div id='${RECIPE_NAME_CONTAINER}'>
+            <${RECIPE_DESCRIPTION_COMPONENT} placeholder="Add description"></${RECIPE_DESCRIPTION_COMPONENT}>
+      </div>
 
       <button id='${SAVE}'>Save</button>
   </div>
@@ -93,7 +102,7 @@ class CreateRecipePage extends WebElement {
 
     _saveRecipe() {
         this.$recipe.name = this.$_id(RECIPE_NAME).value;
-        this.$recipe.text = this.$_id(RECIPE_DESCRIPTION).value;
+        this.$recipe.text = this.$(RECIPE_DESCRIPTION_COMPONENT).value;
 
         if (!this.$recipe.department) {
             this.$recipe.department = this.$departments.length
@@ -108,7 +117,7 @@ class CreateRecipePage extends WebElement {
     _renderPage() {
         if (this.$recipe) {
             this.$_id(RECIPE_NAME).value = this.$recipe.name || '';
-            this.$_id(RECIPE_DESCRIPTION).value = this.$recipe.text || '';
+            this.$(RECIPE_DESCRIPTION_COMPONENT).value = this.$recipe.text || '';
         }
 
         this.$(RECIPE_DEPARTMENT_COMPONENT).recipe = this.$recipe;

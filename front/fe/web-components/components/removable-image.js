@@ -29,11 +29,12 @@ const template = `
     
     #${IMAGE} {
             object-fit: contain;
-            border: 1px solid black;
+            border: var(--image-border, 1px);
             height: 100%;
             width: 100%;
             position: absolute;
             top: 0;
+            box-sizing: border-box;
         }
         
      #${OVERLAY} {

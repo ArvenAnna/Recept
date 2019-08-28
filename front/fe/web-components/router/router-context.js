@@ -16,6 +16,10 @@ class RouterContext extends Model {
         return this._context.pathVariables;
     }
 
+    get component() {
+        return this._context.component;
+    }
+
     set context(newContext) {
         //if newContext is the same is previous don't do anything
         if (!this._context || newContext.url !== this._context.url) {

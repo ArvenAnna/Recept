@@ -19,7 +19,6 @@ const template = `
     
     #${CONTAINER} {
         display: flex;
-        margin: 1rem;
         align-items: flex-start;
         flex-direction: column;
     }
@@ -36,8 +35,15 @@ const template = `
     #${ADD_BUTTON} {
         border: 1px solid black;
         display: flex;
-        padding: 0.5rem;
+        padding: 0 0.5rem;
+        margin: 0.5rem 0;
         cursor: pointer;
+    }
+    
+    ${TEXT_COMPONENT} {
+        width: 100%;
+        
+        --control-width: 100%;
     }
    
   </style>
@@ -45,7 +51,7 @@ const template = `
   <div id="${CONTAINER}">
         <${UPLOAD_COMPONENT}></${UPLOAD_COMPONENT}>
         <div id='${IMAGE_WRAPPER}'><${IMAGE_COMPONENT}></${IMAGE_COMPONENT}></div>
-        <${TEXT_COMPONENT}></${TEXT_COMPONENT}>
+        <${TEXT_COMPONENT} placeholder="Add detail's description" value=""></${TEXT_COMPONENT}>
         <div id="${ADD_BUTTON}">
             <span>Add detail</span>
             <img src="${ICON_ADD_SRC}" id="${ADD_ICON}"/>
@@ -88,6 +94,7 @@ class RecipeDetail extends WebElement {
             },
             src: this.$file
         }
+        // this.$(TEXT_COMPONENT).placeholder = "Add detail's description";
     }
 
     _onAdd() {
