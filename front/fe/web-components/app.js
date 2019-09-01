@@ -10,6 +10,7 @@ import './views/create-recipe/edit-recipe-page-renderer';
 
 import './recipe-header';
 import './recipe-sidebar';
+import './recipe-search';
 
 const CONTAINER = 'app_container';
 const BODY = 'app_body';
@@ -64,7 +65,10 @@ const template = `
             <recipe-route path="/recipe/:id/edit" component="edit-recipe-page-renderer"></recipe-route>
             <recipe-route path="/recipe" component="create-recipe-page-renderer"></recipe-route>
         </div>
-        <div id="${SIDE}"><recipe-sidebar></recipe-sidebar></div>
+        <div id="${SIDE}">
+            <recipe-sidebar></recipe-sidebar>
+            <recipe-search></recipe-search>
+        </div>
     </div>
   </div>
   

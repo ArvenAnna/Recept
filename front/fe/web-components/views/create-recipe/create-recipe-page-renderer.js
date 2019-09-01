@@ -18,6 +18,8 @@ class CreateRecipePageRenderer extends WebElement {
         mNewRecipe.addSubscriber(this._newRecipeChanged);
         mDepartments.addSubscriber(this._departmentsChanged);
 
+        mNewRecipe.clear();
+
         this.querySelector('create-recipe-page').props = {
             recipe: mNewRecipe,
             departments: mDepartments.departments

@@ -43,8 +43,15 @@ create-recipe-page {
 }
 
 ingredients-page {
+    --control-width: 10rem;
+
     /*for list-items*/
     --list-background: var(--light-background);
+
+    /*for input-text*/
+    --input-background: var(--light-background);
+    --input-placeholder: var(--dark-background);
+
 }
 
 recipe-page {

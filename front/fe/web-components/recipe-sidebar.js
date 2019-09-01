@@ -30,9 +30,10 @@ const template = `
         </recipe-link>
     </template>
 
-    <div class="side_menu" id="${CONTAINER}"></div>
+    <div class="side_menu" id="${CONTAINER}">search</div>
 `;
 
+//todo: remove css class from container
 class RecipeSidebar extends WebElement {
     constructor() {
         super(template, true);
@@ -41,6 +42,7 @@ class RecipeSidebar extends WebElement {
         this._departmentsChanged = this._departmentsChanged.bind(this);
 
         mDepartments.addSubscriber(this._departmentsChanged);
+        mDepartments.retrieve();
     }
 
     _departmentsChanged(model) {
@@ -64,11 +66,6 @@ class RecipeSidebar extends WebElement {
             });
 
         }
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
-        mDepartments.retrieve();
     }
 
     disconnectedCallback() {

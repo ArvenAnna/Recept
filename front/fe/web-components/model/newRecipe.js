@@ -41,14 +41,12 @@ class NewRecipe extends Recipe {
         }
         if (!this._recipe.refs.find(r => r.id === ref.id)) {
             this._recipe.refs.push(ref);
-            //this.notifySubscribers();
         }
     }
 
     removeRef(ref) {
         if (this._recipe.refs) {
             this._recipe.refs = this._recipe.refs.filter(r => r.id !== ref.id);
-            //this.notifySubscribers();
         }
     }
 
@@ -69,13 +67,11 @@ class NewRecipe extends Recipe {
             ingredientName: ingredient.name,
             norma
         });
-        //this.notifySubscribers();
     }
 
     removeProportion(prop) {
         if (this._recipe.proportions) {
             this._recipe.proportions = this._recipe.proportions.filter(p => p.ingredientName !== prop.ingredientName);
-            //this.notifySubscribers();
         }
     }
 
@@ -107,6 +103,10 @@ class NewRecipe extends Recipe {
             },
             body: JSON.stringify(this._recipe)}).then(res => res.json());
         return newRecipe.id;
+    }
+
+    clear() {
+        this._recipe = {};
     }
 }
 
