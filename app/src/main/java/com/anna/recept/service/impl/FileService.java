@@ -11,6 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -92,4 +95,16 @@ public class FileService implements IFileService {
             currentFile.delete();
         }
     }
+
+    // oldPathTocatalog in format : path/to/oldCatalog
+    // will be replaced with : path/from/newName
+    public void renameCatalog(String oldPathToCatalog, String newPathToCatalog) throws IOException {
+		String oldDir = context.getRealPath("") + System.getenv(FOTO_LOCATION_ENV)
+				+ File.separator + oldPathToCatalog;
+		String newDir = context.getRealPath("") + System.getenv(FOTO_LOCATION_ENV)
+				+ File.separator + newPathToCatalog;
+		Path oldCatalogPath = Paths.get(oldDir);
+		Path targetPath = Paths.get(newDir);
+		Files.move(oldCatalogPath, targetPath);
+	}
 }

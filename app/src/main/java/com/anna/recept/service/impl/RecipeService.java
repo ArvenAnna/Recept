@@ -18,6 +18,7 @@ import org.springframework.util.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -77,9 +78,9 @@ public class RecipeService implements IRecipeService
 	@Override
 	@Transactional
 	public RecipeDto saveRecipe(RecipeDto recipe) {
-//		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
-//		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
-//		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause()); //also check depart id is not null and existent
+		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
+		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
+		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause()); //also check depart id is not null and existent
 		Assert.isNull(recipe.getId(), Errors.ID_MUST_BE_NULL.getCause());
 
 		if (recipeRep.existsByNameIgnoreCase(recipe.getName())) {
@@ -92,15 +93,30 @@ public class RecipeService implements IRecipeService
 	@Override
 	@Transactional
 	public RecipeDto updateRecipe(RecipeDto recipe) {
-//		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
-//		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
-//		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause()); //also check depart id is not null and existent
+		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
+		Assert.notNull(recipe.getName(), Errors.RECIPE_NAME_NULL.getCause());
+		Assert.notNull(recipe.getDepartment(), Errors.RECIPE_DEPART_NULL.getCause()); //also check depart id is not null and existent
 		Assert.notNull(recipe.getId(), Errors.ID_MUST_NOT_BE_NULL.getCause());
 
 		Recipe recipeWithSameName = recipeRep.findByNameIgnoreCase(recipe.getName());
 		if (recipeWithSameName != null && !recipeWithSameName.getId().equals(recipe.getId())) {
 			throw new RecipeApplicationException(Errors.RECIPE_NAME_NOT_UNIQUE);
 		}
+
+		Optional<Recipe> oldOneOptional = recipeRep.findById(recipe.getId());
+		oldOneOptional.ifPresent(oldOne -> {
+			if (!oldOne.getName().equals(recipe.getName())
+					|| !oldOne.getDepartment().getName().equals(recipe.getDepartment().getName())) {
+				try {
+					fileService.renameCatalog(constructCatalogName(oldOne),
+							constructCatalogName(recipe.getDepartment().getName(), recipe.getName()));
+					recipe.setImgPath(constructCatalogName(recipe.getDepartment().getName(), recipe.getName()));
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 
 		return convertAndSave(recipe);
 	}
@@ -181,10 +197,19 @@ public class RecipeService implements IRecipeService
 	}
 
 	private String constructConstantFileNamePart(Recipe recipe) {
+		return constructCatalogName(recipe) + File.separator
+				+ recipe.getName();
+	}
+
+	private String constructCatalogName(Recipe recipe) {
 		String catalogName = recipe.getDepartment().getName();
 		String subCatalogName = recipe.getName();
 		return catalogName + File.separator
-				+ subCatalogName + File.separator
+				+ subCatalogName;
+	}
+
+	private String constructCatalogName(String catalogName, String subCatalogName) {
+		return catalogName + File.separator
 				+ subCatalogName;
 	}
 

@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
 @NoArgsConstructor
@@ -29,6 +30,7 @@ public class RecipeDto {
 	private String name;
 	@NotNull(message = "Recipe department should not be null")
 	private DepartmentDto department;
+	@Setter
 	private String imgPath;
 	private String text;
 	private List<DetailDto> details = new ArrayList<>();

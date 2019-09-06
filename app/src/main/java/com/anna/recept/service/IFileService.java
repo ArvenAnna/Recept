@@ -20,4 +20,6 @@ public interface IFileService {
     void deleteRealFile(String path) throws IOException;
 
     void cleanTempFiles() throws IOException;
+
+    void renameCatalog(String oldPathTocatalog, String newName) throws IOException;
 }
