@@ -1,6 +1,8 @@
 export const getResponse = (response) => {
     if (!response.ok) {
-        throw new Error(response.json().message);
+         return response.json().then(json => {
+             throw new Error(json.message);
+         });
     }
     return response.json();
 }
