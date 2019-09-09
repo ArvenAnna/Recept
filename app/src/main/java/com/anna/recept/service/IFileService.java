@@ -21,5 +21,5 @@ public interface IFileService {
 
     void cleanTempFiles() throws IOException;
 
-    void renameCatalog(String oldPathTocatalog, String newName) throws IOException;
+    void replaceFilesInCatalog(String oldPathTocatalog, String newName);
 }

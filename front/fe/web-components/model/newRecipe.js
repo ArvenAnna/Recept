@@ -1,5 +1,6 @@
 import {Recipe} from './recipe';
 import routes from '../../constants/Routes';
+import {getResponse} from "../utils/httpUtils";
 
 class NewRecipe extends Recipe {
 
@@ -101,7 +102,11 @@ class NewRecipe extends Recipe {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(this._recipe)}).then(res => res.json());
+            body: JSON.stringify(this._recipe)})
+            .then(getResponse)
+            .catch(e => {
+                console.log(e);
+            });
         return newRecipe.id;
     }
 

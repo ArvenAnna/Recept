@@ -1,5 +1,6 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
+import {getResponse} from "../utils/httpUtils";
 
 class Departments extends Model {
 
@@ -17,8 +18,9 @@ class Departments extends Model {
 
     retrieve() {
         fetch(routes.GET_DEPARTMENTS)
-            .then(res => res.json())
-            .then(newDepartments => this._setDepartments(newDepartments));
+            .then(getResponse)
+            .then(newDepartments => this._setDepartments(newDepartments))
+            .catch(e => console.log(e));
     }
 
     _setDepartments(newDepartments) {

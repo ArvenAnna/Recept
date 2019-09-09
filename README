@@ -11,8 +11,4 @@ To start application you need:
 5. To make dump use inside postgres container
     pg_dump -U postgres recept > docker-entrypoint-initdb.d/recept_plain.sql
 
-
-при смене имени херится фотка, а старая, вероятно остается по старому пути?
-не очищается поле с ингридиентом после добавление одного
-при создании рецепта не сохраняются описания с фото в свободной форме
-обработка ошибок запросов - на рецепт с таким именем существует
+обработка ошибок запросов - на рецепт с таким именем существует - show Error message

@@ -9,6 +9,7 @@ import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.repository.RecipeRepository;
 import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IRecipeService;
+import com.anna.recept.utils.FilePathUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,12 +27,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 @Service
-public class RecipeService implements IRecipeService
-{
-
-	public static final String DEFAULT_EXTENSION = "png";
-	private static final String FOTO_LOCATION_ENV = "FOTO_LOCATION";
-
+public class RecipeService implements IRecipeService {
 
 	@Autowired
 	private RecipeRepository recipeRep;
@@ -103,21 +100,6 @@ public class RecipeService implements IRecipeService
 			throw new RecipeApplicationException(Errors.RECIPE_NAME_NOT_UNIQUE);
 		}
 
-		Optional<Recipe> oldOneOptional = recipeRep.findById(recipe.getId());
-		oldOneOptional.ifPresent(oldOne -> {
-			if (!oldOne.getName().equals(recipe.getName())
-					|| !oldOne.getDepartment().getName().equals(recipe.getDepartment().getName())) {
-				try {
-					fileService.renameCatalog(constructCatalogName(oldOne),
-							constructCatalogName(recipe.getDepartment().getName(), recipe.getName()));
-					recipe.setImgPath(constructCatalogName(recipe.getDepartment().getName(), recipe.getName()));
-				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
 		return convertAndSave(recipe);
 	}
 
@@ -163,54 +145,37 @@ public class RecipeService implements IRecipeService
 		});
 	}
 
-	private String saveRecipeFile(String tempPath, Recipe recipe) {
+	private String saveRecipeFile(String path, Recipe recipe) {
 		Assert.notNull(recipe.getDepartment(), "department should be fetched before accessing it");
 		Assert.notNull(recipe.getDepartment().getName(), "department should be fetched before accessing it");
 
-		return isRealPath(tempPath, recipe)
-				? tempPath
-				: saveFileAndGetPath(tempPath, constructFullFileName(tempPath, recipe));
-	}
+		String catalog = recipe.getDepartment().getName();
+		String subCatalog = recipe.getName();
 
-	private boolean isRealPath(String path, Recipe recipe) {
-		return path == null || path.contains(constructConstantFileNamePart(recipe));
+		return FilePathUtils.isTempPath(path)
+				? saveFileAndGetPath(path, FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog))
+				: replaceFileIfNeededAndGetPath(path, catalog, subCatalog);
 	}
 
 	private String saveFileAndGetPath(String tempPath, String newFileName) {
 			try {
-				String fileNameWithCatalog = System.getenv(FOTO_LOCATION_ENV) + File.separator + newFileName;
-				fileService.saveRealFile(tempPath, fileNameWithCatalog);
+				fileService.saveRealFile(tempPath, newFileName);
 				return newFileName;
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				//todo check if it is not saved process some another way
+				throw new UncheckedIOException(e);
 			}
-			return null;
 	}
 
-	private String constructFullFileName(String tempPath, Recipe recipe) {
-		String[] pathFragments = tempPath.split("\\.");
-		String extension = pathFragments.length <= 1
-				? DEFAULT_EXTENSION
-				: pathFragments[pathFragments.length - 1];
-		return constructConstantFileNamePart(recipe) + UUID.randomUUID().toString() + "." + extension;
-	}
-
-	private String constructConstantFileNamePart(Recipe recipe) {
-		return constructCatalogName(recipe) + File.separator
-				+ recipe.getName();
-	}
-
-	private String constructCatalogName(Recipe recipe) {
-		String catalogName = recipe.getDepartment().getName();
-		String subCatalogName = recipe.getName();
-		return catalogName + File.separator
-				+ subCatalogName;
-	}
-
-	private String constructCatalogName(String catalogName, String subCatalogName) {
-		return catalogName + File.separator
-				+ subCatalogName;
+	private String replaceFileIfNeededAndGetPath(String path, String catalog, String subCatalog) {
+		String newCatalogName = FilePathUtils.constructCatalogName(catalog, subCatalog);
+		String changedFilePath = FilePathUtils.getChangedCatalogsInPath(path, newCatalogName);
+		if (path != null && !path.equals(changedFilePath)) {
+			fileService.replaceFilesInCatalog(FilePathUtils.extractCatalogFromPath(path), newCatalogName);
+			return changedFilePath;
+		}
+		return path;
 	}
 
 	@Override

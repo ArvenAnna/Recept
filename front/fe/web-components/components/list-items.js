@@ -85,6 +85,7 @@ class RecipeListItems extends WebElement {
 
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
+        this._removeItem = this._removeItem.bind(this);
     }
 
     _renderItems() {
@@ -100,11 +101,16 @@ class RecipeListItems extends WebElement {
         template.byClass(ITEM).innerHTML = this.$renderItem(item);
 
         if (this.$removeItem) {
-            template.byClass(REMOVE_ITEM).addEventListener('click', this.$removeItem.bind(null, item));
+            template.byClass(REMOVE_ITEM).addEventListener('click', this._removeItem.bind(null, item));
         } else {
             template.byClass(REMOVE_ITEM).style.display = 'none';
         }
         this.$_id(CONTAINER).appendChild(template);
+    }
+
+    _removeItem(item, e) {
+        this.$removeItem(item);
+        e.target.parentElement.remove();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

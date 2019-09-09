@@ -57,6 +57,7 @@ public class RecipeDto {
 	public static class DetailDto {
 		private Long id;
 		private String description;
+		@Setter
 		private String filePath;
 
 		public static DetailDto of(Detail detail) {

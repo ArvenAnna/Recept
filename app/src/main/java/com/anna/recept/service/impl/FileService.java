@@ -11,10 +11,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class FileService implements IFileService {
@@ -69,7 +72,8 @@ public class FileService implements IFileService {
     // todo:make it void
     @Override
     public String saveRealFile(String tempPath, String name) throws IOException {
-        File webappFile = new File(context.getRealPath("") + File.separator + name);
+        File webappFile = new File(context.getRealPath("") + File.separator +System.getenv(FOTO_LOCATION_ENV) + File.separator + name);
+
         File temp = new File(context.getRealPath("") + File.separator + tempPath);
         if (!temp.getAbsolutePath().equals(webappFile.getAbsolutePath())) {
             FileUtils.copyFile(temp, webappFile);
@@ -96,15 +100,35 @@ public class FileService implements IFileService {
         }
     }
 
-    // oldPathTocatalog in format : path/to/oldCatalog
-    // will be replaced with : path/from/newName
-    public void renameCatalog(String oldPathToCatalog, String newPathToCatalog) throws IOException {
+    // all files will be replaced from one catalog to another
+    public void replaceFilesInCatalog(String oldPathToCatalog, String newPathToCatalog) {
+        if (oldPathToCatalog.equals(newPathToCatalog)) return;
 		String oldDir = context.getRealPath("") + System.getenv(FOTO_LOCATION_ENV)
 				+ File.separator + oldPathToCatalog;
 		String newDir = context.getRealPath("") + System.getenv(FOTO_LOCATION_ENV)
 				+ File.separator + newPathToCatalog;
 		Path oldCatalogPath = Paths.get(oldDir);
 		Path targetPath = Paths.get(newDir);
-		Files.move(oldCatalogPath, targetPath);
+
+        try {
+            Files.createDirectories(targetPath);
+        }
+        catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
+        if (Files.exists(oldCatalogPath)) {
+            Stream.of(oldCatalogPath.toFile().listFiles()).forEach(file -> {
+                try {
+                    Files.move(file.toPath(),
+                            targetPath.resolve(file.getName()),
+                            StandardCopyOption.REPLACE_EXISTING);
+                }
+                catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            });
+            oldCatalogPath.toFile().delete();
+        }
 	}
 }
