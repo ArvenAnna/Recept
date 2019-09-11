@@ -40,23 +40,26 @@ const template = `
       }
       
       #${EXPAND_ICON} {
-        width: 1rem;
-        height: 1rem;
-        margin: 0.5rem;
+        width: 0.5rem;
+        height: 0.5rem;
         cursor: pointer;
+        position: absolute;
+        left: -0.8rem;
       }
       
       #${CAPTION_CONTAINER} {
         display: flex;
         align-items: center;
+        position: relative;
       }
       
   </style>
   
   <div id='${CONTAINER}'>
        <div id='${CAPTION_CONTAINER}'>
-            <div id='${CAPTION}'>Add main photo:</div>
             <img src="${ICON_ARROW_DOWN}" id="${EXPAND_ICON}"/>
+            <div id='${CAPTION}'>Add main photo:</div>
+            
        </div>
        <div id="${UPLOAD_WRAPPER}">
             <${UPLOAD_COMPONENT}></${UPLOAD_COMPONENT}>

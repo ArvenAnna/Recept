@@ -28,6 +28,7 @@ const template = `
   <style>
     #${CONTAINER} {
         color: var(--dark-dark-background-crp);
+        padding: 0 1.5rem;
     }
     
     #${RECIPE_NAME_CONTAINER}{
@@ -48,9 +49,10 @@ const template = `
     
     #${SAVE} {
        text-align: center;
-        background-color: var(--light-background-crp);
-        margin: 1rem;
-        border: 2px solid var(--dark-background-crp);
+       background-color: var(--light-background-crp);
+       margin: 1rem;
+       border: 2px solid var(--dark-background-crp);
+       cursor: pointer;
     }
     
   </style>
@@ -61,14 +63,14 @@ const template = `
         <input-text id='${RECIPE_NAME}' placeholder='Enter name'/>
       </div>
       
+      <${RECIPE_MAIN_PHOTO_COMPONENT}></${RECIPE_MAIN_PHOTO_COMPONENT}>
+      
       <${RECIPE_DEPARTMENT_COMPONENT}></${RECIPE_DEPARTMENT_COMPONENT}>
       
       <${RECIPE_REFS_COMPONENT}></${RECIPE_REFS_COMPONENT}>
       
       <${RECIPE_PROPORTIONS_COMPONENT}></${RECIPE_PROPORTIONS_COMPONENT}>
-      
-      <${RECIPE_MAIN_PHOTO_COMPONENT}></${RECIPE_MAIN_PHOTO_COMPONENT}>
-      
+            
       <${RECIPE_DETAILS_COMPONENT}></${RECIPE_DETAILS_COMPONENT}>
       
       <div id='${RECIPE_NAME_CONTAINER}'>

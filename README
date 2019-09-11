@@ -20,3 +20,6 @@ To start application you need:
 - dropdown arrow not changed
 - green background on side menu
 - foto with file upload looks like a shit
+- foto to be rotatable
+- new fileupload component merged
+- add form validation on empty fields (error tooltips)

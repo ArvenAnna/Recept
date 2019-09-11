@@ -28,10 +28,11 @@ const template = `
       }
       
       #${EXPAND_ICON} {
-        width: 1rem;
-        height: 1rem;
-        margin: 0.5rem;
+        width: 0.5rem;
+        height: 0.5rem;
         cursor: pointer;
+        position: absolute;
+        left: -0.8rem;
       }
       
       ${DETAIL_COMPONENT} {
@@ -41,14 +42,15 @@ const template = `
       #${CAPTION_CONTAINER} {
         display: flex;
         align-items: center;
+        position: relative;
       }
       
   </style>
   
   <div id='${CONTAINER}'>
        <div id='${CAPTION_CONTAINER}'>
-            <span id='${CAPTION}'>Add description with photo in free form:</span>
             <img src="${ICON_ARROW_DOWN}" id="${EXPAND_ICON}"/>
+            <span id='${CAPTION}'>Add description with photo in free form:</span>
        </div>
        
        <${DETAIL_COMPONENT}></${DETAIL_COMPONENT}>
