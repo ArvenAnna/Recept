@@ -5,9 +5,14 @@ import './recipe-detail';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
+const CAPTION_CONTAINER = 'caption-container';
+const EXPAND_ICON = 'expand-icon';
 
 const LIST_COMPONENT = 'list-items';
 const DETAIL_COMPONENT = 'recipe-detail';
+
+const ICON_ARROW_DOWN = 'svg/caret-down.svg';
+const ICON_ARROW_UP = 'svg/sort-up.svg';
 
 const template = `
   <style>
@@ -20,12 +25,32 @@ const template = `
       }
       
       #${CAPTION} {
-        margin-bottom: 0.5rem;
       }
+      
+      #${EXPAND_ICON} {
+        width: 1rem;
+        height: 1rem;
+        margin: 0.5rem;
+        cursor: pointer;
+      }
+      
+      ${DETAIL_COMPONENT} {
+        display: none;
+      }
+      
+      #${CAPTION_CONTAINER} {
+        display: flex;
+        align-items: center;
+      }
+      
   </style>
   
   <div id='${CONTAINER}'>
-       <div id='${CAPTION}'>Add description with photo in free form:</div>
+       <div id='${CAPTION_CONTAINER}'>
+            <span id='${CAPTION}'>Add description with photo in free form:</span>
+            <img src="${ICON_ARROW_DOWN}" id="${EXPAND_ICON}"/>
+       </div>
+       
        <${DETAIL_COMPONENT}></${DETAIL_COMPONENT}>
        <${LIST_COMPONENT}></${LIST_COMPONENT}>
   </div>
@@ -61,10 +86,26 @@ class RecipeDetails extends WebElement {
         }
     }
 
+    _toggleContent() {
+        this.$isContentExpanded = !this.$isContentExpanded;
+        if (this.$isContentExpanded) {
+            this.$_id(EXPAND_ICON).src = ICON_ARROW_UP;
+            this.$(DETAIL_COMPONENT).style.display = 'block';
+        } else {
+            this.$_id(EXPAND_ICON).src = ICON_ARROW_DOWN;
+            this.$(DETAIL_COMPONENT).style.display = 'none';
+        }
+    }
+
     constructor() {
         super(template, true);
 
         this._render = this._render.bind(this);
+        this._toggleContent = this._toggleContent.bind(this);
+
+        this.$isContentExpanded = false;
+
+        this.$_id(EXPAND_ICON).addEventListener('click', this._toggleContent);
     }
 }
 

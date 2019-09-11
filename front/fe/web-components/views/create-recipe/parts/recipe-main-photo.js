@@ -6,6 +6,8 @@ import routes from '../../../../constants/Routes';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
+const CAPTION_CONTAINER = 'caption-container';
+const EXPAND_ICON = 'expand-icon';
 
 const IMAGE_WRAPPER = 'image_wrapper';
 const UPLOAD_WRAPPER = 'upload_wrapper';
@@ -13,6 +15,8 @@ const UPLOAD_WRAPPER = 'upload_wrapper';
 const UPLOAD_COMPONENT = 'file-input-autoupload';
 const IMAGE_COMPONENT = 'removable-image';
 
+const ICON_ARROW_DOWN = 'svg/caret-down.svg';
+const ICON_ARROW_UP = 'svg/sort-up.svg';
 
 const template = `
   <style>
@@ -24,26 +28,40 @@ const template = `
          flex-direction: column;
       }
       
-      #${CAPTION} {
-         padding-right: 0.5rem;
-      }
-      
       #${UPLOAD_WRAPPER} {
-         display: flex;
+         display: none;
+            
+         flex-direction: column;
+         align-items: center;
       }
       
       #${IMAGE_WRAPPER} {
         width: 300px;
       }
+      
+      #${EXPAND_ICON} {
+        width: 1rem;
+        height: 1rem;
+        margin: 0.5rem;
+        cursor: pointer;
+      }
+      
+      #${CAPTION_CONTAINER} {
+        display: flex;
+        align-items: center;
+      }
+      
   </style>
   
   <div id='${CONTAINER}'>
-       <div id='${UPLOAD_WRAPPER}'>
+       <div id='${CAPTION_CONTAINER}'>
             <div id='${CAPTION}'>Add main photo:</div>
+            <img src="${ICON_ARROW_DOWN}" id="${EXPAND_ICON}"/>
+       </div>
+       <div id="${UPLOAD_WRAPPER}">
             <${UPLOAD_COMPONENT}></${UPLOAD_COMPONENT}>
-        </div>
-       
-       <div id='${IMAGE_WRAPPER}'><${IMAGE_COMPONENT}></${IMAGE_COMPONENT}></div>
+            <div id='${IMAGE_WRAPPER}'><${IMAGE_COMPONENT}></${IMAGE_COMPONENT}></div>
+       </div>
   </div>
   
 `;
@@ -73,10 +91,25 @@ class RecipeMainPhoto extends WebElement {
         }
     }
 
+    _toggleContent() {
+        this.$isContentExpanded = !this.$isContentExpanded;
+        if (this.$isContentExpanded) {
+            this.$_id(EXPAND_ICON).src = ICON_ARROW_UP;
+            this.$_id(UPLOAD_WRAPPER).style.display = 'flex';
+        } else {
+            this.$_id(EXPAND_ICON).src = ICON_ARROW_DOWN;
+            this.$_id(UPLOAD_WRAPPER).style.display = 'none';
+        }
+    }
+
     constructor() {
         super(template, true);
+        this.$isContentExpanded = false;
 
         this._render = this._render.bind(this);
+        this._toggleContent = this._toggleContent.bind(this);
+
+        this.$_id(EXPAND_ICON).addEventListener('click', this._toggleContent);
     }
 
 }

@@ -11,4 +11,12 @@ To start application you need:
 5. To make dump use inside postgres container
     pg_dump -U postgres recept > docker-entrypoint-initdb.d/recept_plain.sql
 
-обработка ошибок запросов - на рецепт с таким именем существует - show Error message
+
+- обработка ошибок запросов - на рецепт с таким именем существует - show Error message
+- search
+- foto to ingredient (hierarchial structure?)
+- add another style theme
+- small file copies
+- dropdown arrow not changed
+- green background on side menu
+- foto with file upload looks like a shit

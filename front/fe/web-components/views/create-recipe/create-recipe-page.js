@@ -13,7 +13,6 @@ const CONTAINER = 'create-recipe-page';
 const RECIPE_NAME_CONTAINER = 'recipe-name-container';
 const RECIPE_NAME = 'recipe-name';
 const RECIPE_NAME_CAPTION = 'recipe-name-caption';
-const RECIPE_DESCRIPTION = 'recipe-description';
 
 const RECIPE_DEPARTMENT_COMPONENT = 'recipe-department';
 const RECIPE_REFS_COMPONENT = 'recipe-references';
@@ -47,6 +46,13 @@ const template = `
         
     }
     
+    #${SAVE} {
+       text-align: center;
+        background-color: var(--light-background-crp);
+        margin: 1rem;
+        border: 2px solid var(--dark-background-crp);
+    }
+    
   </style>
   
   <div id='${CONTAINER}'>
@@ -69,7 +75,7 @@ const template = `
             <${RECIPE_DESCRIPTION_COMPONENT} placeholder="Add description"></${RECIPE_DESCRIPTION_COMPONENT}>
       </div>
 
-      <button id='${SAVE}'>Save</button>
+      <div id='${SAVE}'>Save</div>
   </div>
 `;
 

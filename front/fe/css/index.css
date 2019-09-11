@@ -39,7 +39,7 @@ create-recipe-page {
     --list-background: var(--light-background);
 
     /*for removable-image*/
-    --image-border: 2px solid var(--input-background);
+    --image-border: 2px solid var(--dark-background);
 }
 
 ingredients-page {
