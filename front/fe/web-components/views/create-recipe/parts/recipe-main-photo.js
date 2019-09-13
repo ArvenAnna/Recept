@@ -2,6 +2,8 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/removable-image';
 import '../../../components/file-input-autoupload';
+
+import '../../../components/photo-upload';
 import routes from '../../../../constants/Routes';
 
 const CONTAINER = 'container';
@@ -12,8 +14,7 @@ const EXPAND_ICON = 'expand-icon';
 const IMAGE_WRAPPER = 'image_wrapper';
 const UPLOAD_WRAPPER = 'upload_wrapper';
 
-const UPLOAD_COMPONENT = 'file-input-autoupload';
-const IMAGE_COMPONENT = 'removable-image';
+const PHOTO_UPLOAD_COMPONENT = 'photo-upload';
 
 const ICON_ARROW_DOWN = 'svg/caret-down.svg';
 const ICON_ARROW_UP = 'svg/sort-up.svg';
@@ -30,9 +31,6 @@ const template = `
       
       #${UPLOAD_WRAPPER} {
          display: none;
-            
-         flex-direction: column;
-         align-items: center;
       }
       
       #${IMAGE_WRAPPER} {
@@ -59,11 +57,10 @@ const template = `
        <div id='${CAPTION_CONTAINER}'>
             <img src="${ICON_ARROW_DOWN}" id="${EXPAND_ICON}"/>
             <div id='${CAPTION}'>Add main photo:</div>
-            
        </div>
+       
        <div id="${UPLOAD_WRAPPER}">
-            <${UPLOAD_COMPONENT}></${UPLOAD_COMPONENT}>
-            <div id='${IMAGE_WRAPPER}'><${IMAGE_COMPONENT}></${IMAGE_COMPONENT}></div>
+            <${PHOTO_UPLOAD_COMPONENT}></${PHOTO_UPLOAD_COMPONENT}>
        </div>
   </div>
   
@@ -77,19 +74,11 @@ class RecipeMainPhoto extends WebElement {
     }
 
     _render() {
-        this.$(UPLOAD_COMPONENT).props = {
+        this.$(PHOTO_UPLOAD_COMPONENT).props = {
             uploadFileCallback: path => {
                 this.$recipe.imgPath = path;
-                this.$(IMAGE_COMPONENT).src = path;
             },
-            uploadUrl: routes.UPLOAD_FILE
-        };
-
-        this.$(IMAGE_COMPONENT).props = {
-            removeFileCallback: () => {
-                this.$recipe.imgPath = null;
-                this.$(UPLOAD_COMPONENT).cleanFile();
-            },
+            uploadUrl: routes.UPLOAD_FILE,
             src: this.$recipe.imgPath
         }
     }
@@ -98,10 +87,10 @@ class RecipeMainPhoto extends WebElement {
         this.$isContentExpanded = !this.$isContentExpanded;
         if (this.$isContentExpanded) {
             this.$_id(EXPAND_ICON).src = ICON_ARROW_UP;
-            this.$_id(UPLOAD_WRAPPER).style.display = 'flex';
+            this.reveal_id(UPLOAD_WRAPPER);
         } else {
             this.$_id(EXPAND_ICON).src = ICON_ARROW_DOWN;
-            this.$_id(UPLOAD_WRAPPER).style.display = 'none';
+            this.hide_id(UPLOAD_WRAPPER);
         }
     }
 

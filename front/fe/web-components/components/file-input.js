@@ -17,6 +17,7 @@ const template = `
         display: inline-flex;
         align-items: center;
         cursor: pointer;
+        padding: 0.2rem 1rem;
     }
     
     #${FILE_INPUT} {
@@ -24,9 +25,9 @@ const template = `
         left: 0;
         top: 0;
         opacity: 0;
-        cursor: pointer;
-        width: 100%;
-        height: 100%;
+        width: 0;
+        height: 0;
+        visibility: hidden;
     }
     
     #${SEARCH_ICON} {
@@ -38,12 +39,11 @@ const template = `
     
   </style>
   
-  <div id="${CONTAINER}">
+  <label id="${CONTAINER}">
     <img src="${ICON_SRC}" id="${SEARCH_ICON}"/>
     <input type='file' id='${FILE_INPUT}'/>
     <div id="${FILE_NAME}"></div>
-  </div>
-  
+  </label>
 `;
 
 class FileInput extends WebElement {

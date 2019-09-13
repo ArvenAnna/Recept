@@ -9,6 +9,22 @@ export default class WebElement extends HTMLElement {
         return this.$(`#${id}`);
     }
 
+    hide(selector) {
+        this.$(selector).style.display = 'none';
+    }
+
+    hide_id(id) {
+        this.hide(`#${id}`);
+    }
+
+    reveal(selector) {
+        this.$(selector).style.display = 'flex';
+    }
+
+    reveal_id(id) {
+        this.reveal(`#${id}`);
+    }
+
     constructor(template, isShadow) {
         super();
 

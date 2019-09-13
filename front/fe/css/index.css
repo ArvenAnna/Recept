@@ -38,8 +38,9 @@ create-recipe-page {
     /*for list-items*/
     --list-background: var(--light-background);
 
-    /*for removable-image*/
+    /*for photo upload*/
     --image-border: 2px solid var(--dark-background);
+    --overlay-label-bg: var(--light-background);
 }
 
 ingredients-page {
