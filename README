@@ -24,3 +24,5 @@ To start application you need:
 - new fileupload component merged
 - add form validation on empty fields (error tooltips)
 - extract expandable blocks to separate component
+- suggestion input - adding ingredient - doesn't retrieve new suggestions while typing symbols
+	add border radius

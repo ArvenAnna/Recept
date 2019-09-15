@@ -37,6 +37,7 @@ class FileInputAutoUpload extends WebElement {
             body: fd}).then(res => res.json()).then(json => json.path);
 
         this.$uploadFileCallback(path);
+	this.cleanFile();
     }
 
     cleanFile() {

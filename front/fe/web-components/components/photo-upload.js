@@ -100,11 +100,13 @@ class PhotoUpload extends WebElement {
             uploadFileCallback: this._onUpload,
             uploadUrl
         };
-        this.setAttribute(supportedAttributes.SRC, src);
+        
         if (!src) {
+	    this.setAttribute(supportedAttributes.SRC, DEFAULT_SRC);
             this.$(FILE_UPLOAD_COMPONENT).style.display = 'block';
             this.$_id(REMOVE).style.display = 'none';
         } else {
+	    this.setAttribute(supportedAttributes.SRC, src);
             this.$(FILE_UPLOAD_COMPONENT).style.display = 'none';
             this.$_id(REMOVE).style.display = 'block';
         }
