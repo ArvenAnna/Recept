@@ -24,8 +24,6 @@ const template = `
         font-weight: 400;
     }
     
-    
-    
   </style>
   
   <textarea id="${INPUT}"/>

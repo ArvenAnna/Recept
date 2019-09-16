@@ -1,4 +1,5 @@
 import WebElement from '../abstract/web-element';
+import './removable-image-with-text';
 
 const CONTAINER = 'items_container';
 const TITLE = 'title';
@@ -8,8 +9,8 @@ const ITEM_TEMPLATE = 'item_template';
 const ITEM_CONTAINER = 'item_container';
 const ITEMS_CONTAINER = 'items-container';
 const ITEM = 'item';
-const REMOVE_ITEM = 'remove_item';
-const REMOVE_ICON_SRC = 'svg/cross.svg';
+
+const IMAGE_COMPONENT = 'removable-image-with-text';
 
 const template = `
   <style>
@@ -21,12 +22,6 @@ const template = `
         /* don't put margin here*/
     }
     
-    .${REMOVE_ITEM} {
-        width: 1rem;
-        height: 1rem;
-        cursor: pointer;
-    }
-    
     #${ITEMS_CONTAINER} {
         display: flex;
         flex-wrap: wrap;
@@ -34,15 +29,7 @@ const template = `
     }
     
     .${ITEM_CONTAINER} {
-       display: flex;
-       align-items:center;
-       margin: 0.5rem 0;
-       font-style: italic;
-       background-color: var(--list-background, white);
-       color: var(--list-font-color, black);
-       border-radius: 0.2rem;
-       padding: 0.1rem 0.2rem;
-       margin-right: 1rem;
+        margin-right: 1rem;
     }
     
     .${ITEM} {
@@ -53,8 +40,7 @@ const template = `
   
   <template id="${ITEM_TEMPLATE}">
     <div class="${ITEM_CONTAINER}">
-        <span class="${ITEM}"></span>
-        <img src="${REMOVE_ICON_SRC}" class="${REMOVE_ITEM}"/>
+        <${IMAGE_COMPONENT} class="${ITEM}"></${IMAGE_COMPONENT}>
     </div>
   </template>
   
@@ -69,14 +55,14 @@ const supportedAttributes = {
     TITLE: 'title'
 }
 
-class RecipeListItems extends WebElement {
+class ImageList extends WebElement {
 
     static get observedAttributes() {
         return Object.values(supportedAttributes);
     }
 
-    set items(newItems) {
-        this.$items = newItems || [];
+    set data(newData) {
+        this.$data = newData || [];
         this._renderItems();
     }
 
@@ -84,9 +70,8 @@ class RecipeListItems extends WebElement {
         this.setAttribute(supportedAttributes.TITLE, v);
     }
 
-    set props({items, renderItem, removeItemCallback, title}) {
-        this.$items = items || [];
-        this.$renderItem = renderItem;
+    set props({data, removeItemCallback, title}) {
+        this.$data = data || [];
         this.$removeItem = removeItemCallback;
         if (title) {
             this.setAttribute(supportedAttributes.TITLE, title);
@@ -99,32 +84,25 @@ class RecipeListItems extends WebElement {
 
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
-        this._removeItem = this._removeItem.bind(this);
     }
 
     _renderItems() {
         this.$_id(ITEMS_CONTAINER).innerHTML = "";
-        if (this.$renderItem) {
-            this.$items.forEach(this._renderItem);
-        }
+        this.$data.forEach(this._renderItem);
     }
 
-    _renderItem(item) {
+    _renderItem(dataItem) {
         const template = this.getTemplateById(ITEM_TEMPLATE);
 
-        template.byClass(ITEM).innerHTML = this.$renderItem(item);
-
-        if (this.$removeItem) {
-            template.byClass(REMOVE_ITEM).addEventListener('click', this._removeItem.bind(null, item));
-        } else {
-            template.byClass(REMOVE_ITEM).style.display = 'none';
+        template.byClass(ITEM).onConstruct = (image) => {
+            image.props = {
+                removeFileCallback: this.$removeItem.bind(null, dataItem.item),
+                src: dataItem.src,
+                text: dataItem.text
+            }
         }
-        this.$_id(ITEMS_CONTAINER).appendChild(template);
-    }
 
-    _removeItem(item, e) {
-        this.$removeItem(item);
-        e.target.parentElement.remove();
+        this.$_id(ITEMS_CONTAINER).appendChild(template);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -135,4 +113,4 @@ class RecipeListItems extends WebElement {
     }
 
 }
-customElements.define('list-items', RecipeListItems);
+customElements.define('image-list', ImageList);

@@ -106,6 +106,10 @@ class CreateRecipePage extends WebElement {
         this._saveRecipe = this._saveRecipe.bind(this);
 
         this.$_id(SAVE).addEventListener('click', this._saveRecipe);
+        this.$_id(RECIPE_NAME).validationErrorsOnBlur = [{
+            pattern: /.+/,
+            errorText: 'Recipe name should not be empty'
+        }];
     }
 
     _saveRecipe() {

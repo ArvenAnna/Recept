@@ -2,6 +2,8 @@ import {Recipe} from './recipe';
 import routes from '../../constants/Routes';
 import {getResponse} from "../utils/httpUtils";
 
+import mNotification from './notification';
+
 class NewRecipe extends Recipe {
 
     constructor() {
@@ -105,7 +107,7 @@ class NewRecipe extends Recipe {
             body: JSON.stringify(this._recipe)})
             .then(getResponse)
             .catch(e => {
-                console.log(e);
+                mNotification.message = e.message;
             });
         return newRecipe.id;
     }

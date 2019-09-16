@@ -2,7 +2,8 @@ import WebElement from '../abstract/web-element';
 import {isDescendantOf} from "../../utils/domUtils";
 import './toggable-drop-down-list';
 
-const CARET_ICON_SRC = 'svg/caret-down.svg';
+const CARET_ICON_DOWN_SRC = 'svg/caret-down.svg';
+const CARET_ICON_UP_SRC = 'svg/sort-up.svg';
 
 const CONTAINER = 'container';
 const LABEL = 'label';
@@ -43,7 +44,7 @@ const template = `
   <div id="${CONTAINER}">
     <div id="${LABEL}">
         <div id="${LABEL_VALUE}"></div>
-        <img src="${CARET_ICON_SRC}" id="${CARET_ICON}"/>
+        <img src="${CARET_ICON_DOWN_SRC}" id="${CARET_ICON}"/>
     </div>
     <${TOGGABLE_LIST_COMPONENT}></${TOGGABLE_LIST_COMPONENT}>
   </div>
@@ -63,8 +64,19 @@ class DropDown extends WebElement {
         }
     }
 
+    get opened() {
+        return this.$opened;
+    }
+
+    set opened(isOpened) {
+        this.$opened = isOpened;
+        this.$_id(CARET_ICON).src = isOpened ? CARET_ICON_UP_SRC : CARET_ICON_DOWN_SRC;
+    }
+
     constructor() {
         super(template, true);
+
+        this.$opened = false;
 
         this._renderDropDown = this._renderDropDown.bind(this);
         this._clickOutside = this._clickOutside.bind(this);
@@ -95,8 +107,10 @@ class DropDown extends WebElement {
     _clickOutside(e) {
         if (isDescendantOf(e.composedPath()[0], this.$_id(LABEL))) {
             this.$(TOGGABLE_LIST_COMPONENT).toggleDropdown();
+            this.opened = !this.opened;
         } else {
             this.$(TOGGABLE_LIST_COMPONENT).closeDropdown();
+            this.opened = false;
         }
     }
 }

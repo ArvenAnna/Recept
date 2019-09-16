@@ -34,9 +34,12 @@ create-recipe-page {
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
+    --input-error-border: var(--error-border);
+    --input-error-color: var(--error-color);
 
     /*for list-items*/
-    --list-background: var(--light-background);
+    --list-background: var(--dark-background);
+    --list-font-color: var(--light-background);
 
     /*for photo upload*/
     --image-border: 2px solid var(--dark-background);
@@ -47,7 +50,8 @@ ingredients-page {
     --control-width: 10rem;
 
     /*for list-items*/
-    --list-background: var(--light-background);
+    --list-background: var(--dark-background);
+    --list-font-color: var(--light-background);
 
     /*for input-text*/
     --input-background: var(--light-background);
@@ -58,6 +62,11 @@ ingredients-page {
 recipe-page {
     /*for list-items*/
     --list-background: var(--light-background);
+}
+
+common-notification {
+    --notification-error-border: var(--error-border);
+    --notification-error-color: var(--error-background);
 }
 
 /*create-recipe-page drop-down {*/

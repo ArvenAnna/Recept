@@ -1,6 +1,7 @@
 import WebElement from './abstract/web-element';
 
 import './router/recipe-route';
+import './common-notification';
 
 import './views/recipe/recipe-page-renderer';
 import './views/recipes/recipes-page-renderer';
@@ -56,6 +57,7 @@ const template = `
     
   </style>
   <div id="${CONTAINER}">
+    <common-notification></common-notification>
     <recipe-header></recipe-header>
     <div id="${BODY}"> 
         <div id="${CONTENT}">
@@ -77,6 +79,7 @@ const template = `
 export default class App extends WebElement {
     constructor() {
         super(template);
+
     }
 }
 

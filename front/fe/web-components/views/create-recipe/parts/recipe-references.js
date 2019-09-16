@@ -16,17 +16,15 @@ const LIST_COMPONENT = 'list-items';
 const template = `
   <style>
       #${CONTAINER} {
-         
+            display: flex;
+            margin: 1rem;
+            flex-direction: column;
       }
       
       #${INPUT_CONTAINER} {
          display: flex;
-         margin: 1rem;
          align-items: center;
-      }
-      
-      #${LIST_CONTAINER} {
-         margin: 1rem;
+         margin-bottom: 1rem;
       }
       
       #${CAPTION} {

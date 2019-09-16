@@ -17,12 +17,10 @@ To start application you need:
 - foto to ingredient (hierarchial structure?)
 - add another style theme
 - small file copies
-- dropdown arrow not changed
-- green background on side menu
 - foto with file upload looks like a shit
 - foto to be rotatable
-- new fileupload component merged
 - add form validation on empty fields (error tooltips)
-- extract expandable blocks to separate component
-- suggestion input - adding ingredient - doesn't retrieve new suggestions while typing symbols
-	add border radius
+- suggestion input - adding ingredient - doesn't fit container
+- styles on create page: margins, text under image in details list
+- make list component generic (merge 2 lists with slots of rendered props and pass prop to it (how to get slot's content)
+- input error border jumps content below

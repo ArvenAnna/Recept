@@ -2,6 +2,8 @@ import WebElement from '../abstract/web-element';
 
 const INPUT = 'input';
 
+const ERROR_TEXT = 'error-text';
+
 const template = `
   <style>
     
@@ -17,15 +19,25 @@ const template = `
         box-sizing: border-box; 
     }
     
+    #${INPUT}.error{
+        border: var(--input-error-border);
+    }
+    
     #${INPUT}::placeholder {
         color: var(--input-placeholder, gray);
         font-weight: 400;
     }
     
+    #${ERROR_TEXT} {
+        color: var(--input-error-color);
+        font-size: 0.7rem;
+        position: absolute;
+    }
+    
   </style>
   
   <input type="text" id="${INPUT}"/>
-  
+  <div id="${ERROR_TEXT}"></div>
 `;
 
 const inputTextAttributes = {
@@ -72,14 +84,51 @@ class InputText extends WebElement {
         return this.$_id(INPUT);
     }
 
+    set validationErrorsOnBlur(errors) {
+        // should be array of { pattern: regexp, errorText: string }
+        this.$validationErrors = errors;
+    }
+
     constructor() {
         super(template, true);
 
         this._onInput = this._onInput.bind(this);
+        this._onFocus = this._onFocus.bind(this);
+        this._onBlur = this._onBlur.bind(this);
+        this._clearErrors = this._clearErrors.bind(this);
 
         this.$callbacks = {};
+        this.$touched = false;
 
         this.$_id(INPUT).addEventListener('input', this._onInput);
+        this.$_id(INPUT).addEventListener('focus', this._onFocus);
+        this.$_id(INPUT).addEventListener('blur', this._onBlur);
+    }
+
+    _onFocus() {
+        this.$touched = true;
+        this._clearErrors();
+    }
+
+    _onBlur() {
+        if (this.$touched && this.$validationErrors && this.$validationErrors.length) {
+            let isErrorPresent = false;
+            this.$validationErrors.forEach(error => {
+                if (!error.pattern.test(this.value)) {
+                    this.$(INPUT).classList.add('error');
+                    this.$_id(ERROR_TEXT).textContent = error.errorText;
+                    isErrorPresent = true;
+                }
+            });
+            if (!isErrorPresent) {
+                this._clearErrors();
+            }
+        }
+    }
+
+    _clearErrors() {
+        this.$(INPUT).classList.remove('error');
+        this.$_id(ERROR_TEXT).textContent = '';
     }
 
     _onInput({target}) {

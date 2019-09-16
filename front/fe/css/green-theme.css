@@ -6,6 +6,9 @@
     --light-background: #A7A7A7; /*color(gray whiteness(+45%))*/
     --main-font-color: black;
     /*--main-font-color-light: #222222;*/
+    --error-color: #932621;
+    --error-background: #935656;
+    --error-border: 1px solid #932621;
 }
 
 body {

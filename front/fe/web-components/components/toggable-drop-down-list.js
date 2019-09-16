@@ -19,10 +19,7 @@ const template = `
 class ToggableDropDownList extends WebElement {
     set props({chooseItemCallback, items, renderItem, chosenItemIndex}) {
         this.$items = items || [];
-        this.$chooseItem = (item) => {
-            this.closeDropdown();
-            chooseItemCallback(item);
-        }
+        this.$chooseItemCallback = chooseItemCallback;
         this.$renderItem = renderItem;
         this.$chosenItemIndex = chosenItemIndex;
 
@@ -31,41 +28,58 @@ class ToggableDropDownList extends WebElement {
         if (!this.$renderItem) {
             throw new Error("Dropdown-list: renderItem should be defined")
         }
+
+        if (this.$isOpened) {
+            this._renderList();
+        }
     }
 
     constructor() {
         super(template, true);
 
+        this.$isOpened = false;
+
         this.openDropdown = this.openDropdown.bind(this);
         this.closeDropdown = this.closeDropdown.bind(this);
         this.toggleDropdown = this.toggleDropdown.bind(this);
+        this._chooseItem = this._chooseItem.bind(this);
+        this._renderList = this._renderList.bind(this);
+    }
+
+    _renderList() {
+        this.$(LIST_COMPONENT).props = {
+            chooseItemCallback: this._chooseItem,
+            chosenItemIndex: this.$chosenItemIndex,
+            items: this.$items,
+            renderItem: this.$renderItem,
+        }
+    }
+
+    _chooseItem(item) {
+        this.closeDropdown();
+        this.$chooseItemCallback(item);
     }
 
     openDropdown() {
-        const dropdown = this.$(LIST_COMPONENT);
-        if (!dropdown) {
+        if (!this.$isOpened) {
             const template = this.getTemplateById(DROP_DOWN_TEMPLATE);
             this.$_id(CONTAINER).appendChild(template);
 
-            this.$(LIST_COMPONENT).props = {
-                chooseItemCallback: this.$chooseItem,
-                chosenItemIndex: this.$chosenItemIndex,
-                items: this.$items,
-                renderItem: this.$renderItem,
-            }
+            this._renderList();
+
+            this.$isOpened = true;
         }
     }
 
     closeDropdown() {
-        const dropdown = this.$(LIST_COMPONENT);
-        if (dropdown) {
-            dropdown.remove();
+        if (this.$isOpened) {
+            this.$(LIST_COMPONENT).remove();
+            this.$isOpened = false;
         }
     }
 
     toggleDropdown() {
-        const dropdown = this.$(LIST_COMPONENT);
-        if (dropdown) {
+        if (this.$isOpened) {
             this.closeDropdown();
         } else {
             this.openDropdown();
