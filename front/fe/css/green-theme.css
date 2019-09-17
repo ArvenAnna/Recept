@@ -9,6 +9,8 @@
     --error-color: #932621;
     --error-background: #935656;
     --error-border: 1px solid #932621;
+
+    --small-font-size: 0.8rem;
 }
 
 body {

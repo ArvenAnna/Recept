@@ -40,6 +40,7 @@ create-recipe-page {
     /*for list-items*/
     --list-background: var(--dark-background);
     --list-font-color: var(--light-background);
+    --list-font-size: var(--small-font-size);
 
     /*for photo upload*/
     --image-border: 2px solid var(--dark-background);
@@ -62,6 +63,7 @@ ingredients-page {
 recipe-page {
     /*for list-items*/
     --list-background: var(--light-background);
+    --list-font-size: var(--small-font-size);
 }
 
 common-notification {
