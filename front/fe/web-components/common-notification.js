@@ -13,10 +13,11 @@ const DEFAULT_TIMEOUT = 3000;
 const template = `
   <style>
     #${CONTAINER} {
-        display: none;
+        display: flex;
         position: fixed;
         width: 100%;
         margin-top: 0.5rem;
+        transition: opacity 0.5s linear, height 0.5s step-start;
     }
     
     #${INNER_CONTAINER} {
@@ -34,10 +35,17 @@ const template = `
         cursor: pointer;
         margin-left: 0.5rem;
     }
+    
+    .hidden {
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        transition-timing-function: linear, step-end;
+    }
    
   </style>
   
-  <div id='${CONTAINER}'>
+  <div id='${CONTAINER}' class='hidden'>
     <div id='${INNER_CONTAINER}'>
         <div id='${ERROR_TEXT}'></div>
         <img src="${ICON_REMOVE_SRC}" id="${REMOVE_ICON}"/>
@@ -61,6 +69,8 @@ class CommonNotification extends WebElement {
         this.$_id(REMOVE_ICON).addEventListener('click', this._onRemove);
 
         mNotification.addSubscriber(this._showNotification);
+
+
     }
 
     disconnectedCallback() {
@@ -71,7 +81,7 @@ class CommonNotification extends WebElement {
     }
 
     _onRemove() {
-        this.hide_id(CONTAINER);
+        this.$_id(CONTAINER).classList.add('hidden');
         if (this.$timeoutId) {
             clearTimeout(this.$timeoutId);
         }
@@ -80,11 +90,10 @@ class CommonNotification extends WebElement {
     _showNotification(notification) {
         if (notification.message) {
             this.$_id(ERROR_TEXT).textContent = notification.message;
-            this.reveal_id(CONTAINER);
-
-            this.$timeoutId = setTimeout(this.$timeout, () => {
-                this.hide_id(CONTAINER);
-            });
+            this.$_id(CONTAINER).classList.remove('hidden');
+            this.$timeoutId = setTimeout(() => {
+                this.$_id(CONTAINER).classList.add('hidden');
+            }, this.$timeout);
         }
     }
 
