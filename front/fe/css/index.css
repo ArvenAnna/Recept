@@ -24,6 +24,9 @@ create-recipe-page {
     --font-color: var(--main-font-color);
 
     --control-width: 10rem;
+    --control-font-size: var(--small-font-size);
+
+    --theme-border-radius: 0.2rem;
 
     /*for drop-down*/
     --drop-down-font-color: var(--main-font-color);
@@ -37,26 +40,40 @@ create-recipe-page {
     --input-error-border: var(--error-border);
     --input-error-color: var(--error-color);
 
+    /*for textarea*/
+    --textarea-height: var(--card-width);
+
     /*for list-items*/
     --list-background: var(--dark-background);
     --list-font-color: var(--light-background);
     --list-font-size: var(--small-font-size);
 
+    /*for tag*/
+    --tag-background: var(--dark-background);
+    --tag-font-color: var(--light-background);
+    --tag-font-size: var(--small-font-size);
+    --tag-shadow: var(--inset-shadow);
+
     /*for photo upload*/
     --image-border: 2px solid var(--dark-background);
+    --image-width: var(--card-width);
     --overlay-label-bg: var(--light-background);
 }
 
 ingredients-page {
     --control-width: 10rem;
-
-    /*for list-items*/
-    --list-background: var(--dark-background);
-    --list-font-color: var(--light-background);
+    --control-font-size: var(--small-font-size);
 
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
+
+    /*for tag*/
+    --tag-background: var(--dark-background);
+    --tag-font-color: var(--light-background);
+    --tag-font-size: var(--small-font-size);
+    --tag-shadow: var(--inset-shadow);
+
 
 }
 

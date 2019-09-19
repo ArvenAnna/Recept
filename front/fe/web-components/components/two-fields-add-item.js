@@ -1,5 +1,5 @@
 import WebElement from '../abstract/web-element';
-import './dropdown-list';
+import './drop-down/dropdown-list';
 import './suggestions-input';
 import '../styled/input-text-with-icon';
 
@@ -15,6 +15,10 @@ const template = `
         display: flex;
         align-items: center;
         position: relative;
+    }
+    
+    ${INGREDIENT_INPUT_COMPONENT} {
+        margin-right: 0.2rem;
     }
     
   </style>

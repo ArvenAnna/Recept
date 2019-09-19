@@ -23,6 +23,7 @@ const template = `
       
       #${CONTENT_WRAPPER} {
          display: none;
+         margin-top: 1rem;
       }
       
       #${EXPAND_ICON} {

@@ -11,12 +11,13 @@ const template = `
         font-weight: 500;
         background-color: var(--input-background, white);
         border: none;
-        font-size: 1rem;
+        border-radius: var(--theme-border-radius);
+        font-size: var(--control-font-size);
         width: var(--control-width, 10rem);
         padding: 0.1rem var(--input-icon-padding, 0.1rem) 0.1rem 0.1rem;
         box-sizing: border-box; 
         resize: none;
-        height: 4rem;
+        height: var(--textarea-height);
     }
     
     #${INPUT}::placeholder {

@@ -10,7 +10,11 @@
     --error-background: #935656;
     --error-border: 1px solid #932621;
 
-    --small-font-size: 0.8rem;
+    --small-font-size: 0.9rem;
+
+    --inset-shadow: 1px 1px 5px 0 grey inset;
+
+    --card-width: 200px;
 }
 
 body {

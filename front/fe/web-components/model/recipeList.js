@@ -1,5 +1,7 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
+import {getResponse} from "../utils/httpUtils";
+import mNotification from "./notification";
 
 class RecipeList extends Model {
 
@@ -22,8 +24,11 @@ class RecipeList extends Model {
 
     retrieve(departId) {
         fetch(routes.GET_RECIPES(departId))
-            .then(res => res.json())
-            .then(this._setRecipes);
+            .then(getResponse)
+            .then(this._setRecipes)
+            .catch(e => {
+                mNotification.message = e.message;
+            });
     }
 
     _setRecipes(newRecipes) {

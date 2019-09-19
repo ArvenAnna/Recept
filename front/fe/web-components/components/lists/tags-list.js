@@ -1,30 +1,24 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
+import '../removable-tag';
 
-const CONTAINER = 'items_container';
+const CONTAINER = 'container';
 const TITLE = 'title';
 
 const ITEM_TEMPLATE = 'item_template';
 
-const ITEM_CONTAINER = 'item_container';
 const ITEMS_CONTAINER = 'items-container';
-const ITEM = 'item';
-const REMOVE_ITEM = 'remove_item';
-const REMOVE_ICON_SRC = 'svg/cross.svg';
+
+const TAG_COMPONENT = 'removable-tag';
 
 const template = `
   <style>
     #${CONTAINER} {
-        /*margin: 0 1rem;*/
+        margin-top: 1rem;
+        flex-direction: column;
     }
   
     #${TITLE} {
         /* don't put margin here*/
-    }
-    
-    .${REMOVE_ITEM} {
-        width: 1rem;
-        height: 1rem;
-        cursor: pointer;
     }
     
     #${ITEMS_CONTAINER} {
@@ -32,30 +26,10 @@ const template = `
         flex-wrap: wrap;
         justify-content: stretch;
     }
-    
-    .${ITEM_CONTAINER} {
-       display: flex;
-       align-items:center;
-       margin: 0.5rem 0;
-       font-style: italic;
-       background-color: var(--list-background, white);
-       color: var(--list-font-color, black);
-       border-radius: 0.2rem;
-       padding: 0.1rem 0.2rem;
-       margin-right: 1rem;
-    }
-    
-    .${ITEM} {
-       padding-right: 0.5rem;
-       cursor: default;
-    }
   </style>
   
   <template id="${ITEM_TEMPLATE}">
-    <div class="${ITEM_CONTAINER}">
-        <span class="${ITEM}"></span>
-        <img src="${REMOVE_ICON_SRC}" class="${REMOVE_ITEM}"/>
-    </div>
+      <${TAG_COMPONENT}></${TAG_COMPONENT}>
   </template>
   
   <div id="${CONTAINER}">
@@ -69,7 +43,7 @@ const supportedAttributes = {
     TITLE: 'title'
 }
 
-class RecipeListItems extends WebElement {
+class TagsList extends WebElement {
 
     static get observedAttributes() {
         return Object.values(supportedAttributes);
@@ -99,10 +73,14 @@ class RecipeListItems extends WebElement {
 
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
-        this._removeItem = this._removeItem.bind(this);
     }
 
     _renderItems() {
+        if (this.$items.length) {
+            this.reveal_id(CONTAINER);
+        } else {
+            this.hide_id(CONTAINER);
+        }
         this.$_id(ITEMS_CONTAINER).innerHTML = "";
         if (this.$renderItem) {
             this.$items.forEach(this._renderItem);
@@ -112,19 +90,17 @@ class RecipeListItems extends WebElement {
     _renderItem(item) {
         const template = this.getTemplateById(ITEM_TEMPLATE);
 
-        template.byClass(ITEM).innerHTML = this.$renderItem(item);
+        const tag = template.byTag(TAG_COMPONENT);
 
-        if (this.$removeItem) {
-            template.byClass(REMOVE_ITEM).addEventListener('click', this._removeItem.bind(null, item));
-        } else {
-            template.byClass(REMOVE_ITEM).style.display = 'none';
+        tag.innerHTML = this.$renderItem(item);
+
+        tag.onConstruct = (tagEl) => {
+            tagEl.props = {
+                removeItemCallback: this.$removeItem.bind(null, item)
+            }
         }
-        this.$_id(ITEMS_CONTAINER).appendChild(template);
-    }
 
-    _removeItem(item, e) {
-        this.$removeItem(item);
-        e.target.parentElement.remove();
+        this.$_id(ITEMS_CONTAINER).appendChild(template);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -135,4 +111,4 @@ class RecipeListItems extends WebElement {
     }
 
 }
-customElements.define('list-items', RecipeListItems);
+customElements.define('tags-list', TagsList);

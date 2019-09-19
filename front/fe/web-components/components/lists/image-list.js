@@ -1,5 +1,5 @@
-import WebElement from '../abstract/web-element';
-import './removable-image-with-text';
+import WebElement from '../../abstract/web-element';
+import '../image/removable-image-with-text';
 
 const CONTAINER = 'items_container';
 const TITLE = 'title';

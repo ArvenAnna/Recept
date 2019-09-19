@@ -1,5 +1,5 @@
-import WebElement from '../abstract/web-element';
-import {isDescendantOf} from "../../utils/domUtils";
+import WebElement from '../../abstract/web-element';
+import {isDescendantOf} from "../../../utils/domUtils";
 import './toggable-drop-down-list';
 
 const CARET_ICON_DOWN_SRC = 'svg/caret-down.svg';
@@ -30,6 +30,7 @@ const template = `
        font-weight: 500;
        box-sizing: border-box;
        justify-content: space-between;
+       border-radius: var(--theme-border-radius);
     }
     
     #${CARET_ICON} {

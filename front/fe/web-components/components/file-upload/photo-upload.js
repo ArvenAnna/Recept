@@ -1,10 +1,7 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 import './file-input-autoupload';
-import '../styled/image-with-overlay';
+import '../image/image-with-overlay';
 
-const CONTAINER = 'container';
-const OVERLAY = 'overlay';
-const IMAGE = 'image';
 const REMOVE = 'remove';
 
 const ICON_REMOVE_SRC = 'svg/cross.svg';
@@ -21,7 +18,7 @@ const template = `
         height: 1rem;
         cursor: pointer;
         background-color: var(--overlay-label-bg);
-        border-radius: 0.2rem;
+        border-radius: var(--theme-border-radius);
         align-self: flex-start;
         margin-top: 0.2rem;
         margin-left: auto;
@@ -30,14 +27,14 @@ const template = `
 
     ${FILE_UPLOAD_COMPONENT} {
         background-color: var(--overlay-label-bg);
-        border-radius: 0.2rem;
+        border-radius: var(--theme-border-radius);
     }
 
   </style>
  
   <${IMAGE_COMPONENT}>
-        <${FILE_UPLOAD_COMPONENT} slot="content"></${FILE_UPLOAD_COMPONENT}>
-        <img src="${ICON_REMOVE_SRC}" id="${REMOVE}" slot="content" />
+        <${FILE_UPLOAD_COMPONENT}></${FILE_UPLOAD_COMPONENT}>
+        <img src="${ICON_REMOVE_SRC}" id="${REMOVE}"/>
   </${IMAGE_COMPONENT}>
   
 `;

@@ -1,5 +1,5 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/list-items';
+import '../../components/lists/tags-list';
 import '../../styled/input-text-with-icon';
 import '../../components/removable-tag';
 
@@ -9,7 +9,7 @@ const ADD_ITEM = 'add_item';
 const LIST_ITEMS = 'list_items';
 
 const INPUT_COMPONENT = 'input-text-with-icon';
-const LIST_COMPONENT = 'list-items';
+const LIST_COMPONENT = 'tags-list';
 const TAG_COMPONENT = 'removable-tag';
 
 const ICON_SRC = 'svg/add.svg';
@@ -49,7 +49,7 @@ class IngredientsPage extends WebElement {
 
             this.$(LIST_COMPONENT).props = {
                 items: this.$ingredients,
-                renderItem: (item) => `<${TAG_COMPONENT}>${item.name}</${TAG_COMPONENT}>`
+                renderItem: (item) => item.name
             }
 
             if (this.$addIngredient) {

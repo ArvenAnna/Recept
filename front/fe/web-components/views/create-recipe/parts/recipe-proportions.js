@@ -3,15 +3,16 @@ import WebElement from '../../../abstract/web-element';
 import routes from '../../../../constants/Routes';
 
 import '../../../components/two-fields-add-item';
-import '../../../components/list-items';
+import '../../../components/lists/tags-list';
+import {getResponse} from "../../../utils/httpUtils";
+import mNotification from "../../../model/notification";
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
 const INPUT_CONTAINER = 'input-container';
-const LIST_CONTAINER = 'list-container';
 
 const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item';
-const LIST_COMPONENT = 'list-items';
+const LIST_COMPONENT = 'tags-list';
 
 const template = `
   <style>
@@ -24,8 +25,7 @@ const template = `
       #${INPUT_CONTAINER} {
          display: flex;
          align-items: center;
-         margin-bottom: 1rem;
-      
+       }      
       
       #${CAPTION} {
          margin-right: 0.5rem;
@@ -37,7 +37,7 @@ const template = `
        <div id='${CAPTION}'>Add recipe proportion:</div>
        <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
      </div>
-     <div id='${LIST_CONTAINER}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
+     <${LIST_COMPONENT}></${LIST_COMPONENT}>
   </div>
   
 `;
@@ -54,7 +54,11 @@ class RecipeProportions extends WebElement {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({keyword})}).then(res => res.json());
+            body: JSON.stringify({keyword})})
+            .then(getResponse)
+            .catch(e => {
+                mNotification.message = e.message;
+            });
         const maxSuggestionsNumber = 10;
         // exclude also already checked
         ingredients = ingredients.filter(ing => !this.$recipe.proportions || !this.$recipe.proportions.some(p => p.ingredientId === ing.id));
@@ -86,11 +90,7 @@ class RecipeProportions extends WebElement {
         this.$(LIST_COMPONENT).props = {
             title: this.$recipe.proportions && this.$recipe.proportions.length ? 'List of recipe proportions:' : null,
             items: this.$recipe.proportions,
-            renderItem: (item) => `
-                <span>${item.ingredientName}</span>
-                <span>&nbsp;-&nbsp;</span>
-                <span>${item.norma || ''}</span>
-            `,
+            renderItem: (item) => `${item.ingredientName} - ${item.norma || ''}`,
             removeItemCallback: prop => {
                 this.$recipe.removeProportion(prop);
                 this.$(LIST_COMPONENT).items = this.$recipe.proportions;

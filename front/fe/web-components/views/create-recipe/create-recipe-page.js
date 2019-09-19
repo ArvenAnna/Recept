@@ -37,6 +37,10 @@ const template = `
         align-items: center;
     }
     
+    #${RECIPE_NAME_CONTAINER} #${RECIPE_DESCRIPTION_COMPONENT} {
+        
+    }
+    
     #${RECIPE_NAME_CAPTION} {
         margin-right: 0.5rem;
     }
@@ -44,15 +48,17 @@ const template = `
     ${RECIPE_DESCRIPTION_COMPONENT} {
         --control-width: 100%;
         width: 100%;
-        
+        --textarea-height: 4rem;
     }
     
     #${SAVE} {
        text-align: center;
        background-color: var(--light-background-crp);
-       margin: 1rem;
+       margin: 1rem auto;
        border: 2px solid var(--dark-background-crp);
        cursor: pointer;
+       width: var(--control-width, 10rem);
+       border-radius: var(--theme-border-radius);
     }
     
   </style>

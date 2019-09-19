@@ -1,5 +1,7 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
+import {getResponse} from "../utils/httpUtils";
+import mNotification from "./notification";
 
 class Ingredients extends Model {
 
@@ -20,8 +22,11 @@ class Ingredients extends Model {
 
     retrieve() {
         fetch(routes.INGREDIENTS)
-            .then(res => res.json())
-            .then(newIngredients => this._setIngredients(newIngredients));
+            .then(getResponse)
+            .then(newIngredients => this._setIngredients(newIngredients))
+            .catch(e => {
+                mNotification.message = e.message;
+            });
     }
 
     add(ingredient) {
@@ -31,8 +36,11 @@ class Ingredients extends Model {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({name: ingredient})})
-                .then(res => res.json())
-                .then(savedIngredient => this._addIngredient(savedIngredient));
+                .then(getResponse)
+                .then(savedIngredient => this._addIngredient(savedIngredient))
+                .catch(e => {
+                    mNotification.message = e.message;
+                });
         }
     }
 

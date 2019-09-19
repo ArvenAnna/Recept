@@ -1,4 +1,4 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 
 const CONTAINER = 'container';
 const OVERLAY = 'overlay';
@@ -12,7 +12,7 @@ const template = `
     #${CONTAINER} {
         max-width: 100%;
         position: relative;
-        width: 200px;
+        width: var(--image-width);
     }
     
     #${CONTAINER}:before {
@@ -33,7 +33,7 @@ const template = `
         position: absolute;
         top: 0;
         box-sizing: border-box;
-        border-radius: 0.2rem;
+        border-radius: var(--theme-border-radius);
      }
         
      #${OVERLAY} {
@@ -47,7 +47,7 @@ const template = `
         visibility: hidden;
         text-align: right;
         background-color: rgba(0,0,0,0.7);
-        border-radius: 0.2rem;
+        border-radius: var(--theme-border-radius);
      }
     
   </style>
@@ -55,7 +55,7 @@ const template = `
   <div id="${CONTAINER}">
     <img src="${DEFAULT_SRC}" id="${IMAGE}"/>
     <div id="${OVERLAY}">
-        <slot name="content"></slot>
+        <slot></slot>
     </div>
   </div>
   

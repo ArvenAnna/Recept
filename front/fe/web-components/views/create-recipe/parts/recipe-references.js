@@ -3,7 +3,9 @@ import WebElement from '../../../abstract/web-element';
 import routes from '../../../../constants/Routes';
 
 import '../../../components/suggestions-chooser';
-import '../../../components/list-items';
+import '../../../components/lists/tags-list';
+import {getResponse} from "../../../utils/httpUtils";
+import mNotification from "../../../model/notification";
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
@@ -11,7 +13,7 @@ const INPUT_CONTAINER = 'input-container';
 const LIST_CONTAINER = 'list-container';
 
 const SUGGESTION_INPUT_COMPONENT = 'suggestions-chooser';
-const LIST_COMPONENT = 'list-items';
+const LIST_COMPONENT = 'tags-list';
 
 const template = `
   <style>
@@ -24,7 +26,6 @@ const template = `
       #${INPUT_CONTAINER} {
          display: flex;
          align-items: center;
-         margin-bottom: 1rem;
       }
       
       #${CAPTION} {
@@ -54,7 +55,11 @@ class RecipeReferences extends WebElement {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({keyword})}).then(res => res.json());
+            body: JSON.stringify({keyword})})
+            .then(getResponse)
+            .catch(e => {
+                mNotification.message = e.message;
+            });
         const maxSuggestionsNumber = 10;
 
         //exclude current recipe itself

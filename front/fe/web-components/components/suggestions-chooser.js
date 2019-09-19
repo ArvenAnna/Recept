@@ -1,6 +1,6 @@
 import WebElement from '../abstract/web-element';
 import {isDescendantOf} from '../../utils/domUtils';
-import './toggable-drop-down-list';
+import './drop-down/toggable-drop-down-list';
 import '../styled/input-text-with-icon';
 
 const CONTAINER = 'container';

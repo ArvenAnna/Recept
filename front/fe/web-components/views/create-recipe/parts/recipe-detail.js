@@ -1,5 +1,5 @@
 import WebElement from '../../../abstract/web-element';
-import '../../../components/photo-upload';
+import '../../../components/file-upload/photo-upload';
 import '../../../components/expandable-block';
 import '../../../components/step-blocks';
 
@@ -46,8 +46,6 @@ const template = `
     }
 
     ${TEXT_COMPONENT} {
-        width: 100%;
-
         --control-width: 100%;
     }
    

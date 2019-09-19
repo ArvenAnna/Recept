@@ -1,4 +1,4 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 
 const LIST_CONTAINER = 'list-container';
 const ITEM_TEMPLATE = 'item_template';
@@ -16,6 +16,7 @@ const template = `
         width: 100%;
         background-color: var(--drop-down-bg);
         box-sizing: border-box;
+        border-radius: var(--theme-border-radius);
     }
     
     .${ITEM} {

@@ -1,5 +1,7 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
+import {getResponse} from "../utils/httpUtils";
+import mNotification from "./notification";
 
 export class Recipe extends Model {
 
@@ -50,8 +52,11 @@ export class Recipe extends Model {
 
     retrieve(id) {
         fetch(routes.GET_RECIPE(id))
-            .then(res => res.json())
-            .then(this._setRecipe);
+            .then(getResponse)
+            .then(this._setRecipe)
+            .catch(e => {
+                mNotification.message = e.message;
+            });
     }
 
     _setRecipe(newRecipe) {

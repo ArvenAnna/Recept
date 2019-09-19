@@ -1,5 +1,5 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/list-items';
+import '../../components/lists/tags-list';
 import {noImage} from '../../../constants/themes';
 
 const CONTAINER = 'recipe_page';
@@ -17,6 +17,8 @@ const REF_NAME = 'recipe_page_refs_name';
 const DETAIL = 'detail';
 const DETAILS_PHOTO = 'recipe_page_details_photo';
 const DETAILS_DESCRIPTION = 'recipe_page_details_description';
+
+const LIST_COMPONENT = 'tags-list';
 
 const template = `
   <style>
@@ -142,7 +144,7 @@ const template = `
   <div id='${CONTAINER}'>
       <div id='${CAPTION}'></div>
       <div id='recipe_page_proportions'>
-          <list-items/>
+          <${LIST_COMPONENT}></${LIST_COMPONENT}>
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
@@ -173,14 +175,10 @@ class RecipePage extends WebElement {
         this._renderPage();
     }
 
-    _initProportions(proportionsListItems) {
-        proportionsListItems.props = {
+    _initProportions() {
+        this.$(LIST_COMPONENT).props = {
             items: this.$recipe.proportions,
-            renderItem: (item) => `
-                <span>${item.ingredientName}</span>
-                <span>${item.norma ? '&nbsp;-&nbsp;' : ''}</div>
-                <span>${item.norma || ''}</div>
-            `
+            renderItem: (item) => `${item.ingredientName} ${item.norma ? '-' : ''} ${item.norma || ''}`
         }
     }
 
@@ -202,7 +200,7 @@ class RecipePage extends WebElement {
             this.$_id(DESCRIPTION).textContent = this.$recipe.text || '';
 
             if (this.$recipe.proportions) {
-                this._initProportions(this.$('list-items'));
+                this._initProportions();
             }
 
             if (this.$recipe.refs) {

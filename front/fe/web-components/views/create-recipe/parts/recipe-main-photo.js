@@ -1,6 +1,6 @@
 import WebElement from '../../../abstract/web-element';
 
-import '../../../components/photo-upload';
+import '../../../components/file-upload/photo-upload';
 import '../../../components/expandable-block';
 import routes from '../../../../constants/Routes';
 

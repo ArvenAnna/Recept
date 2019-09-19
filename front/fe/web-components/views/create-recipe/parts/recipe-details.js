@@ -1,9 +1,10 @@
 import WebElement from '../../../abstract/web-element';
 
-import '../../../components/image-list';
+import '../../../components/lists/image-list';
 import './recipe-detail';
 
 const CONTAINER = 'container';
+const LIST_CONTAINER = 'list-container';
 
 const LIST_COMPONENT = 'image-list';
 const DETAIL_COMPONENT = 'recipe-detail';
@@ -11,21 +12,18 @@ const DETAIL_COMPONENT = 'recipe-detail';
 const template = `
   <style>
       #${CONTAINER} {
-         /*display: flex;*/
-         
-         /*align-items: flex-start;*/
-         /*flex-direction: column;*/
+     
       }
       
-      ${LIST_COMPONENT} {
-          /*margin: 1rem;*/
+      #${LIST_CONTAINER} {
+          margin-left: 1rem;
       }
-   
+
   </style>
   
   <div id='${CONTAINER}'>
        <${DETAIL_COMPONENT}></${DETAIL_COMPONENT}>
-       <${LIST_COMPONENT}></${LIST_COMPONENT}>
+       <div id="${LIST_CONTAINER}"><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
   </div>
   
 `;

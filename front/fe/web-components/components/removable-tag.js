@@ -10,13 +10,14 @@ const template = `
     #${CONTAINER} {
        display: flex;
        align-items:center;
-       margin: 0.5rem 0;
+       margin: 0.5rem 1rem 0.5rem 0;
        font-style: italic;
-       background-color: var(--list-background, white);
-       color: var(--list-font-color, black);
-       border-radius: 0.2rem;
-       padding: 0.1rem 0.2rem;
-       margin-right: 1rem;
+       background-color: var(--tag-background, white);
+       color: var(--tag-font-color, black);
+       border-radius: var(--theme-border-radius);
+       padding: 0.2rem 0.3rem;
+       box-shadow: var(--tag-shadow);
+       font-size: var(--tag-font-size);
     }
     
     #${REMOVE_ITEM} {
@@ -24,7 +25,7 @@ const template = `
         width: 1rem;
         height: 1rem;
         cursor: pointer;
-        margin-left: 0.3rem;
+        margin-left: 0.5rem;
     }
   
   </style>
@@ -61,10 +62,6 @@ class RemovableTag extends WebElement {
             this.$removeItem();
             this.remove();
         }
-    }
-
-    disconnectedCallback() {
-        console.log('removed tag');
     }
 
 }

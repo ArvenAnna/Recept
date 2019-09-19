@@ -1,4 +1,4 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 
 const CONTAINER = 'container';
 const FILE_INPUT = 'file-input';

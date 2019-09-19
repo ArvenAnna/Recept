@@ -1,6 +1,6 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 
-import '../styled/image-with-overlay';
+import './image-with-overlay';
 
 const REMOVE_ICON = 'remove-icon';
 const IMAGE_COMPONENT = 'image-with-overlay';
@@ -14,7 +14,7 @@ const template = `
         height: 1rem;
         cursor: pointer;
         background-color: var(--overlay-label-bg);
-        border-radius: 0.2rem;
+        border-radius: var(--theme-border-radius);
         align-self: flex-start;
         margin-top: 0.2rem;
         margin-left: auto;
@@ -24,7 +24,7 @@ const template = `
   </style>
   
   <${IMAGE_COMPONENT}>
-      <img src="${ICON_REMOVE_SRC}" id="${REMOVE_ICON}" slot="content"/>
+      <img src="${ICON_REMOVE_SRC}" id="${REMOVE_ICON}"/>
   </${IMAGE_COMPONENT}>
   
 `;

@@ -1,4 +1,4 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 import './dropdown-list';
 
 const CONTAINER = 'container';
@@ -7,7 +7,6 @@ const DROP_DOWN_TEMPLATE = 'drop-down-template';
 const LIST_COMPONENT = 'drop-down-list';
 
 const template = `
-
   <template id="${DROP_DOWN_TEMPLATE}">
     <${LIST_COMPONENT}></${LIST_COMPONENT}> 
   </template>

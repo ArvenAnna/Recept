@@ -1,5 +1,4 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/list-items';
 import { noImage } from '../../../constants/themes';
 
 const CONTAINER = 'recipe_list_page';

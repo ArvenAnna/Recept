@@ -1,6 +1,6 @@
 import WebElement from '../../../abstract/web-element';
 
-import '../../../components/drop-down';
+import '../../../components/drop-down/drop-down';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';

@@ -1,6 +1,7 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
+import mNotification from "./notification";
 
 class Departments extends Model {
 
@@ -20,7 +21,9 @@ class Departments extends Model {
         fetch(routes.GET_DEPARTMENTS)
             .then(getResponse)
             .then(newDepartments => this._setDepartments(newDepartments))
-            .catch(e => console.log(e));
+            .catch(e => {
+                mNotification.message = e.message;
+            });
     }
 
     _setDepartments(newDepartments) {

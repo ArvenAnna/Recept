@@ -1,4 +1,4 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 
 import './removable-image';
 
@@ -8,7 +8,9 @@ const TEXT = 'text';
 
 const template = `
   <style>
-
+     #${CONTAINER} {
+        width: var(--image-width);
+     }
   </style>
   
   <div id="${CONTAINER}">
