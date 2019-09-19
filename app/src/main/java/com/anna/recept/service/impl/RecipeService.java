@@ -1,6 +1,7 @@
 package com.anna.recept.service.impl;
 
 import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.dto.SearchRecipeParams;
 import com.anna.recept.entity.Recipe;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.exception.RecipeApplicationException;
@@ -11,6 +12,7 @@ import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IRecipeService;
 import com.anna.recept.utils.FilePathUtils;
 
+import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import org.springframework.util.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -179,34 +182,31 @@ public class RecipeService implements IRecipeService {
 	}
 
 	@Override
-	@Transactional
-	public RecipeDto addRefsToRecipe(Long recipeId, List<Long> refIds) {
-		Recipe recipe = recipeRep.findById(recipeId).orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()));
-		List<Recipe> recipes = recipeRep.findAllById(refIds);
-		recipe.getRefs().addAll(recipes);
-		return RecipeDto.withAllFields(recipeRep.saveAndFlush(recipe));
+	public List<RecipeDto> findRecipesByParams(SearchRecipeParams params) {
+		List<Recipe> recipes = null;
+
+		//TODO: write it by one query
+		String searchString = params.getSearch() == null ? "" : params.getSearch();
+
+		if (!params.getIngredients().isEmpty()) {
+			recipes = recipeRep.findBySearchParams(searchString, params.getIngredients());
+		} else {
+			recipes = recipeRep.findByKeyword(searchString);
+		}
+
+		if (!params.getRefs().isEmpty()) {
+			recipes = recipes.stream()
+					.filter(recipe -> {
+						List<Long> refIds = recipe.getRefs().stream()
+								.map(ref -> ref.getId()).collect(Collectors.toList());
+						return refIds.containsAll(params.getRefs());
+					})
+					.collect(Collectors.toList());
+		}
+
+		return recipes.stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
 
-	@Override
-	@Transactional
-	public RecipeDto deleteRefsFromRecipe(Long recipeId, List<Long> refIds) {
-		Recipe recipe = recipeRep.findById(recipeId).orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()));
-		List<Recipe> recipesToRemove = recipe.getRefs().stream()
-				.filter(ref -> refIds.contains(ref.getId())).collect(Collectors.toList());
-
-		recipe.getRefs().removeAll(recipesToRemove);
-		return RecipeDto.withAllFields(recipeRep.saveAndFlush(recipe));
-	}
-
-	@Override
-	public List<RecipeDto> findRecipesByIngredients(List<Long> ingIds) {
-		return recipeRep.findByIngredients(ingIds).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
-	}
-
-	@Override
-	public List<RecipeDto> findRecipesByKeyword(String keyword) {
-		return recipeRep.findByKeyword(keyword).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
-	}
 
 	@Override
 	public List<RecipeDto> findRecipesNameByKeyword(String keyword) {

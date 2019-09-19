@@ -2,10 +2,12 @@ package com.anna.recept.controller;
 
 import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.dto.SearchByKeywordRequest;
+import com.anna.recept.dto.SearchRecipeParams;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.service.IRecipeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -20,12 +22,12 @@ public class MainController {
     @Autowired
     private IRecipeService recipeService;
 
+    //todo: move some annotations to class level
     @RequestMapping(value = {"/recipes"}, method = RequestMethod.GET,
             headers = "Accept=application/json", produces="application/json")
     public List<RecipeDto> getRecipesList() {
         return recipeService.getRecipes();
     }
-
 
     @RequestMapping(value = {"/recipes/{recipeId}"}, method = RequestMethod.GET,
             headers = "Accept=application/json")
@@ -51,24 +53,9 @@ public class MainController {
         return recipeService.updateRecipe(recipe);
     }
 
-    @RequestMapping(value = {"/recipes/{recipeId}/refs"}, method = RequestMethod.POST, headers = "Accept=application/json")
-    public RecipeDto addTagsToRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody List<Long> refIds) {
-        return recipeService.addRefsToRecipe(recipeId, refIds);
-    }
-
-    @RequestMapping(value = {"/recipes/{recipeId}/refs"}, method = RequestMethod.DELETE, headers = "Accept=application/json")
-    public RecipeDto deleteTagsFromRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody List<Long> refIds) {
-        return recipeService.deleteRefsFromRecipe(recipeId, refIds);
-    }
-
-    @RequestMapping(value = {"/recipes/by-ingredients"}, method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<RecipeDto> findRecipesByIngredients(@RequestParam("ingIds") List<Long> ingIds) {
-        return recipeService.findRecipesByIngredients(ingIds);
-    }
-
-    @RequestMapping(value = {"/recipes/by-keyword"}, method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<RecipeDto> findRecipesByKeyword(@RequestParam("str") String keyword) {
-        return recipeService.findRecipesByKeyword(keyword);
+    @RequestMapping(value = {"/recipes/search"}, method = RequestMethod.GET, headers = "Accept=application/json")
+    public List<RecipeDto> findRecipesByIngredients(SearchRecipeParams params) {
+        return recipeService.findRecipesByParams(params);
     }
 
     @RequestMapping(value = {"/recipes/keyword"}, method = RequestMethod.POST, headers = "Accept=application/json")
