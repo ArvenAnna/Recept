@@ -1,6 +1,7 @@
 package com.anna.recept.service;
 
 import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.dto.SearchRecipeParams;
 
 import java.util.List;
 
@@ -16,13 +17,7 @@ public interface IRecipeService {
 
     RecipeDto updateRecipe(RecipeDto recipe);
 
-    RecipeDto addRefsToRecipe(Long recipeId, List<Long> refIds);
-
-    RecipeDto deleteRefsFromRecipe(Long recipeId, List<Long> refIds);
-
-    List<RecipeDto> findRecipesByIngredients(List<Long> ingIds);
-
-    List<RecipeDto> findRecipesByKeyword(String keyword);
+    List<RecipeDto> findRecipesByParams(SearchRecipeParams params);
 
     List<RecipeDto> findRecipesNameByKeyword(String keyword);
 }
