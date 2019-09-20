@@ -142,6 +142,7 @@ public class RecipeService implements IRecipeService {
 	}
 
 	private void removeAllFiles(Recipe recipe) {
+		//todo: also delete small copies
 		fileService.deleteRealFile(recipe.getImgPath());
 		recipe.getDetails().stream().forEach(detail -> {
 			fileService.deleteRealFile(detail.getFilePath());
@@ -156,13 +157,16 @@ public class RecipeService implements IRecipeService {
 		String subCatalog = recipe.getName();
 
 		return FilePathUtils.isTempPath(path)
-				? saveFileAndGetPath(path, FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog))
+				? saveFileAndGetPath(path, FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog, null),
+				FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog, "small"))
 				: replaceFileIfNeededAndGetPath(path, catalog, subCatalog);
 	}
 
-	private String saveFileAndGetPath(String tempPath, String newFileName) {
+	private String saveFileAndGetPath(String tempPath, String newFileName, String smallFileName) {
 			try {
-				fileService.saveRealFile(tempPath, newFileName);
+				fileService.saveNormalAndSmallFiles(tempPath, newFileName, smallFileName);
+//				fileService.saveRealFile(tempPath, newFileName);
+//				fileService.saveRealFileAndResize(tempPath, smallFileName);
 				return newFileName;
 			}
 			catch (IOException e) {

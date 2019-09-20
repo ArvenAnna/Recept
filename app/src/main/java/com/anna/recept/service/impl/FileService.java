@@ -4,11 +4,15 @@ import com.anna.recept.service.IFileService;
 import com.anna.recept.service.IRecipeService;
 
 import org.apache.commons.io.FileUtils;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
+
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -80,7 +84,51 @@ public class FileService implements IFileService {
             String tempFilePath = context.getRealPath("") + File.separator + tempPath;
             new File(tempFilePath).delete();
         }
+
         return name;
+    }
+
+    @Override
+    public String saveRealFileAndResize(String tempPath, String name) throws IOException {
+        this.saveRealFile(tempPath, name);
+
+        File newFile = new File(context.getRealPath("") + File.separator +System.getenv(FOTO_LOCATION_ENV) + File.separator + name);
+
+//        //todo: make a small copy of this file
+//        resizeImage(newFile);
+
+        return name;
+    }
+
+    @Override
+    public String saveNormalAndSmallFiles(String tempPath, String name, String smallFileName) throws IOException {
+        File newFile = new File(context.getRealPath("") + File.separator +System.getenv(FOTO_LOCATION_ENV) + File.separator + name);
+        File smallFile = new File(context.getRealPath("") + File.separator +System.getenv(FOTO_LOCATION_ENV) + File.separator + smallFileName);
+
+        File temp = new File(context.getRealPath("") + File.separator + tempPath);
+        if (!temp.getAbsolutePath().equals(newFile.getAbsolutePath())) {
+            FileUtils.copyFile(temp, newFile);
+            createSmallImage(temp, smallFile);
+
+            String tempFilePath = context.getRealPath("") + File.separator + tempPath;
+            new File(tempFilePath).delete();
+        }
+
+        return name;
+    }
+
+
+    public void createSmallImage(File fileFrom, File fileTo) throws IOException {
+        BufferedImage img = ImageIO.read(fileFrom);
+
+        BufferedImage scaledImg = Scalr.resize(img, 300);
+
+        String filePath = fileFrom.getPath();
+        String[] pathFragments = filePath.split("\\.");
+        String extension = pathFragments[pathFragments.length - 1];
+
+        //File outputFile = new File("image.jpg");
+        ImageIO.write(scaledImg, extension, fileTo);
     }
 
     @Override

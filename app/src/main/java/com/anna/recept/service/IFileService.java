@@ -17,9 +17,14 @@ public interface IFileService {
 
     String saveRealFile(String tempPath, String name) throws IOException;
 
+    String saveRealFileAndResize(String tempPath, String name) throws IOException;
+
+    String saveNormalAndSmallFiles(String tempPath, String name, String smallFileName) throws IOException;
+
     void deleteRealFile(String path) throws IOException;
 
     void cleanTempFiles() throws IOException;
 
     void replaceFilesInCatalog(String oldPathTocatalog, String newName);
+
 }

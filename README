@@ -11,16 +11,11 @@ To start application you need:
 5. To make dump use inside postgres container
     pg_dump -U postgres recept > docker-entrypoint-initdb.d/recept_plain.sql
 
-
-- обработка ошибок запросов - на рецепт с таким именем существует - show Error message
 - search
 - foto to ingredient (hierarchial structure?)
 - add another style theme
 - small file copies
-- foto with file upload looks like a shit
 - foto to be rotatable
-- add form validation on empty fields (error tooltips)
 - suggestion input - adding ingredient - doesn't fit container
-- styles on create page: margins, text under image in details list
-- make list component generic (merge 2 lists with slots of rendered props and pass prop to it (how to get slot's content)
 - input error border jumps content below
+- recipe page + recipes list

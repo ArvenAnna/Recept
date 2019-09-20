@@ -59,15 +59,16 @@ public class FilePathUtils {
 	 * @param tempPath
 	 * @param catalog
 	 * @param subCatalog
+	 * @param suffix - added to filename
 	 * @return
 	 */
-	public static String constructPathWithCatalogsToRealFile(String tempPath, String catalog, String subCatalog) {
+	public static String constructPathWithCatalogsToRealFile(String tempPath, String catalog, String subCatalog, String suffix) {
 		String[] pathFragments = tempPath.split("\\.");
 		String extension = pathFragments.length <= 1
 				? DEFAULT_EXTENSION
 				: pathFragments[pathFragments.length - 1];
 		return constructCatalogName(catalog, subCatalog) + File.separator
-				+ subCatalog + UUID.randomUUID().toString() + "." + extension;
+				+ subCatalog + UUID.randomUUID().toString() + (suffix != null ? suffix : "") + "." + extension;
 	}
 
 	/**
