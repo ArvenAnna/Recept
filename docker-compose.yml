@@ -8,6 +8,7 @@ services:
         args:
           - fotoLocation=${FOTO_LOCATION}
           - templocation=${TEMP_LOCATION}
+          - previewImagePrefix=${PREVIEW_IMAGE_PREFIX}
       env_file:
         - '.env'
       ports:

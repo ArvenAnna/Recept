@@ -12,8 +12,9 @@ WORKDIR /usr/src/app/fe
 
 ARG fotoLocation
 ARG templocation
+ARG previewImagePrefix
 
-RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=${fotoLocation} --env.TEMP_CATALOG=${templocation}
+RUN ./node_modules/.bin/webpack --env.FOTO_CATALOG=${fotoLocation} --env.TEMP_CATALOG=${templocation} --env.PREVIEW_IMG_PREFIX=${previewImagePrefix}
 
 #RUN npm test
 

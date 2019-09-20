@@ -5,26 +5,26 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Structure of folders:
+ *   - tempfiles
+ *          - tempfile.jpg
+ *   - photo
+ *     - department
+ *       - recipeName
+ *             - recipe123.jpg
+ *             - recipe123-small.jpg
+ */
 public interface IFileService {
-
-    File getXsdScheme() throws IOException;
-
-    File getXslFile() throws IOException;
-
-    File getLangConfig() throws IOException;
 
     String saveTemporaryFile(MultipartFile file) throws IOException;
 
-    String saveRealFile(String tempPath, String name) throws IOException;
-
-    String saveRealFileAndResize(String tempPath, String name) throws IOException;
-
-    String saveNormalAndSmallFiles(String tempPath, String name, String smallFileName) throws IOException;
-
-    void deleteRealFile(String path) throws IOException;
+    /**
+     * Deletes folder with recipe name and all its content
+     */
+    void deleteRecipeFolder(String department, String recipeName);
 
     void cleanTempFiles() throws IOException;
 
-    void replaceFilesInCatalog(String oldPathTocatalog, String newName);
-
+    String saveRecipeFile(String path, String department, String name);
 }

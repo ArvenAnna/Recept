@@ -81,6 +81,12 @@ recipe-page {
     /*for list-items*/
     --list-background: var(--light-background);
     --list-font-size: var(--small-font-size);
+
+    /*for tag*/
+    --tag-background: var(--dark-background);
+    --tag-font-color: var(--light-background);
+    --tag-font-size: var(--small-font-size);
+    --tag-shadow: var(--inset-shadow);
 }
 
 common-notification {

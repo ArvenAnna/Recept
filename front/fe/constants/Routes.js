@@ -15,7 +15,8 @@ const routes = {
     UPLOAD_FILE: httpPrefix + '/file',
 
     IMAGE_CATALOG: `/${process.env.FOTO_CATALOG}/`,
-    TEMP_CATALOG: `/${process.env.TEMP_CATALOG}/`
+    TEMP_CATALOG: `/${process.env.TEMP_CATALOG}/`,
+    PREVIEW_IMAGE_PREFIX: process.env.PREVIEW_IMAGE_PREFIX
 
 };
 

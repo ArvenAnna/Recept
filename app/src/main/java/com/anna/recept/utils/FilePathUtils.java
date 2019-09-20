@@ -1,10 +1,10 @@
 package com.anna.recept.utils;
 
-import java.io.File;
-import java.util.UUID;
-
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.io.File;
+import java.util.UUID;
 
 /**
  * Utils functions for working with recipe file paths
@@ -15,10 +15,6 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class FilePathUtils {
-
-	private static final String FOTO_LOCATION_ENV = "FOTO_LOCATION";
-	private static final String TEMP_LOCATION_ENV = "TEMP_LOCATION";
-	public static final String DEFAULT_EXTENSION = "png";
 
 	/**
 	 *
@@ -46,15 +42,6 @@ public class FilePathUtils {
 	}
 
 	/**
-	 * Temp resource should looks like: TEMP_CATALOG/filename.extension
-	 * @param path given path for analysis
-	 * @return true if it is temp path, false if it real one
-	 */
-	public static boolean isTempPath(String path) {
-		return path != null && path.startsWith(System.getenv(TEMP_LOCATION_ENV)) && path.split(File.separator).length == 2;
-	}
-
-	/**
 	 * Constructs path for real file from tempfile
 	 * @param tempPath
 	 * @param catalog
@@ -63,12 +50,9 @@ public class FilePathUtils {
 	 * @return
 	 */
 	public static String constructPathWithCatalogsToRealFile(String tempPath, String catalog, String subCatalog, String suffix) {
-		String[] pathFragments = tempPath.split("\\.");
-		String extension = pathFragments.length <= 1
-				? DEFAULT_EXTENSION
-				: pathFragments[pathFragments.length - 1];
 		return constructCatalogName(catalog, subCatalog) + File.separator
-				+ subCatalog + UUID.randomUUID().toString() + (suffix != null ? suffix : "") + "." + extension;
+				+ subCatalog + UUID.randomUUID().toString()
+				+ (suffix != null ? suffix : "") + "." + getFileExtensionFromPath(tempPath);
 	}
 
 	/**
@@ -79,5 +63,10 @@ public class FilePathUtils {
 	 */
 	public static String constructCatalogName(String catalog, String subCatalog) {
 		return catalog + File.separator + subCatalog;
+	}
+
+	public static String getFileExtensionFromPath(String path) {
+		String[] pathFragments = path.split("\\.");
+		return pathFragments[pathFragments.length - 1];
 	}
 }

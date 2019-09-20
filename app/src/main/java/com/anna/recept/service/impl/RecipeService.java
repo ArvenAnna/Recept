@@ -10,24 +10,14 @@ import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.repository.RecipeRepository;
 import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IRecipeService;
-import com.anna.recept.utils.FilePathUtils;
-
-import org.apache.commons.collections.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RecipeService implements IRecipeService {
@@ -136,53 +126,19 @@ public class RecipeService implements IRecipeService {
 
 	private void saveAllFiles(Recipe recipe) {
 		recipe.setImgPath(saveRecipeFile(recipe.getImgPath(), recipe));
-		recipe.getDetails().stream().forEach(detail -> {
-			detail.setFilePath(saveRecipeFile(detail.getFilePath(), recipe));
-		});
+		recipe.getDetails().stream().forEach(detail ->
+				detail.setFilePath(saveRecipeFile(detail.getFilePath(), recipe)));
 	}
 
 	private void removeAllFiles(Recipe recipe) {
-		//todo: also delete small copies
-		fileService.deleteRealFile(recipe.getImgPath());
-		recipe.getDetails().stream().forEach(detail -> {
-			fileService.deleteRealFile(detail.getFilePath());
-		});
+		fileService.deleteRecipeFolder(recipe.getDepartment().getName(), recipe.getName());
 	}
 
 	private String saveRecipeFile(String path, Recipe recipe) {
 		Assert.notNull(recipe.getDepartment(), "department should be fetched before accessing it");
 		Assert.notNull(recipe.getDepartment().getName(), "department should be fetched before accessing it");
 
-		String catalog = recipe.getDepartment().getName();
-		String subCatalog = recipe.getName();
-
-		return FilePathUtils.isTempPath(path)
-				? saveFileAndGetPath(path, FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog, null),
-				FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog, "small"))
-				: replaceFileIfNeededAndGetPath(path, catalog, subCatalog);
-	}
-
-	private String saveFileAndGetPath(String tempPath, String newFileName, String smallFileName) {
-			try {
-				fileService.saveNormalAndSmallFiles(tempPath, newFileName, smallFileName);
-//				fileService.saveRealFile(tempPath, newFileName);
-//				fileService.saveRealFileAndResize(tempPath, smallFileName);
-				return newFileName;
-			}
-			catch (IOException e) {
-				//todo check if it is not saved process some another way
-				throw new UncheckedIOException(e);
-			}
-	}
-
-	private String replaceFileIfNeededAndGetPath(String path, String catalog, String subCatalog) {
-		String newCatalogName = FilePathUtils.constructCatalogName(catalog, subCatalog);
-		String changedFilePath = FilePathUtils.getChangedCatalogsInPath(path, newCatalogName);
-		if (path != null && !path.equals(changedFilePath)) {
-			fileService.replaceFilesInCatalog(FilePathUtils.extractCatalogFromPath(path), newCatalogName);
-			return changedFilePath;
-		}
-		return path;
+		return fileService.saveRecipeFile(path, recipe.getDepartment().getName(), recipe.getName());
 	}
 
 	@Override

@@ -16,7 +16,8 @@ module.exports = env => {
             new webpack.DefinePlugin({
                 'process.env': {
                     'FOTO_CATALOG': JSON.stringify(env.FOTO_CATALOG),
-                    'TEMP_CATALOG': JSON.stringify(env.TEMP_CATALOG)
+                    'TEMP_CATALOG': JSON.stringify(env.TEMP_CATALOG),
+                    'PREVIEW_IMAGE_PREFIX': JSON.stringify(env.PREVIEW_IMG_PREFIX)
                 }
             })
         ],
