@@ -59,7 +59,7 @@ class RecipeSidebar extends WebElement {
 
                 const linkEl = template.byTag('recipe-link');
                 linkEl.onConstruct = (link) => {
-                    link.path = `/departments/${dep.id}/recipes`;
+                    link.path = `/recipes?departmentId=${dep.id}`;
                 };
                 template.byClass(BUTTON).textContent = dep.name;
                 this.$_id(CONTAINER).appendChild(template);

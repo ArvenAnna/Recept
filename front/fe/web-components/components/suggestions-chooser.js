@@ -28,6 +28,7 @@ const template = `
   
 `;
 
+//todo: make support of placeholder as attribute
 class SuggestionsChooser extends WebElement {
 
     set props({getSuggestionsPromise, renderSuggestionCallback, placeholder, addItemCallback}) {

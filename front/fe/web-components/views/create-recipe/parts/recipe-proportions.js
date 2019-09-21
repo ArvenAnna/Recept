@@ -1,11 +1,8 @@
 import WebElement from '../../../abstract/web-element';
 
-import routes from '../../../../constants/Routes';
-
 import '../../../components/two-fields-add-item';
 import '../../../components/lists/tags-list';
-import {getResponse} from "../../../utils/httpUtils";
-import mNotification from "../../../model/notification";
+import {retrieveIngredientsByKeyword} from '../../../utils/asyncRequests';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
@@ -50,15 +47,7 @@ class RecipeProportions extends WebElement {
     }
 
     async _retrieveIngredientsByKeyword(keyword) {
-        let ingredients = await fetch(routes.GET_INGREDIENTS_BY_KEYWORD, {method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({keyword})})
-            .then(getResponse)
-            .catch(e => {
-                mNotification.message = e.message;
-            });
+        let ingredients = await retrieveIngredientsByKeyword(keyword);
         const maxSuggestionsNumber = 10;
         // exclude also already checked
         ingredients = ingredients.filter(ing => !this.$recipe.proportions || !this.$recipe.proportions.some(p => p.ingredientId === ing.id));
@@ -70,8 +59,8 @@ class RecipeProportions extends WebElement {
         this.$(TWO_FIELD_LIST_COMPONENT).props = {
             addItemCallback: ({first, second}) => {
                 this._retrieveIngredientsByKeyword(first).then(ingredients => {
-                    // should be one ingredient only
-                    if (ingredients.length === 1 && ingredients[0].name === first) {
+                    // take only first
+                    if (ingredients[0].name === first) {
                         this.$recipe.proportion = {
                             ingredient: ingredients[0],
                             norma: second

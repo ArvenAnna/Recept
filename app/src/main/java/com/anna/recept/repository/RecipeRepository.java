@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeCriteriaRepository {
 
    // @Query("select distinct room.type from Room room")
     boolean existsByNameIgnoreCase(String name);

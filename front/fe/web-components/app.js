@@ -62,7 +62,7 @@ const template = `
     <div id="${BODY}"> 
         <div id="${CONTENT}">
             <recipe-route path="/recipe/:id" component="recipe-page-renderer"></recipe-route>
-            <recipe-route path="/departments/:id/recipes" component="recipes-page-renderer"></recipe-route>
+            <recipe-route path="/recipes" component="recipes-page-renderer"></recipe-route>
             <recipe-route path="/ingredients" component="ingredients-page-renderer"></recipe-route>
             <recipe-route path="/recipe/:id/edit" component="edit-recipe-page-renderer"></recipe-route>
             <recipe-route path="/recipe" component="create-recipe-page-renderer"></recipe-route>

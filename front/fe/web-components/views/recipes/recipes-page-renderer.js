@@ -18,14 +18,13 @@ export default class RecipesPageRenderer extends WebElement {
         mRecipeList.addSubscriber(this._recipeListChanged);
         router.addSubscriber(this._currentRouteChanged);
 
-        mRecipeList.retrieve(router.params.id);
+        mRecipeList.search(router.search);
     }
 
     _currentRouteChanged() {
         if (router.component == 'recipes-page-renderer') {
-            mRecipeList.retrieve(router.params.id);
+            mRecipeList.search(router.search);
         }
-
     }
 
     _recipeListChanged (model) {

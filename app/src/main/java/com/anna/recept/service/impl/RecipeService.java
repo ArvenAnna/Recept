@@ -143,30 +143,8 @@ public class RecipeService implements IRecipeService {
 
 	@Override
 	public List<RecipeDto> findRecipesByParams(SearchRecipeParams params) {
-		List<Recipe> recipes = null;
-
-		//TODO: write it by one query
-		String searchString = params.getSearch() == null ? "" : params.getSearch();
-
-		if (!params.getIngredients().isEmpty()) {
-			recipes = recipeRep.findBySearchParams(searchString, params.getIngredients());
-		} else {
-			recipes = recipeRep.findByKeyword(searchString);
-		}
-
-		if (!params.getRefs().isEmpty()) {
-			recipes = recipes.stream()
-					.filter(recipe -> {
-						List<Long> refIds = recipe.getRefs().stream()
-								.map(ref -> ref.getId()).collect(Collectors.toList());
-						return refIds.containsAll(params.getRefs());
-					})
-					.collect(Collectors.toList());
-		}
-
-		return recipes.stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
+		return recipeRep.findRecipesBySearchParams(params).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
-
 
 	@Override
 	public List<RecipeDto> findRecipesNameByKeyword(String keyword) {

@@ -8,7 +8,7 @@ const REMOVE_ICON = 'remove-icon';
 
 const ICON_REMOVE_SRC = 'svg/cross.svg';
 
-const DEFAULT_TIMEOUT = 3000;
+const DEFAULT_TIMEOUT = 5000;
 
 const template = `
   <style>

@@ -13,7 +13,7 @@ const TAG_COMPONENT = 'removable-tag';
 const template = `
   <style>
     #${CONTAINER} {
-        margin-top: 1rem;
+        /*margin-top: 1rem;*/
         flex-direction: column;
     }
   
@@ -94,9 +94,11 @@ class TagsList extends WebElement {
 
         tag.innerHTML = this.$renderItem(item);
 
-        tag.onConstruct = (tagEl) => {
-            tagEl.props = {
-                removeItemCallback: this.$removeItem.bind(null, item)
+        if (this.$removeItem) {
+            tag.onConstruct = (tagEl) => {
+                tagEl.props = {
+                    removeItemCallback: this.$removeItem.bind(null, item)
+                }
             }
         }
 

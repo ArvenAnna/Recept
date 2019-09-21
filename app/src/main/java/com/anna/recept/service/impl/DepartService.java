@@ -1,31 +1,22 @@
 package com.anna.recept.service.impl;
 
-import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.entity.Department;
-import com.anna.recept.entity.Recipe;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.exception.RecipeApplicationException;
 import com.anna.recept.repository.DepartmentRepository;
-import com.anna.recept.repository.RecipeRepository;
 import com.anna.recept.service.IDepartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class DepartService implements IDepartService {
 
     @Autowired
     private DepartmentRepository departRep;
-    @Autowired
-    private RecipeRepository recipeRep;
 
     @Override
     public List<Department> findAllDepartments() {
@@ -44,20 +35,10 @@ public class DepartService implements IDepartService {
     }
 
     @Override
-    public void deleteDepartment(Integer id) {
+    public void deleteDepartment(Long id) {
         if (!departRep.existsById(id)) {
             throw new EntityNotFoundException(Errors.DEPART_NOT_FOUND.getCause());
         }
         departRep.deleteById(id);
-    }
-
-    @Transactional
-    @Override
-    public List<RecipeDto> findRecipesByDepart(Integer id) {
-        Department department = departRep.findById(id).orElseThrow(() -> new EntityNotFoundException(Errors.DEPART_NOT_FOUND.getCause()));
-
-        return recipeRep.findByDepartment(department).stream()
-                .map(RecipeDto::withBasicFields)
-                .collect(Collectors.toList());
     }
 }

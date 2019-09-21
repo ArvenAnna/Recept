@@ -1,7 +1,7 @@
 package com.anna.recept.controller;
 
-import java.util.List;
-
+import com.anna.recept.entity.Department;
+import com.anna.recept.service.IDepartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,38 +9,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.anna.recept.dto.RecipeDto;
-import com.anna.recept.entity.Department;
-import com.anna.recept.service.IDepartService;
+import java.util.List;
 
 @RestController
+@RequestMapping(value = {"/departs"}, headers = "Accept=application/json")
 public class DepartmentController {
 
 	@Autowired
 	private IDepartService departServ;
 
-	@RequestMapping(value = {"/departs"}, method = RequestMethod.GET,
-			headers = "Accept=application/json")
+	@RequestMapping(method = RequestMethod.GET)
 	public List<Department> departsList() {
 		return departServ.findAllDepartments();
 	}
 
-	@RequestMapping(value = {"/departs"}, method = RequestMethod.POST,
-			headers = "Accept=application/json")
+	@RequestMapping(method = RequestMethod.POST)
 	public Department createDepart(@RequestBody Department department) {
 		return departServ.createNewDepartment(department);
 	}
 
-	@RequestMapping(value = {"/departs/{id}"}, method = RequestMethod.DELETE,
-			headers = "Accept=application/json")
-	public void removeDepart(@PathVariable("id") Integer id) {
+	@RequestMapping(value = {"/{id}"}, method = RequestMethod.DELETE)
+	public void removeDepart(@PathVariable("id") Long id) {
 		departServ.deleteDepartment(id);
 	}
-
-	@RequestMapping(value = {"/departs/{id}/recipes"}, method = RequestMethod.GET,
-			headers = "Accept=application/json")
-	public List<RecipeDto> getRecipesByDepart(@PathVariable("id") Integer id) {
-		return departServ.findRecipesByDepart(id);
-	}
-
 }

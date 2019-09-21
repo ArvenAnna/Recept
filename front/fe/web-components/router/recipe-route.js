@@ -53,7 +53,6 @@ class RecipeRoute extends WebElement {
                 <${component}></${component}>
             `;
 
-
                 this.appendChild(template.content.cloneNode(true));
             }
 
@@ -73,6 +72,7 @@ class RecipeRoute extends WebElement {
             pathVariables: {
 
             },
+            search: '?' + url.split('?')[1],
             component
         };
 
@@ -103,15 +103,16 @@ class RecipeRoute extends WebElement {
         //analyze url:
         const fullPathParts = fullPath.split('/');
 
-        if(url.split('/').length !== fullPathParts.length) {
+        const urlWithoutSearchString = url.split('?')[0];
+
+        if (urlWithoutSearchString.split('/').length !== fullPathParts.length) {
             return false;
         }
 
         let matches = true;
 
-        url.split('/').forEach((part, i) => {
-
-            if (part != fullPathParts[i] && !fullPathParts[i].startsWith(':')) {
+        urlWithoutSearchString.split('/').forEach((part, i) => {
+            if (part !== fullPathParts[i] && !fullPathParts[i].startsWith(':')) {
                 matches = false;
             }
         });

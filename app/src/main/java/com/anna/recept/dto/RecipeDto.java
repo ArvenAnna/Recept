@@ -42,7 +42,7 @@ public class RecipeDto {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class DepartmentDto {
-		private Integer id;
+		private Long id;
 		@NotNull(message = "Department name should not be null")
 		private String name;
 

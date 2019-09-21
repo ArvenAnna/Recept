@@ -6,6 +6,7 @@ import '../../../components/suggestions-chooser';
 import '../../../components/lists/tags-list';
 import {getResponse} from "../../../utils/httpUtils";
 import mNotification from "../../../model/notification";
+import {retrieveRecipesByKeyword} from '../../../utils/asyncRequests';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
@@ -51,15 +52,7 @@ class RecipeReferences extends WebElement {
     }
 
     async _retrieveRecipesByKeyword(keyword) {
-        let recipes = await fetch(routes.GET_RECIPES_BY_KEYWORD, {method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({keyword})})
-            .then(getResponse)
-            .catch(e => {
-                mNotification.message = e.message;
-            });
+        let recipes = await retrieveRecipesByKeyword(keyword);
         const maxSuggestionsNumber = 10;
 
         //exclude current recipe itself
@@ -76,8 +69,8 @@ class RecipeReferences extends WebElement {
             renderSuggestionCallback: suggestion => suggestion.name,
             addItemCallback: (item) => {
                 this._retrieveRecipesByKeyword(item).then(recipes => {
-                    // should be one recipe only
-                    if (recipes.length === 1 && recipes[0].name === item) {
+                    // take only
+                    if (recipes[0].name === item) {
                         this.$recipe.ref = recipes[0];
                         this.$(LIST_COMPONENT).items = this.$recipe.refs;
                         this.$(LIST_COMPONENT).title = 'List of recipe references:';

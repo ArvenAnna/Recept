@@ -20,6 +20,10 @@ class RouterContext extends Model {
         return this._context.component;
     }
 
+    get search() {
+        return this._context.search;
+    }
+
     set context(newContext) {
         //if newContext is the same is previous don't do anything
         if (!this._context || newContext.url !== this._context.url) {

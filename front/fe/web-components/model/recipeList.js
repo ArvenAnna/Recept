@@ -10,7 +10,7 @@ class RecipeList extends Model {
 
         this._recipes = [];
 
-        this.retrieve = this.retrieve.bind(this);
+        this.search = this.search.bind(this);
         this._setRecipes = this._setRecipes.bind(this);
     }
 
@@ -22,8 +22,17 @@ class RecipeList extends Model {
         }))
     }
 
-    retrieve(departId) {
-        fetch(routes.GET_RECIPES(departId))
+    // retrieve(departId) {
+    //     fetch(routes.GET_RECIPES(departId))
+    //         .then(getResponse)
+    //         .then(this._setRecipes)
+    //         .catch(e => {
+    //             mNotification.message = e.message;
+    //         });
+    // }
+
+    search(searchUrl) {
+        fetch(routes.SEARCH_RECIPES(searchUrl))
             .then(getResponse)
             .then(this._setRecipes)
             .catch(e => {

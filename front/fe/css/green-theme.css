@@ -5,6 +5,17 @@
     --main-border: 1px solid #585858;
     --light-background: #A7A7A7; /*color(gray whiteness(+45%))*/
     --main-font-color: black;
+
+
+    /*--main-background: #1D8051;*/
+    /*--dark-background: #011B12 !*color(gray blackness(+45%))*!;*/
+    /*--dark-dark-background: #000101;  !*color(#585858 blackness(+95%));*!*/
+    /*--main-border: 1px solid #011B12;*/
+    /*--light-background: #0F8487; !*color(gray whiteness(+45%))*!*/
+    /*--main-font-color: black;*/
+
+
+
     /*--main-font-color-light: #222222;*/
     --error-color: #932621;
     --error-background: #935656;
@@ -12,7 +23,7 @@
 
     --small-font-size: 0.9rem;
 
-    --inset-shadow: 1px 1px 5px 0 grey inset;
+    --inset-shadow: 1px 1px 5px 0 var(--main-background) inset;
 
     --card-width: 200px;
 }
