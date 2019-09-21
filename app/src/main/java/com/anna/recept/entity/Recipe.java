@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
-@Table(name = "recept")
+@Table(name = "recipe")
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,7 +10,7 @@ import com.anna.recept.dto.RecipeDto;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
-@Table(name = "dapart")
+@Table(name = "depart")
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,11 +6,9 @@ import './components/lists/tags-list';
 import './components/drop-down/drop-down';
 import {retrieveIngredientsByKeyword, retrieveRecipesByKeyword} from './utils/asyncRequests';
 import mDepartments from './model/departments';
-import mRecipeList from './model/recipeList';
 import {goTo} from './router/utils';
 
 const CONTAINER = 'search-container';
-const BUTTON = 'nav_button';
 
 const INGREDIENT_CHOOSER = 'ingredient-chooser';
 const REF_CHOOSER = 'ref-chooser';

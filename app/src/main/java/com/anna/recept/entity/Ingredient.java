@@ -22,4 +22,13 @@ public class Ingredient {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "img_path")
+    private String imgPath;
+
+    @Column(name = "parent")
+    private Long parent;
+
 }
