@@ -18,6 +18,7 @@ const template = `
         box-sizing: border-box; 
         resize: none;
         height: var(--textarea-height);
+        box-shadow: var(--input-shadow);
     }
     
     #${INPUT}::placeholder {

@@ -18,10 +18,11 @@ const template = `
         width: var(--control-width, 10rem);
         padding: 0.1rem var(--input-icon-padding, 0.1rem) 0.1rem 0.1rem;
         box-sizing: border-box; 
+        box-shadow: var(--input-shadow);
     }
     
     #${INPUT}.error{
-        border: var(--input-error-border);
+        box-shadow: var(--input-error-shadow);
     }
     
     #${INPUT}::placeholder {

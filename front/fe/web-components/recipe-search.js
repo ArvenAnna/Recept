@@ -1,5 +1,6 @@
 import WebElement from './abstract/web-element';
 import './styled/input-text';
+import './styled/action-button';
 import './components/expandable-block';
 import './components/suggestions-chooser';
 import './components/lists/tags-list';
@@ -15,12 +16,15 @@ const REF_CHOOSER = 'ref-chooser';
 const INGREDIENT_LIST = 'ingredient-list';
 const REF_LIST = 'ref-list';
 const ADDITIONAL_SEARCH_PARAMS = 'additional-search-params';
+const APPLY_BUTTON = 'apply-button';
+const RESET_BUTTON = 'reset-button';
 
 const INPUT_COMPONENT = 'input-text';
 const EXPANDABLE_COMPONENT = 'expandable-block';
 const SUGGESTIONS_COMPONENT = 'suggestions-chooser';
 const LIST_COMPONENT = 'tags-list';
 const DROP_DOWN_COMPONENT = 'drop-down';
+const BUTTON_COMPONENT = 'action-button';
 
 const template = `
     <style>
@@ -52,6 +56,9 @@ const template = `
 
                 <${SUGGESTIONS_COMPONENT} id='${REF_CHOOSER}' placeholder='add reference'></${SUGGESTIONS_COMPONENT}>
                 <${LIST_COMPONENT} id='${REF_LIST}'></${LIST_COMPONENT}>
+            
+                <${BUTTON_COMPONENT} text='Apply' id='${APPLY_BUTTON}'></${BUTTON_COMPONENT}>
+                <${BUTTON_COMPONENT} text='Reset' id='${RESET_BUTTON}'></${BUTTON_COMPONENT}>
             </div>
         </${EXPANDABLE_COMPONENT}>
     </div>

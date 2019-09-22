@@ -19,11 +19,14 @@
     /*--main-font-color-light: #222222;*/
     --error-color: #932621;
     --error-background: #935656;
-    --error-border: 1px solid #932621;
+    --error-shadow: 1px 1px 1px 0 #932621;
+
+    --main-border: 2px solid var(--dark-background);
 
     --small-font-size: 0.9rem;
 
-    --inset-shadow: 1px 1px 5px 0 var(--main-background) inset;
+    --inset-shadow: 2px 2px 5px 0 var(--main-background) inset;
+    --outer-shadow: 1px 1px 5px 0 var(--dark-background);
 
     --card-width: 200px;
 }

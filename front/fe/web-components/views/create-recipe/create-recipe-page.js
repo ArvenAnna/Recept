@@ -1,6 +1,7 @@
 import WebElement from '../../abstract/web-element';
 import '../../styled/input-text';
 import '../../styled/text-area';
+import '../../styled/action-button';
 
 import './parts/recipe-references';
 import './parts/recipe-proportions';
@@ -20,9 +21,7 @@ const RECIPE_PROPORTIONS_COMPONENT = 'recipe-proportions';
 const RECIPE_MAIN_PHOTO_COMPONENT = 'recipe-main-photo';
 const RECIPE_DETAILS_COMPONENT = 'recipe-details';
 const RECIPE_DESCRIPTION_COMPONENT = 'text-area';
-
-
-const SAVE = 'save';
+const BUTTON_COMPONENT = 'action-button';
 
 const template = `
   <style>
@@ -51,16 +50,6 @@ const template = `
         --textarea-height: 4rem;
     }
     
-    #${SAVE} {
-       text-align: center;
-       background-color: var(--light-background-crp);
-       margin: 1rem auto;
-       border: 2px solid var(--dark-background-crp);
-       cursor: pointer;
-       width: var(--control-width, 10rem);
-       border-radius: var(--theme-border-radius);
-    }
-    
   </style>
   
   <div id='${CONTAINER}'>
@@ -82,8 +71,8 @@ const template = `
       <div id='${RECIPE_NAME_CONTAINER}'>
             <${RECIPE_DESCRIPTION_COMPONENT} placeholder="Add description"></${RECIPE_DESCRIPTION_COMPONENT}>
       </div>
-
-      <div id='${SAVE}'>Save</div>
+      
+      <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
   </div>
 `;
 
@@ -111,7 +100,7 @@ class CreateRecipePage extends WebElement {
         this._renderPage = this._renderPage.bind(this);
         this._saveRecipe = this._saveRecipe.bind(this);
 
-        this.$_id(SAVE).addEventListener('click', this._saveRecipe);
+        this.$(BUTTON_COMPONENT).onClick = this._saveRecipe;
         this.$_id(RECIPE_NAME).validationErrorsOnBlur = [{
             pattern: /.+/,
             errorText: 'Recipe name should not be empty'

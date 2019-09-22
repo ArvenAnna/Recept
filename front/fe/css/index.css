@@ -17,11 +17,15 @@ recipe-header, recipe-sidebar, recipe-search {
 
 recipe-search {
     --control-width: 100%;
+    --control-font-size: var(--small-font-size);
+
+    --theme-border-radius: 0.2rem;
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
     --input-error-border: var(--error-border);
     --input-error-color: var(--error-color);
+    --input-shadow: var(--outer-shadow);
 
     /*for drop-down*/
     --drop-down-font-color: var(--main-font-color);
@@ -58,11 +62,17 @@ create-recipe-page {
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
-    --input-error-border: var(--error-border);
+    --input-error-shadow: var(--error-shadow);
     --input-error-color: var(--error-color);
+    --input-shadow: var(--outer-shadow);
 
     /*for textarea*/
     --textarea-height: var(--card-width);
+
+    /*for button*/
+    --button-border: var(--main-border);
+    --button-background: var(--light-background);
+    --button-shadow: var(--inset-shadow);
 
     /*for list-items*/
     --list-background: var(--dark-background);
@@ -85,9 +95,12 @@ ingredients-page {
     --control-width: 10rem;
     --control-font-size: var(--small-font-size);
 
+    --theme-border-radius: 0.2rem;
+
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
+    --input-shadow: var(--outer-shadow);
 
     /*for tag*/
     --tag-background: var(--dark-background);
