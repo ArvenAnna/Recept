@@ -1,11 +1,8 @@
 import WebElement from '../../../abstract/web-element';
 
-import routes from '../../../../constants/Routes';
-
 import '../../../components/suggestions-chooser';
 import '../../../components/lists/tags-list';
-import {getResponse} from "../../../utils/httpUtils";
-import mNotification from "../../../model/notification";
+
 import {retrieveRecipesByKeyword} from '../../../utils/asyncRequests';
 
 const CONTAINER = 'container';

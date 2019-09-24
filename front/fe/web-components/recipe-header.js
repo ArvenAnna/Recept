@@ -18,10 +18,12 @@ const template = `
         margin: 0.5rem;
         padding: 0 0.5rem;
         cursor: pointer;
+        border-radius: var(--theme-border-radius);
     }
     
     .${BUTTON}:hover {
         background-color: var(--hover-button, lightgreen);
+        box-shadow: var(--shadow-button);
     }
     
   </style>

@@ -4,8 +4,6 @@ const CONTAINER = 'container';
 const OVERLAY = 'overlay';
 const IMAGE = 'image';
 
-const DEFAULT_SRC = 'svg/dish-fork-and-knife.svg';
-
 const template = `
   <style>
     
@@ -52,9 +50,9 @@ const template = `
     
   </style>
   
-  <div id="${CONTAINER}">
-    <img src="${DEFAULT_SRC}" id="${IMAGE}"/>
-    <div id="${OVERLAY}">
+  <div id='${CONTAINER}'>
+    <img id='${IMAGE}'/>
+    <div id='${OVERLAY}'>
         <slot></slot>
     </div>
   </div>
@@ -69,6 +67,10 @@ class ImageWithOverlay extends WebElement {
 
     set src(newSrc) {
         this.setAttribute(supportedAttributes.SRC, newSrc);
+    }
+
+    set defaultSrc(src) {
+        this.$defaultSrc = src;
     }
 
     static get observedAttributes() {
@@ -88,7 +90,7 @@ class ImageWithOverlay extends WebElement {
     }
 
     clean() {
-        this.setAttribute(supportedAttributes.SRC, DEFAULT_SRC);
+        this.setAttribute(supportedAttributes.SRC, this.$defaultSrc);
     }
 }
 

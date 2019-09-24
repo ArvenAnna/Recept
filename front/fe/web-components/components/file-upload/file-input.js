@@ -1,11 +1,10 @@
 import WebElement from '../../abstract/web-element';
+import {searchIcon} from '../../../constants/themes';
 
 const CONTAINER = 'container';
 const FILE_INPUT = 'file-input';
 const FILE_NAME = 'file-name';
 const SEARCH_ICON = 'search-icon';
-
-const ICON_SRC = 'svg/search-in-folder.svg';
 
 const INITIAL_TEXT = 'upload photo';
 
@@ -40,7 +39,7 @@ const template = `
   </style>
   
   <label id="${CONTAINER}">
-    <img src="${ICON_SRC}" id="${SEARCH_ICON}"/>
+    <img src="${searchIcon}" id="${SEARCH_ICON}"/>
     <input type='file' id='${FILE_INPUT}'/>
     <div id="${FILE_NAME}"></div>
   </label>

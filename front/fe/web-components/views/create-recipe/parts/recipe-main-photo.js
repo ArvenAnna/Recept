@@ -3,6 +3,7 @@ import WebElement from '../../../abstract/web-element';
 import '../../../components/file-upload/photo-upload';
 import '../../../components/expandable-block';
 import routes from '../../../../constants/Routes';
+import {noImage} from '../../../../constants/themes';
 
 const PHOTO_UPLOAD_COMPONENT = 'photo-upload';
 const EXPANDABLE_BLOCK_COMPONENT = 'expandable-block';
@@ -26,7 +27,8 @@ class RecipeMainPhoto extends WebElement {
                 this.$recipe.imgPath = path;
             },
             uploadUrl: routes.UPLOAD_FILE,
-            src: this.$recipe.imgPath
+            src: this.$recipe.imgPath,
+            defaultSrc: noImage
         }
     }
 

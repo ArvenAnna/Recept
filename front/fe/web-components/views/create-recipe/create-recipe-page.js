@@ -14,6 +14,7 @@ const CONTAINER = 'create-recipe-page';
 const RECIPE_NAME_CONTAINER = 'recipe-name-container';
 const RECIPE_NAME = 'recipe-name';
 const RECIPE_NAME_CAPTION = 'recipe-name-caption';
+const BUTTON_CONTAINER = 'button-container';
 
 const RECIPE_DEPARTMENT_COMPONENT = 'recipe-department';
 const RECIPE_REFS_COMPONENT = 'recipe-references';
@@ -26,7 +27,7 @@ const BUTTON_COMPONENT = 'action-button';
 const template = `
   <style>
     #${CONTAINER} {
-        color: var(--dark-dark-background-crp);
+        color: var(--create-recipe-font-color);
         padding: 0 1.5rem;
     }
     
@@ -36,8 +37,10 @@ const template = `
         align-items: center;
     }
     
-    #${RECIPE_NAME_CONTAINER} #${RECIPE_DESCRIPTION_COMPONENT} {
-        
+    #${BUTTON_CONTAINER} {
+       margin: 1rem 0;
+       display: flex;
+       justify-content: center;
     }
     
     #${RECIPE_NAME_CAPTION} {
@@ -72,7 +75,9 @@ const template = `
             <${RECIPE_DESCRIPTION_COMPONENT} placeholder="Add description"></${RECIPE_DESCRIPTION_COMPONENT}>
       </div>
       
-      <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
+      <div id='${BUTTON_CONTAINER}'>
+            <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
+      </div>
   </div>
 `;
 

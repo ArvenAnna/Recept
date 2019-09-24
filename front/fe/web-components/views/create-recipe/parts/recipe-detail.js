@@ -6,6 +6,7 @@ import '../../../components/step-blocks';
 import '../../../styled/text-area';
 import '../../../styled/action-button';
 import routes from '../../../../constants/Routes';
+import {noImage} from '../../../../constants/themes';
 
 const CONTAINER = 'container';
 const ADD_ICON = 'add-icon';
@@ -77,7 +78,8 @@ class RecipeDetail extends WebElement {
                 this.$file = path;
                 this.$(STEPS_COMPONENT).setNextStep(STEPS.PRESS_ADD_BUTTON_STEP);
                 },
-            uploadUrl: routes.UPLOAD_FILE
+            uploadUrl: routes.UPLOAD_FILE,
+            defaultSrc: noImage
         };
     }
 

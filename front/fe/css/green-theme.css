@@ -19,16 +19,24 @@
     /*--main-font-color-light: #222222;*/
     --error-color: #932621;
     --error-background: #935656;
-    --error-shadow: 1px 1px 1px 0 #932621;
+    --error-shadow: 1px 1px 1px 0 #932621, -1px -1px 1px 0 #932621;
 
     --main-border: 2px solid var(--dark-background);
 
+    --normal-font-size: 1rem;
     --small-font-size: 0.9rem;
+    --header-font-size: 1.6rem;
 
     --inset-shadow: 2px 2px 5px 0 var(--main-background) inset;
     --outer-shadow: 1px 1px 5px 0 var(--dark-background);
+    --outer-light-shadow: 1px 1px 5px 0 var(--light-background);
+    --text-shadow: 2px 2px var(--dark-dark-background);
 
     --card-width: 200px;
+    --small-card-width: 100px;
+    --full-size-card-height: 200px;
+
+    --main-border-radius: 0.2rem;
 }
 
 body {

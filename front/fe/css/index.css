@@ -7,19 +7,11 @@ html {
 }
 
 body {
-    font-size: 1rem;
-}
+    font-size: var(--normal-font-size);
 
-recipe-header, recipe-sidebar, recipe-search {
-    --background: var(--main-background);
-    --hover-button: var(--dark-background);
-}
-
-recipe-search {
-    --control-width: 100%;
+    --theme-border-radius: var(--main-border-radius);
     --control-font-size: var(--small-font-size);
 
-    --theme-border-radius: 0.2rem;
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
@@ -27,47 +19,21 @@ recipe-search {
     --input-error-color: var(--error-color);
     --input-shadow: var(--outer-shadow);
 
+    /*for textarea*/
+    --textarea-height: var(--card-width);
+
     /*for drop-down*/
     --drop-down-font-color: var(--main-font-color);
     --drop-down-bg: var(--light-background);
     --drop-down-outlined-color: var(--light-background);
     --drop-down-outlined-bg: var(--dark-background);
+    --drop-down-shadow: var(--outer-shadow);
 
     /*for tag*/
     --tag-background: var(--dark-background);
     --tag-font-color: var(--light-background);
     --tag-font-size: var(--small-font-size);
     --tag-shadow: var(--inset-shadow);
-}
-
-create-recipe-page {
-    --border: var(--main-border);
-    --background: var(--main-background);
-    --dark-background-crp: var(--dark-background);
-    --dark-dark-background-crp: var(--dark-dark-background);
-    --light-background-crp: var(--light-background);
-    --font-color: var(--main-font-color);
-
-    --control-width: 10rem;
-    --control-font-size: var(--small-font-size);
-
-    --theme-border-radius: 0.2rem;
-
-    /*for drop-down*/
-    --drop-down-font-color: var(--main-font-color);
-    --drop-down-bg: var(--light-background);
-    --drop-down-outlined-color: var(--light-background);
-    --drop-down-outlined-bg: var(--dark-background);
-
-    /*for input-text*/
-    --input-background: var(--light-background);
-    --input-placeholder: var(--dark-background);
-    --input-error-shadow: var(--error-shadow);
-    --input-error-color: var(--error-color);
-    --input-shadow: var(--outer-shadow);
-
-    /*for textarea*/
-    --textarea-height: var(--card-width);
 
     /*for button*/
     --button-border: var(--main-border);
@@ -79,63 +45,40 @@ create-recipe-page {
     --list-font-color: var(--light-background);
     --list-font-size: var(--small-font-size);
 
-    /*for tag*/
-    --tag-background: var(--dark-background);
-    --tag-font-color: var(--light-background);
-    --tag-font-size: var(--small-font-size);
-    --tag-shadow: var(--inset-shadow);
+}
+
+recipe-header, recipe-sidebar, recipe-search {
+    --background: var(--main-background);
+    --hover-button: var(--dark-background);
+    --shadow-button: var(--outer-shadow);
+}
+
+recipe-search {
+    --control-width: 100%;
+}
+
+create-recipe-page {
+    --create-recipe-font-color: var(--dark-dark-background);
+    --control-width: 10rem;
 
     /*for photo upload*/
     --image-border: 2px solid var(--dark-background);
     --image-width: var(--card-width);
-    --overlay-label-bg: var(--light-background);
+    --image-overlay-label-bg: var(--light-background);
 }
 
 ingredients-page {
     --control-width: 10rem;
-    --control-font-size: var(--small-font-size);
-
-    --theme-border-radius: 0.2rem;
-
-    /*for input-text*/
-    --input-background: var(--light-background);
-    --input-placeholder: var(--dark-background);
-    --input-shadow: var(--outer-shadow);
-
-    /*for tag*/
-    --tag-background: var(--dark-background);
-    --tag-font-color: var(--light-background);
-    --tag-font-size: var(--small-font-size);
-    --tag-shadow: var(--inset-shadow);
-
-
 }
 
 recipe-page {
-    /*for list-items*/
-    --list-background: var(--light-background);
-    --list-font-size: var(--small-font-size);
-
-    /*for tag*/
-    --tag-background: var(--dark-background);
-    --tag-font-color: var(--light-background);
-    --tag-font-size: var(--small-font-size);
-    --tag-shadow: var(--inset-shadow);
+    /*for tooltip*/
+    --tooltip-background: var(--dark-dark-background);
+    --tooltip-font--color: var(--light-background);
+    --tooltip-shadow: var(--outer-light-shadow);
 }
 
 common-notification {
     --notification-error-border: var(--error-border);
     --notification-error-color: var(--error-background);
 }
-
-/*create-recipe-page drop-down {*/
-    /*--drop-down-font-color: var(--main-font-color);*/
-    /*--drop-down-bg: var(--light-background);*/
-    /*--drop-down-outlined-color: var(--light-background);*/
-    /*--drop-down-outlined-bg: var(--dark-background);*/
-/*}*/
-
-/*create-recipe-page input-text {*/
-    /*--input-background: var(--light-background);*/
-    /*--input-placeholder: var(--dark-background);*/
-/*}*/

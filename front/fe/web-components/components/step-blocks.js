@@ -1,4 +1,5 @@
 import WebElement from '../abstract/web-element';
+import {arrowRightIcon} from '../../constants/themes';
 
 const CONTAINER = 'container';
 
@@ -6,8 +7,6 @@ const STEP_ICON = 'step-icon';
 
 const STEP_ICON_TEMPLATE = 'step-icon-template';
 const SLOT_TEMPLATE = 'slot-template';
-
-const ICON_ARROW_RIGHT = 'svg/long-arrow-pointing-to-the-right.svg'
 
 const template = `
   <style>
@@ -25,7 +24,7 @@ const template = `
   </style>
   
     <template id="${STEP_ICON_TEMPLATE}">
-        <img src="${ICON_ARROW_RIGHT}" class="${STEP_ICON}"/>
+        <img src="${arrowRightIcon}" class="${STEP_ICON}"/>
     </template>
     <template id="${SLOT_TEMPLATE}">
         <slot></slot>

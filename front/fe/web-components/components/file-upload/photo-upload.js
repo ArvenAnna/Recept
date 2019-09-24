@@ -1,11 +1,9 @@
 import WebElement from '../../abstract/web-element';
 import './file-input-autoupload';
 import '../image/image-with-overlay';
+import {removeIcon} from '../../../constants/themes';
 
 const REMOVE = 'remove';
-
-const ICON_REMOVE_SRC = 'svg/cross.svg';
-const DEFAULT_SRC = 'svg/dish-fork-and-knife.svg';
 
 const FILE_UPLOAD_COMPONENT = 'file-input-autoupload';
 const IMAGE_COMPONENT = 'image-with-overlay';
@@ -17,7 +15,7 @@ const template = `
         width: 1rem;
         height: 1rem;
         cursor: pointer;
-        background-color: var(--overlay-label-bg);
+        background-color: var(--image-overlay-label-bg);
         border-radius: var(--theme-border-radius);
         align-self: flex-start;
         margin-top: 0.2rem;
@@ -26,7 +24,7 @@ const template = `
     }
 
     ${FILE_UPLOAD_COMPONENT} {
-        background-color: var(--overlay-label-bg);
+        background-color: var(--image-overlay-label-bg);
         border-radius: var(--theme-border-radius);
     }
 
@@ -34,7 +32,7 @@ const template = `
  
   <${IMAGE_COMPONENT}>
         <${FILE_UPLOAD_COMPONENT}></${FILE_UPLOAD_COMPONENT}>
-        <img src="${ICON_REMOVE_SRC}" id="${REMOVE}"/>
+        <img src="${removeIcon}" id="${REMOVE}"/>
   </${IMAGE_COMPONENT}>
   
 `;
@@ -49,15 +47,17 @@ class PhotoUpload extends WebElement {
         return Object.values(supportedAttributes);
     }
 
-    set props({uploadFileCallback, uploadUrl, src}) {
+    set props({uploadFileCallback, uploadUrl, src, defaultSrc}) {
         this.$uploadFileCallback = uploadFileCallback;
+        this.$defaultSrc = defaultSrc;
         this.$(FILE_UPLOAD_COMPONENT).props = {
             uploadFileCallback: this._onUpload,
             uploadUrl
         };
+        this.$(IMAGE_COMPONENT).defaultSrc = defaultSrc;
 
         if (!src) {
-	    this.setAttribute(supportedAttributes.SRC, DEFAULT_SRC);
+	    this.setAttribute(supportedAttributes.SRC, defaultSrc);
             this.$(FILE_UPLOAD_COMPONENT).style.display = 'block';
             this.$_id(REMOVE).style.display = 'none';
         } else {
@@ -109,7 +109,7 @@ class PhotoUpload extends WebElement {
 
     clean() {
         this._showFileUpload();
-        this.setAttribute(supportedAttributes.SRC, DEFAULT_SRC);
+        this.setAttribute(supportedAttributes.SRC, this.$defaultSrc);
     }
 }
 

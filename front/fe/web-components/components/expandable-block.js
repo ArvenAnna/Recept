@@ -1,4 +1,5 @@
 import WebElement from '../abstract/web-element';
+import {arrowDownIcon, arrowUpIcon} from '../../constants/themes';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
@@ -6,10 +7,6 @@ const CAPTION_CONTAINER = 'caption-container';
 const EXPAND_ICON = 'expand-icon';
 
 const CONTENT_WRAPPER = 'content-wrapper';
-
-
-const ICON_ARROW_DOWN = 'svg/caret-down.svg';
-const ICON_ARROW_UP = 'svg/sort-up.svg';
 
 const template = `
   <style>
@@ -24,6 +21,7 @@ const template = `
       #${CONTENT_WRAPPER} {
          display: none;
          margin-top: 1rem;
+         width: 100%;
       }
       
       #${EXPAND_ICON} {
@@ -44,7 +42,7 @@ const template = `
   
   <div id='${CONTAINER}'>
        <div id='${CAPTION_CONTAINER}'>
-            <img src="${ICON_ARROW_DOWN}" id="${EXPAND_ICON}"/>
+            <img src="${arrowDownIcon}" id="${EXPAND_ICON}"/>
             <div id='${CAPTION}'></div>
        </div>
        
@@ -77,10 +75,10 @@ class ExpandableBlock extends WebElement {
     _toggleContent() {
         this.$isContentExpanded = !this.$isContentExpanded;
         if (this.$isContentExpanded) {
-            this.$_id(EXPAND_ICON).src = ICON_ARROW_UP;
+            this.$_id(EXPAND_ICON).src = arrowUpIcon;
             this.reveal_id(CONTENT_WRAPPER);
         } else {
-            this.$_id(EXPAND_ICON).src = ICON_ARROW_DOWN;
+            this.$_id(EXPAND_ICON).src = arrowDownIcon;
             this.hide_id(CONTENT_WRAPPER);
         }
     }

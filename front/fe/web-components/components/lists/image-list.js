@@ -14,13 +14,6 @@ const IMAGE_COMPONENT = 'removable-image-with-text';
 
 const template = `
   <style>
-    #${CONTAINER} {
-        /*margin: 0 1rem;*/
-    }
-  
-    #${TITLE} {
-        /* don't put margin here*/
-    }
     
     #${ITEMS_CONTAINER} {
         display: flex;
@@ -70,8 +63,9 @@ class ImageList extends WebElement {
         this.setAttribute(supportedAttributes.TITLE, v);
     }
 
-    set props({data, removeItemCallback, title}) {
+    set props({data, removeItemCallback, title, defaultSrc}) {
         this.$data = data || [];
+        this.$defaultSrc = defaultSrc;
         this.$removeItem = removeItemCallback;
         if (title) {
             this.setAttribute(supportedAttributes.TITLE, title);
@@ -98,7 +92,8 @@ class ImageList extends WebElement {
             image.props = {
                 removeFileCallback: this.$removeItem.bind(null, dataItem.item),
                 src: dataItem.src,
-                text: dataItem.text
+                text: dataItem.text,
+                defaultSrc: this.$defaultSrc
             }
         }
 

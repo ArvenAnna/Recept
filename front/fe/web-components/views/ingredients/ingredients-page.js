@@ -2,6 +2,7 @@ import WebElement from '../../abstract/web-element';
 import '../../components/lists/tags-list';
 import '../../styled/input-text-with-icon';
 import '../../components/removable-tag';
+import {addIcon} from '../../../constants/themes';
 
 const CONTAINER = 'ingredients_page';
 
@@ -10,9 +11,6 @@ const LIST_ITEMS = 'list_items';
 
 const INPUT_COMPONENT = 'input-text-with-icon';
 const LIST_COMPONENT = 'tags-list';
-const TAG_COMPONENT = 'removable-tag';
-
-const ICON_SRC = 'svg/add.svg';
 
 const template = `
   <style>
@@ -53,7 +51,7 @@ class IngredientsPage extends WebElement {
             }
 
             if (this.$addIngredient) {
-                this.$(INPUT_COMPONENT).src = ICON_SRC;
+                this.$(INPUT_COMPONENT).src = addIcon;
                 this.$(INPUT_COMPONENT).placeholder = 'Add new ingredient';
                 this.$(INPUT_COMPONENT).iconClick = this.$addIngredient;
             }

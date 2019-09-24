@@ -2,13 +2,12 @@ import WebElement from '../abstract/web-element';
 import {isDescendantOf} from '../../utils/domUtils';
 import './drop-down/toggable-drop-down-list';
 import '../styled/input-text-with-icon';
+import {addIcon} from '../../constants/themes';
 
 const CONTAINER = 'container';
 
 const TOGGABLE_LIST_COMPONENT = 'toggable-drop-down-list';
 const INPUT_COMPONENT = 'input-text-with-icon';
-
-const ICON_SRC = 'svg/add.svg';
 
 const template = `
   <style>
@@ -65,7 +64,7 @@ class SuggestionsChooser extends WebElement {
             focus: this._onFocus
         };
 
-        this.$(INPUT_COMPONENT).src = ICON_SRC;
+        this.$(INPUT_COMPONENT).src = addIcon;
     }
 
     disconnectedCallback() {

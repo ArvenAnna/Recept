@@ -2,6 +2,7 @@ import WebElement from '../abstract/web-element';
 import './drop-down/dropdown-list';
 import './suggestions-input';
 import '../styled/input-text-with-icon';
+import {addIcon} from '../../constants/themes';
 
 const CONTAINER = 'container';
 
@@ -51,7 +52,7 @@ class TwoFieldsAddItem extends WebElement {
 
         this.$(NORMA_INPUT_COMPONENT).placeholder = placeholders.second;
         this.$(NORMA_INPUT_COMPONENT).iconClick = this._addItem;
-        this.$(NORMA_INPUT_COMPONENT).src = 'svg/add.svg';
+        this.$(NORMA_INPUT_COMPONENT).src = addIcon;
     }
 
     constructor() {

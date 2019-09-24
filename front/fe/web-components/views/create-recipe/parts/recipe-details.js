@@ -2,6 +2,7 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/lists/image-list';
 import './recipe-detail';
+import {noImage} from '../../../../constants/themes';
 
 const CONTAINER = 'container';
 const LIST_CONTAINER = 'list-container';
@@ -49,7 +50,8 @@ class RecipeDetails extends WebElement {
                 this.$recipe.removeDetail(detail);
                 this.$(LIST_COMPONENT).data = this._constructDataForList();
             },
-            title: this.$recipe.details && this.$recipe.details.length && 'List of details'
+            title: this.$recipe.details && this.$recipe.details.length && 'List of details:',
+            defaultSrc: noImage
         }
     }
 

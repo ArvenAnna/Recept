@@ -1,6 +1,7 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/lists/tags-list';
-import {noImage} from '../../../constants/themes';
+import './parts/recipe-reference';
+import { noImage } from '../../../constants/themes';
 
 const CONTAINER = 'recipe_page';
 const RECIPE_REF_TEMPLATE = 'recipe_ref_template';
@@ -12,13 +13,13 @@ const DESCRIPTION = 'recipe_page_description';
 const REFS = 'recipe_page_refs';
 const DETAILS = 'recipe_page_details';
 
-const REF_PHOTO = 'recipe_ref_photo';
-const REF_NAME = 'recipe_page_refs_name';
 const DETAIL = 'detail';
 const DETAILS_PHOTO = 'recipe_page_details_photo';
 const DETAILS_DESCRIPTION = 'recipe_page_details_description';
+const REFS_CONTAINER = 'refs-container';
 
 const LIST_COMPONENT = 'tags-list';
+const RECIPE_REF_COMPONENT = 'recipe-reference';
 
 const template = `
   <style>
@@ -33,14 +34,15 @@ const template = `
         grid-row-start: 1;
         grid-row-end: 2;
         text-align: center;
-        font-size: 1.6rem;
+        font-size: var(--header-font-size);
         width: 100%;
         margin: 20px 0;
+        text-shadow: var(--text-shadow);
     }
     
     #recipe_page_proportions {
         grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-end: 4;
         grid-row-start: 2;
         grid-row-end: 3;
         padding: 0 1rem;
@@ -52,8 +54,10 @@ const template = `
         grid-row-start: 3;
         grid-row-end: 4;
         width: 100%;
-        padding: 0 1rem;
+        padding: 0.5rem 1rem;
         box-sizing: border-box;
+        /*height: var(--full-size-card-height);*/
+        border-radius: var(--theme-border-radius);
     }
     
     #${DESCRIPTION} {
@@ -62,33 +66,24 @@ const template = `
         grid-row-start: 4;
         grid-row-end: 5;
 
-        font-size: 1.1rem;
         text-align: justify;
-        font-weight: 600;
         margin: 1rem;
     }
     
-    #${REFS} {
+    #${REFS_CONTAINER} {
         grid-column-start: 3;
         grid-column-end: 4;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
 
         display: flex;
         flex-direction: column;
-        cursor: pointer;
         margin: 0 1rem;
+        padding: 0.5rem 1rem;
     }
     
-    .${REF_NAME} {
-      text-align: center;
-      padding: 5px;
-      font-size: medium;
-      font-weight: 600;
-    }
-    
-    .${REF_PHOTO} {
-        width: 5rem;
+    #${REFS} {
+        cursor: pointer;
     }
     
     #${DETAILS} {
@@ -98,46 +93,45 @@ const template = `
         grid-row-end: 6;
 
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        background-color: var(--dark-background);
+        border-radius: var(--theme-border-radius);
+        grid-template-columns: repeat(auto-fit, minmax(var(--card-width), 1fr));
         justify-items: center;
         margin: 1rem;
+        padding: 1rem;
     }
     
     .${DETAIL} {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        max-width: 200px;
-        min-width: 80%;
-        
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: flex-start;
+       width: var(--card-width); 
+       padding-bottom: 1rem;
     }
     
     .${DETAILS_DESCRIPTION} {
-        padding: 1rem;
-        font-size: medium;
-        font-weight: 600;
+        padding: 0.2rem 0;
+        color: var(--light-background);
      }
     
     .${DETAILS_PHOTO} {
         width: 100%;
-        height: 200px;
+        
         object-fit: contain;
+        border-radius: var(--theme-border-radius);
     }
     
   </style>
   
   <template id='${RECIPE_REF_TEMPLATE}'>
-    <recipe-link>
-        <img src='${noImage}' class='${REF_PHOTO}'/>
-        <div class='${REF_NAME}'/>
-    </recipe-link>
+    <${RECIPE_REF_COMPONENT}></${RECIPE_REF_COMPONENT}>
   </template>
   
   <template id='${RECIPE_DETAIL_TEMPLATE}'>
     <div class='${DETAIL}'>
-      <img src='${noImage}' class='${DETAILS_PHOTO}'/>
-      <div class='${DETAILS_DESCRIPTION}'></div>
+        <img src='${noImage}' class='${DETAILS_PHOTO}'/>
+        <div class='${DETAILS_DESCRIPTION}'></div>
     </div>
   </template>
   
@@ -148,7 +142,10 @@ const template = `
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
-      <div id='${REFS}'></div>
+      <div id='${REFS_CONTAINER}'>
+        References:
+        <div id='${REFS}'></div>
+      </div>
       <div id='${DETAILS}'></div>
   </div>
 `;
@@ -188,6 +185,8 @@ class RecipePage extends WebElement {
         this.$_id(DESCRIPTION).textContent = '';
         this.$_id(REFS).innerHTML = '';
         this.$_id(DETAILS).innerHTML = '';
+        this.$_id(DETAILS).style.display = 'none';
+        this.$_id(REFS_CONTAINER).style.display = 'none';
     }
 
     _renderPage() {
@@ -203,19 +202,19 @@ class RecipePage extends WebElement {
                 this._initProportions();
             }
 
-            if (this.$recipe.refs) {
+            if (this.$recipe.refs && this.$recipe.refs.length) {
+                this.$_id(REFS_CONTAINER).style.display = 'flex';
                 this.$recipe.refs.forEach(ref => {
                     const refTemplate = this.getTemplateById(RECIPE_REF_TEMPLATE);
-                    refTemplate.byTag('recipe-link').setAttribute('path', `/recipe/${ref.id}`);
-                    if (ref.imgPath) {
-                        refTemplate.byClass(REF_PHOTO).src = ref.imgPath;
+                    refTemplate.byTag(RECIPE_REF_COMPONENT).onConstruct = (component) => {
+                        component.props = {src: ref.imgPath, text: ref.name, link: `/recipe/${ref.id}`};
                     }
-                    refTemplate.byClass(REF_NAME).textContent = ref.name;
                     this.$_id(REFS).appendChild(refTemplate);
                 })
             }
 
-            if (this.$recipe.details) {
+            if (this.$recipe.details && this.$recipe.details.length) {
+                this.$_id(DETAILS).style.display = 'flex';
                 this.$recipe.details.forEach(detail => {
                     const detailTemplate = this.getTemplateById(RECIPE_DETAIL_TEMPLATE);
                     if (detail.imgPath) {

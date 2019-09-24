@@ -1,9 +1,7 @@
 import WebElement from '../../abstract/web-element';
 import {isDescendantOf} from "../../../utils/domUtils";
 import './toggable-drop-down-list';
-
-const CARET_ICON_DOWN_SRC = 'svg/caret-down.svg';
-const CARET_ICON_UP_SRC = 'svg/sort-up.svg';
+import {arrowDownIcon, arrowUpIcon} from '../../../constants/themes';
 
 const CONTAINER = 'container';
 const LABEL = 'label';
@@ -31,6 +29,7 @@ const template = `
        box-sizing: border-box;
        justify-content: space-between;
        border-radius: var(--theme-border-radius);
+       box-shadow: var(--drop-down-shadow); 
     }
     
     #${CARET_ICON} {
@@ -45,7 +44,7 @@ const template = `
   <div id="${CONTAINER}">
     <div id="${LABEL}">
         <div id="${LABEL_VALUE}"></div>
-        <img src="${CARET_ICON_DOWN_SRC}" id="${CARET_ICON}"/>
+        <img src="${arrowDownIcon}" id="${CARET_ICON}"/>
     </div>
     <${TOGGABLE_LIST_COMPONENT}></${TOGGABLE_LIST_COMPONENT}>
   </div>
@@ -71,7 +70,7 @@ class DropDown extends WebElement {
 
     set opened(isOpened) {
         this.$opened = isOpened;
-        this.$_id(CARET_ICON).src = isOpened ? CARET_ICON_UP_SRC : CARET_ICON_DOWN_SRC;
+        this.$_id(CARET_ICON).src = isOpened ? arrowUpIcon : arrowDownIcon;
     }
 
     constructor() {

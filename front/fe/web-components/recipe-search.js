@@ -18,6 +18,7 @@ const REF_LIST = 'ref-list';
 const ADDITIONAL_SEARCH_PARAMS = 'additional-search-params';
 const APPLY_BUTTON = 'apply-button';
 const RESET_BUTTON = 'reset-button';
+const BUTTONS_CONTAINER = 'buttons-container';
 
 const INPUT_COMPONENT = 'input-text';
 const EXPANDABLE_COMPONENT = 'expandable-block';
@@ -38,10 +39,19 @@ const template = `
         #${ADDITIONAL_SEARCH_PARAMS} {
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
         
         ${DROP_DOWN_COMPONENT}, ${LIST_COMPONENT} {
             margin-bottom: 1rem;
+        }
+        
+        ${BUTTON_COMPONENT} {
+            width: 100%;
+        }
+        
+        #${BUTTONS_CONTAINER} {
+            display: flex;
         }
     </style>
 
@@ -57,8 +67,11 @@ const template = `
                 <${SUGGESTIONS_COMPONENT} id='${REF_CHOOSER}' placeholder='add reference'></${SUGGESTIONS_COMPONENT}>
                 <${LIST_COMPONENT} id='${REF_LIST}'></${LIST_COMPONENT}>
             
-                <${BUTTON_COMPONENT} text='Apply' id='${APPLY_BUTTON}'></${BUTTON_COMPONENT}>
-                <${BUTTON_COMPONENT} text='Reset' id='${RESET_BUTTON}'></${BUTTON_COMPONENT}>
+                <div id='${BUTTONS_CONTAINER}'>
+                    <${BUTTON_COMPONENT} text='Apply' id='${APPLY_BUTTON}'></${BUTTON_COMPONENT}>
+                    <${BUTTON_COMPONENT} text='Reset' id='${RESET_BUTTON}'></${BUTTON_COMPONENT}>
+                </div>
+               
             </div>
         </${EXPANDABLE_COMPONENT}>
     </div>
@@ -75,11 +88,15 @@ class RecipeSearch extends WebElement {
         this._render = this._render.bind(this);
         this._onKeyPress = this._onKeyPress.bind(this);
         this._departmentsChanged = this._departmentsChanged.bind(this);
+        this._onApplyAdditionalSearch = this._onApplyAdditionalSearch.bind(this);
+        this._onResetAdditionalSearch = this._onResetAdditionalSearch.bind(this);
 
         mDepartments.addSubscriber(this._departmentsChanged);
         mDepartments.retrieve();
 
         this.$(INPUT_COMPONENT).addEventListener('keydown', this._onKeyPress);
+        this.$_id(APPLY_BUTTON).addEventListener('click', this._onApplyAdditionalSearch);
+        this.$_id(RESET_BUTTON).addEventListener('click', this._onResetAdditionalSearch);
 
         this._render();
     }
@@ -140,28 +157,40 @@ class RecipeSearch extends WebElement {
         }
     }
 
+    _onResetAdditionalSearch() {
+        this.$chosenIngredients = [];
+        this.$chosenRefs = [];
+        this.$chosenDepartment = null;
+        this._render();
+        this._onApplyAdditionalSearch();
+    }
+
+    _onApplyAdditionalSearch() {
+        let searchUrl = '';
+        if (this.$(INPUT_COMPONENT).value) {
+            searchUrl = `?search=${this.$(INPUT_COMPONENT).value.trim()}`;
+        }
+        if (this.$chosenDepartment && this.$chosenDepartment.id) {
+            searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${this.$chosenDepartment.id}`
+        }
+        if (this.$chosenRefs && this.$chosenRefs.length) {
+            this.$chosenRefs.forEach(ref => {
+                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref.id}`
+            });
+        }
+        if (this.$chosenIngredients && this.$chosenIngredients.length) {
+            this.$chosenIngredients.forEach(ing => {
+                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing.id}`
+            });
+        }
+        goTo(`/recipes${searchUrl}`);
+    }
+
     _onKeyPress(e) {
         const key = e.key;
 
         if (key == 'Enter') {
-            let searchUrl = '';
-            if (this.$(INPUT_COMPONENT).value) {
-                searchUrl = `?search=${this.$(INPUT_COMPONENT).value.trim()}`;
-            }
-            if (this.$chosenDepartment && this.$chosenDepartment.id) {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${this.$chosenDepartment.id}`
-            }
-            if (this.$chosenRefs && this.$chosenRefs.length) {
-                this.$chosenRefs.forEach(ref => {
-                    searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref.id}`
-                });
-            }
-            if (this.$chosenIngredients && this.$chosenIngredients.length) {
-                this.$chosenIngredients.forEach(ing => {
-                    searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing.id}`
-                });
-            }
-            goTo(`/recipes${searchUrl}`);
+            this._onApplyAdditionalSearch();
         }
     }
 

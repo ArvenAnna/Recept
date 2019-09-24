@@ -13,10 +13,11 @@ const template = `
         cursor: pointer;
         z-index: 2;
         padding: 0.2rem;
-        width: 100%;
+        min-width: 100%;
         background-color: var(--drop-down-bg);
         box-sizing: border-box;
         border-radius: var(--theme-border-radius);
+        box-shadow: var(--drop-down-shadow);
     }
     
     .${ITEM} {

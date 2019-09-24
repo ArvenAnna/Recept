@@ -1,10 +1,10 @@
 import WebElement from '../../abstract/web-element';
 
 import './image-with-overlay';
+import {removeIcon} from '../../../constants/themes';
 
 const REMOVE_ICON = 'remove-icon';
 const IMAGE_COMPONENT = 'image-with-overlay';
-const ICON_REMOVE_SRC = 'svg/cross.svg';
 
 const template = `
   <style>
@@ -24,7 +24,7 @@ const template = `
   </style>
   
   <${IMAGE_COMPONENT}>
-      <img src="${ICON_REMOVE_SRC}" id="${REMOVE_ICON}"/>
+      <img src="${removeIcon}" id="${REMOVE_ICON}"/>
   </${IMAGE_COMPONENT}>
   
 `;
@@ -39,12 +39,14 @@ class RemovableImage extends WebElement {
         return Object.values(supportedAttributes);
     }
 
-    set props({removeFileCallback, src}) {
+    set props({removeFileCallback, src, defaultSrc}) {
         this.$removeFileCallback = removeFileCallback;
 
         if (src) {
             this.setAttribute(supportedAttributes.SRC, src);
         }
+
+        this.$(IMAGE_COMPONENT).defaultSrc = defaultSrc;
     }
 
     set src(newSrc) {

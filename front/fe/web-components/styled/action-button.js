@@ -8,11 +8,11 @@ const template = `
     #${BUTTON} {
        text-align: center;
        background-color: var(--button-background);
-       margin: 1rem auto;
        border: var(--button-border);
        cursor: pointer;
        width: var(--control-width, 10rem);
        border-radius: var(--theme-border-radius);
+       box-sizing: border-box;
     }
     
     #${BUTTON}:hover {

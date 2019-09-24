@@ -30,11 +30,12 @@ class RemovableImageWithText extends WebElement {
         return Object.values(supportedAttributes);
     }
 
-    set props({removeFileCallback, src, text}) {
+    set props({removeFileCallback, src, text, defaultSrc}) {
         this.$_id(TEXT).textContent = text;
         this.$(IMAGE_COMPONENT).props = {
             removeFileCallback,
-            src
+            src,
+            defaultSrc
         }
         if (src) {
             this.setAttribute(supportedAttributes.SRC, src);

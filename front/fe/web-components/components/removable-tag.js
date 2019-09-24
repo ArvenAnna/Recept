@@ -1,9 +1,9 @@
 import WebElement from '../abstract/web-element';
+import {removeIcon} from '../../constants/themes';
 
 const CONTAINER = 'tag_container';
 
 const REMOVE_ITEM = 'remove_item';
-const REMOVE_ICON_SRC = 'svg/cross.svg';
 
 const template = `
   <style>
@@ -32,7 +32,7 @@ const template = `
   
   <div id='${CONTAINER}'>
     <slot></slot>
-    <img src='${REMOVE_ICON_SRC}' id='${REMOVE_ITEM}'/>
+    <img src='${removeIcon}' id='${REMOVE_ITEM}'/>
   </div>
   
 `;

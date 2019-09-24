@@ -1,12 +1,11 @@
 import WebElement from './abstract/web-element';
 import mNotification from './model/notification';
+import {removeIcon} from '../constants/themes';
 
 const CONTAINER = 'container';
 const INNER_CONTAINER = 'inner-container';
 const ERROR_TEXT = 'error-text';
 const REMOVE_ICON = 'remove-icon';
-
-const ICON_REMOVE_SRC = 'svg/cross.svg';
 
 const DEFAULT_TIMEOUT = 5000;
 
@@ -48,7 +47,7 @@ const template = `
   <div id='${CONTAINER}' class='hidden'>
     <div id='${INNER_CONTAINER}'>
         <div id='${ERROR_TEXT}'></div>
-        <img src="${ICON_REMOVE_SRC}" id="${REMOVE_ICON}"/>
+        <img src="${removeIcon}" id="${REMOVE_ICON}"/>
     </div>     
   </div>
 `;
