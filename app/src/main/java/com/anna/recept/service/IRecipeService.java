@@ -5,6 +5,8 @@ import com.anna.recept.dto.SearchRecipeParams;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 public interface IRecipeService {
 
     List<RecipeDto> getRecipes();
@@ -17,7 +19,7 @@ public interface IRecipeService {
 
     RecipeDto updateRecipe(RecipeDto recipe);
 
-    List<RecipeDto> findRecipesByParams(SearchRecipeParams params);
+    List<RecipeDto> findRecipesByParams(@Valid SearchRecipeParams params);
 
     List<RecipeDto> findRecipesNameByKeyword(String keyword);
 }

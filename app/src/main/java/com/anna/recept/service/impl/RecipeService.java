@@ -1,5 +1,16 @@
 package com.anna.recept.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
+
 import com.anna.recept.dto.RecipeDto;
 import com.anna.recept.dto.SearchRecipeParams;
 import com.anna.recept.entity.Recipe;
@@ -10,15 +21,8 @@ import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.repository.RecipeRepository;
 import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IRecipeService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
-
+@Validated
 @Service
 public class RecipeService implements IRecipeService {
 

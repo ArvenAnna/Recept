@@ -1,4 +1,4 @@
-import routes from '../../constants/Routes';
+import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
@@ -33,12 +33,12 @@ export class Recipe extends Model {
         return this._recipe.refs.map(ref => ({
            id: ref.id,
            name: ref.name,
-           imgPath: ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath
+           imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath)
         }));
     }
 
     get imgPath() {
-        return this._recipe.imgPath && routes.IMAGE_CATALOG + this._recipe.imgPath;
+        return getImageSmallCopy(this._recipe.imgPath && routes.IMAGE_CATALOG + this._recipe.imgPath);
     }
 
     get proportions() {
@@ -47,7 +47,7 @@ export class Recipe extends Model {
 
     get details() {
         return this._recipe.details && this._recipe.details.map(({id, description, filePath}) =>
-            ({id, description, imgPath: filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG) ? filePath : routes.IMAGE_CATALOG + filePath}));
+            ({id, description, imgPath: filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG) ? filePath : getImageSmallCopy(routes.IMAGE_CATALOG + filePath)}));
     }
 
     retrieve(id) {

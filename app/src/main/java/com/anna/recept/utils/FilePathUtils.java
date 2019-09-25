@@ -46,13 +46,23 @@ public class FilePathUtils {
 	 * @param tempPath
 	 * @param catalog
 	 * @param subCatalog
+	 * @return
+	 */
+	public static String constructPathWithCatalogsToRealFile(String tempPath, String catalog, String subCatalog) {
+		return constructCatalogName(catalog, subCatalog) + File.separator
+				+ subCatalog + UUID.randomUUID().toString()
+				+ "." + getFileExtensionFromPath(tempPath);
+	}
+
+	/**
+	 * Constructs path for real small file from normal sized
+	 * @param pathToRealFile - path to normal size file
 	 * @param suffix - added to filename
 	 * @return
 	 */
-	public static String constructPathWithCatalogsToRealFile(String tempPath, String catalog, String subCatalog, String suffix) {
-		return constructCatalogName(catalog, subCatalog) + File.separator
-				+ subCatalog + UUID.randomUUID().toString()
-				+ (suffix != null ? suffix : "") + "." + getFileExtensionFromPath(tempPath);
+	public static String constructPathToSmallRealFile(String pathToRealFile, String suffix) {
+		String extension = '.' + getFileExtensionFromPath(pathToRealFile);
+		return pathToRealFile.replace(extension, suffix + extension);
 	}
 
 	/**

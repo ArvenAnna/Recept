@@ -48,7 +48,7 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
-    public List<RecipeDto> findRecipesByIngredients(SearchRecipeParams params) {
+    public List<RecipeDto> findRecipesBySearchParams(SearchRecipeParams params) {
         return recipeService.findRecipesByParams(params);
     }
 

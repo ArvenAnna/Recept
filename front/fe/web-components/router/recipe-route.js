@@ -72,7 +72,7 @@ class RecipeRoute extends WebElement {
             pathVariables: {
 
             },
-            search: '?' + url.split('?')[1],
+            search: '?' + (url.split('?')[1] || ''),
             component
         };
 

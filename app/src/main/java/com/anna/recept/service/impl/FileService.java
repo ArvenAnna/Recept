@@ -82,8 +82,8 @@ public class FileService implements IFileService {
 	@Override
 	public String saveRecipeFile(String path, String department, String name) {
         if (isTempPath(path)) {
-            String pathNameInsidePhotoCatalog = FilePathUtils.constructPathWithCatalogsToRealFile(path, department, name, null);
-            String smallFilePathNameInsidePhotoCatalog = FilePathUtils.constructPathWithCatalogsToRealFile(path, department, name, System.getenv(PREVIEW_IMAGE_PREFIX_ENV));
+            String pathNameInsidePhotoCatalog = FilePathUtils.constructPathWithCatalogsToRealFile(path, department, name);
+            String smallFilePathNameInsidePhotoCatalog = FilePathUtils.constructPathToSmallRealFile(pathNameInsidePhotoCatalog, System.getenv(PREVIEW_IMAGE_PREFIX_ENV));
 
             saveNormalAndSmallFiles(path, pathNameInsidePhotoCatalog, smallFilePathNameInsidePhotoCatalog);
             return pathNameInsidePhotoCatalog;
