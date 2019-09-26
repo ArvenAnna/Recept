@@ -33,7 +33,8 @@ export class Recipe extends Model {
         return this._recipe.refs.map(ref => ({
            id: ref.id,
            name: ref.name,
-           imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath)
+           imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath),
+           imgPathFull: ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath
         }));
     }
 
@@ -41,13 +42,24 @@ export class Recipe extends Model {
         return getImageSmallCopy(this._recipe.imgPath && routes.IMAGE_CATALOG + this._recipe.imgPath);
     }
 
+    get imgPathFull() {
+        return this._recipe.imgPath && routes.IMAGE_CATALOG + this._recipe.imgPath;
+    }
+
     get proportions() {
         return this._recipe.proportions && this._recipe.proportions.map(prop => ({...prop}));
     }
 
     get details() {
-        return this._recipe.details && this._recipe.details.map(({id, description, filePath}) =>
-            ({id, description, imgPath: filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG) ? filePath : getImageSmallCopy(routes.IMAGE_CATALOG + filePath)}));
+        return this._recipe.details && this._recipe.details.map(({id, description, filePath}) => {
+            const isTempImage = filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG);
+            return {
+                id,
+                description,
+                imgPath: isTempImage ? filePath : getImageSmallCopy(routes.IMAGE_CATALOG + filePath),
+                imgPathFull: isTempImage ? filePath : routes.IMAGE_CATALOG + filePath
+            }
+        });
     }
 
     retrieve(id) {

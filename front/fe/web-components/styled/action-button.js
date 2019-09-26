@@ -17,6 +17,7 @@ const template = `
     
     #${BUTTON}:hover {
         box-shadow: var(--button-shadow);
+        background-color: var(--button-hover-background);
     }
     
   </style>
@@ -40,7 +41,7 @@ class ActionButton extends WebElement {
             this.$_id(BUTTON).removeEventListener('click', this.$onClick);
         };
 
-        if(onClickHandler) {
+        if (onClickHandler) {
             this.$_id(BUTTON).addEventListener('click', onClickHandler);
         }
 

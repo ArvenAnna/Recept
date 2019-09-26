@@ -1,41 +1,21 @@
 import mDepartments from './model/departments';
 import WebElement from './abstract/web-element';
-import './router/recipe-link';
+import './components/menu/vertical-menu';
 
-const CONTAINER = 'sidebar_menu';
-const BUTTON_TEMPLATE = 'sidebar_button_template';
-const BUTTON = 'nav_button';
+const CONTAINER = 'sidebar-menu';
+
+const MENU_COMPONENT = 'vertical-menu';
 
 const template = `
     <style>
         #${CONTAINER} {
             margin-left: 1rem;
-            background-color: var(--background, green);
-            padding: 0.5rem 0;
-        }
-
-        .${BUTTON} {
-            padding: 0 0.5rem;
-            cursor: pointer;
-            border-radius: var(--theme-border-radius);
-        }
-    
-        .${BUTTON}:hover {
-            background-color: var(--hover-button, lightgreen);
-            box-shadow: var(--shadow-button);
         }
     </style>
 
-    <template id='${BUTTON_TEMPLATE}'>
-        <recipe-link>
-            <div class='${BUTTON}'></div>
-        </recipe-link>
-    </template>
-
-    <div class="side_menu" id="${CONTAINER}">search</div>
+    <div id='${CONTAINER}'><${MENU_COMPONENT}></${MENU_COMPONENT}></div>
 `;
 
-//todo: remove css class from container
 class RecipeSidebar extends WebElement {
     constructor() {
         super(template, true);
@@ -52,21 +32,12 @@ class RecipeSidebar extends WebElement {
     }
 
     _render(newDepartments) {
-        this.$_id(CONTAINER).innerHTML = ''; // clear all content
-
         if (newDepartments.length) {
 
-            newDepartments.forEach(dep => {
-                const template = this.getTemplateById(BUTTON_TEMPLATE);
-
-                const linkEl = template.byTag('recipe-link');
-                linkEl.onConstruct = (link) => {
-                    link.path = `/recipes?departmentId=${dep.id}`;
-                };
-                template.byClass(BUTTON).textContent = dep.name;
-                this.$_id(CONTAINER).appendChild(template);
-            });
-
+            this.$(MENU_COMPONENT).items = newDepartments.map(dep => ({
+                link: `/recipes?departmentId=${dep.id}`,
+                text: dep.name
+            }));
         }
     }
 

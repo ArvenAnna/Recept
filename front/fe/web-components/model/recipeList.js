@@ -18,7 +18,8 @@ class RecipeList extends Model {
         return this._recipes.map(recipe => ({
             id: recipe.id,
             name: recipe.name,
-            imgPath: getImageSmallCopy(recipe.imgPath && routes.IMAGE_CATALOG + recipe.imgPath)
+            imgPath: getImageSmallCopy(recipe.imgPath && routes.IMAGE_CATALOG + recipe.imgPath),
+            imgPathFull: recipe.imgPath && routes.IMAGE_CATALOG + recipe.imgPath
         }))
     }
 

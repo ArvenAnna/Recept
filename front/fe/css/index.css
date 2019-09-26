@@ -15,7 +15,6 @@ body {
     /*for input-text*/
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
-    --input-error-border: var(--error-border);
     --input-error-color: var(--error-color);
     --input-shadow: var(--outer-shadow);
 
@@ -39,6 +38,7 @@ body {
     --button-border: var(--main-border);
     --button-background: var(--light-background);
     --button-shadow: var(--inset-shadow);
+    --button-hover-background: var(--light-background);
 
     /*for list-items*/
     --list-background: var(--dark-background);
@@ -48,9 +48,13 @@ body {
 }
 
 recipe-header, recipe-sidebar, recipe-search {
-    --background: var(--main-background);
-    --hover-button: var(--dark-background);
-    --shadow-button: var(--outer-shadow);
+    /*for button*/
+    --button-border: none;
+    --button-background: var(--main-background);
+    --button-shadow: var(--outer-shadow);
+    --button-hover-background: var(--dark-background);
+    /*for menu*/
+    --menu-background: var(--main-background);
 }
 
 recipe-search {

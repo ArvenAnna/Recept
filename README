@@ -20,7 +20,6 @@ drop database recipe
 - search - not working with complex request
 - foto to ingredient (hierarchial structure?)
 - add another style theme
-- small file copies / check small files flow
 - foto to be rotatable
 - recipe pagination
 - different browsers support

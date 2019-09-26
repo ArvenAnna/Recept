@@ -32,7 +32,7 @@ const template = `
         #${CONTAINER} {
             margin-left: 1rem;
             margin-top: 1rem;
-            background-color: var(--background, green);
+            background-color: var(--menu-background, green);
             padding: 0.5rem;
         }
 
