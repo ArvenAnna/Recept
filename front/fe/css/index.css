@@ -45,16 +45,16 @@ body {
     --list-font-color: var(--light-background);
     --list-font-size: var(--small-font-size);
 
+    /*for menu*/
+    --menu-background: var(--main-background);
 }
 
-recipe-header, recipe-sidebar, recipe-search {
+recipe-header, recipe-sidebar {
     /*for button*/
     --button-border: none;
     --button-background: var(--main-background);
     --button-shadow: var(--outer-shadow);
     --button-hover-background: var(--dark-background);
-    /*for menu*/
-    --menu-background: var(--main-background);
 }
 
 recipe-search {

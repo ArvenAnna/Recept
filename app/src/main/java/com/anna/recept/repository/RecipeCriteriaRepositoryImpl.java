@@ -43,7 +43,8 @@ public class RecipeCriteriaRepositoryImpl implements RecipeCriteriaRepository {
         }
 
         if (params.getRefs() != null && !params.getRefs().isEmpty()) {
-            Predicate refsPredicate =  recipe.get("refs").in(params.getRefs().toArray());
+            Join<Recipe, Recipe> recipeJoin = recipe.join("refs", JoinType.INNER);
+            Predicate refsPredicate = recipeJoin.get("id").in(params.getRefs().toArray());
             predicates.add(refsPredicate);
         }
 

@@ -49,7 +49,7 @@ public class IngredientService implements IIngredientService {
 
     @Override
     public List<Ingredient> searchIngredients(String str) {
-        return str.trim().isEmpty()
+        return (str == null || str.trim().isEmpty())
                 ? new ArrayList<>()
                 : ingRep.findByNameIgnoreCaseContaining(str.trim())
                 .stream().limit(10L).collect(Collectors.toList());
