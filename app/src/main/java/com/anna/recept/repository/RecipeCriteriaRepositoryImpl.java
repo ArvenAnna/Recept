@@ -43,15 +43,35 @@ public class RecipeCriteriaRepositoryImpl implements RecipeCriteriaRepository {
         }
 
         if (params.getRefs() != null && !params.getRefs().isEmpty()) {
-            Join<Recipe, Recipe> recipeJoin = recipe.join("refs", JoinType.INNER);
-            Predicate refsPredicate = recipeJoin.get("id").in(params.getRefs().toArray());
-            predicates.add(refsPredicate);
+            Predicate containAllRefsPredicate = null;
+            for (Long ref : params.getRefs()) {
+                Join<Recipe, Recipe> recipeJoin = recipe.join("refs", JoinType.INNER);
+                Predicate refPredicate = cb.equal(recipeJoin.get("id"), ref);
+                if (containAllRefsPredicate == null) {
+                    containAllRefsPredicate = refPredicate;
+                } else {
+                    containAllRefsPredicate = cb.and(containAllRefsPredicate, refPredicate);
+                }
+            }
+            if (containAllRefsPredicate != null) {
+                predicates.add(containAllRefsPredicate);
+            }
         }
 
         if (params.getIngredients() != null && !params.getIngredients().isEmpty()) {
-            Join<Recipe, Proportion> propJoin = recipe.join("proportions", JoinType.INNER);
-            Predicate propPredicate =  propJoin.get("ingredient").in(params.getIngredients().toArray());
-            predicates.add(propPredicate);
+            Predicate containAllIngredientsPredicate = null;
+            for (Long ing : params.getIngredients()) {
+                Join<Recipe, Proportion> propJoin = recipe.join("proportions", JoinType.INNER);
+                Predicate containIngredientPredicate =  cb.equal(propJoin.get("ingredient"), ing);
+                if (containAllIngredientsPredicate == null) {
+                    containAllIngredientsPredicate = containIngredientPredicate;
+                } else {
+                    containAllIngredientsPredicate = cb.and(containAllIngredientsPredicate, containIngredientPredicate);
+                }
+            }
+            if (containAllIngredientsPredicate != null) {
+                predicates.add(containAllIngredientsPredicate);
+            }
         }
 
         cq.where(predicates.toArray(new Predicate[0]));

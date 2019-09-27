@@ -7,6 +7,7 @@ import './components/lists/tags-list';
 import './components/drop-down/drop-down';
 import {retrieveIngredientsByKeyword, retrieveRecipesByKeyword} from './utils/asyncRequests';
 import mDepartments from './model/departments';
+import mRecipeSearch from './model/recipeSearch';
 import {goTo} from './router/utils';
 
 const CONTAINER = 'search-container';
@@ -87,12 +88,14 @@ class RecipeSearch extends WebElement {
 
         this._render = this._render.bind(this);
         this._onKeyPress = this._onKeyPress.bind(this);
-        this._departmentsChanged = this._departmentsChanged.bind(this);
+        // this._departmentsChanged = this._departmentsChanged.bind(this);
         this._onApplyAdditionalSearch = this._onApplyAdditionalSearch.bind(this);
         this._onResetAdditionalSearch = this._onResetAdditionalSearch.bind(this);
 
-        mDepartments.addSubscriber(this._departmentsChanged);
+        mDepartments.addSubscriber(this._render);
         mDepartments.retrieve();
+
+        mRecipeSearch.addSubscriber(this._render);
 
         this.$(INPUT_COMPONENT).addEventListener('keydown', this._onKeyPress);
         this.$_id(APPLY_BUTTON).addEventListener('click', this._onApplyAdditionalSearch);
@@ -101,9 +104,9 @@ class RecipeSearch extends WebElement {
         this._render();
     }
 
-    _departmentsChanged() {
-        this._render();
-    }
+    // _departmentsChanged() {
+    //     this._render();
+    // }
 
     _render() {
         this.$(DROP_DOWN_COMPONENT).props = {
@@ -166,24 +169,32 @@ class RecipeSearch extends WebElement {
     }
 
     _onApplyAdditionalSearch() {
-        let searchUrl = '';
-        if (this.$(INPUT_COMPONENT).value) {
-            searchUrl = `?search=${this.$(INPUT_COMPONENT).value.trim()}`;
+        mRecipeSearch.searchParams = {
+            value: this.$(INPUT_COMPONENT).value && this.$(INPUT_COMPONENT).value.trim(),
+            department: this.$chosenDepartment,
+            refs: this.$chosenRefs,
+            ingredients: this.$chosenIngredients
         }
-        if (this.$chosenDepartment && this.$chosenDepartment.id) {
-            searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${this.$chosenDepartment.id}`
-        }
-        if (this.$chosenRefs && this.$chosenRefs.length) {
-            this.$chosenRefs.forEach(ref => {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref.id}`
-            });
-        }
-        if (this.$chosenIngredients && this.$chosenIngredients.length) {
-            this.$chosenIngredients.forEach(ing => {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing.id}`
-            });
-        }
-        goTo(`/recipes${searchUrl}`);
+        // let searchUrl = '';
+        // if (this.$(INPUT_COMPONENT).value) {
+        //     searchUrl = `?search=${this.$(INPUT_COMPONENT).value.trim()}`;
+        // }
+        // if (this.$chosenDepartment && this.$chosenDepartment.id) {
+        //     searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${this.$chosenDepartment.id}`
+        // }
+        // if (this.$chosenRefs && this.$chosenRefs.length) {
+        //     this.$chosenRefs.forEach(ref => {
+        //         searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref.id}`
+        //     });
+        // }
+        // if (this.$chosenIngredients && this.$chosenIngredients.length) {
+        //     this.$chosenIngredients.forEach(ing => {
+        //         searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing.id}`
+        //     });
+        // }
+
+
+        //goTo(`/recipes${searchUrl}`);
     }
 
     _onKeyPress(e) {
@@ -195,7 +206,8 @@ class RecipeSearch extends WebElement {
     }
 
     disconnectedCallback() {
-        mDepartments.removeSubscriber(this._departmentsChanged);
+        mDepartments.removeSubscriber(this._render);
+        mRecipeSearch.removeSubscriber(this._render);
     }
 }
 

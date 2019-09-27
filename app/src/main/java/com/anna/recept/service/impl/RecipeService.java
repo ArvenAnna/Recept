@@ -148,13 +148,7 @@ public class RecipeService implements IRecipeService {
 	@Override
 	@Transactional // due to Lazy context
 	public List<RecipeDto> findRecipesByParams(SearchRecipeParams params) {
-		// as we can not search by and clause for ingredients
-		// TODO: get from hibernate
-		// TODO: check if params exists
 		return recipeRep.findRecipesBySearchParams(params).stream()
-				.filter(recipe ->
-						recipe.getRefs().stream().map(r -> r.getId()).collect(Collectors.toList()).containsAll(params.getRefs()))
-				.filter(recipe -> recipe.getProportions().stream().map(p -> p.getIngredient().getId()).collect(Collectors.toList()).containsAll(params.getIngredients()))
 				.map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
 
