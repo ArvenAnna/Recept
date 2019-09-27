@@ -18,9 +18,6 @@ drop database recipe
 
 
 - foto to ingredient (hierarchial structure?)
-- add another style theme
-- foto to be rotatable
 - recipe pagination
 - different browsers support
-- move search params to model to be consistent with departments change
-- check not optmal scenarios: calls to same endpoints
+- check not optimal scenarios: calls to same endpoints

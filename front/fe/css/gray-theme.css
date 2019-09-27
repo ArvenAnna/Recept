@@ -1,10 +1,9 @@
 :root {
-    --main-background: #1D8051;
-    --dark-background: #011B12 /*color(gray blackness(+45%))*/;
-    --dark-dark-background: #000101;  /*color(#585858 blackness(+95%));*/
-    --light-background: #0F8487; /*color(gray whiteness(+45%))*/
+    --main-background: gray;
+    --dark-background: #585858; /*color(gray blackness(+45%))*/;
+    --dark-dark-background: #414141;  /*color(#585858 blackness(+95%));*/
+    --light-background: #A7A7A7; /*color(gray whiteness(+45%))*/
     --main-font-color: black;
-
 
     --error-color: #932621;
     --error-background: #935656;

@@ -2,6 +2,7 @@ import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
+import mRecipeSearch from "./recipeSearch";
 
 class RecipeList extends Model {
 
@@ -23,7 +24,8 @@ class RecipeList extends Model {
         }))
     }
 
-    search(searchUrl) {
+    search() {
+        const searchUrl = mRecipeSearch.searchUrl;
         fetch(routes.SEARCH_RECIPES(searchUrl))
             .then(getResponse)
             .then(this._setRecipes)

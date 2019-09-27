@@ -20,13 +20,13 @@ export default class RecipesPageRenderer extends WebElement {
         router.addSubscriber(this._currentRouteChanged);
 
         mRecipeSearch.search = router.search;
-        mRecipeList.search(router.search);
+        mRecipeList.search();
     }
 
     _currentRouteChanged() {
         if (router.component == 'recipes-page-renderer') {
             mRecipeSearch.search = router.search;
-            mRecipeList.search(router.search);
+            mRecipeList.search();
         }
     }
 
