@@ -22,4 +22,6 @@ public interface IRecipeService {
     List<RecipeDto> findRecipesByParams(@Valid SearchRecipeParams params);
 
     List<RecipeDto> findRecipesNameByKeyword(String keyword);
+
+    List<RecipeDto> getRecipes(List<Long> ids);
 }

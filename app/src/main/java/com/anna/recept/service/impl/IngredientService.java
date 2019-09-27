@@ -48,6 +48,11 @@ public class IngredientService implements IIngredientService {
     }
 
     @Override
+    public List<Ingredient> showIngredients(List<Long> ids) {
+        return ingRep.findAllById(ids);
+    }
+
+    @Override
     public List<Ingredient> searchIngredients(String str) {
         return (str == null || str.trim().isEmpty())
                 ? new ArrayList<>()

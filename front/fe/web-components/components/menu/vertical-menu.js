@@ -1,6 +1,5 @@
 import WebElement from '../../abstract/web-element';
 import '../../styled/action-button';
-import '../../router/recipe-link';
 
 const CONTAINER = 'menu';
 const BUTTON_TEMPLATE = 'header_button_template';
@@ -27,9 +26,7 @@ const template = `
   </style>
   
   <template id='${BUTTON_TEMPLATE}'>
-    <recipe-link>
-        <div class='${BUTTON_CONTAINER}'></div>
-    </recipe-link>
+     <div class='${BUTTON_CONTAINER}'></div>
   </template>
   
   <div id='${CONTAINER}'></div>
@@ -53,10 +50,8 @@ class VerticalMenu extends WebElement {
             items.forEach(item => {
                 const buttonTemplate = this.getTemplateById(BUTTON_TEMPLATE);
 
-                buttonTemplate.byTag('recipe-link').onConstruct = (link) => {
-                    link.path = item.link;
-                };
                 buttonTemplate.byClass(BUTTON_CONTAINER).textContent = item.text;
+                buttonTemplate.byClass(BUTTON_CONTAINER).addEventListener('click', item.onClick);
 
                 this.$_id(CONTAINER).appendChild(buttonTemplate);
             });

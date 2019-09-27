@@ -1,4 +1,5 @@
 import mRecipeList from '../../model/recipeList';
+import mRecipeSearch from '../../model/recipeSearch';
 import router from '../../router/router-context';
 import WebElement from '../../abstract/web-element';
 import './recipes-page';
@@ -18,11 +19,13 @@ export default class RecipesPageRenderer extends WebElement {
         mRecipeList.addSubscriber(this._recipeListChanged);
         router.addSubscriber(this._currentRouteChanged);
 
+        mRecipeSearch.search = router.search;
         mRecipeList.search(router.search);
     }
 
     _currentRouteChanged() {
         if (router.component == 'recipes-page-renderer') {
+            mRecipeSearch.search = router.search;
             mRecipeList.search(router.search);
         }
     }

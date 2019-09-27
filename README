@@ -17,12 +17,10 @@ To start application you need:
 drop database recipe
 
 
-- search - not working with complex request
 - foto to ingredient (hierarchial structure?)
 - add another style theme
 - foto to be rotatable
 - recipe pagination
 - different browsers support
-- extract menus to separate components
-- move repeated styles to body tag
 - move search params to model to be consistent with departments change
+- check not optmal scenarios: calls to same endpoints

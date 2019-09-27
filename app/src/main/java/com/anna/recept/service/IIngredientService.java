@@ -12,5 +12,7 @@ public interface IIngredientService {
 
     List<Ingredient> showAllIngredients();
 
+    List<Ingredient> showIngredients(List<Long> ids);
+
     List<Ingredient> searchIngredients(String str);
 }

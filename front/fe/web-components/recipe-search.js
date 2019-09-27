@@ -5,10 +5,9 @@ import './components/expandable-block';
 import './components/suggestions-chooser';
 import './components/lists/tags-list';
 import './components/drop-down/drop-down';
-import {retrieveIngredientsByKeyword, retrieveRecipesByKeyword} from './utils/asyncRequests';
+import {retrieveIngredientsByIds, retrieveIngredientsByKeyword, retrieveRecipesByIds, retrieveRecipesByKeyword} from './utils/asyncRequests';
 import mDepartments from './model/departments';
 import mRecipeSearch from './model/recipeSearch';
-import {goTo} from './router/utils';
 
 const CONTAINER = 'search-container';
 
@@ -88,7 +87,6 @@ class RecipeSearch extends WebElement {
 
         this._render = this._render.bind(this);
         this._onKeyPress = this._onKeyPress.bind(this);
-        // this._departmentsChanged = this._departmentsChanged.bind(this);
         this._onApplyAdditionalSearch = this._onApplyAdditionalSearch.bind(this);
         this._onResetAdditionalSearch = this._onResetAdditionalSearch.bind(this);
 
@@ -104,17 +102,20 @@ class RecipeSearch extends WebElement {
         this._render();
     }
 
-    // _departmentsChanged() {
-    //     this._render();
-    // }
+    async _render() {
+        this.$chosenIngredients = mRecipeSearch.ingredients && mRecipeSearch.ingredients.length
+            ? await retrieveIngredientsByIds(mRecipeSearch.ingredients) : [];
+        this.$chosenRefs = mRecipeSearch.refs && mRecipeSearch.refs.length ? await retrieveRecipesByIds(mRecipeSearch.refs) : [];
+        this.$chosenDepartment = mRecipeSearch.department ? mDepartments.departments.find(d => d.id === mRecipeSearch.department) : null;
+        this.$(INPUT_COMPONENT).value = mRecipeSearch.searchString;
 
-    _render() {
         this.$(DROP_DOWN_COMPONENT).props = {
             chooseItemCallback: item => {
                 this.$chosenDepartment = item;
                 },
             items: [{id: null, name: 'All'}, ...mDepartments.departments],
-            renderItem: item => item.name
+            renderItem: item => item.name,
+            chosenItemIndex: this.$chosenDepartment ? mDepartments.departments.indexOf(this.$chosenDepartment) + 1 : 0
         }
         this.$_id(INGREDIENT_CHOOSER).props = {
             getSuggestionsPromise: retrieveIngredientsByKeyword,
@@ -161,40 +162,21 @@ class RecipeSearch extends WebElement {
     }
 
     _onResetAdditionalSearch() {
-        this.$chosenIngredients = [];
-        this.$chosenRefs = [];
-        this.$chosenDepartment = null;
-        this._render();
-        this._onApplyAdditionalSearch();
+        mRecipeSearch.searchParams = {
+            value: this.$(INPUT_COMPONENT).value && this.$(INPUT_COMPONENT).value.trim(),
+            department: null,
+            refs: [],
+            ingredients: []
+        }
     }
 
     _onApplyAdditionalSearch() {
         mRecipeSearch.searchParams = {
             value: this.$(INPUT_COMPONENT).value && this.$(INPUT_COMPONENT).value.trim(),
-            department: this.$chosenDepartment,
-            refs: this.$chosenRefs,
-            ingredients: this.$chosenIngredients
+            department: this.$chosenDepartment && this.$chosenDepartment.id,
+            refs: this.$chosenRefs.map(ref => ref.id),
+            ingredients: this.$chosenIngredients.map(ing => ing.id)
         }
-        // let searchUrl = '';
-        // if (this.$(INPUT_COMPONENT).value) {
-        //     searchUrl = `?search=${this.$(INPUT_COMPONENT).value.trim()}`;
-        // }
-        // if (this.$chosenDepartment && this.$chosenDepartment.id) {
-        //     searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${this.$chosenDepartment.id}`
-        // }
-        // if (this.$chosenRefs && this.$chosenRefs.length) {
-        //     this.$chosenRefs.forEach(ref => {
-        //         searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref.id}`
-        //     });
-        // }
-        // if (this.$chosenIngredients && this.$chosenIngredients.length) {
-        //     this.$chosenIngredients.forEach(ing => {
-        //         searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing.id}`
-        //     });
-        // }
-
-
-        //goTo(`/recipes${searchUrl}`);
     }
 
     _onKeyPress(e) {

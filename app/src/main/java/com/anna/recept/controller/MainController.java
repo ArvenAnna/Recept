@@ -27,6 +27,11 @@ public class MainController {
         return recipeService.getRecipes();
     }
 
+    @RequestMapping(value = {"/ids"}, method = RequestMethod.POST)
+    public List<RecipeDto> getRecipesByIds(@RequestBody List<Long> ids) {
+        return recipeService.getRecipes(ids);
+    }
+
     @RequestMapping(value = {"/{recipeId}"}, method = RequestMethod.GET)
     public RecipeDto getRecipe(@PathVariable("recipeId") Long recipeId) {
         return recipeService.getRecipe(recipeId);

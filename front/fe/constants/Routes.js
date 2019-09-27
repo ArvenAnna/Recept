@@ -8,7 +8,9 @@ const routes = {
     GET_TAGS: httpPrefix + '/tags',
 
     GET_RECIPES_BY_KEYWORD: `${httpPrefix}/recipes/keyword`,
+    GET_RECIPES_BY_IDS: `${httpPrefix}/recipes/ids`,
     GET_INGREDIENTS_BY_KEYWORD: `${httpPrefix}/ingredients/keyword`,
+    GET_INGREDIENTS_BY_IDS: `${httpPrefix}/ingredients/ids`,
 
     POST_CREATE_RECIPE: httpPrefix + '/recipes',
 

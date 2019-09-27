@@ -158,4 +158,9 @@ public class RecipeService implements IRecipeService {
 				.limit(10L)
 				.map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
+
+	@Override
+	public List<RecipeDto> getRecipes(List<Long> ids) {
+		return recipeRep.findAllById(ids).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
+	}
 }

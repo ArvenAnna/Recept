@@ -1,7 +1,5 @@
-import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
-import {getResponse} from "../utils/httpUtils";
-import mNotification from "./notification";
+import {goTo} from "../router/utils";
 
 class RecipeSearch extends Model {
 
@@ -11,66 +9,96 @@ class RecipeSearch extends Model {
         this.$ingredients = [];
         this.$refs = [];
         this.$department = null;
-        this.$searchString = null;
+        this.$searchString = '';
 
         this.$searchUrl = '';
-
-        // this.search = this.search.bind(this);
-        // this._setRecipes = this._setRecipes.bind(this);
     }
 
     get searchUrl() {
         return this.$searchUrl;
     }
 
+    get searchString() {
+        return this.$searchString;
+    }
+
+    get department() {
+        return this.$department;
+    }
+
+    get refs() {
+        return [...this.$refs];
+    }
+
+    get ingredients() {
+        return [...this.$ingredients];
+    }
+
+    set search(searchUrl) {
+        // for direct opening from url
+        const PARAMS = {
+            VALUE: 'value',
+            REFS: 'refs',
+            INGREDIENTS: 'ingredients',
+            DEPARTMENT: 'departmentId'
+        }
+        this.$ingredients = [];
+        this.$refs = [];
+        this.$department = null;
+        this.$searchString = '';
+
+        let search = searchUrl.startsWith('?') ? searchUrl.substr(1) : searchUrl;
+
+        const params = search.split('&');
+        params.forEach(param => {
+            const paramWithValue = param.split('=');
+            const paramName = paramWithValue[0];
+            const paramValue = paramWithValue[1];
+            switch (paramName) {
+                case PARAMS.VALUE:
+                    this.$searchString = paramValue;
+                    break;
+                case PARAMS.REFS:
+                    this.$refs.push(parseInt(paramValue));
+                    break;
+                case PARAMS.INGREDIENTS:
+                    this.$ingredients.push(parseInt(paramValue));
+                    break;
+                case PARAMS.DEPARTMENT:
+                    this.$department = parseInt(paramValue);
+                    break;
+            }
+        });
+        this.$searchUrl = searchUrl;
+    }
+
     set searchParams(params) {
         let searchUrl = '';
+        this.$searchString = params.value;
+        this.$department = params.department;
+        this.$refs = params.refs || [];
+        this.$ingredients = params.ingredients || [];
+
         if (params.value) {
-            this.$searchString = params.value;
             searchUrl = `?search=${params.value}`;
         }
-        if (params.department && params.department.id) {
-            this.$department = params.department;
-            searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${params.department.id}`
+        if (params.department) {
+            searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${params.department}`
         }
         if (params.refs && params.refs.length) {
-            this.$refs = params.refs;
             params.refs.forEach(ref => {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref.id}`
+                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref}`
             });
         }
         if (params.ingredients && params.ingredients.length) {
-            this.$ingredients = params.ingredients;
             params.ingredients.forEach(ing => {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing.id}`
+                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing}`
             });
         }
         this.$searchUrl = searchUrl;
+        goTo(`/recipes${searchUrl}`);
         this.notifySubscribers();
     }
-
-    // get recipes() {
-    //     return this._recipes.map(recipe => ({
-    //         id: recipe.id,
-    //         name: recipe.name,
-    //         imgPath: getImageSmallCopy(recipe.imgPath && routes.IMAGE_CATALOG + recipe.imgPath),
-    //         imgPathFull: recipe.imgPath && routes.IMAGE_CATALOG + recipe.imgPath
-    //     }))
-    // }
-    //
-    // search(searchUrl) {
-    //     fetch(routes.SEARCH_RECIPES(searchUrl))
-    //         .then(getResponse)
-    //         .then(this._setRecipes)
-    //         .catch(e => {
-    //             mNotification.message = e.message;
-    //         });
-    // }
-    //
-    // _setRecipes(newRecipes) {
-    //     this._recipes = newRecipes;
-    //     this.notifySubscribers();
-    // }
 }
 
 export default new RecipeSearch();

@@ -1,6 +1,7 @@
 import mDepartments from './model/departments';
 import WebElement from './abstract/web-element';
 import './components/menu/vertical-menu';
+import mRecipeSearch from "./model/recipeSearch";
 
 const CONTAINER = 'sidebar-menu';
 
@@ -21,28 +22,29 @@ class RecipeSidebar extends WebElement {
         super(template, true);
 
         this._render = this._render.bind(this);
-        this._departmentsChanged = this._departmentsChanged.bind(this);
 
-        mDepartments.addSubscriber(this._departmentsChanged);
+        mDepartments.addSubscriber(this._render);
         mDepartments.retrieve();
     }
 
-    _departmentsChanged(model) {
-        this._render(model.departments);
-    }
 
-    _render(newDepartments) {
+    _render() {
+        const newDepartments = mDepartments.departments;
         if (newDepartments.length) {
 
             this.$(MENU_COMPONENT).items = newDepartments.map(dep => ({
-                link: `/recipes?departmentId=${dep.id}`,
+                onClick: () => {
+                    mRecipeSearch.searchParams = {
+                        department: dep.id
+                    }
+                },
                 text: dep.name
             }));
         }
     }
 
     disconnectedCallback() {
-        mDepartments.removeSubscriber(this._departmentsChanged);
+        mDepartments.removeSubscriber(this._render);
     }
 }
 

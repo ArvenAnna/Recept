@@ -22,6 +22,11 @@ public class IngredientController {
         return ingredientService.showAllIngredients();
     }
 
+    @RequestMapping(value = {"/ids"}, method = RequestMethod.POST)
+    public List<Ingredient> showIngredientsByIds(@RequestBody List<Long> ids) {
+        return ingredientService.showIngredients(ids);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public Ingredient saveIngredient(@RequestBody Ingredient ingredient) {
         return ingredientService.saveIngredient(ingredient);
