@@ -6,6 +6,7 @@ import { noImage } from '../../../constants/themes';
 const CONTAINER = 'recipe_page';
 const RECIPE_REF_TEMPLATE = 'recipe_ref_template';
 const RECIPE_DETAIL_TEMPLATE = 'recipe_detail_template';
+const RECIPE_DETAIL_PHOTO_TEMPLATE = 'recipe-detail-photo-template';
 
 const CAPTION = 'recipe_page_caption';
 const MAIN_PHOTO = 'recipe_page_main_photo';
@@ -15,6 +16,7 @@ const DETAILS = 'recipe_page_details';
 
 const DETAIL = 'detail';
 const DETAILS_PHOTO = 'recipe_page_details_photo';
+const DETAILS_PHOTO_FULL = 'recipe_page_details_photo_full';
 const DETAILS_DESCRIPTION = 'recipe_page_details_description';
 const REFS_CONTAINER = 'refs-container';
 
@@ -26,6 +28,7 @@ const template = `
     #${CONTAINER} {
         display: grid;
         grid-template-columns: 1fr auto auto;
+        position: relative;
     }
     
     #${CAPTION} {
@@ -121,6 +124,11 @@ const template = `
         border-radius: var(--theme-border-radius);
     }
     
+    .${DETAILS_PHOTO_FULL} {
+        width: 100%;
+        position: fixed;
+    }
+    
   </style>
   
   <template id='${RECIPE_REF_TEMPLATE}'>
@@ -132,6 +140,10 @@ const template = `
         <img src='${noImage}' class='${DETAILS_PHOTO}'/>
         <div class='${DETAILS_DESCRIPTION}'></div>
     </div>
+  </template>
+  
+  <template id='${RECIPE_DETAIL_PHOTO_TEMPLATE}'>
+        <img src='${noImage}' class='${DETAILS_PHOTO_FULL}'/>
   </template>
   
   <div id='${CONTAINER}'>
@@ -167,8 +179,17 @@ class RecipePage extends WebElement {
         this._renderPage = this._renderPage.bind(this);
         this._clearPage = this._clearPage.bind(this);
         this._initProportions = this._initProportions.bind(this);
+        this._openFullPhoto = this._openFullPhoto.bind(this);
+
+        this.$_id(MAIN_PHOTO).addEventListener('click', this._openFullPhoto);
 
         this._renderPage();
+    }
+
+    _openFullPhoto() {
+        const photoTemplate = this.getTemplateById(RECIPE_DETAIL_PHOTO_TEMPLATE);
+        photoTemplate.byTag('img').src = this.$recipe.imgPathFull;
+        this.$_id(CONTAINER).appendChild(photoTemplate);
     }
 
     _initProportions() {

@@ -11,13 +11,16 @@ To start application you need:
 5. To make dump use inside postgres container
     pg_dump -U postgres recept > docker-entrypoint-initdb.d/recept_plain.sql
 
+6. Useful actions with db using psql
+    \dt - show tables
+    \q - exit
+    drop database recipe
 
-\dt -show tables
-\q - exit
-drop database recipe
-
-
-- foto to ingredient (hierarchial structure?)
+What could be done else:
+- photo to ingredient (hierarchical structure?)
 - recipe pagination
-- different browsers support
 - check not optimal scenarios: calls to same endpoints
+- recipe page layout broken
+- old files don't removed (check)
+- open full size file on click on image
+- header button takes 2 lines

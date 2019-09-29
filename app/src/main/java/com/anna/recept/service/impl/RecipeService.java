@@ -62,14 +62,6 @@ public class RecipeService implements IRecipeService {
 	}
 
 	@Override
-	@Transactional // due to Lazy context
-	public List<RecipeDto> getRecipes() {
-		return recipeRep.findAll().stream()
-				.map(RecipeDto::withBasicFields)
-				.collect(Collectors.toList());
-	}
-
-	@Override
 	@Transactional
 	public RecipeDto saveRecipe(RecipeDto recipe) {
 		Assert.notNull(recipe, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());

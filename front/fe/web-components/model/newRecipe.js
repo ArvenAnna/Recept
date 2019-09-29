@@ -90,11 +90,11 @@ class NewRecipe extends Recipe {
 
     removeDetail(detail) {
         if (this._recipe.details) {
-            let path = detail.imgPath
-            if (detail.imgPath.startsWith(routes.IMAGE_CATALOG)) {
-                path = detail.imgPath.substr(routes.IMAGE_CATALOG.length, detail.imgPath.length - 1);
+            if (detail.id) {
+                this._recipe.details = this._recipe.details.filter(p => p.id !== detail.id);
+            } else {
+                this._recipe.details = this._recipe.details.filter(p => p.filePath !== detail.imgPath);
             }
-            this._recipe.details = this._recipe.details.filter(p => p.filePath !== path);
         }
     }
 

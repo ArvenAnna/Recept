@@ -22,11 +22,6 @@ public class MainController {
     @Autowired
     private IRecipeService recipeService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<RecipeDto> getRecipesList() {
-        return recipeService.getRecipes();
-    }
-
     @RequestMapping(value = {"/ids"}, method = RequestMethod.POST)
     public List<RecipeDto> getRecipesByIds(@RequestBody List<Long> ids) {
         return recipeService.getRecipes(ids);
@@ -52,7 +47,7 @@ public class MainController {
         return recipeService.updateRecipe(recipe);
     }
 
-    @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public List<RecipeDto> findRecipesBySearchParams(SearchRecipeParams params) {
         return recipeService.findRecipesByParams(params);
     }

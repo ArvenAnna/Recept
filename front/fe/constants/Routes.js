@@ -2,7 +2,7 @@ const httpPrefix = '/api';
 
 const routes = {
     GET_DEPARTMENTS: `${httpPrefix}/departs`,
-    SEARCH_RECIPES: (searchUrl) => `${httpPrefix}/recipes/search/${searchUrl}`,
+    SEARCH_RECIPES: (searchUrl) => `${httpPrefix}/recipes${searchUrl}`,
     GET_RECIPE: (recipe) => `${httpPrefix}/recipes/${recipe}`,
     INGREDIENTS: `${httpPrefix}/ingredients`,
     GET_TAGS: httpPrefix + '/tags',

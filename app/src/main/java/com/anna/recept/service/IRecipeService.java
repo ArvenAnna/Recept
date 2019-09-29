@@ -9,8 +9,6 @@ import javax.validation.Valid;
 
 public interface IRecipeService {
 
-    List<RecipeDto> getRecipes();
-
     RecipeDto getRecipe(Long recipeId);
 
     void removeRecipe(Long recipeId);
