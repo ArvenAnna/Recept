@@ -30,7 +30,9 @@ class EditRecipePageRenderer extends WebElement {
     }
 
     _onRouteChange({params: {id}}) {
-        mNewRecipe.retrieve(id);
+        if (router.component == 'edit-recipe-page-renderer') {
+            mNewRecipe.retrieve(id);
+        }
     }
 
     _newRecipeChanged (model) {

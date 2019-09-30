@@ -71,7 +71,7 @@ class RecipesPage extends WebElement {
     _renderPage() {
         this.$_id(CONTAINER).innerHTML = ''; // clear all content
 
-        if (this.$recipes) {
+        if (this.$recipes && this.$recipes.length) {
 
             this.$recipes.forEach(recipe => {
 
@@ -91,6 +91,8 @@ class RecipesPage extends WebElement {
 
             });
 
+        } else {
+            this.$_id(CONTAINER).textContent = 'No recipes found';
         }
     }
 

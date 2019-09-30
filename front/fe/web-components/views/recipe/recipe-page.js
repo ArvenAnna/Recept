@@ -1,4 +1,7 @@
 import WebElement from '../../abstract/web-element';
+
+import mModal from '../../model/modal';
+
 import '../../components/lists/tags-list';
 import './parts/recipe-reference';
 import { noImage } from '../../../constants/themes';
@@ -27,13 +30,13 @@ const template = `
   <style>
     #${CONTAINER} {
         display: grid;
-        grid-template-columns: 1fr auto auto;
+        grid-template-columns: 1fr auto;
         position: relative;
     }
     
     #${CAPTION} {
         grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 2;
         text-align: center;
@@ -44,16 +47,16 @@ const template = `
     }
     
     #recipe_page_proportions {
-        grid-column-start: 2;
-        grid-column-end: 4;
+        grid-column-start: 1;
+        grid-column-end: 3;
         grid-row-start: 2;
         grid-row-end: 3;
         padding: 0 1rem;
     }
     
     #${MAIN_PHOTO} {
-        grid-column-start: 2;
-        grid-column-end: 3;
+        grid-column-start: 1;
+        grid-column-end: 2;
         grid-row-start: 3;
         grid-row-end: 4;
         width: 100%;
@@ -64,7 +67,7 @@ const template = `
     
     #${DESCRIPTION} {
         grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-end: 3;
         grid-row-start: 4;
         grid-row-end: 5;
 
@@ -73,8 +76,8 @@ const template = `
     }
     
     #${REFS_CONTAINER} {
-        grid-column-start: 3;
-        grid-column-end: 4;
+        grid-column-start: 2;
+        grid-column-end: 3;
         grid-row-start: 3;
         grid-row-end: 4;
 
@@ -90,7 +93,7 @@ const template = `
     
     #${DETAILS} {
         grid-column-start: 1;
-        grid-column-end: 4;
+        grid-column-end: 3;
         grid-row-start: 5;
         grid-row-end: 6;
 
@@ -186,10 +189,11 @@ class RecipePage extends WebElement {
         this._renderPage();
     }
 
-    _openFullPhoto() {
+    _openFullPhoto(imgPath) {
         const photoTemplate = this.getTemplateById(RECIPE_DETAIL_PHOTO_TEMPLATE);
-        photoTemplate.byTag('img').src = this.$recipe.imgPathFull;
-        this.$_id(CONTAINER).appendChild(photoTemplate);
+        photoTemplate.byTag('img').src = imgPath;
+        mModal.open(photoTemplate);
+        // this.$_id(CONTAINER).appendChild(photoTemplate);
     }
 
     _initProportions() {
@@ -215,7 +219,7 @@ class RecipePage extends WebElement {
         if (this.$recipe) {
 
             this.$_id(CAPTION).textContent = this.$recipe.name || '';
-            this.$_id(MAIN_PHOTO).src =  this.$recipe.imgPath || noImage;
+            this.$_id(MAIN_PHOTO).src =  this.$recipe.imgPathFull || noImage;
             this.$_id(DESCRIPTION).textContent = this.$recipe.text || '';
 
             if (this.$recipe.proportions) {
@@ -239,6 +243,7 @@ class RecipePage extends WebElement {
                     const detailTemplate = this.getTemplateById(RECIPE_DETAIL_TEMPLATE);
                     if (detail.imgPath) {
                         detailTemplate.byClass(DETAILS_PHOTO).src = detail.imgPath;
+                        detailTemplate.byClass(DETAILS_PHOTO).addEventListener('click', this._openFullPhoto.bind(this, detail.imgPathFull));
                     }
                     detailTemplate.byClass(DETAILS_DESCRIPTION).textContent = detail.description;
                     this.$_id(DETAILS).appendChild(detailTemplate);

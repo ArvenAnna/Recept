@@ -19,6 +19,10 @@ const template = `
         padding: 0.5rem;
     }
     
+    ${BUTTON_COMPONENT} {
+        --control-width: auto;
+    }
+    
   </style>
   
   <template id='${BUTTON_TEMPLATE}'>

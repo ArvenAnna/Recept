@@ -19,8 +19,5 @@ To start application you need:
 What could be done else:
 - photo to ingredient (hierarchical structure?)
 - recipe pagination
-- check not optimal scenarios: calls to same endpoints
-- recipe page layout broken
-- old files don't removed (check)
-- open full size file on click on image
-- header button takes 2 lines
+- old files don't removed - don't removed
+- center 'no recipes found'

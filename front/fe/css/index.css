@@ -86,3 +86,7 @@ common-notification {
     --notification-error-border: var(--error-border);
     --notification-error-color: var(--error-background);
 }
+
+modal-window {
+    --modal-cross-background: var(--light-background);
+}

@@ -2,6 +2,7 @@ import WebElement from './abstract/web-element';
 
 import './router/recipe-route';
 import './common-notification';
+import './views/modal-window';
 
 import './views/recipe/recipe-page-renderer';
 import './views/recipes/recipes-page-renderer';
@@ -58,6 +59,7 @@ const template = `
   </style>
   <div id="${CONTAINER}">
     <common-notification></common-notification>
+    <modal-window></modal-window>
     <recipe-header></recipe-header>
     <div id="${BODY}"> 
         <div id="${CONTENT}">
