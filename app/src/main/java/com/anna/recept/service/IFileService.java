@@ -27,4 +27,6 @@ public interface IFileService {
     void cleanTempFiles() throws IOException;
 
     String saveRecipeFile(String path, String department, String name);
+
+	String saveIngredientFile(String path, String name);
 }

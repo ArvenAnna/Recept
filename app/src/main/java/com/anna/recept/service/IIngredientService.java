@@ -1,12 +1,13 @@
 package com.anna.recept.service;
 
+import com.anna.recept.dto.IngredientDto;
 import com.anna.recept.entity.Ingredient;
 
 import java.util.List;
 
 public interface IIngredientService {
 
-    Ingredient saveIngredient(Ingredient ingredient);
+    Ingredient saveIngredient(IngredientDto ingredient);
 
     void deleteIngredient(Long ingId);
 

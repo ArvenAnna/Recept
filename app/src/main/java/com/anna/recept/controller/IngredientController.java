@@ -1,5 +1,6 @@
 package com.anna.recept.controller;
 
+import com.anna.recept.dto.IngredientDto;
 import com.anna.recept.dto.SearchByKeywordRequest;
 import com.anna.recept.entity.Ingredient;
 import com.anna.recept.service.IIngredientService;
@@ -28,7 +29,7 @@ public class IngredientController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Ingredient saveIngredient(@RequestBody Ingredient ingredient) {
+    public Ingredient saveIngredient(@RequestBody IngredientDto ingredient) {
         return ingredientService.saveIngredient(ingredient);
     }
 

@@ -1,5 +1,6 @@
 package com.anna.recept.service.impl;
 
+import com.anna.recept.dto.IngredientDto;
 import com.anna.recept.entity.Ingredient;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.exception.RecipeApplicationException;
@@ -19,15 +20,22 @@ public class IngredientService implements IIngredientService {
 
     @Autowired
     private IngredientRepository ingRep;
+    @Autowired
+    private FileService fileService;
 
     @Override
     @Transactional
-    public Ingredient saveIngredient(Ingredient ingredient) {
+    public Ingredient saveIngredient(IngredientDto ingredient) {
         Assert.notNull(ingredient, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
         Assert.isNull(ingredient.getId(), Errors.ID_MUST_BE_NULL.getCause());
 
         if (isUniqueIngredientName(ingredient.getName())) {
-            return ingRep.saveAndFlush(ingredient);
+            Ingredient parent = ingredient.getParent() != null ? ingRep.getOne(ingredient.getParent()) : null;
+
+            Ingredient ingredientEntity = IngredientDto.toEntity(ingredient,
+                    fileService.saveIngredientFile(ingredient.getImgPath(), ingredient.getName()),
+                    parent);
+            return ingRep.saveAndFlush(ingredientEntity);
         }
         throw new RecipeApplicationException(Errors.INGREDIENT_NAME_NOT_UNIQUE);
     }

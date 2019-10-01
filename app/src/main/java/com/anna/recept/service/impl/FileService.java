@@ -29,7 +29,7 @@ public class FileService implements IFileService {
     private static final String PREVIEW_IMAGE_PREFIX_ENV = "PREVIEW_IMAGE_PREFIX";
 
     public static final int SMALL_IMAGE_TARGET_SIZE = 300;
-
+    public static final String INGREDIENTS_CATALOG = "ingredients";
 
     @Autowired
     ServletContext context;
@@ -81,15 +81,23 @@ public class FileService implements IFileService {
 
 	@Override
 	public String saveRecipeFile(String path, String department, String name) {
-        if (isTempPath(path)) {
-            String pathNameInsidePhotoCatalog = FilePathUtils.constructPathWithCatalogsToRealFile(path, department, name);
-            String smallFilePathNameInsidePhotoCatalog = FilePathUtils.constructPathToSmallRealFile(pathNameInsidePhotoCatalog, System.getenv(PREVIEW_IMAGE_PREFIX_ENV));
+        return saveFile(path, department, name);
+    }
 
+    @Override
+    public String saveIngredientFile(String path, String name) {
+        return saveFile(path, INGREDIENTS_CATALOG, name);
+    }
+
+    private String saveFile(String path, String catalog, String subCatalog) {
+        if (isTempPath(path)) {
+            String pathNameInsidePhotoCatalog = FilePathUtils.constructPathWithCatalogsToRealFile(path, catalog, subCatalog);
+            String smallFilePathNameInsidePhotoCatalog = FilePathUtils.constructPathToSmallRealFile(pathNameInsidePhotoCatalog, System.getenv(PREVIEW_IMAGE_PREFIX_ENV));
             saveNormalAndSmallFiles(path, pathNameInsidePhotoCatalog, smallFilePathNameInsidePhotoCatalog);
             return pathNameInsidePhotoCatalog;
 
         } else {
-            return replaceFileIfNeededAndGetPath(path, department, name);
+            return replaceFileIfNeededAndGetPath(path, catalog, subCatalog);
         }
     }
 

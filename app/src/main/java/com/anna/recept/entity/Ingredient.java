@@ -28,7 +28,8 @@ public class Ingredient {
     @Column(name = "img_path")
     private String imgPath;
 
-    @Column(name = "parent")
-    private Long parent;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinTable(name = "ingredient_ref", joinColumns = {@JoinColumn(name = "ingredient_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name = "parent_ingredient_id", nullable = false, updatable = false)})
+    private Ingredient parent;
 
 }
