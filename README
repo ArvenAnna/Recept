@@ -21,3 +21,4 @@ What could be done else:
 - recipe pagination
 - old files don't removed - don't removed
 - center 'no recipes found'
+- check how tree retrieved in hibernate - too much joins

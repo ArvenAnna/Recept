@@ -1,5 +1,9 @@
 package com.anna.recept.dto;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +24,7 @@ public class IngredientDto {
     private String description;
     private String imgPath;
     private Long parent;
+    private List<Long> children;
 
     public static Ingredient toEntity(IngredientDto dto, String imgPath, Ingredient parent) {
         Ingredient ingredient = new Ingredient();
@@ -28,5 +33,16 @@ public class IngredientDto {
         ingredient.setImgPath(imgPath);
         ingredient.setParent(parent);
         return ingredient;
+    }
+
+    public static IngredientDto of(Ingredient ing) {
+        return IngredientDto.builder()
+                .id(ing.getId())
+                .name(ing.getName())
+                .description(ing.getDescription())
+                .imgPath(ing.getImgPath())
+                .parent(Optional.ofNullable(ing.getParent()).map(Ingredient::getId).orElse(null))
+                .children(Optional.ofNullable(ing.getChildren()).map(children -> children.stream().map(Ingredient::getId).collect(Collectors.toList())).orElse(null))
+                .build();
     }
 }

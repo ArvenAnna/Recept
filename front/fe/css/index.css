@@ -47,6 +47,11 @@ body {
 
     /*for menu*/
     --menu-background: var(--main-background);
+
+    /*for photo upload*/
+    --image-border: 2px solid var(--dark-background);
+    --image-width: var(--card-width);
+    --image-overlay-label-bg: var(--light-background);
 }
 
 recipe-header, recipe-sidebar {
@@ -66,9 +71,9 @@ create-recipe-page {
     --control-width: 10rem;
 
     /*for photo upload*/
-    --image-border: 2px solid var(--dark-background);
-    --image-width: var(--card-width);
-    --image-overlay-label-bg: var(--light-background);
+    /*--image-border: 2px solid var(--dark-background);*/
+    /*--image-width: var(--card-width);*/
+    /*--image-overlay-label-bg: var(--light-background);*/
 }
 
 ingredients-page {

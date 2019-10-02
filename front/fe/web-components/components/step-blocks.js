@@ -14,6 +14,7 @@ const template = `
     #${CONTAINER} {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
     }
     
     .${STEP_ICON} {

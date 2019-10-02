@@ -25,23 +25,41 @@ public class IngredientService implements IIngredientService {
 
     @Override
     @Transactional
-    public Ingredient saveIngredient(IngredientDto ingredient) {
+    public IngredientDto saveIngredient(IngredientDto ingredient) {
         Assert.notNull(ingredient, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
         Assert.isNull(ingredient.getId(), Errors.ID_MUST_BE_NULL.getCause());
 
         if (isUniqueIngredientName(ingredient.getName())) {
-            Ingredient parent = ingredient.getParent() != null ? ingRep.getOne(ingredient.getParent()) : null;
-
-            Ingredient ingredientEntity = IngredientDto.toEntity(ingredient,
-                    fileService.saveIngredientFile(ingredient.getImgPath(), ingredient.getName()),
-                    parent);
-            return ingRep.saveAndFlush(ingredientEntity);
+            return convertAndSave(ingredient);
         }
         throw new RecipeApplicationException(Errors.INGREDIENT_NAME_NOT_UNIQUE);
     }
 
+    @Override
+    @Transactional
+    public IngredientDto updateIngredient(IngredientDto ingredient) {
+        Assert.notNull(ingredient, Errors.REQUEST_MUST_NOT_BE_NULL.getCause());
+        Assert.notNull(ingredient.getId(), Errors.ID_MUST_NOT_BE_NULL.getCause());
+
+        Ingredient ingWithSameNewName = ingRep.findByNameIgnoreCase(ingredient.getName());
+        if (ingWithSameNewName != null && !ingWithSameNewName.getId().equals(ingredient.getId())) {
+            throw new RecipeApplicationException(Errors.INGREDIENT_NAME_NOT_UNIQUE);
+        }
+
+        return convertAndSave(ingredient);
+    }
+
+    private IngredientDto convertAndSave(IngredientDto ingredient) {
+        Ingredient parent = ingredient.getParent() != null ? ingRep.getOne(ingredient.getParent()) : null;
+
+        Ingredient ingredientEntity = IngredientDto.toEntity(ingredient,
+                fileService.saveIngredientFile(ingredient.getImgPath(), ingredient.getName()),
+                parent);
+        return IngredientDto.of(ingRep.saveAndFlush(ingredientEntity));
+    }
+
     private boolean isUniqueIngredientName(String name) {
-        return !name.isEmpty() && ingRep.findByNameIgnoreCase(name).isEmpty();
+        return !name.isEmpty() && ingRep.findByNameIgnoreCase(name) == null;
     }
 
     @Override
@@ -51,21 +69,25 @@ public class IngredientService implements IIngredientService {
     }
 
     @Override
-    public List<Ingredient> showAllIngredients() {
-        return ingRep.findAll();
+    @Transactional
+    public List<IngredientDto> showAllIngredients() {
+        return ingRep.findAll().stream().map(IngredientDto::of).collect(Collectors.toList());
     }
 
     @Override
-    public List<Ingredient> showIngredients(List<Long> ids) {
-        return ingRep.findAllById(ids);
+    @Transactional
+    public List<IngredientDto> showIngredients(List<Long> ids) {
+        return ingRep.findAllById(ids).stream().map(IngredientDto::of).collect(Collectors.toList());
     }
 
     @Override
-    public List<Ingredient> searchIngredients(String str) {
+    @Transactional
+    public List<IngredientDto> searchIngredients(String str) {
         return (str == null || str.trim().isEmpty())
                 ? new ArrayList<>()
-                : ingRep.findByNameIgnoreCaseContaining(str.trim())
-                .stream().limit(10L).collect(Collectors.toList());
+                : ingRep.findByNameIgnoreCaseContaining(str.trim()).stream()
+                        .limit(10L)
+                        .map(IngredientDto::of).collect(Collectors.toList());
     }
 
 }

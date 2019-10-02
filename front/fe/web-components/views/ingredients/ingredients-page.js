@@ -1,38 +1,45 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/lists/tags-list';
-import '../../styled/input-text-with-icon';
-import '../../components/removable-tag';
 import {addIcon} from '../../../constants/themes';
 
-const CONTAINER = 'ingredients_page';
+import './parts/create-ingredient';
 
-const ADD_ITEM = 'add_item';
+const CONTAINER = 'ingredients_page';
 const LIST_ITEMS = 'list_items';
 
-const INPUT_COMPONENT = 'input-text-with-icon';
 const LIST_COMPONENT = 'tags-list';
+const CREATE_INGREDIENT_COMPONENT = 'create-ingredient';
+
 
 const template = `
   <style>
-    .${ADD_ITEM} {
-        margin: 1rem;
-    }
     .${LIST_ITEMS} {
         margin: 1rem;
     }
   </style>
   
   <div id='${CONTAINER}'>
-      <div class='${ADD_ITEM}'><${INPUT_COMPONENT}></${INPUT_COMPONENT}></div>  
+      <${CREATE_INGREDIENT_COMPONENT}></${CREATE_INGREDIENT_COMPONENT}>
       <div class='${LIST_ITEMS}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
   </div>
 `;
 
 class IngredientsPage extends WebElement {
 
-    set props({ingredients, addIngredientCallback}) {
-        this.$ingredients = ingredients;
+    set props({addIngredientCallback, ingredient, ingredients}) {
         this.$addIngredient = addIngredientCallback;
+        this.$ingredient = ingredient;
+        this.$ingredients = ingredients;
+        this._renderPage();
+    }
+
+    set ingredient(ingredient) {
+        this.$ingredient = ingredient;
+        this._renderPage();
+    }
+
+    set ingredients(ingredients) {
+        this.$ingredients = ingredients;
         this._renderPage();
     }
 
@@ -51,9 +58,10 @@ class IngredientsPage extends WebElement {
             }
 
             if (this.$addIngredient) {
-                this.$(INPUT_COMPONENT).src = addIcon;
-                this.$(INPUT_COMPONENT).placeholder = 'Add new ingredient';
-                this.$(INPUT_COMPONENT).iconClick = this.$addIngredient;
+                this.$(CREATE_INGREDIENT_COMPONENT).props = {
+                    ingredient: this.$ingredient,
+                    addIngredientCallback: this.$addIngredient
+                };
             }
         }
     }

@@ -28,8 +28,12 @@ public class Ingredient {
     @Column(name = "img_path")
     private String imgPath;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinTable(name = "ingredient_ref", joinColumns = {@JoinColumn(name = "ingredient_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name = "parent_ingredient_id", nullable = false, updatable = false)})
     private Ingredient parent;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ingredient_ref", joinColumns = {@JoinColumn(name = "parent_ingredient_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name = "ingredient_id", nullable = false, updatable = false)})
+    private List<Ingredient> children;
 
 }
