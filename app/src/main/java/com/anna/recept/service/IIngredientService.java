@@ -11,8 +11,9 @@ public interface IIngredientService {
 
     IngredientDto saveIngredient(IngredientDto ingredient);
 
-    @Transactional
     IngredientDto updateIngredient(IngredientDto ingredient);
+
+    IngredientDto getIngredient(Long id);
 
     void deleteIngredient(Long ingId);
 

@@ -5,6 +5,7 @@ const routes = {
     SEARCH_RECIPES: (searchUrl) => `${httpPrefix}/recipes${searchUrl}`,
     GET_RECIPE: (recipe) => `${httpPrefix}/recipes/${recipe}`,
     INGREDIENTS: `${httpPrefix}/ingredients`,
+    GET_INGREDIENT: (ingredient) => `${httpPrefix}/ingredients/${ingredient}`,
     GET_TAGS: httpPrefix + '/tags',
 
     GET_RECIPES_BY_KEYWORD: `${httpPrefix}/recipes/keyword`,

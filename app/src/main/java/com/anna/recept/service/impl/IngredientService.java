@@ -49,6 +49,12 @@ public class IngredientService implements IIngredientService {
         return convertAndSave(ingredient);
     }
 
+    @Override
+    @Transactional
+    public IngredientDto getIngredient(Long id) {
+        return IngredientDto.of(ingRep.getOne(id));
+    }
+
     private IngredientDto convertAndSave(IngredientDto ingredient) {
         Ingredient parent = ingredient.getParent() != null ? ingRep.getOne(ingredient.getParent()) : null;
 

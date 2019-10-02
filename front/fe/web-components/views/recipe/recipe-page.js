@@ -184,8 +184,6 @@ class RecipePage extends WebElement {
         this._initProportions = this._initProportions.bind(this);
         this._openFullPhoto = this._openFullPhoto.bind(this);
 
-        this.$_id(MAIN_PHOTO).addEventListener('click', this._openFullPhoto);
-
         this._renderPage();
     }
 

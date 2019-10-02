@@ -3,7 +3,7 @@ import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
 
-export class Ingredient extends Model {
+export class NewIngredient extends Model {
 
     constructor() {
         super();
@@ -70,4 +70,32 @@ export class Ingredient extends Model {
     }
 }
 
-export default new Ingredient();
+export default new NewIngredient();
+
+export class Ingredient extends NewIngredient {
+    constructor() {
+        super();
+
+        this.retrieve = this.retrieve.bind(this);
+        this._setIngredient = this._setIngredient.bind(this);
+    }
+
+    retrieve(id) {
+        fetch(routes.GET_INGREDIENT(id))
+            .then(getResponse)
+            .then(this._setIngredient)
+            .catch(e => {
+                mNotification.message = e.message;
+            });
+    }
+
+    _setIngredient(newIngredient) {
+        this._ingredient = newIngredient;
+        this.notifySubscribers();
+    }
+}
+// for ingredient details
+export const ingredient = new Ingredient();
+
+
+// export { ingredient };

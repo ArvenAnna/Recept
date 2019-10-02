@@ -28,6 +28,11 @@ public class IngredientController {
         return ingredientService.showIngredients(ids);
     }
 
+    @RequestMapping(value = {"/{ingredientId}"}, method = RequestMethod.GET)
+    public IngredientDto getIngredient(@PathVariable("ingredientId") Long ingredientId) {
+        return ingredientService.getIngredient(ingredientId);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public IngredientDto saveIngredient(@RequestBody IngredientDto ingredient) {
         return ingredientService.saveIngredient(ingredient);

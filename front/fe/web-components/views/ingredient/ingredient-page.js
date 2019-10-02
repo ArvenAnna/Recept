@@ -1,0 +1,63 @@
+import WebElement from '../../abstract/web-element';
+import '../../components/lists/tags-list';
+import '../../components/tree-tags';
+
+const CONTAINER = 'ingredient_page';
+const LIST_ITEMS = 'list_items';
+
+const LIST_COMPONENT = 'tags-list';
+const TREE_COMPONENT = 'tree-tags';
+
+const template = `
+  <style>
+    .${LIST_ITEMS} {
+        margin: 1rem;
+    }
+  </style>
+  
+  <div id='${CONTAINER}'>
+      here will be ingredient page
+      <!--<div class='${LIST_ITEMS}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>-->
+      <!--<${TREE_COMPONENT}></${TREE_COMPONENT}>-->
+  </div>
+`;
+
+class IngredientPage extends WebElement {
+
+    set ingredient(ingredient) {
+        this.$ingredient = ingredient;
+        this._renderPage();
+    }
+
+    constructor() {
+        super(template, true);
+
+        this._renderPage = this._renderPage.bind(this);
+    }
+
+    _renderPage() {
+        // if (this.$ingredients) {
+        //
+        //     // this.$(LIST_COMPONENT).props = {
+        //     //     items: this.$ingredients,
+        //     //     renderItem: (item) => item.name
+        //     // }
+        //
+        //     if (this.$addIngredient) {
+        //         this.$(CREATE_INGREDIENT_COMPONENT).props = {
+        //             ingredient: this.$ingredient,
+        //             addIngredientCallback: this.$addIngredient
+        //         };
+        //     }
+        //
+        //     this.$(TREE_COMPONENT).props = {
+        //         items: this.$ingredients,
+        //         onClick: console.log,
+        //         renderItem: item => item.name
+        //     }
+        // }
+    }
+
+}
+
+customElements.define('ingredient-page', IngredientPage);

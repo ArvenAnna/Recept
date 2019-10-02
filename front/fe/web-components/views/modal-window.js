@@ -19,10 +19,17 @@ const template = `
             background-color: rgba(0,0,0,0.7);
             display: none;
             box-sizing: border-box;
+            height: 100vh;
       }
       
       #${CONTENT_WRAPPER} {
+          width: 100%;
+      }
       
+      #${CONTENT_WRAPPER} > img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
       }
       
       #${REMOVE_ICON} {

@@ -9,6 +9,7 @@ import './views/recipes/recipes-page-renderer';
 import './views/ingredients/ingredients-page-renderer';
 import './views/create-recipe/create-recipe-page-renderer';
 import './views/create-recipe/edit-recipe-page-renderer';
+import './views/ingredient/ingredient-page-renderer';
 
 import './recipe-header';
 import './recipe-sidebar';
@@ -68,6 +69,7 @@ const template = `
             <recipe-route path="/ingredients" component="ingredients-page-renderer"></recipe-route>
             <recipe-route path="/recipe/:id/edit" component="edit-recipe-page-renderer"></recipe-route>
             <recipe-route path="/recipe" component="create-recipe-page-renderer"></recipe-route>
+            <recipe-route path="/ingredient/:id" component="ingredient-page-renderer"></recipe-route>
         </div>
         <div id="${SIDE}">
             <recipe-sidebar></recipe-sidebar>

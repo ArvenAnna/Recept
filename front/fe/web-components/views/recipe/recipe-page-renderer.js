@@ -29,13 +29,13 @@ export default class RecipePageRenderer extends WebElement {
 
     currentRecipeFetched (newRecipe) {
         this.querySelector('recipe-page').recipe = newRecipe;
-        mHeader.addEditButton(newRecipe.id);
+        mHeader.addRecipeEditButton(newRecipe.id);
     }
 
     disconnectedCallback() {
         mRecipe.removeSubscriber(this.currentRecipeFetched);
         router.removeSubscriber(this.currentRecipeChanged);
-        mHeader.removeEditButton();
+        mHeader.removeRecipeEditButton();
     }
 
 }
