@@ -11,10 +11,11 @@ class Ingredients extends Model {
         this._ingredients = [];
         // this._ingredients_in_tree = [];
 
-        this.bindMethods(this._setIngredients, this.retrieve);
+        this._setIngredients = this._setIngredients.bind(this);
+        this.retrieve = this.retrieve.bind(this);
         this._getTree = this._getTree.bind(this);
         this._buildNodes = this._buildNodes.bind(this);
-        this.add = this.add.bind(this);
+        // this.add = this.add.bind(this);
     }
 
     get ingredients() {
@@ -49,17 +50,18 @@ class Ingredients extends Model {
             });
     }
 
-    add (ingredient) {
-        this._ingredients.push(ingredient);
-        if (ingredient.parent) {
-            const parent = this._ingredients.find(ing => ing.id === ingredient.parent);
-            if (!parent.children) {
-                parent.children = [];
-            }
-            parent.children.push(ingredient.id);
-        }
-        this.notifySubscribers();
-    }
+    // add() {
+    //     this.retrieve();
+    //     // this._ingredients.push(ingredient);
+    //     // if (ingredient.parent) {
+    //     //     const parent = this._ingredients.find(ing => ing.id === ingredient.parent);
+    //     //     if (!parent.children) {
+    //     //         parent.children = [];
+    //     //     }
+    //     //     parent.children.push(ingredient.id);
+    //     // }
+    //     // this.notifySubscribers();
+    // }
 
     _setIngredients(newIngredients) {
         this._ingredients = newIngredients;

@@ -4,6 +4,7 @@ const NEW_RECIPE_ID = 1;
 const INGREDIENTS_ID = 2;
 const NEW_INGREDIENT_ID = 3;
 const EDIT_RECIPE_ID = 4;
+const EDIT_INGREDIENT_ID = 5;
 
 class Header extends Model {
 
@@ -22,6 +23,8 @@ class Header extends Model {
 
         this.addRecipeEditButton = this.addRecipeEditButton.bind(this);
         this.removeRecipeEditButton = this.removeRecipeEditButton.bind(this);
+        this.addIngredientEditButton = this.addIngredientEditButton.bind(this);
+        this.removeIngredientEditButton = this.removeIngredientEditButton.bind(this);
     }
 
     addRecipeEditButton(id) {
@@ -36,6 +39,21 @@ class Header extends Model {
 
     removeRecipeEditButton() {
         this._buttons = this._buttons.filter(button => button.id !== EDIT_RECIPE_ID);
+        this.notifySubscribers();
+    }
+
+    addIngredientEditButton(id) {
+        if (!this._buttons.find(bt => bt.id === EDIT_INGREDIENT_ID)) {
+            this._buttons.push ({'name': 'Редактировать ингридиент', 'id': EDIT_INGREDIENT_ID, 'to': `/ingredients/${id}/edit`});
+        } else {
+            // if button already present, then only update link
+            this._buttons.find(bt => bt.id === EDIT_RECIPE_ID).to = `/ingredients/${id}/edit`;
+        }
+        this.notifySubscribers();
+    }
+
+    removeIngredientEditButton() {
+        this._buttons = this._buttons.filter(button => button.id !== EDIT_INGREDIENT_ID);
         this.notifySubscribers();
     }
 }

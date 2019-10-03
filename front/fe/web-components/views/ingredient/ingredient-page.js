@@ -1,24 +1,39 @@
 import WebElement from '../../abstract/web-element';
-import '../../components/lists/tags-list';
-import '../../components/tree-tags';
+import {noImage} from "../../../constants/themes";
 
-const CONTAINER = 'ingredient_page';
-const LIST_ITEMS = 'list_items';
+const CONTAINER = 'ingredient-page';
 
-const LIST_COMPONENT = 'tags-list';
-const TREE_COMPONENT = 'tree-tags';
+const CAPTION = 'ingredient-page-caption';
+const MAIN_PHOTO = 'ingredient-page-photo';
+const DESCRIPTION = 'ingredient-page-description';
 
 const template = `
   <style>
-    .${LIST_ITEMS} {
-        margin: 1rem;
+    #${CAPTION} {
+        text-align: center;
+        font-size: var(--header-font-size);
+        /*width: 100%;*/
+        /*margin: 20px 0;*/
+        text-shadow: var(--text-shadow);
+    }
+    
+    #${DESCRIPTION} {
+        text-align: justify;
+        /*margin: 1rem;*/
+    }
+    
+    #${MAIN_PHOTO} {
+        width: 100%;
+        /*padding: 0.5rem 1rem;*/
+        box-sizing: border-box;
+        border-radius: var(--theme-border-radius);
     }
   </style>
   
   <div id='${CONTAINER}'>
-      here will be ingredient page
-      <!--<div class='${LIST_ITEMS}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>-->
-      <!--<${TREE_COMPONENT}></${TREE_COMPONENT}>-->
+      <div id='${CAPTION}'></div>
+      <img src='${noImage}' id='${MAIN_PHOTO}'/>
+      <div id='${DESCRIPTION}'></div> 
   </div>
 `;
 
@@ -32,30 +47,23 @@ class IngredientPage extends WebElement {
     constructor() {
         super(template, true);
 
+        this._clearPage = this._clearPage.bind(this);
         this._renderPage = this._renderPage.bind(this);
     }
 
+    _clearPage() {
+        this.$_id(CAPTION).textContent = '';
+        this.$_id(MAIN_PHOTO).src = noImage;
+        this.$_id(DESCRIPTION).textContent = '';
+    }
+
     _renderPage() {
-        // if (this.$ingredients) {
-        //
-        //     // this.$(LIST_COMPONENT).props = {
-        //     //     items: this.$ingredients,
-        //     //     renderItem: (item) => item.name
-        //     // }
-        //
-        //     if (this.$addIngredient) {
-        //         this.$(CREATE_INGREDIENT_COMPONENT).props = {
-        //             ingredient: this.$ingredient,
-        //             addIngredientCallback: this.$addIngredient
-        //         };
-        //     }
-        //
-        //     this.$(TREE_COMPONENT).props = {
-        //         items: this.$ingredients,
-        //         onClick: console.log,
-        //         renderItem: item => item.name
-        //     }
-        // }
+        this._clearPage();
+        if (this.$ingredient) {
+            this.$_id(CAPTION).textContent = this.$ingredient.name || '';
+            this.$_id(MAIN_PHOTO).src =  this.$ingredient.imgPathFull || noImage;
+            this.$_id(DESCRIPTION).textContent = this.$ingredient.description || '';
+        }
     }
 
 }

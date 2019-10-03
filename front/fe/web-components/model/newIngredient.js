@@ -3,14 +3,14 @@ import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
 
-export class NewIngredient extends Model {
+export class Ingredient extends Model {
 
     constructor() {
         super();
 
         this._ingredient = {};
 
-        this.save = this.save.bind(this);
+
     }
 
     get id() {
@@ -52,6 +52,18 @@ export class NewIngredient extends Model {
     get imgPathFull() {
         return this._ingredient.imgPath && routes.IMAGE_CATALOG + this._ingredient.imgPath;
     }
+}
+
+export default new Ingredient();
+
+export class NewIngredient extends Ingredient {
+    constructor() {
+        super();
+
+        this.retrieve = this.retrieve.bind(this);
+        this.save = this.save.bind(this);
+        this._setIngredient = this._setIngredient.bind(this);
+    }
 
     async save(ingredient) {
         const method = this._ingredient.id ? 'PUT' : 'POST';
@@ -66,19 +78,9 @@ export class NewIngredient extends Model {
             });
         this._ingredient = {};
         this.notifySubscribers();
-        return newIngredient;
+        return newIngredient.id;
     }
-}
 
-export default new NewIngredient();
-
-export class Ingredient extends NewIngredient {
-    constructor() {
-        super();
-
-        this.retrieve = this.retrieve.bind(this);
-        this._setIngredient = this._setIngredient.bind(this);
-    }
 
     retrieve(id) {
         fetch(routes.GET_INGREDIENT(id))
@@ -95,7 +97,7 @@ export class Ingredient extends NewIngredient {
     }
 }
 // for ingredient details
-export const ingredient = new Ingredient();
+export const newIngredient = new NewIngredient();
 
 
 // export { ingredient };

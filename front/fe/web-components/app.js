@@ -10,6 +10,8 @@ import './views/ingredients/ingredients-page-renderer';
 import './views/create-recipe/create-recipe-page-renderer';
 import './views/create-recipe/edit-recipe-page-renderer';
 import './views/ingredient/ingredient-page-renderer';
+import './views/create-ingredient/edit-ingredient-page-renderer';
+import './views/create-ingredient/create-ingredient-page-renderer';
 
 import './recipe-header';
 import './recipe-sidebar';
@@ -66,10 +68,13 @@ const template = `
         <div id="${CONTENT}">
             <recipe-route path="/recipe/:id" component="recipe-page-renderer"></recipe-route>
             <recipe-route path="/recipes" component="recipes-page-renderer"></recipe-route>
-            <recipe-route path="/ingredients" component="ingredients-page-renderer"></recipe-route>
             <recipe-route path="/recipe/:id/edit" component="edit-recipe-page-renderer"></recipe-route>
             <recipe-route path="/recipe" component="create-recipe-page-renderer"></recipe-route>
-            <recipe-route path="/ingredient/:id" component="ingredient-page-renderer"></recipe-route>
+            
+            <recipe-route path="/ingredients" component="ingredients-page-renderer"></recipe-route>
+            <recipe-route path="/ingredients/:id" component="ingredient-page-renderer"></recipe-route>
+            <recipe-route path="/ingredients/:id/edit" component="edit-ingredient-page-renderer"></recipe-route>
+            <recipe-route path="/ingredient" component="create-ingredient-page-renderer"></recipe-route>
         </div>
         <div id="${SIDE}">
             <recipe-sidebar></recipe-sidebar>

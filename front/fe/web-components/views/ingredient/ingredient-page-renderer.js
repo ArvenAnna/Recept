@@ -1,8 +1,9 @@
-import { ingredient } from '../../model/newIngredient';
+import mIngredient from '../../model/newIngredient';
 
 import WebElement from '../../abstract/web-element';
 import './ingredient-page';
 import router from '../../router/router-context';
+import mHeader from '../../model/header';
 
 const template = `
   <ingredient-page></ingredient-page>
@@ -16,24 +17,29 @@ class IngredientPageRenderer extends WebElement {
         this._routeChanged = this._routeChanged.bind(this);
         this._ingredientChanged = this._ingredientChanged.bind(this);
 
-        ingredient.addSubscriber(this._ingredientChanged);
+        mIngredient.addSubscriber(this._ingredientChanged);
         router.addSubscriber(this._routeChanged);
 
-        ingredient.retrieve(router.params.id);
+        mIngredient.retrieve(router.params.id);
         this.querySelector('ingredient-page').ingredient = ingredient;
     }
 
-    _routeChanged() {
-        ingredient.retrieve(router.params.id);
+    _routeChanged({params: {id}}) {
+        if (router.component == 'ingredient-page-renderer') {
+            mIngredient.retrieve(id);
+        }
+
     }
 
     _ingredientChanged (model) {
         this.querySelector('ingredient-page').ingredient = model;
+        mHeader.addIngredientEditButton(model.id);
     }
 
     disconnectedCallback() {
-        ingredient.removeSubscriber(this._ingredientChanged);
+        mIngredient.removeSubscriber(this._ingredientChanged);
         router.removeSubscriber(this._routeChanged);
+        mHeader.removeIngredientEditButton();
     }
 
 }

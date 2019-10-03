@@ -1,17 +1,17 @@
-import WebElement from '../../../abstract/web-element';
-import '../../../styled/input-text';
-import '../../../styled/text-area';
-import '../../../styled/action-button';
+import WebElement from '../../abstract/web-element';
+import '../../styled/input-text';
+import '../../styled/text-area';
+import '../../styled/action-button';
 
-import '../../../components/step-blocks';
-import '../../../components/removable-tag';
+import '../../components/step-blocks';
+import '../../components/removable-tag';
 
-import '../../../components/suggestions-chooser';
-import '../../../components/file-upload/photo-upload';
+import '../../components/suggestions-chooser';
+import '../../components/file-upload/photo-upload';
 
-import {addIcon, noImage} from '../../../../constants/themes';
-import routes from "../../../../constants/Routes";
-import {retrieveIngredientsByKeyword} from "../../../utils/asyncRequests";
+import {noImage} from '../../../constants/themes';
+import routes from '../../../constants/Routes';
+import {retrieveIngredientsByKeyword} from "../../utils/asyncRequests";
 
 const CONTAINER = 'ingredient-create';
 
@@ -58,7 +58,7 @@ const template = `
   </div>
 `;
 
-class CreateIngredient extends WebElement {
+class CreateIngredientPage extends WebElement {
 
     set props({ingredient, addIngredientCallback}) {
         this.$ingredient = ingredient;
@@ -139,7 +139,10 @@ class CreateIngredient extends WebElement {
         this.$(REMOVABLE_TAG_COMPONENT).style.display = 'none';
         this.$(SUGGESTION_INPUT_COMPONENT).style.display = 'block';
 
-        this.$ingredient.save().then(this.$addIngredient);
+        this.$ingredient.save().then(id => {
+            this.$addIngredient();
+            window.location.hash = '/ingredients/' + id;
+        });
     }
 
     async _retrieveIngredientsByKeyword(keyword) {
@@ -154,4 +157,4 @@ class CreateIngredient extends WebElement {
 
 }
 
-customElements.define('create-ingredient', CreateIngredient);
+customElements.define('create-ingredient-page', CreateIngredientPage);
