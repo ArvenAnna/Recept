@@ -14,7 +14,6 @@ class CreateIngredientPageRenderer extends WebElement {
 
         this._ingredientChanged = this._ingredientChanged.bind(this);
 
-        mIngredients.addSubscriber(this._ingredientsChanged);
         newIngredient.addSubscriber(this._ingredientChanged);
 
         // mIngredient.clear();

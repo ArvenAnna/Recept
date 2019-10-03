@@ -47,21 +47,9 @@ class Ingredients extends Model {
             .then(newIngredients => this._setIngredients(newIngredients))
             .catch(e => {
                 mNotification.message = e.message;
+                console.error(e);
             });
     }
-
-    // add() {
-    //     this.retrieve();
-    //     // this._ingredients.push(ingredient);
-    //     // if (ingredient.parent) {
-    //     //     const parent = this._ingredients.find(ing => ing.id === ingredient.parent);
-    //     //     if (!parent.children) {
-    //     //         parent.children = [];
-    //     //     }
-    //     //     parent.children.push(ingredient.id);
-    //     // }
-    //     // this.notifySubscribers();
-    // }
 
     _setIngredients(newIngredients) {
         this._ingredients = newIngredients;

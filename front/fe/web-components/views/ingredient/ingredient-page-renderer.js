@@ -21,7 +21,7 @@ class IngredientPageRenderer extends WebElement {
         router.addSubscriber(this._routeChanged);
 
         mIngredient.retrieve(router.params.id);
-        this.querySelector('ingredient-page').ingredient = ingredient;
+        this.querySelector('ingredient-page').ingredient = mIngredient;
     }
 
     _routeChanged({params: {id}}) {

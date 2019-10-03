@@ -66,6 +66,11 @@ class CreateIngredientPage extends WebElement {
         this._renderPage();
     }
 
+    set ingredient(ingredient) {
+        this.$ingredient = ingredient;
+        this._renderPage();
+    }
+
     constructor() {
         super(template, true);
 

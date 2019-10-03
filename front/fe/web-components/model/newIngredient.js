@@ -10,7 +10,8 @@ export class Ingredient extends Model {
 
         this._ingredient = {};
 
-
+        this._setIngredient = this._setIngredient.bind(this);
+        this.retrieve = this.retrieve.bind(this);
     }
 
     get id() {
@@ -21,36 +22,51 @@ export class Ingredient extends Model {
         return this._ingredient.name;
     }
 
-    set name(name) {
-        this._ingredient.name = name;
-    }
+    // set name(name) {
+    //     this._ingredient.name = name;
+    // }
 
     get description() {
         return this._ingredient.text;
     }
 
-    set description(description) {
-        this._ingredient.description = description;
-    }
+    // set description(description) {
+    //     this._ingredient.description = description;
+    // }
 
     get parent() {
         return this._ingredient.parent;
     }
 
-    set parent(parent) {
-        this._ingredient.parent = parent;
-    }
+    // set parent(parent) {
+    //     this._ingredient.parent = parent;
+    // }
 
     get imgPath() {
         return getImageSmallCopy(this._ingredient.imgPath && routes.IMAGE_CATALOG + this._ingredient.imgPath);
     }
 
-    set imgPath(path) {
-        this._ingredient.imgPath = path;
-    }
+    // set imgPath(path) {
+    //     this._ingredient.imgPath = path;
+    // }
 
     get imgPathFull() {
         return this._ingredient.imgPath && routes.IMAGE_CATALOG + this._ingredient.imgPath;
+    }
+
+    retrieve(id) {
+        fetch(routes.GET_INGREDIENT(id))
+            .then(getResponse)
+            .then(this._setIngredient)
+            .catch(e => {
+                mNotification.message = e.message;
+                console.error(e);
+            });
+    }
+
+    _setIngredient(newIngredient) {
+        this._ingredient = newIngredient;
+        this.notifySubscribers();
     }
 }
 
@@ -60,9 +76,39 @@ export class NewIngredient extends Ingredient {
     constructor() {
         super();
 
-        this.retrieve = this.retrieve.bind(this);
         this.save = this.save.bind(this);
-        this._setIngredient = this._setIngredient.bind(this);
+    }
+
+    get name() {
+        return super.name;
+    }
+
+    set name(name) {
+        this._ingredient.name = name;
+    }
+
+    get description() {
+        return super.description;
+    }
+
+    set description(description) {
+        this._ingredient.description = description;
+    }
+
+    get parent() {
+        return super.parent;
+    }
+
+    set parent(parent) {
+        this._ingredient.parent = parent;
+    }
+
+    get imgPath() {
+        return super.imgPath;
+    }
+
+    set imgPath(path) {
+        this._ingredient.imgPath = path;
     }
 
     async save(ingredient) {
@@ -75,25 +121,11 @@ export class NewIngredient extends Ingredient {
             .then(getResponse)
             .catch(e => {
                 mNotification.message = e.message;
+                console.error(e);
             });
         this._ingredient = {};
         this.notifySubscribers();
         return newIngredient.id;
-    }
-
-
-    retrieve(id) {
-        fetch(routes.GET_INGREDIENT(id))
-            .then(getResponse)
-            .then(this._setIngredient)
-            .catch(e => {
-                mNotification.message = e.message;
-            });
-    }
-
-    _setIngredient(newIngredient) {
-        this._ingredient = newIngredient;
-        this.notifySubscribers();
     }
 }
 // for ingredient details
