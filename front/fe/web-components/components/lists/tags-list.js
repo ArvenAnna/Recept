@@ -1,5 +1,5 @@
 import WebElement from '../../abstract/web-element';
-import '../removable-tag';
+import '../clickable-tag';
 
 const CONTAINER = 'container';
 const TITLE = 'title';
@@ -8,7 +8,7 @@ const ITEM_TEMPLATE = 'item_template';
 
 const ITEMS_CONTAINER = 'items-container';
 
-const TAG_COMPONENT = 'removable-tag';
+const TAG_COMPONENT = 'clickable-tag';
 
 const template = `
   <style>
@@ -58,10 +58,11 @@ class TagsList extends WebElement {
         this.setAttribute(supportedAttributes.TITLE, v);
     }
 
-    set props({items, renderItem, removeItemCallback, title}) {
+    set props({items, renderItem, removeItemCallback, clickItemCallback, title}) {
         this.$items = items || [];
         this.$renderItem = renderItem;
         this.$removeItem = removeItemCallback;
+        this.$clickItem = clickItemCallback;
         if (title) {
             this.setAttribute(supportedAttributes.TITLE, title);
         }
@@ -94,13 +95,13 @@ class TagsList extends WebElement {
 
         tag.innerHTML = this.$renderItem(item);
 
-        if (this.$removeItem) {
-            tag.onConstruct = (tagEl) => {
-                tagEl.props = {
-                    removeItemCallback: this.$removeItem.bind(null, item)
-                }
+        tag.onConstruct = (tagEl) => {
+            tagEl.props = {
+                removeItemCallback: this.$removeItem && this.$removeItem.bind(null, item),
+                clickItemCallback: this.$clickItem && this.$clickItem.bind(null, item)
             }
         }
+
 
         this.$_id(ITEMS_CONTAINER).appendChild(template);
     }

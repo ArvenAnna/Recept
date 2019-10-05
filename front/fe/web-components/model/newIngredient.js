@@ -27,7 +27,7 @@ export class Ingredient extends Model {
     // }
 
     get description() {
-        return this._ingredient.text;
+        return this._ingredient.description;
     }
 
     // set description(description) {

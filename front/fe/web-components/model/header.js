@@ -47,7 +47,7 @@ class Header extends Model {
             this._buttons.push ({'name': 'Редактировать ингридиент', 'id': EDIT_INGREDIENT_ID, 'to': `/ingredients/${id}/edit`});
         } else {
             // if button already present, then only update link
-            this._buttons.find(bt => bt.id === EDIT_RECIPE_ID).to = `/ingredients/${id}/edit`;
+            this._buttons.find(bt => bt.id === EDIT_INGREDIENT_ID).to = `/ingredients/${id}/edit`;
         }
         this.notifySubscribers();
     }

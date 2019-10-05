@@ -36,6 +36,7 @@ const template = `
         display: flex;
         align-items: center;
         position: relative;
+        cursor: pointer;
       }
       
   </style>
@@ -69,7 +70,7 @@ class ExpandableBlock extends WebElement {
 
         this._toggleContent = this._toggleContent.bind(this);
 
-        this.$_id(EXPAND_ICON).addEventListener('click', this._toggleContent);
+        this.$_id(CAPTION_CONTAINER).addEventListener('click', this._toggleContent);
     }
 
     _toggleContent() {

@@ -1,5 +1,6 @@
 import WebElement from '../../abstract/web-element';
 import '../../components/tree-tags';
+import {goTo} from '../../router/utils';
 
 const CONTAINER = 'ingredients_page';
 
@@ -28,7 +29,7 @@ class IngredientsPage extends WebElement {
         if (this.$ingredients) {
             this.$(TREE_COMPONENT).props = {
                 items: this.$ingredients,
-                onClick: console.log,
+                onClick: item => goTo(`/ingredients/${item.id}`),
                 renderItem: item => item.name
             }
         }

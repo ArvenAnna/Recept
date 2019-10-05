@@ -1,30 +1,42 @@
 import WebElement from '../../abstract/web-element';
-import {noImage} from "../../../constants/themes";
+import {noImage} from '../../../constants/themes';
+import '../../router/recipe-link';
+import mNotification from '../../model/notification';
+import {getResponse} from '../../utils/httpUtils';
+import routes from '../../../constants/Routes';
 
 const CONTAINER = 'ingredient-page';
 
 const CAPTION = 'ingredient-page-caption';
+const SUB_CAPTION = 'ingredient-parent';
 const MAIN_PHOTO = 'ingredient-page-photo';
 const DESCRIPTION = 'ingredient-page-description';
+
+const LINK_COMPONENT = 'recipe-link';
 
 const template = `
   <style>
     #${CAPTION} {
         text-align: center;
         font-size: var(--header-font-size);
-        /*width: 100%;*/
-        /*margin: 20px 0;*/
         text-shadow: var(--text-shadow);
+    }
+    
+    #${SUB_CAPTION} {
+        text-align: center;
+        font-size: var(--normal-font-size);
+        cursor: pointer;
+        text-decoration: underline;
     }
     
     #${DESCRIPTION} {
         text-align: justify;
-        /*margin: 1rem;*/
+        margin: 1rem;
     }
     
     #${MAIN_PHOTO} {
         width: 100%;
-        /*padding: 0.5rem 1rem;*/
+        padding: 0.5rem 1rem;
         box-sizing: border-box;
         border-radius: var(--theme-border-radius);
     }
@@ -32,6 +44,9 @@ const template = `
   
   <div id='${CONTAINER}'>
       <div id='${CAPTION}'></div>
+      <${LINK_COMPONENT}>
+        <div id='${SUB_CAPTION}'></div>
+      </${LINK_COMPONENT}>
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div> 
   </div>
@@ -55,6 +70,8 @@ class IngredientPage extends WebElement {
         this.$_id(CAPTION).textContent = '';
         this.$_id(MAIN_PHOTO).src = noImage;
         this.$_id(DESCRIPTION).textContent = '';
+        this.$_id(SUB_CAPTION).textContent = '';
+        this.$(LINK_COMPONENT).path = null;
     }
 
     _renderPage() {
@@ -63,6 +80,18 @@ class IngredientPage extends WebElement {
             this.$_id(CAPTION).textContent = this.$ingredient.name || '';
             this.$_id(MAIN_PHOTO).src =  this.$ingredient.imgPathFull || noImage;
             this.$_id(DESCRIPTION).textContent = this.$ingredient.description || '';
+            if (this.$ingredient.parent) {
+                this.$(LINK_COMPONENT).path = `/ingredients/${this.$ingredient.parent}`;
+                fetch(routes.GET_INGREDIENT(this.$ingredient.parent))
+                    .then(getResponse)
+                    .then(ing => {
+                        this.$_id(SUB_CAPTION).textContent = ing.name;
+                    })
+                    .catch(e => {
+                        mNotification.message = e.message;
+                        console.error(e);
+                    });
+            }
         }
     }
 

@@ -22,3 +22,4 @@ What could be done else:
 - old files don't removed - don't removed
 - center 'no recipes found'
 - check how tree retrieved in hibernate - too much joins
+- when try to edit ingredient then parent tag is not set if it was already present

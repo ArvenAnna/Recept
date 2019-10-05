@@ -5,6 +5,7 @@ import mModal from '../../model/modal';
 import '../../components/lists/tags-list';
 import './parts/recipe-reference';
 import { noImage } from '../../../constants/themes';
+import {goTo} from '../../router/utils';
 
 const CONTAINER = 'recipe_page';
 const RECIPE_REF_TEMPLATE = 'recipe_ref_template';
@@ -22,6 +23,7 @@ const DETAILS_PHOTO = 'recipe_page_details_photo';
 const DETAILS_PHOTO_FULL = 'recipe_page_details_photo_full';
 const DETAILS_DESCRIPTION = 'recipe_page_details_description';
 const REFS_CONTAINER = 'refs-container';
+const PROPORTIONS = 'recipe-proportions';
 
 const LIST_COMPONENT = 'tags-list';
 const RECIPE_REF_COMPONENT = 'recipe-reference';
@@ -46,7 +48,7 @@ const template = `
         text-shadow: var(--text-shadow);
     }
     
-    #recipe_page_proportions {
+    #${PROPORTIONS} {
         grid-column-start: 1;
         grid-column-end: 3;
         grid-row-start: 2;
@@ -151,7 +153,7 @@ const template = `
   
   <div id='${CONTAINER}'>
       <div id='${CAPTION}'></div>
-      <div id='recipe_page_proportions'>
+      <div id='${PROPORTIONS}'>
           <${LIST_COMPONENT}></${LIST_COMPONENT}>
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
@@ -197,6 +199,7 @@ class RecipePage extends WebElement {
     _initProportions() {
         this.$(LIST_COMPONENT).props = {
             items: this.$recipe.proportions,
+            clickItemCallback: prop => goTo(`/ingredients/${prop.ingredientId}`),
             renderItem: (item) => `${item.ingredientName} ${item.norma ? '-' : ''} ${item.norma || ''}`
         }
     }

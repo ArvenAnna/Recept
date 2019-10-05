@@ -1,12 +1,12 @@
 import WebElement from '../abstract/web-element';
-import './removable-tag';
+import './clickable-tag';
 
 const CONTAINER = 'tag_container';
 const CHILD_TEMPLATE = 'child-template';
 const TAG_TEMPLATE = 'tag-template';
 
 const COMPONENT = 'tree-tags';
-const TAG_COMPONENT = 'removable-tag';
+const TAG_COMPONENT = 'clickable-tag';
 
 const template = `
   <style>
@@ -14,14 +14,6 @@ const template = `
        display: flex;
        align-items: flex-start;
        flex-direction: column;
-       /*margin: 0.5rem 1rem 0.5rem 0;*/
-       /*font-style: italic;*/
-       /*background-color: var(--tag-background, white);*/
-       /*color: var(--tag-font-color, black);*/
-       /*border-radius: var(--theme-border-radius);*/
-       /*padding: 0.2rem 0.3rem;*/
-       /*box-shadow: var(--tag-shadow);*/
-       /*font-size: var(--tag-font-size);*/
     }
   
   </style>
@@ -66,7 +58,12 @@ class TreeTags extends WebElement {
             this.$items.forEach(item => {
                 const tagTemplate = this.getTemplateById(TAG_TEMPLATE);
                 tagTemplate.byTag(TAG_COMPONENT).innerHTML = this.$renderItem(item);
-                tagTemplate.byTag(TAG_COMPONENT).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`
+                tagTemplate.byTag(TAG_COMPONENT).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`;
+                tagTemplate.byTag(TAG_COMPONENT).onConstruct = comp => {
+                    comp.props = {
+                        clickItemCallback: this.$onClick.bind(null, item)
+                    }
+                }
                 this.$_id(CONTAINER).appendChild(tagTemplate);
 
                 if (item[this.$childrenProp] && item[this.$childrenProp].length) {
