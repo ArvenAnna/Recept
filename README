@@ -22,4 +22,10 @@ What could be done else:
 - old files don't removed - don't removed
 - center 'no recipes found'
 - check how tree retrieved in hibernate - too much joins
-- when try to edit ingredient then parent tag is not set if it was already present
+
+Features:
+- add possibility to get menu made by ingredients (with separate list of always present ingredients)
+- change order of details
+- add loader on recipe saving (+ move all endpoints to loader)
+- hide inner ingredients with expandable block + number of children
+- make edit ingredient like edit recipe in design

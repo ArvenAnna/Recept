@@ -27,6 +27,9 @@ public class Detail {
     @Column(name = "file")
     private String filePath;
 
+    @Column(name = "detail_order")
+    private Integer order;
+
     public static Detail of(RecipeDto.DetailDto dto) {
         Detail detail = new Detail();
         detail.setId(dto.getId());

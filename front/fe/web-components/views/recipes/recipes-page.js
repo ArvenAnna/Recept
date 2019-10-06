@@ -13,6 +13,8 @@ const template = `
        display: grid;
        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
        justify-items: center;
+       align-content: center;
+       height: 100%;
     }
     
     .${RECIPE} {

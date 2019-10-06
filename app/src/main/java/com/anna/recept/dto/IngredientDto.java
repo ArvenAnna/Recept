@@ -28,6 +28,7 @@ public class IngredientDto {
 
     public static Ingredient toEntity(IngredientDto dto, String imgPath, Ingredient parent) {
         Ingredient ingredient = new Ingredient();
+        ingredient.setId(dto.getId());
         ingredient.setName(dto.getName());
         ingredient.setDescription(dto.getDescription());
         ingredient.setImgPath(imgPath);

@@ -50,7 +50,7 @@ const template = `
     ${RECIPE_DESCRIPTION_COMPONENT} {
         --control-width: 100%;
         width: 100%;
-        --textarea-height: 4rem;
+        --textarea-height: 10rem;
     }
     
   </style>

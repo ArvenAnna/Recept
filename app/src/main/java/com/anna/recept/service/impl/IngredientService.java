@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,11 +57,12 @@ public class IngredientService implements IIngredientService {
     }
 
     private IngredientDto convertAndSave(IngredientDto ingredient) {
-        Ingredient parent = ingredient.getParent() != null ? ingRep.getOne(ingredient.getParent()) : null;
+        Optional<Ingredient> parentOptional = Optional.ofNullable(ingredient.getParent()).map(ingRep::getOne);
 
         Ingredient ingredientEntity = IngredientDto.toEntity(ingredient,
                 fileService.saveIngredientFile(ingredient.getImgPath(), ingredient.getName()),
-                parent);
+                parentOptional.orElse(null));
+        parentOptional.ifPresent(parent -> parent.getChildren().add(ingredientEntity));
         return IngredientDto.of(ingRep.saveAndFlush(ingredientEntity));
     }
 

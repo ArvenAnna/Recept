@@ -159,7 +159,6 @@ const template = `
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
       <div id='${REFS_CONTAINER}'>
-        References:
         <div id='${REFS}'></div>
       </div>
       <div id='${DETAILS}'></div>
@@ -239,7 +238,7 @@ class RecipePage extends WebElement {
             }
 
             if (this.$recipe.details && this.$recipe.details.length) {
-                this.$_id(DETAILS).style.display = 'flex';
+                this.$_id(DETAILS).style.display = 'grid';
                 this.$recipe.details.forEach(detail => {
                     const detailTemplate = this.getTemplateById(RECIPE_DETAIL_TEMPLATE);
                     if (detail.imgPath) {

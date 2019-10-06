@@ -1,8 +1,6 @@
 import {Recipe} from './recipe';
 import routes from '../../constants/Routes';
-import {getResponse} from "../utils/httpUtils";
-
-import mNotification from './notification';
+import {doJsonRequest} from '../utils/httpUtils';
 
 class NewRecipe extends Recipe {
 
@@ -100,15 +98,7 @@ class NewRecipe extends Recipe {
 
     async save() {
         const method = this._recipe.id ? 'PUT' : 'POST';
-        let newRecipe = await fetch(routes.POST_CREATE_RECIPE, {method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this._recipe)})
-            .then(getResponse)
-            .catch(e => {
-                mNotification.message = e.message;
-            });
+        let newRecipe = await doJsonRequest(routes.POST_CREATE_RECIPE, method, this._recipe);
         return newRecipe.id;
     }
 

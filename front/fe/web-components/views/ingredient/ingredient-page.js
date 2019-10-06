@@ -1,9 +1,6 @@
 import WebElement from '../../abstract/web-element';
 import {noImage} from '../../../constants/themes';
 import '../../router/recipe-link';
-import mNotification from '../../model/notification';
-import {getResponse} from '../../utils/httpUtils';
-import routes from '../../../constants/Routes';
 
 const CONTAINER = 'ingredient-page';
 
@@ -80,18 +77,8 @@ class IngredientPage extends WebElement {
             this.$_id(CAPTION).textContent = this.$ingredient.name || '';
             this.$_id(MAIN_PHOTO).src =  this.$ingredient.imgPathFull || noImage;
             this.$_id(DESCRIPTION).textContent = this.$ingredient.description || '';
-            if (this.$ingredient.parent) {
-                this.$(LINK_COMPONENT).path = `/ingredients/${this.$ingredient.parent}`;
-                fetch(routes.GET_INGREDIENT(this.$ingredient.parent))
-                    .then(getResponse)
-                    .then(ing => {
-                        this.$_id(SUB_CAPTION).textContent = ing.name;
-                    })
-                    .catch(e => {
-                        mNotification.message = e.message;
-                        console.error(e);
-                    });
-            }
+            this.$_id(SUB_CAPTION).textContent = this.$ingredient.parentName || '';
+            this.$(LINK_COMPONENT).path = `/ingredients/${this.$ingredient.parent}`;
         }
     }
 

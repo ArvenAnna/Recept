@@ -12,6 +12,8 @@ import '../../components/file-upload/photo-upload';
 import {noImage} from '../../../constants/themes';
 import routes from '../../../constants/Routes';
 import {retrieveIngredientsByKeyword} from "../../utils/asyncRequests";
+import mNotification from '../../model/notification';
+import {getResponse} from '../../utils/httpUtils';
 
 const CONTAINER = 'ingredient-create';
 
@@ -109,24 +111,36 @@ class CreateIngredientPage extends WebElement {
             defaultSrc: noImage
         }
 
-        this.$(SUGGESTION_INPUT_COMPONENT).props = {
-            getSuggestionsPromise: this._retrieveIngredientsByKeyword,
-            renderSuggestionCallback: suggestion => suggestion.name,
-            addItemCallback: (item) => {
-                this._retrieveIngredientsByKeyword(item).then(ings => {
-                    const ingredient = ings[0];
-                    if (ingredient.name === item) {
-                        this.$ingredient.parent = ingredient.id;
-                        this.$(REMOVABLE_TAG_COMPONENT).innerHTML = ingredient.name;
-                        this.$(REMOVABLE_TAG_COMPONENT).props = {
-                            removeItemCallback: this._removeParentCallback
-                        };
-                        this.$(REMOVABLE_TAG_COMPONENT).style.display = 'block';
-                        this.$(SUGGESTION_INPUT_COMPONENT).style.display = 'none';
-                    }
-                })
-            },
-            placeholder: 'Add parent ingredient'
+
+        this.$(REMOVABLE_TAG_COMPONENT).props = {
+            removeItemCallback: this._removeParentCallback
+        };
+
+        if (this.$ingredient.parent) {
+            this.$(SUGGESTION_INPUT_COMPONENT).style.display = 'none';
+            this.$(REMOVABLE_TAG_COMPONENT).innerHTML = this.$ingredient.parentName;
+            this.$(REMOVABLE_TAG_COMPONENT).style.display = 'block';
+
+        } else {
+            this.$(REMOVABLE_TAG_COMPONENT).style.display = 'none';
+            this.$(SUGGESTION_INPUT_COMPONENT).style.display = 'block';
+
+            this.$(SUGGESTION_INPUT_COMPONENT).props = {
+                getSuggestionsPromise: this._retrieveIngredientsByKeyword,
+                renderSuggestionCallback: suggestion => suggestion.name,
+                addItemCallback: (item) => {
+                    this._retrieveIngredientsByKeyword(item).then(ings => {
+                        const ingredient = ings.find(ing => ing.name === item);
+                        if (ingredient) {
+                            this.$ingredient.parent = ingredient.id;
+                            this.$(REMOVABLE_TAG_COMPONENT).innerHTML = ingredient.name;
+                            this.$(REMOVABLE_TAG_COMPONENT).style.display = 'block';
+                            this.$(SUGGESTION_INPUT_COMPONENT).style.display = 'none';
+                        }
+                    })
+                },
+                placeholder: 'Add parent ingredient'
+            }
         }
     }
 

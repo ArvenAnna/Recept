@@ -60,7 +60,6 @@ class ModalWindow extends WebElement {
 
         this.$_id(REMOVE_ICON).addEventListener('click', mModal.close);
         mModal.addSubscriber(this._openModalCallback);
-        document.addEventListener('click', this._clickOutside);
     }
 
     _openModalCallback(modal) {
@@ -72,6 +71,10 @@ class ModalWindow extends WebElement {
             this.$_id(CONTENT_WRAPPER).innerHTML = '';
             this.$_id(CONTAINER).style.display = 'none';
         }
+    }
+
+    disconnectedCallback() {
+        mModal.removeSubscriber(this._openModalCallback);
     }
 }
 

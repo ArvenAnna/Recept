@@ -1,6 +1,6 @@
 import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
-import {getResponse} from "../utils/httpUtils";
+import {doJsonRequest, getResponse} from '../utils/httpUtils';
 import mNotification from "./notification";
 
 export class Ingredient extends Model {
@@ -9,9 +9,12 @@ export class Ingredient extends Model {
         super();
 
         this._ingredient = {};
+        this._parent = {};
 
         this._setIngredient = this._setIngredient.bind(this);
+        this._getIngredientById = this._getIngredientById.bind(this);
         this.retrieve = this.retrieve.bind(this);
+        this.clear = this.clear.bind(this);
     }
 
     get id() {
@@ -22,51 +25,58 @@ export class Ingredient extends Model {
         return this._ingredient.name;
     }
 
-    // set name(name) {
-    //     this._ingredient.name = name;
-    // }
-
     get description() {
         return this._ingredient.description;
     }
-
-    // set description(description) {
-    //     this._ingredient.description = description;
-    // }
 
     get parent() {
         return this._ingredient.parent;
     }
 
-    // set parent(parent) {
-    //     this._ingredient.parent = parent;
-    // }
-
     get imgPath() {
         return getImageSmallCopy(this._ingredient.imgPath && routes.IMAGE_CATALOG + this._ingredient.imgPath);
     }
-
-    // set imgPath(path) {
-    //     this._ingredient.imgPath = path;
-    // }
 
     get imgPathFull() {
         return this._ingredient.imgPath && routes.IMAGE_CATALOG + this._ingredient.imgPath;
     }
 
+    get parentName() {
+        return this._parent.name;
+    }
+
     retrieve(id) {
-        fetch(routes.GET_INGREDIENT(id))
-            .then(getResponse)
-            .then(this._setIngredient)
+        this._getIngredientById(id)
+            .then(ing => {
+                const parentPromise = ing.parent
+                    ? this._getIngredientById(ing.parent)
+                    : Promise.resolve();
+                return parentPromise.then(parent => this._setIngredient(ing, parent))
+            })
             .catch(e => {
                 mNotification.message = e.message;
                 console.error(e);
             });
     }
 
-    _setIngredient(newIngredient) {
+    _getIngredientById(id) {
+        return fetch(routes.GET_INGREDIENT(id))
+            .then(getResponse)
+            .catch(e => {
+                mNotification.message = e.message;
+                console.error(e);
+            })
+    }
+
+    _setIngredient(newIngredient, parent) {
         this._ingredient = newIngredient;
+        this._parent = parent || {};
         this.notifySubscribers();
+    }
+
+    clear() {
+        this._ingredient = {};
+        this._parent = {};
     }
 }
 
@@ -111,18 +121,9 @@ export class NewIngredient extends Ingredient {
         this._ingredient.imgPath = path;
     }
 
-    async save(ingredient) {
+    async save() {
         const method = this._ingredient.id ? 'PUT' : 'POST';
-        let newIngredient = await fetch(routes.INGREDIENTS, {method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(this._ingredient)})
-            .then(getResponse)
-            .catch(e => {
-                mNotification.message = e.message;
-                console.error(e);
-            });
+        let newIngredient = await doJsonRequest(routes.INGREDIENTS, method, this._ingredient);
         this._ingredient = {};
         this.notifySubscribers();
         return newIngredient.id;

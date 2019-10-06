@@ -1,4 +1,4 @@
-import mIngredient from '../../model/newIngredient';
+import mIngredient, {newIngredient} from '../../model/newIngredient';
 
 import WebElement from '../../abstract/web-element';
 import './ingredient-page';
@@ -37,6 +37,7 @@ class IngredientPageRenderer extends WebElement {
     }
 
     disconnectedCallback() {
+        mIngredient.clear();
         mIngredient.removeSubscriber(this._ingredientChanged);
         router.removeSubscriber(this._routeChanged);
         mHeader.removeIngredientEditButton();

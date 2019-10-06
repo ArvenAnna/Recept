@@ -3,6 +3,7 @@ import WebElement from './abstract/web-element';
 import './router/recipe-route';
 import './common-notification';
 import './views/modal-window';
+import './views/recipe-spinner';
 
 import './views/recipe/recipe-page-renderer';
 import './views/recipes/recipes-page-renderer';
@@ -38,6 +39,13 @@ const template = `
         margin: 2rem 0;
     }
     
+    recipe-spinner {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    
     #${BODY} {
         grid-column-start: 2;
         grid-column-end: 3;
@@ -63,6 +71,7 @@ const template = `
   <div id="${CONTAINER}">
     <common-notification></common-notification>
     <modal-window></modal-window>
+    <recipe-spinner></recipe-spinner>
     <recipe-header></recipe-header>
     <div id="${BODY}"> 
         <div id="${CONTENT}">

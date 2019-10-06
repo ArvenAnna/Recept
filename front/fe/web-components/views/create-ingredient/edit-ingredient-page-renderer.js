@@ -39,6 +39,7 @@ class EditIngredientPageRenderer extends WebElement {
     }
 
     disconnectedCallback() {
+        newIngredient.clear();
         newIngredient.removeSubscriber(this._ingredientChanged);
         router.removeSubscriber(this._onRouteChange);
     }
