@@ -3,7 +3,6 @@ import '../../styled/input-text';
 import '../../styled/text-area';
 import '../../styled/action-button';
 
-import '../../components/step-blocks';
 import '../../components/removable-tag';
 
 import '../../components/suggestions-chooser';
@@ -12,8 +11,6 @@ import '../../components/file-upload/photo-upload';
 import {noImage} from '../../../constants/themes';
 import routes from '../../../constants/Routes';
 import {retrieveIngredientsByKeyword} from "../../utils/asyncRequests";
-import mNotification from '../../model/notification';
-import {getResponse} from '../../utils/httpUtils';
 
 const CONTAINER = 'ingredient-create';
 
@@ -22,17 +19,7 @@ const TEXT_COMPONENT = 'text-area';
 const PHOTO_UPLOAD_COMPONENT = 'photo-upload';
 const SUGGESTION_INPUT_COMPONENT = 'suggestions-chooser';
 const BUTTON_COMPONENT = 'action-button';
-const STEPS_COMPONENT = 'step-blocks';
 const REMOVABLE_TAG_COMPONENT = 'removable-tag';
-
-const STEPS = {
-    ADD_NAME_STEP: 'add-name-step',
-    ADD_DESCRIPTION_STEP: 'add-description-step',
-    ADD_PHOTO_STEP: 'add-photo-step',
-    ADD_PARENT_STEP: 'add-paren-step',
-    PRESS_ADD_BUTTON_STEP: 'press-add-button-step'
-}
-
 
 const template = `
   <style>
@@ -44,19 +31,50 @@ const template = `
         display: none;
     }
     
+    .flex {
+        display: flex;
+        margin: 0.5rem;
+    }
+    
+    .label {
+        margin-right: 0.5rem;
+    }
+    
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
+    }
+    
+    .label-column {
+        margin-bottom: 0.5rem;
+    }
+    
+    ${BUTTON_COMPONENT} {
+       margin: 0.5rem; 
+    }
+    
   </style>
   
-  <div id='${CONTAINER}'>
-  <${STEPS_COMPONENT}>
-      <${INPUT_COMPONENT} slot='${STEPS.ADD_NAME_STEP}'></${INPUT_COMPONENT}>
-      <${TEXT_COMPONENT} slot='${STEPS.ADD_DESCRIPTION_STEP}'></${TEXT_COMPONENT}>
-      <${PHOTO_UPLOAD_COMPONENT} slot='${STEPS.ADD_PHOTO_STEP}'></${PHOTO_UPLOAD_COMPONENT}> 
-      <div slot='${STEPS.ADD_PARENT_STEP}'>
+  <div id='${CONTAINER}' class='flex-column'>
+      <div class='flex'>
+        <span class='label'>Ingredient name:</span> 
+        <${INPUT_COMPONENT}></${INPUT_COMPONENT}>
+      </div>
+      <div class='flex-column'>
+        <span class='label-column'>Ingredient description:</span> 
+        <${TEXT_COMPONENT}></${TEXT_COMPONENT}>
+      </div>
+      <div class='flex-column'>
+        <span class='label-column'>Ingredient photo:</span>
+        <${PHOTO_UPLOAD_COMPONENT}></${PHOTO_UPLOAD_COMPONENT}> 
+      </div>
+      <div class='flex'>
+        <span class='label'>Parent ingredient:</span> 
         <${SUGGESTION_INPUT_COMPONENT}></${SUGGESTION_INPUT_COMPONENT}>
         <${REMOVABLE_TAG_COMPONENT}></${REMOVABLE_TAG_COMPONENT}>
       </div>
-      <${BUTTON_COMPONENT} text="Save" slot='${STEPS.PRESS_ADD_BUTTON_STEP}'></${BUTTON_COMPONENT}>
-  </${STEPS_COMPONENT}>
+      <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
   </div>
 `;
 
@@ -85,22 +103,11 @@ class CreateIngredientPage extends WebElement {
     }
 
     _renderPage() {
-        this.$(STEPS_COMPONENT).props = {
-            blockNames: Object.values(STEPS)
-        }
 
         this.$(INPUT_COMPONENT).placeholder = 'Add new ingredient';
         this.$(INPUT_COMPONENT).value = this.$ingredient.name;
-        // this.$(INPUT_COMPONENT).callbacks = {
-        //     input: () => this.$(STEPS_COMPONENT).setNextStep(STEPS.ADD_DESCRIPTION_STEP)
-        // }
         this.$(TEXT_COMPONENT).placeholder = 'Add description';
         this.$(TEXT_COMPONENT).value = this.$ingredient.description;
-        // this.$(TEXT_COMPONENT).callbacks = {
-        //     input: () => this.$(STEPS_COMPONENT).setNextStep(STEPS.ADD_PHOTO_STEP)
-        // }
-
-        this.$(STEPS_COMPONENT).setNextStep(STEPS.PRESS_ADD_BUTTON_STEP);
 
         this.$(PHOTO_UPLOAD_COMPONENT).props = {
             uploadFileCallback: path => {

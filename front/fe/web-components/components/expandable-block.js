@@ -64,6 +64,10 @@ class ExpandableBlock extends WebElement {
         return Object.values(supportedAttributes);
     }
 
+    set caption(caption) {
+        this.setAttribute(supportedAttributes.CAPTION, caption);
+    }
+
     constructor() {
         super(template, true);
         this.$isContentExpanded = false;

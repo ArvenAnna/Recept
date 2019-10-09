@@ -1,12 +1,17 @@
 import WebElement from '../abstract/web-element';
 import './clickable-tag';
+import './expandable-block';
 
 const CONTAINER = 'tag_container';
-const CHILD_TEMPLATE = 'child-template';
 const TAG_TEMPLATE = 'tag-template';
+const CHILDREN_CONTAINER_TEMPLATE = 'children-container-template';
 
 const COMPONENT = 'tree-tags';
 const TAG_COMPONENT = 'clickable-tag';
+const EXPANDER_COMPONENT = 'expandable-block';
+const ROOT = 'root';
+
+const CHILD_TAG_CONTAINER = 'child_tag_container';
 
 const template = `
   <style>
@@ -15,19 +20,27 @@ const template = `
        align-items: flex-start;
        flex-direction: column;
     }
-  
+    
+    .${CHILD_TAG_CONTAINER} {
+        display: flex;
+    }
   </style>
-  
-  <template id='${CHILD_TEMPLATE}'>
-     <${COMPONENT}></${COMPONENT}>
-  </template>
-  
+
   <template id='${TAG_TEMPLATE}'>
      <${TAG_COMPONENT}></${TAG_COMPONENT}>
   </template>
   
-  <div id='${CONTAINER}'>
-     
+  <template id='${CHILDREN_CONTAINER_TEMPLATE}'>
+     <div class='${CHILD_TAG_CONTAINER}'>
+        <div><${TAG_COMPONENT}></${TAG_COMPONENT}></div>
+        <div><${COMPONENT}></${COMPONENT}></div>
+     </div>
+  </template>
+  
+  <div id='${ROOT}'>
+    <${EXPANDER_COMPONENT}>
+     <div id='${CONTAINER}' slot='content'></div>
+    </${EXPANDER_COMPONENT}>
   </div>
   
 `;
@@ -42,6 +55,13 @@ class TreeTags extends WebElement {
         this.$renderItem = renderItem;
         this.$childrenProp = childrenProp;
         this.$level = level;
+        if (level === 1) {
+           const html = this.$(EXPANDER_COMPONENT).innerHTML;
+           this.$(EXPANDER_COMPONENT).remove();
+           this.$_id(ROOT).innerHTML = html;
+        } else {
+            this.$(EXPANDER_COMPONENT).caption = items.length;
+        }
         this._render();
     }
 
@@ -49,26 +69,24 @@ class TreeTags extends WebElement {
         super(template, true);
 
         this._render = this._render.bind(this);
-
+        this._setTagProps = this._setTagProps.bind(this);
     }
 
     _render() {
         this.$_id(CONTAINER).innerHTML = '';
         if (this.$items) {
             this.$items.forEach(item => {
-                const tagTemplate = this.getTemplateById(TAG_TEMPLATE);
-                tagTemplate.byTag(TAG_COMPONENT).innerHTML = this.$renderItem(item);
-                tagTemplate.byTag(TAG_COMPONENT).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`;
-                tagTemplate.byTag(TAG_COMPONENT).onConstruct = comp => {
-                    comp.props = {
-                        clickItemCallback: this.$onClick.bind(null, item)
-                    }
-                }
-                this.$_id(CONTAINER).appendChild(tagTemplate);
+                const hasChildren = item[this.$childrenProp] && item[this.$childrenProp].length;
 
-                if (item[this.$childrenProp] && item[this.$childrenProp].length) {
-                    const nodeTemplate = this.getTemplateById(CHILD_TEMPLATE);
-                    nodeTemplate.byTag(COMPONENT).onConstruct = (comp) => {
+                if (!hasChildren) {
+                    const tagTemplate = this.getTemplateById(TAG_TEMPLATE);
+                    this._setTagProps(tagTemplate, item);
+                    this.$_id(CONTAINER).appendChild(tagTemplate);
+                } else {
+                    const childrenContainerTemplate = this.getTemplateById(CHILDREN_CONTAINER_TEMPLATE);
+                    this._setTagProps(childrenContainerTemplate, item);
+
+                    childrenContainerTemplate.byTag(COMPONENT).onConstruct = (comp) => {
                         comp.props = {
                             items: item[this.$childrenProp],
                             onClick: this.$onClick,
@@ -77,12 +95,23 @@ class TreeTags extends WebElement {
                             level: this.$level + 1
                         }
                     };
-                    this.$_id(CONTAINER).appendChild(nodeTemplate);
+
+                    this.$_id(CONTAINER).appendChild(childrenContainerTemplate);
                 }
 
             });
         }
 
+    }
+
+    _setTagProps(tmpl, item) {
+        tmpl.byTag(TAG_COMPONENT).innerHTML = this.$renderItem(item);
+        tmpl.byTag(TAG_COMPONENT).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`;
+        tmpl.byTag(TAG_COMPONENT).onConstruct = comp => {
+            comp.props = {
+                clickItemCallback: this.$onClick.bind(null, item)
+            }
+        }
     }
 
 }
