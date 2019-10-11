@@ -80,10 +80,28 @@ class NewRecipe extends Recipe {
         if (!this._recipe.details) {
             this._recipe.details = [];
         }
-        this._recipe.details.push({
-            description: detail.description,
-            filePath: detail.imgPath
-        });
+
+        let oldDetail;
+
+        if (detail.id) {
+            oldDetail = this._recipe.details.find(p => p.id == detail.id);
+        } else {
+            oldDetail = this._recipe.details.find(p => p.filePath == detail.imgPathFull);
+        }
+
+        // img path can not be changed
+        if (oldDetail) {
+            //then update
+            oldDetail.description = detail.description;
+            oldDetail.order = detail.order;
+        } else {
+            //then create
+            this._recipe.details.push({
+                description: detail.description,
+                filePath: detail.imgPath,
+                order: detail.order
+            });
+        }
     }
 
     removeDetail(detail) {

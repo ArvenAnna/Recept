@@ -1,13 +1,13 @@
 import WebElement from '../../../abstract/web-element';
 
-import '../../../components/lists/image-list';
+import '../../../components/lists/draggable-image-list';
 import './recipe-detail';
 import {noImage} from '../../../../constants/themes';
 
 const CONTAINER = 'container';
 const LIST_CONTAINER = 'list-container';
 
-const LIST_COMPONENT = 'image-list';
+const LIST_COMPONENT = 'draggable-image-list';
 const DETAIL_COMPONENT = 'recipe-detail';
 
 const template = `
@@ -51,7 +51,11 @@ class RecipeDetails extends WebElement {
                 this.$(LIST_COMPONENT).data = this._constructDataForList();
             },
             title: this.$recipe.details && this.$recipe.details.length && 'List of details:',
-            defaultSrc: noImage
+            defaultSrc: noImage,
+            editTextCallback: (dataItem, newText) => {
+                dataItem.description = newText;
+                this.$recipe.detail = dataItem;
+            }
         }
     }
 

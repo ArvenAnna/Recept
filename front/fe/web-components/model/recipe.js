@@ -51,11 +51,12 @@ export class Recipe extends Model {
     }
 
     get details() {
-        return this._recipe.details && this._recipe.details.map(({id, description, filePath}) => {
+        return this._recipe.details && this._recipe.details.map(({id, description, order, filePath}) => {
             const isTempImage = filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG);
             return {
                 id,
                 description,
+                order,
                 imgPath: isTempImage ? filePath : getImageSmallCopy(routes.IMAGE_CATALOG + filePath),
                 imgPathFull: isTempImage ? filePath : routes.IMAGE_CATALOG + filePath
             }
