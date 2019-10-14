@@ -59,9 +59,11 @@ public class RecipeDto {
 		private String description;
 		@Setter
 		private String filePath;
+		@NotNull
+		private Integer order;
 
 		public static DetailDto of(Detail detail) {
-			return new DetailDto(detail.getId(), detail.getDescription(), detail.getFilePath());
+			return new DetailDto(detail.getId(), detail.getDescription(), detail.getFilePath(), detail.getOrder());
 		}
 	}
 

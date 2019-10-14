@@ -24,3 +24,7 @@ Features:
 - add possibility to get menu made by ingredients (with separate list of always present ingredients)
 - change order of details
 - hide inner ingredients with expandable block + number of children
+- turn description to normal mode when focusout of detail
+- when no text on detail add possibility to add
+- make another recipe as ingredient
+- add possibility to add alternative ingredient

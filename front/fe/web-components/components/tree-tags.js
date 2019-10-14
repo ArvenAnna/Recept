@@ -10,6 +10,8 @@ const COMPONENT = 'tree-tags';
 const TAG_COMPONENT = 'clickable-tag';
 const EXPANDER_COMPONENT = 'expandable-block';
 const ROOT = 'root';
+const TAG_CONTAINER = 'tag-container';
+const INNER_TREE_CONTAINER = 'inner-tree-container';
 
 const CHILD_TAG_CONTAINER = 'child_tag_container';
 
@@ -24,16 +26,23 @@ const template = `
     .${CHILD_TAG_CONTAINER} {
         display: flex;
     }
+    
+    .${INNER_TREE_CONTAINER} {
+        display: flex;
+        align-items: center;
+    }
   </style>
 
   <template id='${TAG_TEMPLATE}'>
-     <${TAG_COMPONENT}></${TAG_COMPONENT}>
+     <div class='${TAG_CONTAINER}'>
+         <${TAG_COMPONENT}></${TAG_COMPONENT}>
+    </div>
   </template>
   
   <template id='${CHILDREN_CONTAINER_TEMPLATE}'>
      <div class='${CHILD_TAG_CONTAINER}'>
-        <div><${TAG_COMPONENT}></${TAG_COMPONENT}></div>
-        <div><${COMPONENT}></${COMPONENT}></div>
+        <div class='${TAG_CONTAINER}'><${TAG_COMPONENT}></${TAG_COMPONENT}></div>
+        <div class='${INNER_TREE_CONTAINER}'><${COMPONENT}></${COMPONENT}></div>
      </div>
   </template>
   
@@ -106,7 +115,7 @@ class TreeTags extends WebElement {
 
     _setTagProps(tmpl, item) {
         tmpl.byTag(TAG_COMPONENT).innerHTML = this.$renderItem(item);
-        tmpl.byTag(TAG_COMPONENT).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`;
+        // tmpl.byClass(TAG_CONTAINER).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`;
         tmpl.byTag(TAG_COMPONENT).onConstruct = comp => {
             comp.props = {
                 clickItemCallback: this.$onClick.bind(null, item)

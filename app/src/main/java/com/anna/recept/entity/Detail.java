@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import com.anna.recept.dto.RecipeDto;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
@@ -35,6 +37,7 @@ public class Detail {
         detail.setId(dto.getId());
         detail.setDescription(dto.getDescription());
         detail.setFilePath(dto.getFilePath());
+        detail.setOrder(Optional.ofNullable(dto.getOrder()).orElse(1));
         return detail;
     }
 

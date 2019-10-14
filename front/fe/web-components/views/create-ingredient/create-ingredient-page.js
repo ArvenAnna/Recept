@@ -34,6 +34,7 @@ const template = `
     .flex {
         display: flex;
         margin: 0.5rem;
+        align-items: center;
     }
     
     .label {
