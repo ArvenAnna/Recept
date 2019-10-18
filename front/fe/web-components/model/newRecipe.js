@@ -6,6 +6,8 @@ class NewRecipe extends Recipe {
 
     constructor() {
         super();
+
+        this._calculateDetailOrder = this._calculateDetailOrder.bind(this);
     }
 
     get name() {
@@ -93,14 +95,23 @@ class NewRecipe extends Recipe {
         if (oldDetail) {
             //then update
             oldDetail.description = detail.description;
-            oldDetail.order = detail.order;
+            oldDetail.order = this._calculateDetailOrder(detail);
         } else {
             //then create
             this._recipe.details.push({
                 description: detail.description,
                 filePath: detail.imgPath,
-                order: detail.order
+                order: this._calculateDetailOrder(detail)
             });
+        }
+    }
+
+    _calculateDetailOrder(detail) {
+        if (detail.order) return detail.order;
+        if (this._recipe.details.length === 0) {
+            return 1;
+        } else {
+            return this._recipe.details[this._recipe.details.length - 1].order + 1;
         }
     }
 

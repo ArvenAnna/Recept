@@ -55,6 +55,13 @@ class RecipeDetails extends WebElement {
             editTextCallback: (dataItem, newText) => {
                 dataItem.description = newText;
                 this.$recipe.detail = dataItem;
+            },
+            dragCallback: (dataItemFrom, dataItemTo) => {
+                const orderFrom = dataItemFrom.order;
+                dataItemFrom.order = dataItemTo.order;
+                dataItemTo.order = orderFrom;
+                this.$recipe.detail = dataItemFrom;
+                this.$recipe.detail = dataItemTo;
             }
         }
     }

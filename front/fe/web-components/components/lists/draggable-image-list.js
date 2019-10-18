@@ -33,7 +33,7 @@ const template = `
   
   <template id="${ITEM_TEMPLATE}">
     <div class="${ITEM_CONTAINER}">
-        <${IMAGE_COMPONENT} class="${ITEM}"></${IMAGE_COMPONENT}>
+        <${IMAGE_COMPONENT} class="${ITEM}" draggable="true"></${IMAGE_COMPONENT}>
     </div>
   </template>
   
@@ -56,6 +56,7 @@ class DraggableImageList extends WebElement {
 
     set data(newData) {
         this.$data = newData || [];
+        this.$transformedData = this.$data.map((item, i) => ({...item, innerId: i + 1}));
         this._renderItems();
     }
 
@@ -63,11 +64,13 @@ class DraggableImageList extends WebElement {
         this.setAttribute(supportedAttributes.TITLE, v);
     }
 
-    set props({data, removeItemCallback, title, defaultSrc, editTextCallback}) {
+    set props({data, removeItemCallback, title, defaultSrc, editTextCallback, dragCallback}) {
         this.$data = data || [];
+        this.$transformedData = this.$data.map((item, i) => ({...item, innerId: i + 1}));
         this.$defaultSrc = defaultSrc;
         this.$removeItem = removeItemCallback;
         this.$editTextCallback = editTextCallback;
+        this.$dragCallback = dragCallback;
         if (title) {
             this.setAttribute(supportedAttributes.TITLE, title);
         }
@@ -77,17 +80,29 @@ class DraggableImageList extends WebElement {
     constructor() {
         super(template, true);
 
+        this.drag = null;
+
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
+
+        document.addEventListener('drag', e => {}, false);
+        document.addEventListener('dragstart', e => {
+            this.drag = event.target;
+            event.target.style.opacity = .5;
+        }, false);
     }
 
     _renderItems() {
         this.$_id(ITEMS_CONTAINER).innerHTML = "";
-        this.$data.forEach(this._renderItem);
+        this.$transformedData.forEach(this._renderItem);
     }
 
     _renderItem(dataItem) {
         const template = this.getTemplateById(ITEM_TEMPLATE);
+        template.byClass(ITEM_CONTAINER).setAttribute('innerId', dataItem.innerId);
+        // template.byClass(ITEM_CONTAINER).addEventListener('dragstart', this._onDragStart.bind(this, dataItem));
+        // template.byClass(ITEM_CONTAINER).addEventListener('drage', this._onDragStart.bind(this, dataItem));
+        template.byClass(ITEM_CONTAINER).addEventListener('dragend', this._onDrop.bind(this, dataItem));
 
         template.byTag(IMAGE_COMPONENT).onConstruct = (image) => {
             image.props = {
@@ -107,6 +122,48 @@ class DraggableImageList extends WebElement {
             case supportedAttributes.TITLE:
                 this.$_id(TITLE).innerHTML = newValue;
         }
+    }
+
+    // _onDragStart(dataItem, e) {
+    //     console.log(dataItem);
+    //     this.dragObj = {
+    //         item: dataItem
+    //     }
+    // }
+
+    _onDrop(dataItem, e) {
+        // console.log(e);
+        // console.log(dataItem);
+        const coordinates = {
+            x: e.x,
+            y: e.y
+        }
+        const dropElement = this.shadowRoot.elementFromPoint(coordinates.x, coordinates.y);
+        if (dropElement && dropElement.hasAttribute("innerId")) {
+            const innerId = dropElement.getAttribute("innerId");
+            const targetDataItem = this.$transformedData.find(item => item.innerId === parseInt(innerId));
+            console.log(dataItem);
+            console.log(targetDataItem);
+            //change elements:
+
+            // this.$dragCallback(dataItem.item, targetDataItem.item);
+
+            const targetDataItemCopy = {...targetDataItem};
+            const targetItem = {... targetDataItem.item};
+            targetDataItem.src = dataItem.src;
+            targetDataItem.text = dataItem.text;
+            targetDataItem.item = dataItem.item;
+
+            dataItem.src = targetDataItemCopy.src;
+            dataItem.text = targetDataItemCopy.text;
+            dataItem.item = targetItem;
+
+            this._renderItems();
+        }
+
+
+        //this.$dragCallback(this.dragObj.item, dataItem);
+        // this.dragObj = {}
     }
 
 }
