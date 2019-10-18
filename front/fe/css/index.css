@@ -45,6 +45,9 @@ body {
     --list-font-color: var(--light-background);
     --list-font-size: var(--small-font-size);
 
+    /*for draggable-image-list*/
+    --drag-target-bg: var(--dark-background);
+
     /*for menu*/
     --menu-background: var(--main-background);
 

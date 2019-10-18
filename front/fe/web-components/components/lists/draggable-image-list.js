@@ -9,6 +9,7 @@ const ITEM_TEMPLATE = 'item_template';
 const ITEM_CONTAINER = 'item_container';
 const ITEMS_CONTAINER = 'items-container';
 const ITEM = 'item';
+const DRAG_TARGET = 'drag-target';
 
 const IMAGE_COMPONENT = 'removable-image-with-editable-text';
 
@@ -29,11 +30,15 @@ const template = `
        padding-right: 0.5rem;
        cursor: default;
     }
+    
+    .${DRAG_TARGET} {
+        background-color: var(--drag-target-bg);
+    }
   </style>
   
   <template id="${ITEM_TEMPLATE}">
-    <div class="${ITEM_CONTAINER}">
-        <${IMAGE_COMPONENT} class="${ITEM}" draggable="true"></${IMAGE_COMPONENT}>
+    <div class="${ITEM_CONTAINER}" draggable="true">
+       <${IMAGE_COMPONENT} class="${ITEM}" ></${IMAGE_COMPONENT}>
     </div>
   </template>
   
@@ -85,11 +90,32 @@ class DraggableImageList extends WebElement {
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
 
-        document.addEventListener('drag', e => {}, false);
-        document.addEventListener('dragstart', e => {
-            this.drag = event.target;
-            event.target.style.opacity = .5;
+        this.shadowRoot.addEventListener('drag', e => {}, false);
+        this.shadowRoot.addEventListener('dragstart', e => {
+            // should be ITEM_CONTAINER
+            this.drag = e.target;
+            e.target.style.opacity = .5;
         }, false);
+        this.shadowRoot.addEventListener('dragend', e => {
+            e.target.style.opacity = "";
+        }, false);
+        this.shadowRoot.addEventListener('dragover', e => {
+            // prevent default to allow drop
+            e.preventDefault();
+        }, false);
+        this.shadowRoot.addEventListener('dragenter', e => {
+            // highlight potential drop target when the draggable element enters it
+            if ( e.target.className === ITEM ) {
+                e.target.parentNode.classList.add(DRAG_TARGET);
+            }
+        }, false);
+        this.shadowRoot.addEventListener('dragleave', e => {
+            // reset background of potential drop target when the draggable element leaves it
+            if ( e.target.className == ITEM ) {
+                e.target.parentNode.classList.remove(DRAG_TARGET);
+            }
+        }, false);
+        this.shadowRoot.addEventListener('drop', this._onDrop, false);
     }
 
     _renderItems() {
@@ -99,11 +125,7 @@ class DraggableImageList extends WebElement {
 
     _renderItem(dataItem) {
         const template = this.getTemplateById(ITEM_TEMPLATE);
-        template.byClass(ITEM_CONTAINER).setAttribute('innerId', dataItem.innerId);
-        // template.byClass(ITEM_CONTAINER).addEventListener('dragstart', this._onDragStart.bind(this, dataItem));
-        // template.byClass(ITEM_CONTAINER).addEventListener('drage', this._onDragStart.bind(this, dataItem));
-        template.byClass(ITEM_CONTAINER).addEventListener('dragend', this._onDrop.bind(this, dataItem));
-
+        template.byTag(IMAGE_COMPONENT).setAttribute('innerId', dataItem.innerId);
         template.byTag(IMAGE_COMPONENT).onConstruct = (image) => {
             image.props = {
                 removeFileCallback: this.$removeItem.bind(null, dataItem.item),
@@ -124,46 +146,31 @@ class DraggableImageList extends WebElement {
         }
     }
 
-    // _onDragStart(dataItem, e) {
-    //     console.log(dataItem);
-    //     this.dragObj = {
-    //         item: dataItem
-    //     }
-    // }
+    _onDrop(e) {
+        // prevent default action (open as link for some elements)
+        e.preventDefault();
+        // move dragged elem to the selected drop target
+        if ( e.target.className === ITEM ) {
+            e.target.parentNode.classList.remove(DRAG_TARGET);
+            // e.target.parentNode.style.background = "";
+            const containerFrom = this.drag;
+            const itemFrom = this.drag.querySelector(IMAGE_COMPONENT);
 
-    _onDrop(dataItem, e) {
-        // console.log(e);
-        // console.log(dataItem);
-        const coordinates = {
-            x: e.x,
-            y: e.y
+            const containerTo = e.target.parentNode;
+            const itemTo = e.target;
+
+            containerFrom.innerHTML = '';
+            containerFrom.appendChild(itemTo);
+            containerTo.appendChild(itemFrom);
+
+            const idFrom = parseInt(itemFrom.getAttribute('innerId'));
+            const dataItemFrom = this.$transformedData.find(tdi => tdi.innerId === idFrom)
+
+            const idTo = parseInt(itemTo.getAttribute('innerId'));
+            const dataItemTo = this.$transformedData.find(tdi => tdi.innerId === idTo);
+
+            this.$dragCallback(dataItemFrom.item, dataItemTo.item);
         }
-        const dropElement = this.shadowRoot.elementFromPoint(coordinates.x, coordinates.y);
-        if (dropElement && dropElement.hasAttribute("innerId")) {
-            const innerId = dropElement.getAttribute("innerId");
-            const targetDataItem = this.$transformedData.find(item => item.innerId === parseInt(innerId));
-            console.log(dataItem);
-            console.log(targetDataItem);
-            //change elements:
-
-            // this.$dragCallback(dataItem.item, targetDataItem.item);
-
-            const targetDataItemCopy = {...targetDataItem};
-            const targetItem = {... targetDataItem.item};
-            targetDataItem.src = dataItem.src;
-            targetDataItem.text = dataItem.text;
-            targetDataItem.item = dataItem.item;
-
-            dataItem.src = targetDataItemCopy.src;
-            dataItem.text = targetDataItemCopy.text;
-            dataItem.item = targetItem;
-
-            this._renderItems();
-        }
-
-
-        //this.$dragCallback(this.dragObj.item, dataItem);
-        // this.dragObj = {}
     }
 
 }
