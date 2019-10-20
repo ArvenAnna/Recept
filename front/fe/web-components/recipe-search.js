@@ -122,9 +122,10 @@ class RecipeSearch extends WebElement {
             renderSuggestionCallback: suggestion => suggestion.name,
             addItemCallback: (item) => {
                 retrieveIngredientsByKeyword(item).then(ings => {
-                    // take only first
-                    if (ings[0].name === item) {
-                        this.$chosenIngredients.push(ings[0]);
+                    // find with exact name matching
+                    const ingredient = ings.find(ing => ing.name === item);
+                    if (ingredient) {
+                        this.$chosenIngredients.push(ingredient);
                         this.$_id(INGREDIENT_LIST).items = this.$chosenIngredients;
                     }
                 })
@@ -143,9 +144,10 @@ class RecipeSearch extends WebElement {
             renderSuggestionCallback: suggestion => suggestion.name,
             addItemCallback: (item) => {
                 retrieveRecipesByKeyword(item).then(recipes => {
-                    // take only first
-                    if (recipes[0].name === item) {
-                        this.$chosenRefs.push(recipes[0]);
+                    // find with exact name matching
+                    const recipe = recipes.find(r => r.name === item);
+                    if (recipe) {
+                        this.$chosenRefs.push(recipe);
                         this.$_id(REF_LIST).items = this.$chosenRefs;
                     }
                 })

@@ -89,6 +89,7 @@ class DraggableImageList extends WebElement {
 
         this._renderItem = this._renderItem.bind(this);
         this._renderItems = this._renderItems.bind(this);
+        this._onDrop = this._onDrop.bind(this);
 
         this.shadowRoot.addEventListener('drag', e => {}, false);
         this.shadowRoot.addEventListener('dragstart', e => {

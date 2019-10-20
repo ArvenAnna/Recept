@@ -26,7 +26,7 @@ class ClickableTag extends WebElement {
     set props({removeItemCallback, clickItemCallback}) {
         this.$clickItemCallback = clickItemCallback;
 
-        this.$(TAG_COMPONENT).removeItemCallback = removeItemCallback;
+        this.$(TAG_COMPONENT).props = { removeItemCallback };
         if (clickItemCallback) {
             this.$_id(CONTAINER).style.cursor = 'pointer';
         } else {
@@ -43,7 +43,7 @@ class ClickableTag extends WebElement {
     }
 
     _clickItem() {
-        this.$clickItemCallback();
+        this.$clickItemCallback && this.$clickItemCallback();
     }
 
 }

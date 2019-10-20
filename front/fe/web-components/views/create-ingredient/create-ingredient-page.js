@@ -180,8 +180,6 @@ class CreateIngredientPage extends WebElement {
         ingredients.slice(0, maxSuggestionsNumber);
         return ingredients;
     }
-
-
 }
 
 customElements.define('create-ingredient-page', CreateIngredientPage);

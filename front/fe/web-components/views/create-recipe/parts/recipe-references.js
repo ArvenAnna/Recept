@@ -66,9 +66,10 @@ class RecipeReferences extends WebElement {
             renderSuggestionCallback: suggestion => suggestion.name,
             addItemCallback: (item) => {
                 this._retrieveRecipesByKeyword(item).then(recipes => {
-                    // take only
-                    if (recipes[0].name === item) {
-                        this.$recipe.ref = recipes[0];
+                    // find with exact name matching
+                    const recipe = recipes.find(r => r.name === item);
+                    if (recipe) {
+                        this.$recipe.ref = recipe;
                         this.$(LIST_COMPONENT).items = this.$recipe.refs;
                         this.$(LIST_COMPONENT).title = 'List of recipe references:';
                     }

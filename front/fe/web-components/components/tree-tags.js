@@ -115,7 +115,6 @@ class TreeTags extends WebElement {
 
     _setTagProps(tmpl, item) {
         tmpl.byTag(TAG_COMPONENT).innerHTML = this.$renderItem(item);
-        // tmpl.byClass(TAG_CONTAINER).style.marginLeft = `${this.$level * MARGIN_SIZE}rem`;
         tmpl.byTag(TAG_COMPONENT).onConstruct = comp => {
             comp.props = {
                 clickItemCallback: this.$onClick.bind(null, item)

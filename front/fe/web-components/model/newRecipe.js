@@ -88,7 +88,7 @@ class NewRecipe extends Recipe {
         if (detail.id) {
             oldDetail = this._recipe.details.find(p => p.id == detail.id);
         } else {
-            oldDetail = this._recipe.details.find(p => p.filePath == detail.imgPathFull);
+            oldDetail = this._recipe.details.find(p => detail.imgPathFull && p.filePath == detail.imgPathFull);
         }
 
         // img path can not be changed

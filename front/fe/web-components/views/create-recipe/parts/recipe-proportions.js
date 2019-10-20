@@ -59,10 +59,11 @@ class RecipeProportions extends WebElement {
         this.$(TWO_FIELD_LIST_COMPONENT).props = {
             addItemCallback: ({first, second}) => {
                 this._retrieveIngredientsByKeyword(first).then(ingredients => {
-                    // take only first
-                    if (ingredients[0].name === first) {
+                    // find with exact name matching
+                    const ingredient = ingredients.find(ing => ing.name === first);
+                    if (ingredient) {
                         this.$recipe.proportion = {
-                            ingredient: ingredients[0],
+                            ingredient,
                             norma: second
                         };
                         this.$(LIST_COMPONENT).items = this.$recipe.proportions;

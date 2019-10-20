@@ -7,6 +7,11 @@ const CONTAINER = 'ingredients_page';
 const TREE_COMPONENT = 'tree-tags';
 
 const template = `
+  <style>
+    #${CONTAINER} {
+        padding: 1rem;
+    }
+  </style>
   <div id='${CONTAINER}'>
       <${TREE_COMPONENT}></${TREE_COMPONENT}>
   </div>

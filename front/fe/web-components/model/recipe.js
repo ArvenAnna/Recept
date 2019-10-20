@@ -75,7 +75,7 @@ export class Recipe extends Model {
     _setRecipe(newRecipe) {
         this._recipe = newRecipe;
         // check and fix orders of details
-        this._recipe.details = this._recipe.details.sort((d1,d2) => d2.order - d1.order);
+        this._recipe.details = this._recipe.details.sort((d1,d2) => d1.order - d2.order);
         this._recipe.details.forEach((d, i) => d.order = i + 1);
         this.notifySubscribers();
     }
