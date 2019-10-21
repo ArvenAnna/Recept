@@ -23,6 +23,11 @@ public class IngredientController {
         return ingredientService.showAllIngredients();
     }
 
+    /**
+     * Finds ingredients without children
+     * @param ids
+     * @return
+     */
     @RequestMapping(value = {"/ids"}, method = RequestMethod.POST)
     public List<IngredientDto> showIngredientsByIds(@RequestBody List<Long> ids) {
         return ingredientService.showIngredients(ids);
@@ -48,6 +53,11 @@ public class IngredientController {
         ingredientService.deleteIngredient(ingId);
     }
 
+    /**
+     * Finds ingredients without children
+     * @param request
+     * @return
+     */
     @RequestMapping(value = {"/keyword"}, method = RequestMethod.POST)
     public List<IngredientDto> findIngredientsBySearchString(@RequestBody @NotNull SearchByKeywordRequest request) {
         return ingredientService.searchIngredients(request.getKeyword());

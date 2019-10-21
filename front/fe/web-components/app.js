@@ -22,6 +22,7 @@ const CONTAINER = 'app_container';
 const BODY = 'app_body';
 const CONTENT = 'app_body_content';
 const SIDE = 'side_menu';
+const GLOBAL_COMPONENTS_CONTAINER = 'global_components_container';
 
 const template = `
   <style>   
@@ -68,10 +69,12 @@ const template = `
     }
     
   </style>
-  <div id="${CONTAINER}">
+  <div id='${GLOBAL_COMPONENTS_CONTAINER}'>
     <common-notification></common-notification>
     <modal-window></modal-window>
     <recipe-spinner></recipe-spinner>
+  </div>
+  <div id="${CONTAINER}">
     <recipe-header></recipe-header>
     <div id="${BODY}"> 
         <div id="${CONTENT}">

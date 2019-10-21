@@ -55,7 +55,8 @@ const template = `
 `;
 
 const supportedAttributes = {
-    CAPTION: 'caption'
+    CAPTION: 'caption',
+    OPEN: 'open'
 }
 
 class ExpandableBlock extends WebElement {
@@ -66,6 +67,10 @@ class ExpandableBlock extends WebElement {
 
     set caption(caption) {
         this.setAttribute(supportedAttributes.CAPTION, caption);
+    }
+
+    set open(open) {
+        this.setAttribute(supportedAttributes.OPEN, open);
     }
 
     constructor() {
@@ -92,6 +97,11 @@ class ExpandableBlock extends WebElement {
         switch (name) {
             case supportedAttributes.CAPTION:
                 this.$_id(CAPTION).innerHTML = newValue;
+                break;
+            case supportedAttributes.OPEN:
+                this.$_id(EXPAND_ICON).src = arrowUpIcon;
+                this.reveal_id(CONTENT_WRAPPER);
+                break;
         }
     }
 }

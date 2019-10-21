@@ -2,8 +2,10 @@ package com.anna.recept.service.impl;
 
 import com.anna.recept.dto.IngredientDto;
 import com.anna.recept.entity.Ingredient;
+import com.anna.recept.entity.IngredientRef;
 import com.anna.recept.exception.Errors;
 import com.anna.recept.exception.RecipeApplicationException;
+import com.anna.recept.repository.IngredientRefRepository;
 import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.service.IIngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,8 @@ public class IngredientService implements IIngredientService {
 
     @Autowired
     private IngredientRepository ingRep;
+    @Autowired
+    private IngredientRefRepository ingRefRep;
     @Autowired
     private FileService fileService;
 
@@ -62,7 +67,6 @@ public class IngredientService implements IIngredientService {
         Ingredient ingredientEntity = IngredientDto.toEntity(ingredient,
                 fileService.saveIngredientFile(ingredient.getImgPath(), ingredient.getName()),
                 parentOptional.orElse(null));
-        parentOptional.ifPresent(parent -> parent.getChildren().add(ingredientEntity));
         return IngredientDto.of(ingRep.saveAndFlush(ingredientEntity));
     }
 
@@ -79,13 +83,25 @@ public class IngredientService implements IIngredientService {
     @Override
     @Transactional
     public List<IngredientDto> showAllIngredients() {
-        return ingRep.findAll().stream().map(IngredientDto::of).collect(Collectors.toList());
+        List<Ingredient> ings = ingRep.findAll();
+        Map<Long, List<IngredientRef>> ingsWithChildren = getRefsMap(ings);
+        return ings.stream().map(ing -> IngredientDto.of(ing, ingsWithChildren.get(ing.getId()))).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public List<IngredientDto> showIngredients(List<Long> ids) {
-        return ingRep.findAllById(ids).stream().map(IngredientDto::of).collect(Collectors.toList());
+        List<Ingredient> ings = ingRep.findAllById(ids);
+        Map<Long, List<IngredientRef>> ingsWithChildren = getRefsMap(ings);
+
+        return ings.stream()
+                .map(ing -> IngredientDto.of(ing, ingsWithChildren.get(ing.getId()))).collect(Collectors.toList());
+    }
+
+    private Map<Long, List<IngredientRef>> getRefsMap(List<Ingredient> ings) {
+        List<Long> ids = ings.stream().map(ing -> ing.getId()).collect(Collectors.toList());
+        List<IngredientRef> refs = ingRefRep.findByParentIngredientIdIn(ids);
+        return refs.stream().collect(Collectors.groupingBy(IngredientRef::getParentIngredientId));
     }
 
     @Override

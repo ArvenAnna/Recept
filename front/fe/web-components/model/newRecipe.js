@@ -8,6 +8,8 @@ class NewRecipe extends Recipe {
         super();
 
         this._calculateDetailOrder = this._calculateDetailOrder.bind(this);
+        this._findDetailInList = this._findDetailInList.bind(this);
+        this.reorderDetails = this.reorderDetails.bind(this);
     }
 
     get name() {
@@ -83,13 +85,7 @@ class NewRecipe extends Recipe {
             this._recipe.details = [];
         }
 
-        let oldDetail;
-
-        if (detail.id) {
-            oldDetail = this._recipe.details.find(p => p.id == detail.id);
-        } else {
-            oldDetail = this._recipe.details.find(p => detail.imgPathFull && p.filePath == detail.imgPathFull);
-        }
+        let oldDetail = this._findDetailInList(detail);
 
         // img path can not be changed
         if (oldDetail) {
@@ -103,6 +99,22 @@ class NewRecipe extends Recipe {
                 filePath: detail.imgPath,
                 order: this._calculateDetailOrder(detail)
             });
+        }
+    }
+
+    reorderDetails(detailFrom, detailTo) {
+        let oldDetailFrom = this._findDetailInList(detailFrom);
+        // let oldDetailTo = this._findDetailInList(detailTo);
+        this._recipe.details.filter(d => d.order >= detailTo.order).forEach(d => d.order = d.order + 1);
+        oldDetailFrom.order = detailTo.order;
+        this._recipe.details = this._recipe.details.sort((d1,d2) => d1.order - d2.order);
+    }
+
+    _findDetailInList(detail) {
+        if (detail.id) {
+            return this._recipe.details.find(p => p.id == detail.id);
+        } else {
+            return this._recipe.details.find(p => detail.imgPathFull && p.filePath == detail.imgPathFull);
         }
     }
 

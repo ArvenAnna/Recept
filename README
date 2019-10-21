@@ -17,18 +17,14 @@ To start application you need:
     drop database recipe
 
 Bugs:
-- check how tree retrieved in hibernate - too much joins
-- turn description to normal mode when focusout of detail
-- when no text on detail add possibility to add
-- can not create new ingredient with parent
 - reordering should be different way: more paste then replace
-- when you are watching recipe, then searching, department should be reset
-- modal window has a big margin top
 
 Features:
 - recipe pagination
 - add possibility to get menu made by ingredients (with separate list of always present ingredients)
-- hide inner ingredients with expandable block + number of children
 - make another recipe as ingredient
 - add possibility to add alternative ingredient
 - optional ingredients
+
+Next bugs/features
+- textarea make it autoresizabla, remove content jumping when try to edit detail's text

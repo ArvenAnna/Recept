@@ -1,6 +1,7 @@
 package com.anna.recept.dto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 
 import com.anna.recept.entity.Ingredient;
+import com.anna.recept.entity.IngredientRef;
 
 @Builder
 @NoArgsConstructor
@@ -44,6 +46,17 @@ public class IngredientDto {
                 .imgPath(ing.getImgPath())
                 .parent(Optional.ofNullable(ing.getParent()).map(Ingredient::getId).orElse(null))
                 .children(Optional.ofNullable(ing.getChildren()).map(children -> children.stream().map(Ingredient::getId).collect(Collectors.toList())).orElse(null))
+                .build();
+    }
+
+    public static IngredientDto of(Ingredient ing, List<IngredientRef> refs) {
+        return IngredientDto.builder()
+                .id(ing.getId())
+                .name(ing.getName())
+                .description(ing.getDescription())
+                .imgPath(ing.getImgPath())
+                .parent(Optional.ofNullable(ing.getParent()).map(Ingredient::getId).orElse(null))
+                .children(Optional.ofNullable(refs).map(r -> r.stream().map(IngredientRef::getIngredientId).collect(Collectors.toList())).orElse(null))
                 .build();
     }
 }

@@ -24,6 +24,7 @@ const template = `
       #${INPUT_CONTAINER} {
          display: flex;
          align-items: center;
+         margin-bottom: 1rem;
       }
       
       #${CAPTION} {

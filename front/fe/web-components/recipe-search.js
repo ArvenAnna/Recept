@@ -44,6 +44,7 @@ const template = `
         
         ${DROP_DOWN_COMPONENT}, ${LIST_COMPONENT} {
             margin-bottom: 1rem;
+            margin-top: 0.2rem;
         }
         
         ${BUTTON_COMPONENT} {
@@ -57,7 +58,7 @@ const template = `
 
     <div id="${CONTAINER}">
         <${INPUT_COMPONENT} placeholder='search'></${INPUT_COMPONENT}>
-        <${EXPANDABLE_COMPONENT} caption='Additional search params'>
+        <${EXPANDABLE_COMPONENT} caption='Additional search params' open>
             <div id='${ADDITIONAL_SEARCH_PARAMS}' slot='content'>
                 <${DROP_DOWN_COMPONENT} ></${DROP_DOWN_COMPONENT}>
             

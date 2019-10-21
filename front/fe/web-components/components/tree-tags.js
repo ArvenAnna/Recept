@@ -1,6 +1,7 @@
 import WebElement from '../abstract/web-element';
 import './clickable-tag';
-import './expandable-block';
+import {arrowDownIcon, arrowUpIcon} from '../../constants/themes';
+
 
 const CONTAINER = 'tag_container';
 const TAG_TEMPLATE = 'tag-template';
@@ -8,12 +9,13 @@ const CHILDREN_CONTAINER_TEMPLATE = 'children-container-template';
 
 const COMPONENT = 'tree-tags';
 const TAG_COMPONENT = 'clickable-tag';
-const EXPANDER_COMPONENT = 'expandable-block';
-const ROOT = 'root';
+
 const TAG_CONTAINER = 'tag-container';
 const INNER_TREE_CONTAINER = 'inner-tree-container';
-
 const CHILD_TAG_CONTAINER = 'child_tag_container';
+const EXPAND_ICON = 'expand-icon';
+const COUNT_CONTAINER = 'count-container';
+const ARROW_CONTAINER = 'arrow-container';
 
 const template = `
   <style>
@@ -25,11 +27,39 @@ const template = `
     
     .${CHILD_TAG_CONTAINER} {
         display: flex;
+        flex-direction: column;
+    }
+    
+    .${TAG_CONTAINER} {
+        display: flex;
+        align-items: center;
+        margin: 0.4rem 0;
     }
     
     .${INNER_TREE_CONTAINER} {
+        display: none;
+        align-items: center;
+    }
+    
+    .${EXPAND_ICON} {
+        width: 0.5rem;
+        height: 0.5rem;
+        cursor: pointer;
+        margin-right: 0.2rem;
+     }
+    
+    .${ARROW_CONTAINER} {
         display: flex;
         align-items: center;
+        background-color: #A7A7A7;
+        padding: 0.2rem;
+        border: solid 2px #414141;
+        border-radius: var(--theme-border-radius);
+        margin-left: 0.5rem;
+    }
+    
+    ${TAG_COMPONENT} {
+        --tag-font-size: var(--big-font-size);
     }
   </style>
 
@@ -41,16 +71,18 @@ const template = `
   
   <template id='${CHILDREN_CONTAINER_TEMPLATE}'>
      <div class='${CHILD_TAG_CONTAINER}'>
-        <div class='${TAG_CONTAINER}'><${TAG_COMPONENT}></${TAG_COMPONENT}></div>
+        <div class='${TAG_CONTAINER}'>
+            <${TAG_COMPONENT}></${TAG_COMPONENT}>
+            <div class='${ARROW_CONTAINER}'>
+                <img class='${EXPAND_ICON}' src='${arrowDownIcon}'/>
+                <div class='${COUNT_CONTAINER}'></div>
+            </div>
+        </div>
         <div class='${INNER_TREE_CONTAINER}'><${COMPONENT}></${COMPONENT}></div>
      </div>
   </template>
   
-  <div id='${ROOT}'>
-    <${EXPANDER_COMPONENT}>
-     <div id='${CONTAINER}' slot='content'></div>
-    </${EXPANDER_COMPONENT}>
-  </div>
+  <div id='${CONTAINER}'></div>
   
 `;
 
@@ -64,13 +96,6 @@ class TreeTags extends WebElement {
         this.$renderItem = renderItem;
         this.$childrenProp = childrenProp;
         this.$level = level;
-        if (level === 1) {
-           const html = this.$(EXPANDER_COMPONENT).innerHTML;
-           this.$(EXPANDER_COMPONENT).remove();
-           this.$_id(ROOT).innerHTML = html;
-        } else {
-            this.$(EXPANDER_COMPONENT).caption = items.length;
-        }
         this._render();
     }
 
@@ -93,6 +118,9 @@ class TreeTags extends WebElement {
                     this.$_id(CONTAINER).appendChild(tagTemplate);
                 } else {
                     const childrenContainerTemplate = this.getTemplateById(CHILDREN_CONTAINER_TEMPLATE);
+                    childrenContainerTemplate.byClass(COUNT_CONTAINER).textContent = item[this.$childrenProp].length;
+                    childrenContainerTemplate.byClass(INNER_TREE_CONTAINER).style.marginLeft = `${MARGIN_SIZE * this.$level}rem`;
+                    childrenContainerTemplate.byClass(TAG_CONTAINER).addEventListener('click', this._triggerExpander);
                     this._setTagProps(childrenContainerTemplate, item);
 
                     childrenContainerTemplate.byTag(COMPONENT).onConstruct = (comp) => {
@@ -110,7 +138,6 @@ class TreeTags extends WebElement {
 
             });
         }
-
     }
 
     _setTagProps(tmpl, item) {
@@ -120,6 +147,14 @@ class TreeTags extends WebElement {
                 clickItemCallback: this.$onClick.bind(null, item)
             }
         }
+    }
+
+    _triggerExpander(e) {
+        const tagContainer = e.currentTarget;
+        const isOpened = tagContainer.parentNode.querySelector(`.${INNER_TREE_CONTAINER}`).style.display === 'flex';
+        tagContainer.querySelector(`.${EXPAND_ICON}`).src = isOpened ? arrowDownIcon : arrowUpIcon;
+        tagContainer.parentNode.querySelector(`.${INNER_TREE_CONTAINER}`).style.display = isOpened ? 'none' : 'flex';
+
     }
 
 }

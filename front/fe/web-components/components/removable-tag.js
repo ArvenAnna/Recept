@@ -10,7 +10,6 @@ const template = `
     #${CONTAINER} {
        display: flex;
        align-items:center;
-       margin: 0.5rem 1rem 0.5rem 0;
        font-style: italic;
        background-color: var(--tag-background, white);
        color: var(--tag-font-color, black);

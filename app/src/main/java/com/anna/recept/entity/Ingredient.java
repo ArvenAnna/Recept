@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.Formula;
+
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
@@ -29,11 +31,10 @@ public class Ingredient {
     private String imgPath;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinTable(name = "ingredient_ref", joinColumns = {@JoinColumn(name = "ingredient_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name = "parent_ingredient_id", nullable = false, updatable = false)})
+    @JoinTable(name = "ingredient_ref", joinColumns = {@JoinColumn(name = "ingredient_id", nullable = false)}, inverseJoinColumns = {@JoinColumn(name = "parent_ingredient_id", nullable = false)})
     private Ingredient parent;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ingredient_ref", joinColumns = {@JoinColumn(name = "parent_ingredient_id", nullable = false, updatable = false)}, inverseJoinColumns = {@JoinColumn(name = "ingredient_id", nullable = false, updatable = false)})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
     private List<Ingredient> children;
 
 }

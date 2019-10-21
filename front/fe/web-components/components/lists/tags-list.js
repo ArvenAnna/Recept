@@ -21,6 +21,11 @@ const template = `
         /* don't put margin here*/
     }
     
+    ${TAG_COMPONENT} {
+       margin-right: 0.2rem;
+       margin-bottom: 0.2rem;
+    }
+    
     #${ITEMS_CONTAINER} {
         display: flex;
         flex-wrap: wrap;

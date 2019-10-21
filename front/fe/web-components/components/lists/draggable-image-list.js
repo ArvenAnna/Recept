@@ -154,15 +154,15 @@ class DraggableImageList extends WebElement {
         if ( e.target.className === ITEM ) {
             e.target.parentNode.classList.remove(DRAG_TARGET);
             // e.target.parentNode.style.background = "";
-            const containerFrom = this.drag;
+            // const containerFrom = this.drag;
             const itemFrom = this.drag.querySelector(IMAGE_COMPONENT);
 
-            const containerTo = e.target.parentNode;
+            // const containerTo = e.target.parentNode;
             const itemTo = e.target;
 
-            containerFrom.innerHTML = '';
-            containerFrom.appendChild(itemTo);
-            containerTo.appendChild(itemFrom);
+            // containerFrom.innerHTML = '';
+            // containerFrom.appendChild(itemTo);
+            // containerTo.appendChild(itemFrom);
 
             const idFrom = parseInt(itemFrom.getAttribute('innerId'));
             const dataItemFrom = this.$transformedData.find(tdi => tdi.innerId === idFrom)

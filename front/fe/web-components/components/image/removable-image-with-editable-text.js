@@ -21,6 +21,11 @@ const template = `
      #${TEXT} {
         cursor: pointer;
         width: var(--card-width);
+        background-color: var(--image-with-text-bg);
+        color: var(--image-with-text-color);
+        padding: 0.2rem;
+        box-sizing: border-box;
+        min-height: 1.5rem;
      }
      
      #${EDIT_TEXT} {
@@ -83,24 +88,34 @@ class RemovableImageWithEditableText extends WebElement {
         super(template, true);
 
         this._openEditMode = this._openEditMode.bind(this);
+        this._closeEditMode =this._closeEditMode.bind(this);
         this._editText = this._editText.bind(this);
 
         this.$_id(ADD_ICON).addEventListener('click', this._editText);
         this.$_id(TEXT).addEventListener('click', this._openEditMode);
+        this.$(TEXT_COMPONENT).callbacks = {
+            blur: this._closeEditMode
+        }
     }
 
     _openEditMode() {
         this.$(TEXT_COMPONENT).value = this.$_id(TEXT).textContent;
         this.$_id(TEXT).style.display = 'none';
         this.$_id(EDIT_TEXT).style.display = 'flex';
+        this.$(TEXT_COMPONENT).innerRef.focus();
     }
+
+    _closeEditMode() {
+        this.$_id(TEXT).style.display = 'block';
+        this.$_id(EDIT_TEXT).style.display = 'none';
+    }
+
 
     _editText() {
         const text = this.$(TEXT_COMPONENT).value;
         this.$editTextCallback(text);
         this.$_id(TEXT).textContent = text;
-        this.$_id(TEXT).style.display = 'block';
-        this.$_id(EDIT_TEXT).style.display = 'none';
+        this._closeEditMode();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

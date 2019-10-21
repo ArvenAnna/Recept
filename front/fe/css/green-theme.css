@@ -15,6 +15,7 @@
 
     --normal-font-size: 1rem;
     --small-font-size: 0.9rem;
+    --big-font-size: 1.2rem;
     --header-font-size: 1.6rem;
 
     --inset-shadow: 2px 2px 5px 0 var(--main-background) inset;

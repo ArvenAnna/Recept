@@ -47,6 +47,9 @@ body {
 
     /*for draggable-image-list*/
     --drag-target-bg: var(--dark-background);
+    /*for image with text*/
+    --image-with-text-bg: var(--list-background);
+    --image-with-text-color: var(--light-background);
 
     /*for menu*/
     --menu-background: var(--main-background);
