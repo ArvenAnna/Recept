@@ -11,6 +11,10 @@ const template = `
      #${CONTAINER} {
         width: var(--image-width);
      }
+     
+     #${TEXT} {
+        white-space: pre-wrap;
+     }
   </style>
   
   <div id="${CONTAINER}">

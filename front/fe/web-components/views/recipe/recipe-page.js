@@ -79,6 +79,7 @@ const template = `
 
         text-align: justify;
         margin: 1rem;
+        white-space: pre-wrap;
     }
     
     #${DETAILS} {
@@ -108,6 +109,7 @@ const template = `
     .${DETAILS_DESCRIPTION} {
         padding: 0.2rem 0;
         color: var(--light-background);
+        white-space: pre-wrap;
      }
     
     .${DETAILS_PHOTO} {
