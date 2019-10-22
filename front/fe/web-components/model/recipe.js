@@ -31,10 +31,11 @@ export class Recipe extends Model {
             return null;
         }
         return this._recipe.refs.map(ref => ({
-           id: ref.id,
-           name: ref.name,
-           imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath),
-           imgPathFull: ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath
+           id: ref.recipeId,
+           name: ref.recipeName,
+           optional: ref.optional,
+           // imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath),
+           // imgPathFull: ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath
         }));
     }
 

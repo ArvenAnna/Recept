@@ -109,10 +109,8 @@ public class RecipeService implements IRecipeService {
 			prop.setIngredient(ingRep.findById(prop.getIngredient().getId())
 					.orElseThrow(() -> new EntityNotFoundException(Errors.INGREDIENT_NOT_FOUND.getCause())))
 		);
-		recipeEntity.setRefs(recipeEntity.getRefs().stream().map(ref ->
-				recipeRep.findById(ref.getId())
-						.orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()))
-		).collect(Collectors.toList()));
+		recipeEntity.getRefs().stream().forEach(ref ->
+			ref.setReferenceRecipe(recipeRep.findById(ref.getReferenceRecipe().getId()).orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()))));
 
 		recipeEntity.setTags(recipeEntity.getTags().stream().map(tag ->
 				tagRep.findById(tag.getId())

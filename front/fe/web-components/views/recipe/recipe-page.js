@@ -3,30 +3,26 @@ import WebElement from '../../abstract/web-element';
 import mModal from '../../model/modal';
 
 import '../../components/lists/tags-list';
-import './parts/recipe-reference';
 import { noImage } from '../../../constants/themes';
-import {goTo} from '../../router/utils';
+import { goTo } from '../../router/utils';
 
 const CONTAINER = 'recipe_page';
-const RECIPE_REF_TEMPLATE = 'recipe_ref_template';
 const RECIPE_DETAIL_TEMPLATE = 'recipe_detail_template';
 const RECIPE_DETAIL_PHOTO_TEMPLATE = 'recipe-detail-photo-template';
 
 const CAPTION = 'recipe_page_caption';
 const MAIN_PHOTO = 'recipe_page_main_photo';
 const DESCRIPTION = 'recipe_page_description';
-const REFS = 'recipe_page_refs';
 const DETAILS = 'recipe_page_details';
 
 const DETAIL = 'detail';
 const DETAILS_PHOTO = 'recipe_page_details_photo';
 const DETAILS_PHOTO_FULL = 'recipe_page_details_photo_full';
 const DETAILS_DESCRIPTION = 'recipe_page_details_description';
-const REFS_CONTAINER = 'refs-container';
 const PROPORTIONS = 'recipe-proportions';
+const REFERENCES = 'recipe-references';
 
 const LIST_COMPONENT = 'tags-list';
-const RECIPE_REF_COMPONENT = 'recipe-reference';
 
 const template = `
   <style>
@@ -56,11 +52,19 @@ const template = `
         padding: 0 1rem;
     }
     
+    #${REFERENCES} {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        padding: 0 1rem;
+    }
+    
     #${MAIN_PHOTO} {
         grid-column-start: 1;
         grid-column-end: 2;
-        grid-row-start: 3;
-        grid-row-end: 4;
+        grid-row-start: 4;
+        grid-row-end: 5;
         width: 100%;
         padding: 0.5rem 1rem;
         box-sizing: border-box;
@@ -70,34 +74,18 @@ const template = `
     #${DESCRIPTION} {
         grid-column-start: 1;
         grid-column-end: 3;
-        grid-row-start: 4;
-        grid-row-end: 5;
+        grid-row-start: 5;
+        grid-row-end: 6;
 
         text-align: justify;
         margin: 1rem;
     }
     
-    #${REFS_CONTAINER} {
-        grid-column-start: 2;
-        grid-column-end: 3;
-        grid-row-start: 3;
-        grid-row-end: 4;
-
-        display: flex;
-        flex-direction: column;
-        margin: 0 1rem;
-        padding: 0.5rem 1rem;
-    }
-    
-    #${REFS} {
-        cursor: pointer;
-    }
-    
     #${DETAILS} {
         grid-column-start: 1;
         grid-column-end: 3;
-        grid-row-start: 5;
-        grid-row-end: 6;
+        grid-row-start: 6;
+        grid-row-end: 7;
 
         display: grid;
         background-color: var(--dark-background);
@@ -136,10 +124,6 @@ const template = `
     
   </style>
   
-  <template id='${RECIPE_REF_TEMPLATE}'>
-    <${RECIPE_REF_COMPONENT}></${RECIPE_REF_COMPONENT}>
-  </template>
-  
   <template id='${RECIPE_DETAIL_TEMPLATE}'>
     <div class='${DETAIL}'>
         <img src='${noImage}' class='${DETAILS_PHOTO}'/>
@@ -155,12 +139,12 @@ const template = `
       <div id='${CAPTION}'></div>
       <div id='${PROPORTIONS}'>
           <${LIST_COMPONENT}></${LIST_COMPONENT}>
+      </div>  
+      <div id='${REFERENCES}'>
+          <${LIST_COMPONENT}></${LIST_COMPONENT}>
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
-      <div id='${REFS_CONTAINER}'>
-        <div id='${REFS}'></div>
-      </div>
       <div id='${DETAILS}'></div>
   </div>
 `;
@@ -183,6 +167,7 @@ class RecipePage extends WebElement {
         this._renderPage = this._renderPage.bind(this);
         this._clearPage = this._clearPage.bind(this);
         this._initProportions = this._initProportions.bind(this);
+        this._initReferences = this._initReferences.bind(this);
         this._openFullPhoto = this._openFullPhoto.bind(this);
 
         this._renderPage();
@@ -196,10 +181,18 @@ class RecipePage extends WebElement {
     }
 
     _initProportions() {
-        this.$(LIST_COMPONENT).props = {
+        this.$_id(PROPORTIONS).querySelector(LIST_COMPONENT).props = {
             items: this.$recipe.proportions,
             clickItemCallback: prop => goTo(`/ingredients/${prop.ingredientId}`),
             renderItem: (item) => `${item.ingredientName} ${item.norma ? '-' : ''} ${item.norma || ''}`
+        }
+    }
+
+    _initReferences() {
+        this.$_id(REFERENCES).querySelector(LIST_COMPONENT).props = {
+            items: this.$recipe.refs,
+            clickItemCallback: ref => goTo(`/recipe/${ref.id}`),
+            renderItem: (item) => `${item.name} ${item.norma ? '-' : ''} ${item.norma || ''}`
         }
     }
 
@@ -207,10 +200,8 @@ class RecipePage extends WebElement {
         this.$_id(CAPTION).textContent = '';
         this.$_id(MAIN_PHOTO).src = noImage;
         this.$_id(DESCRIPTION).textContent = '';
-        this.$_id(REFS).innerHTML = '';
         this.$_id(DETAILS).innerHTML = '';
         this.$_id(DETAILS).style.display = 'none';
-        this.$_id(REFS_CONTAINER).style.display = 'none';
     }
 
     _renderPage() {
@@ -226,15 +217,8 @@ class RecipePage extends WebElement {
                 this._initProportions();
             }
 
-            if (this.$recipe.refs && this.$recipe.refs.length) {
-                this.$_id(REFS_CONTAINER).style.display = 'flex';
-                this.$recipe.refs.forEach(ref => {
-                    const refTemplate = this.getTemplateById(RECIPE_REF_TEMPLATE);
-                    refTemplate.byTag(RECIPE_REF_COMPONENT).onConstruct = (component) => {
-                        component.props = {src: ref.imgPath, text: ref.name, link: `/recipe/${ref.id}`};
-                    }
-                    this.$_id(REFS).appendChild(refTemplate);
-                })
+            if (this.$recipe.refs) {
+                this._initReferences();
             }
 
             if (this.$recipe.details && this.$recipe.details.length) {

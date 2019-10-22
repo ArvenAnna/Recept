@@ -12,6 +12,7 @@ import com.anna.recept.entity.Detail;
 import com.anna.recept.entity.Ingredient;
 import com.anna.recept.entity.Proportion;
 import com.anna.recept.entity.Recipe;
+import com.anna.recept.entity.RecipeRef;
 import com.anna.recept.entity.Tag;
 
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class RecipeDto {
 	private List<DetailDto> details = new ArrayList<>();
 	private List<ProportionDto> proportions = new ArrayList<>();
 	private List<TagDto> tags = new ArrayList<>();
-	private List<RecipeDto> refs = new ArrayList<>();
+	private List<RefDto> refs = new ArrayList<>();
 
 	@Getter
 	@NoArgsConstructor
@@ -71,11 +72,40 @@ public class RecipeDto {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
+	public static class RefDto {
+		private Long id;
+		private String norma;
+		private Long recipeId;
+		private String recipeName;
+		private boolean optional;
+		private Long alternativeProportionId;
+		private Long alternativeRefId;
+
+		public static RefDto of(RecipeRef ref) {
+			return RefDto.builder()
+					.id(ref.getId())
+					.norma(ref.getNorma())
+					.recipeId(Optional.ofNullable(ref.getReferenceRecipe()).map(Recipe::getId).orElse(null))
+					.recipeName(Optional.ofNullable(ref.getReferenceRecipe()).map(Recipe::getName).orElse(null))
+					.optional(ref.isOptional())
+					.alternativeProportionId(ref.getAlternativeProportionId())
+					.alternativeRefId(ref.getAlternativeRefId())
+					.build();
+		}
+	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class ProportionDto {
 		private Long id;
 		private String norma;
 		private Long ingredientId;
 		private String ingredientName;
+		private boolean optional;
+		private Long alternativeProportionId;
+		private Long alternativeRefId;
 
 		public static ProportionDto of(Proportion proportion) {
 			return ProportionDto.builder()
@@ -83,6 +113,9 @@ public class RecipeDto {
 					.norma(proportion.getNorma())
 					.ingredientId(Optional.ofNullable(proportion.getIngredient()).map(Ingredient::getId).orElse(null))
 					.ingredientName(Optional.ofNullable(proportion.getIngredient()).map(Ingredient::getName).orElse(null))
+					.optional(proportion.isOptional())
+					.alternativeProportionId(proportion.getAlternativeProportionId())
+					.alternativeRefId(proportion.getAlternativeRefId())
 					.build();
 		}
 	}
@@ -122,7 +155,7 @@ public class RecipeDto {
 				.details(recipe.getDetails().stream().map(DetailDto::of).collect(Collectors.toList()))
 				.proportions(recipe.getProportions().stream().map(ProportionDto::of).collect(Collectors.toList()))
 				.tags(recipe.getTags().stream().map(TagDto::of).collect(Collectors.toList()))
-				.refs(recipe.getRefs().stream().map(RecipeDto::withBasicFields).collect(Collectors.toList()));
+				.refs(recipe.getRefs().stream().map(RefDto::of).collect(Collectors.toList()));
 	}
 
 }

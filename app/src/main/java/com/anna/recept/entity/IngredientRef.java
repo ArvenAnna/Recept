@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-//it is exists for performance reason - in order to populate ingredient's children without many joins
+//it is exists for performance reason - in order to populate ingredient's children without many joins (triggering lazy bond)
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})

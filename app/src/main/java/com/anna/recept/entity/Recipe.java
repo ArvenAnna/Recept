@@ -47,10 +47,8 @@ public class Recipe {
                         inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
     private List<Tag> tags = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "reference", joinColumns = {@JoinColumn(name = "recept_id", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "recept_reference_id", nullable = false, updatable = false)})
-    private List<Recipe> refs = new ArrayList<>();
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<RecipeRef> refs = new ArrayList<>();
 
     public static Recipe of(RecipeDto dto) {
         Recipe recipe = new Recipe();
@@ -69,7 +67,7 @@ public class Recipe {
                 .map(proportions -> proportions.stream().map(proportion -> Proportion.of(proportion, recipe)).collect(Collectors.toList()))
                 .orElse(new ArrayList<>()));
         recipe.setRefs(Optional.ofNullable(dto.getRefs())
-                .map(refs -> refs.stream().map(Recipe::of).collect(Collectors.toList()))
+                .map(refs -> refs.stream().map(ref -> RecipeRef.of(ref, recipe)).collect(Collectors.toList()))
                 .orElse(new ArrayList<>()));
         return recipe;
     }

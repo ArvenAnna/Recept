@@ -16,9 +16,6 @@ To start application you need:
     \q - exit
     drop database recipe
 
-Bugs:
-- reordering should be different way: more paste then replace
-
 Features:
 - recipe pagination
 - add possibility to get menu made by ingredients (with separate list of always present ingredients)
@@ -27,4 +24,4 @@ Features:
 - optional ingredients
 
 Next bugs/features
-- textarea make it autoresizabla, remove content jumping when try to edit detail's text
+- textarea make it autoresizable, remove content jumping when try to edit detail's text
