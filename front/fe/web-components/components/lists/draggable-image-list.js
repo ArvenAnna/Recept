@@ -28,7 +28,7 @@ const template = `
     
     .${ITEM} {
        padding-right: 0.5rem;
-       cursor: default;
+       cursor: grab;
     }
     
     .${DRAG_TARGET} {

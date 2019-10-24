@@ -3,7 +3,7 @@ import '../../styled/input-text';
 import '../../styled/text-area';
 import '../../styled/action-button';
 
-import '../../components/removable-tag';
+import '../../components/tag/removable-tag';
 
 import '../../components/suggestions-chooser';
 import '../../components/file-upload/photo-upload';

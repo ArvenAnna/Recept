@@ -1,5 +1,5 @@
 import WebElement from '../abstract/web-element';
-import './clickable-tag';
+import './tag/clickable-tag';
 import {arrowDownIcon, arrowUpIcon} from '../../constants/themes';
 
 

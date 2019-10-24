@@ -1,5 +1,5 @@
 import WebElement from '../../abstract/web-element';
-import '../clickable-tag';
+import '../tag/clickable-tag';
 
 const CONTAINER = 'container';
 const TITLE = 'title';
@@ -14,6 +14,7 @@ const template = `
   <style>
     #${CONTAINER} {
         /*margin-top: 1rem;*/
+        display: none;
         flex-direction: column;
     }
   
@@ -63,14 +64,17 @@ class TagsList extends WebElement {
         this.setAttribute(supportedAttributes.TITLE, v);
     }
 
-    set props({items, renderItem, removeItemCallback, clickItemCallback, title}) {
+    set props({items, renderItem, removeItemCallback, clickItemCallback, editItemCallback, title}) {
         this.$items = items || [];
         this.$renderItem = renderItem;
         this.$removeItem = removeItemCallback;
+        this.$editItem = editItemCallback;
         this.$clickItem = clickItemCallback;
+        // this.$_id(CONTAINER).style.display = 'none';
         if (title) {
             this.setAttribute(supportedAttributes.TITLE, title);
         }
+        // this.$_id(CONTAINER).style.display = 'none';
         this._renderItems();
     }
 
@@ -82,12 +86,12 @@ class TagsList extends WebElement {
     }
 
     _renderItems() {
+        this.$_id(ITEMS_CONTAINER).innerHTML = "";
         if (this.$items.length) {
             this.reveal_id(CONTAINER);
         } else {
             this.hide_id(CONTAINER);
         }
-        this.$_id(ITEMS_CONTAINER).innerHTML = "";
         if (this.$renderItem) {
             this.$items.forEach(this._renderItem);
         }
@@ -103,7 +107,8 @@ class TagsList extends WebElement {
         tag.onConstruct = (tagEl) => {
             tagEl.props = {
                 removeItemCallback: this.$removeItem && this.$removeItem.bind(null, item),
-                clickItemCallback: this.$clickItem && this.$clickItem.bind(null, item)
+                clickItemCallback: this.$clickItem && this.$clickItem.bind(null, item),
+                editItemCallback: this.$editItem && this.$editItem.bind(null, item)
             }
         }
 

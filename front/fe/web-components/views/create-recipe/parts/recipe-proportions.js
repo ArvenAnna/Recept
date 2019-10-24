@@ -89,6 +89,9 @@ class RecipeProportions extends WebElement {
                 this.$recipe.removeProportion(prop);
                 this.$(LIST_COMPONENT).items = this.$recipe.proportions;
             },
+            editItemCallback: prop => {
+                console.log(prop);
+            }
         }
     }
 

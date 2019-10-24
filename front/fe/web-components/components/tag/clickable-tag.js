@@ -1,4 +1,4 @@
-import WebElement from '../abstract/web-element';
+import WebElement from '../../abstract/web-element';
 import './removable-tag';
 
 const CONTAINER = 'tag-container';
@@ -15,10 +15,10 @@ const template = `
 
 class ClickableTag extends WebElement {
 
-    set props({removeItemCallback, clickItemCallback}) {
+    set props({removeItemCallback, clickItemCallback, editItemCallback}) {
         this.$clickItemCallback = clickItemCallback;
 
-        this.$(TAG_COMPONENT).props = { removeItemCallback };
+        this.$(TAG_COMPONENT).props = { removeItemCallback, editItemCallback };
         if (clickItemCallback) {
             this.$_id(CONTAINER).style.cursor = 'pointer';
         } else {
