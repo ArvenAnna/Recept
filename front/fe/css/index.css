@@ -16,10 +16,15 @@ body {
     --input-background: var(--light-background);
     --input-placeholder: var(--dark-background);
     --input-error-color: var(--error-color);
+    --input-error-color: var(--error-color);
     --input-shadow: var(--outer-shadow);
 
     /*for textarea*/
     --textarea-height: var(--card-width);
+
+    /*for checkbox*/
+    --checkbox-background: var(--light-background);
+    --checkbox-shadow: var(--outer-shadow);
 
     /*for drop-down*/
     --drop-down-font-color: var(--main-font-color);
@@ -58,6 +63,12 @@ body {
     --image-border: 2px solid var(--dark-background);
     --image-width: var(--card-width);
     --image-overlay-label-bg: var(--light-background);
+
+    /*for tooltip*/
+    --tooltip-background: var(--dark-dark-background);
+    --tooltip-font--color: var(--light-background);
+    --tooltip-shadow: var(--outer-light-shadow);
+    --tooltip-width: 10rem;
 }
 
 recipe-header, recipe-sidebar {
@@ -84,13 +95,6 @@ create-recipe-page {
 
 ingredients-page {
     --control-width: 10rem;
-}
-
-recipe-page {
-    /*for tooltip*/
-    --tooltip-background: var(--dark-dark-background);
-    --tooltip-font--color: var(--light-background);
-    --tooltip-shadow: var(--outer-light-shadow);
 }
 
 common-notification {

@@ -3,6 +3,7 @@ import WebElement from '../../abstract/web-element';
 import mModal from '../../model/modal';
 
 import '../../components/lists/tags-list';
+import './parts/recipe-page-proportions';
 import { noImage } from '../../../constants/themes';
 import { goTo } from '../../router/utils';
 
@@ -23,6 +24,7 @@ const PROPORTIONS = 'recipe-proportions';
 const REFERENCES = 'recipe-references';
 
 const LIST_COMPONENT = 'tags-list';
+const PROPORTIONS_COMPONENT = 'recipe-page-proportions';
 
 const template = `
   <style>
@@ -140,7 +142,7 @@ const template = `
   <div id='${CONTAINER}'>
       <div id='${CAPTION}'></div>
       <div id='${PROPORTIONS}'>
-          <${LIST_COMPONENT}></${LIST_COMPONENT}>
+          <${PROPORTIONS_COMPONENT}></${PROPORTIONS_COMPONENT}>
       </div>  
       <div id='${REFERENCES}'>
           <${LIST_COMPONENT}></${LIST_COMPONENT}>
@@ -168,7 +170,6 @@ class RecipePage extends WebElement {
 
         this._renderPage = this._renderPage.bind(this);
         this._clearPage = this._clearPage.bind(this);
-        this._initProportions = this._initProportions.bind(this);
         this._initReferences = this._initReferences.bind(this);
         this._openFullPhoto = this._openFullPhoto.bind(this);
 
@@ -180,14 +181,6 @@ class RecipePage extends WebElement {
         photoTemplate.byTag('img').src = imgPath;
         mModal.open(photoTemplate);
         // this.$_id(CONTAINER).appendChild(photoTemplate);
-    }
-
-    _initProportions() {
-        this.$_id(PROPORTIONS).querySelector(LIST_COMPONENT).props = {
-            items: this.$recipe.proportions,
-            clickItemCallback: prop => goTo(`/ingredients/${prop.ingredientId}`),
-            renderItem: (item) => `${item.ingredientName} ${item.norma ? '-' : ''} ${item.norma || ''}`
-        }
     }
 
     _initReferences() {
@@ -214,10 +207,7 @@ class RecipePage extends WebElement {
             this.$_id(CAPTION).textContent = this.$recipe.name || '';
             this.$_id(MAIN_PHOTO).src =  this.$recipe.imgPathFull || noImage;
             this.$_id(DESCRIPTION).textContent = this.$recipe.text || '';
-
-            if (this.$recipe.proportions) {
-                this._initProportions();
-            }
+            this.$(PROPORTIONS_COMPONENT).proportions = this.$recipe.proportions;
 
             if (this.$recipe.refs) {
                 this._initReferences();

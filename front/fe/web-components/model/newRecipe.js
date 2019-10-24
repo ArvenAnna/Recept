@@ -63,14 +63,15 @@ class NewRecipe extends Recipe {
         return super.imgPath;
     }
 
-    set proportion({ingredient, norma}) {
+    set proportion({ingredient, norma, optional}) {
         if (!this._recipe.proportions) {
             this._recipe.proportions = [];
         }
         this._recipe.proportions.push({
             ingredientId: ingredient.id,
             ingredientName: ingredient.name,
-            norma
+            norma,
+            optional
         });
     }
 

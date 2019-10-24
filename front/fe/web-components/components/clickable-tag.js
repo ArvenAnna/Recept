@@ -5,20 +5,12 @@ const CONTAINER = 'tag-container';
 
 const TAG_COMPONENT = 'removable-tag';
 
-const template = `
-  <style>
-    #${CONTAINER} {
-       /*cursor: pointer;*/
-    }
-  
-  </style>
-  
+const template = `  
   <div id='${CONTAINER}'>
     <${TAG_COMPONENT}>
         <slot></slot>
     </${TAG_COMPONENT}>
   </div>
-  
 `;
 
 class ClickableTag extends WebElement {

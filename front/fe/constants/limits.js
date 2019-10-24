@@ -1,0 +1,1 @@
+export const MAX_SUGGESTIONS_NUMBER = 10;

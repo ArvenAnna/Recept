@@ -22,6 +22,7 @@ public class Proportion extends BaseRecipeRef {
         Proportion proportion = new Proportion();
         proportion.setId(dto.getId());
         proportion.setNorma(dto.getNorma());
+        proportion.setOptional(dto.isOptional());
 
         Ingredient ingredient = new Ingredient();
         ingredient.setId(dto.getIngredientId());
