@@ -106,10 +106,6 @@ public class RecipeService implements IRecipeService {
 				.orElseThrow(() -> new EntityNotFoundException(Errors.DEPART_NOT_EXISTS.getCause())));
 
 		// check if it is needed
-//		recipeEntity.getProportions().stream().forEach(prop ->
-//			prop.setIngredient(ingRep.findById(prop.getIngredient().getId())
-//					.orElseThrow(() -> new EntityNotFoundException(Errors.INGREDIENT_NOT_FOUND.getCause())))
-//		);
 		recipeEntity.getRefs().stream().forEach(ref ->
 			ref.setReferenceRecipe(recipeRep.findById(ref.getReferenceRecipe().getId()).orElseThrow(() -> new EntityNotFoundException(Errors.RECIPE_NOT_FOUND.getCause()))));
 

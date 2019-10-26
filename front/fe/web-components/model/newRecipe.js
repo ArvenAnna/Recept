@@ -1,6 +1,7 @@
 import {Recipe} from './recipe';
 import routes from '../../constants/Routes';
 import {doJsonRequest} from '../utils/httpUtils';
+import {INTERNAL_ID_KEY} from '../../constants/common';
 
 class NewRecipe extends Recipe {
 
@@ -10,6 +11,7 @@ class NewRecipe extends Recipe {
         this._calculateDetailOrder = this._calculateDetailOrder.bind(this);
         this._findDetailInList = this._findDetailInList.bind(this);
         this.reorderDetails = this.reorderDetails.bind(this);
+        this.setAlternativeProportions = this.setAlternativeProportions.bind(this);
     }
 
     get name() {
@@ -63,22 +65,38 @@ class NewRecipe extends Recipe {
         return super.imgPath;
     }
 
-    set proportion({ingredient, norma, optional}) {
+    set proportion(proportion) {
         if (!this._recipe.proportions) {
             this._recipe.proportions = [];
         }
-        this._recipe.proportions.push({
-            ingredientId: ingredient.id,
-            ingredientName: ingredient.name,
-            norma,
-            optional
-        });
+
+        const oldProportion = this._recipe.proportions.find(p => p[`${INTERNAL_ID_KEY}`] === proportion[`${INTERNAL_ID_KEY}`]);
+
+        if (oldProportion) {
+            oldProportion.optional = proportion.optional;
+            oldProportion.norma = proportion.norma;
+        } else {
+            const internalKeys = this._recipe.proportions.map(p => p[`${INTERNAL_ID_KEY}`]);
+            const maximumKey = internalKeys.length ? Math.max(...internalKeys) : 0;
+
+            this._recipe.proportions.push({
+                ...proportion,
+                [`${INTERNAL_ID_KEY}`]: maximumKey + 1
+            });
+        }
     }
 
     removeProportion(prop) {
         if (this._recipe.proportions) {
-            this._recipe.proportions = this._recipe.proportions.filter(p => p.ingredientName !== prop.ingredientName);
+            this._recipe.proportions = this._recipe.proportions.filter(p => p[`${INTERNAL_ID_KEY}`] !== prop[`${INTERNAL_ID_KEY}`]);
         }
+    }
+
+    setAlternativeProportions(proportion, altProportions) {
+        const prop = this._recipe.proportions.find(p => p[`${INTERNAL_ID_KEY}`] === proportion[`${INTERNAL_ID_KEY}`]);
+        prop.alternativeProportions = altProportions.map(altP => ({
+            ...altP
+        }))
     }
 
     set detail (detail) {
@@ -140,7 +158,7 @@ class NewRecipe extends Recipe {
 
     async save() {
         const method = this._recipe.id ? 'PUT' : 'POST';
-        let newRecipe = await doJsonRequest(routes.POST_CREATE_RECIPE, method, this._recipe);
+        const newRecipe = await doJsonRequest(routes.POST_CREATE_RECIPE, method, this._recipe);
         return newRecipe.id;
     }
 

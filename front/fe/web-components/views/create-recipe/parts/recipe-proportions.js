@@ -72,11 +72,13 @@ class RecipeProportions extends WebElement {
                     // find with exact name matching
                     const ingredient = ingredients.find(ing => ing.name === first);
                     if (ingredient) {
-                        this.$recipe.proportion = {
-                            ingredient,
+                        const proportion = {
+                            ingredientId: ingredient.id,
+                            ingredientName: ingredient.name,
                             norma: second,
                             optional
                         };
+                        this.$recipe.proportion = proportion;
                         this.$(LIST_COMPONENT).items = this.$recipe.proportions;
                         this.$(LIST_COMPONENT).title = 'List of recipe proportions:';
                     }
@@ -103,8 +105,24 @@ class RecipeProportions extends WebElement {
                 editTemplate.byTag(EDIT_PROPORTION_COMPONENT).onConstruct = comp => {
                     comp.recipe = this.$recipe;
                     comp.proportion = prop;
+                    comp.saveCallback = () => {
+                        this.$(LIST_COMPONENT).items = this.$recipe.proportions;
+                    }
                 }
                 mModal.open(editTemplate);
+            },
+            renderTooltip: prop => {
+                let tooltipContent = ''
+                if (prop.optional) {
+                    tooltipContent = tooltipContent + '<div>This proportion is optional.</div>';
+                }
+                if (prop.alternativeProportions && prop.alternativeProportions.length) {
+                    tooltipContent = tooltipContent + '<div>Alternative to this could be:</div>'
+                    prop.alternativeProportions.forEach(p => {
+                        tooltipContent = tooltipContent + `<div>${p.ingredientName} - ${p.norma || ''}</div>`;
+                    })
+                }
+                return tooltipContent;
             }
         }
     }

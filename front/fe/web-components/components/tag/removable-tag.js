@@ -1,10 +1,16 @@
 import WebElement from '../../abstract/web-element';
-import {removeIcon, editIcon} from '../../../constants/themes';
+import {removeIcon, editIcon, infoIcon} from '../../../constants/themes';
+
+import '../tool-tip';
 
 const CONTAINER = 'tag_container';
 
 const REMOVE_ITEM = 'remove_item';
 const EDIT_ITEM = 'edit-item';
+const INFO = 'info';
+const INFO_TOOLTIP = 'info-tooltip';
+
+const TOOLTIP_COMPONENT = 'tool-tip';
 
 const template = `
   <style>
@@ -20,7 +26,7 @@ const template = `
        font-size: var(--tag-font-size);
     }
     
-    #${REMOVE_ITEM},  #${EDIT_ITEM}{
+    #${REMOVE_ITEM},  #${EDIT_ITEM}, #${INFO} {
         display: none;
         width: 1rem;
         height: 1rem;
@@ -32,6 +38,10 @@ const template = `
   
   <div id='${CONTAINER}'>
     <slot></slot>
+    <${TOOLTIP_COMPONENT}>
+        <img src='${infoIcon}' id='${INFO}' slot='component'/>
+        <div id='${INFO_TOOLTIP}' slot='tooltip-content'></div>
+    </${TOOLTIP_COMPONENT}>
     <img src='${editIcon}' id='${EDIT_ITEM}'/>
     <img src='${removeIcon}' id='${REMOVE_ITEM}'/>
   </div>
@@ -40,9 +50,16 @@ const template = `
 
 class RemovableTag extends WebElement {
 
-    set props({removeItemCallback, editItemCallback}) {
+    set props({removeItemCallback, editItemCallback, tooltipContent}) {
         this.$removeItem = removeItemCallback;
         this.$editItem = editItemCallback;
+
+        if (tooltipContent) {
+            this.reveal_id(INFO);
+            this.$_id(INFO_TOOLTIP).innerHTML = tooltipContent;
+        } else {
+            this.hide_id(INFO);
+        }
 
         if (removeItemCallback) {
             this.reveal_id(REMOVE_ITEM);

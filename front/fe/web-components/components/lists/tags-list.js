@@ -13,7 +13,6 @@ const TAG_COMPONENT = 'clickable-tag';
 const template = `
   <style>
     #${CONTAINER} {
-        /*margin-top: 1rem;*/
         display: none;
         flex-direction: column;
     }
@@ -46,7 +45,7 @@ const template = `
 `;
 
 const supportedAttributes = {
-    TITLE: 'title'
+    TITLE: 'list-title'
 }
 
 class TagsList extends WebElement {
@@ -64,17 +63,16 @@ class TagsList extends WebElement {
         this.setAttribute(supportedAttributes.TITLE, v);
     }
 
-    set props({items, renderItem, removeItemCallback, clickItemCallback, editItemCallback, title}) {
+    set props({items, renderItem, removeItemCallback, clickItemCallback, editItemCallback, title, renderTooltip}) {
         this.$items = items || [];
         this.$renderItem = renderItem;
         this.$removeItem = removeItemCallback;
         this.$editItem = editItemCallback;
         this.$clickItem = clickItemCallback;
-        // this.$_id(CONTAINER).style.display = 'none';
+        this.$renderTooltip = renderTooltip;
         if (title) {
             this.setAttribute(supportedAttributes.TITLE, title);
         }
-        // this.$_id(CONTAINER).style.display = 'none';
         this._renderItems();
     }
 
@@ -108,7 +106,8 @@ class TagsList extends WebElement {
             tagEl.props = {
                 removeItemCallback: this.$removeItem && this.$removeItem.bind(null, item),
                 clickItemCallback: this.$clickItem && this.$clickItem.bind(null, item),
-                editItemCallback: this.$editItem && this.$editItem.bind(null, item)
+                editItemCallback: this.$editItem && this.$editItem.bind(null, item),
+                tooltipContent: this.$renderTooltip && this.$renderTooltip(item)
             }
         }
 

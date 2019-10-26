@@ -1,11 +1,14 @@
 import WebElement from '../../../abstract/web-element';
 
-import '../../../components/two-fields-add-item-with-checkbox';
+import '../../../components/two-fields-add-item';
 import '../../../components/lists/tags-list';
 import '../../../styled/input-text';
 import '../../../styled/check-box';
 import {MAX_SUGGESTIONS_NUMBER} from '../../../../constants/limits';
 import {retrieveIngredientsByKeyword} from '../../../utils/asyncRequests';
+
+import mNewRecipe from '../../../model/newRecipe';
+import mModal from '../../../model/modal';
 
 const CONTAINER = 'container';
 const BUTTON_CONTAINER = 'button-container';
@@ -21,7 +24,7 @@ const VERTICAL_PADDING = 'vertical-padding';
 const CHECKBOX_COMPONENT = 'check-box';
 const INPUT_COMPONENT = 'input-text';
 const BUTTON_COMPONENT = 'action-button';
-const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item-with-checkbox';
+const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item';
 const LIST_COMPONENT = 'tags-list';
 
 
@@ -30,7 +33,7 @@ const template = `
       #${CONTAINER} {
          display: flex;
          flex-direction: column;
-         background-color: var(--light-background);
+         background-color: var(--main-background);
          padding: 1rem;
       }
       
@@ -95,6 +98,7 @@ class RecipeProportionEdit extends WebElement {
 
     set proportion(newProportion) {
         this.$proportion = newProportion;
+        this.alternativeProportions = newProportion.alternativeProportions || [];
         this._render();
     }
 
@@ -103,11 +107,15 @@ class RecipeProportionEdit extends WebElement {
         // this._render();
     }
 
+    set saveCallback(saveCallback) {
+        this.$saveCallback = saveCallback;
+    }
+
     async _retrieveIngredientsByKeyword(keyword) {
         let ingredients = await retrieveIngredientsByKeyword(keyword);
         // exclude also already checked in recipe and alternative list
         ingredients = ingredients.filter(ing => !this.$recipe.proportions || !this.$recipe.proportions.some(p => p.ingredientId === ing.id));
-        ingredients = ingredients.filter(ing => !this.alternativeProportions.some(p => p.ingredient.id === ing.id));
+        ingredients = ingredients.filter(ing => !this.alternativeProportions.some(p => p.ingredientId === ing.id));
         ingredients.slice(0, MAX_SUGGESTIONS_NUMBER);
         return ingredients;
     }
@@ -119,15 +127,15 @@ class RecipeProportionEdit extends WebElement {
             this.$(CHECKBOX_COMPONENT).value = !this.$proportion.optional;
 
             this.$(TWO_FIELD_LIST_COMPONENT).props = {
-                addItemCallback: ({first, second, optional}) => {
+                addItemCallback: ({first, second}) => {
                     this._retrieveIngredientsByKeyword(first).then(ingredients => {
                         // find with exact name matching
                         const ingredient = ingredients.find(ing => ing.name === first);
                         if (ingredient) {
                             this.alternativeProportions.push({
-                                ingredient,
-                                norma: second,
-                                optional
+                                ingredientId: ingredient.id,
+                                ingredientName: ingredient.name,
+                                norma: second
                             });
                             this.$(LIST_COMPONENT).items = this.alternativeProportions;
                         }
@@ -144,9 +152,9 @@ class RecipeProportionEdit extends WebElement {
             this.$(LIST_COMPONENT).props = {
                 title: 'Alternative proportions list:',
                 items: this.alternativeProportions,
-                renderItem: (item) => `${item.ingredient.name} - ${item.norma || ''}`,
+                renderItem: (item) => `${item.ingredientName} - ${item.norma || ''}`,
                 removeItemCallback: prop => {
-                    this.alternativeProportions = this.alternativeProportions.filter(p => p.ingredient.id !== prop.ingredient.id);
+                    this.alternativeProportions = this.alternativeProportions.filter(p => p.ingredientId !== prop.ingredientId);
                     this.$(LIST_COMPONENT).items = this.alternativeProportions;
                 }
             }
@@ -154,7 +162,12 @@ class RecipeProportionEdit extends WebElement {
     }
 
     _saveProportion() {
-        console.log(this.alternativeProportions)
+        this.$proportion.norma = this.$_id(NORMA).value;
+        this.$proportion.optional = !this.$(CHECKBOX_COMPONENT).value;
+        mNewRecipe.proportion = this.$proportion;
+        mNewRecipe.setAlternativeProportions(this.$proportion, this.alternativeProportions);
+        mModal.close();
+        this.$saveCallback && this.$saveCallback();
     }
 
     constructor() {

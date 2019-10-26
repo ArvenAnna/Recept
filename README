@@ -23,6 +23,7 @@ Features:
 - add possibility to add alternative ingredient
 - add possibility to separate set of details
 - localization
+- show optional ingredients different color on edit recipe page
 
 Next bugs/features
 - textarea make it autoresizable, remove content jumping when try to edit detail's text

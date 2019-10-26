@@ -39,11 +39,11 @@ public class Proportion extends BaseRecipeProportion {
         proportion.setIngredient(ingredient);
 
         proportion.setAlternativeProportions(Optional.ofNullable(dto.getAlternativeProportions())
-                .map(altProps -> altProps.stream().map(AlternativeProportion::of).collect(Collectors.toList()))
+                .map(altProps -> altProps.stream().map(altProp -> AlternativeProportion.of(altProp, proportion)).collect(Collectors.toList()))
                 .orElse(null));
 
         proportion.setAlternativeProportionsFromRecipes(Optional.ofNullable(dto.getAlternativeProportionsFromRecipes())
-                .map(altProps -> altProps.stream().map(AlternativeProportionFromRecipes::of).collect(Collectors.toList()))
+                .map(altProps -> altProps.stream().map(altProp -> AlternativeProportionFromRecipes.of(altProp, proportion)).collect(Collectors.toList()))
                 .orElse(null));
 
         return proportion;

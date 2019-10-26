@@ -2,6 +2,7 @@ import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
+import {INTERNAL_ID_KEY} from '../../constants/common';
 
 export class Recipe extends Model {
 
@@ -48,7 +49,10 @@ export class Recipe extends Model {
     }
 
     get proportions() {
-        return this._recipe.proportions && this._recipe.proportions.map(prop => ({...prop}));
+        return this._recipe.proportions
+            && this._recipe.proportions.map(prop => ({ ...prop,
+                alternativeProportions: prop.alternativeProportions && prop.alternativeProportions.map(altP => ({...altP}))
+            }));
     }
 
     get details() {
@@ -78,6 +82,8 @@ export class Recipe extends Model {
         // check and fix orders of details
         this._recipe.details = this._recipe.details.sort((d1,d2) => d1.order - d2.order);
         this._recipe.details.forEach((d, i) => d.order = i + 1);
+        // todo: set internalId's for detail's search
+        this._recipe.proportions = this._recipe.proportions.map((p, i) => ({...p, [`${INTERNAL_ID_KEY}`]: i}));
         this.notifySubscribers();
     }
 }

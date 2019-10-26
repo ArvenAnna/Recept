@@ -15,10 +15,10 @@ const template = `
 
 class ClickableTag extends WebElement {
 
-    set props({removeItemCallback, clickItemCallback, editItemCallback}) {
+    set props({removeItemCallback, clickItemCallback, editItemCallback, tooltipContent}) {
         this.$clickItemCallback = clickItemCallback;
 
-        this.$(TAG_COMPONENT).props = { removeItemCallback, editItemCallback };
+        this.$(TAG_COMPONENT).props = { removeItemCallback, editItemCallback, tooltipContent };
         if (clickItemCallback) {
             this.$_id(CONTAINER).style.cursor = 'pointer';
         } else {
