@@ -22,6 +22,7 @@ Features:
 - make another recipe as ingredient
 - add possibility to add alternative ingredient
 - add possibility to separate set of details
+- localization
 
 Next bugs/features
 - textarea make it autoresizable, remove content jumping when try to edit detail's text

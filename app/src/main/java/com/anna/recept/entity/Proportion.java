@@ -1,24 +1,32 @@
 package com.anna.recept.entity;
 
+import com.anna.recept.dto.ProportionDto;
 import lombok.*;
 
 import javax.persistence.*;
 
-import com.anna.recept.dto.RecipeDto;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "proportion")
-public class Proportion extends BaseRecipeRef {
+public class Proportion extends BaseRecipeProportion {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ingridient_id")
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "proportion")
+    private List<AlternativeProportion> alternativeProportions;
 
-    public static Proportion of(RecipeDto.ProportionDto dto) {
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "proportion")
+    private List<AlternativeProportionFromRecipes> alternativeProportionsFromRecipes;
+
+    public static Proportion of(ProportionDto dto) {
         Proportion proportion = new Proportion();
         proportion.setId(dto.getId());
         proportion.setNorma(dto.getNorma());
@@ -26,13 +34,22 @@ public class Proportion extends BaseRecipeRef {
 
         Ingredient ingredient = new Ingredient();
         ingredient.setId(dto.getIngredientId());
-        ingredient.setName(dto.getIngredientName());
+//        ingredient.setName(dto.getIngredientName());
 
         proportion.setIngredient(ingredient);
+
+        proportion.setAlternativeProportions(Optional.ofNullable(dto.getAlternativeProportions())
+                .map(altProps -> altProps.stream().map(AlternativeProportion::of).collect(Collectors.toList()))
+                .orElse(null));
+
+        proportion.setAlternativeProportionsFromRecipes(Optional.ofNullable(dto.getAlternativeProportionsFromRecipes())
+                .map(altProps -> altProps.stream().map(AlternativeProportionFromRecipes::of).collect(Collectors.toList()))
+                .orElse(null));
+
         return proportion;
     }
 
-    public static Proportion of(RecipeDto.ProportionDto dto, Recipe recipe) {
+    public static Proportion of(ProportionDto dto, Recipe recipe) {
         Proportion proportion = of(dto);
         proportion.setRecipe(recipe);
         return proportion;

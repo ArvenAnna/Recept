@@ -2,15 +2,20 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/two-fields-add-item-with-checkbox';
 import '../../../components/lists/tags-list';
+import './recipe-proportion-edit';
 import {retrieveIngredientsByKeyword} from '../../../utils/asyncRequests';
 import {MAX_SUGGESTIONS_NUMBER} from "../../../../constants/limits";
+import mModal from '../../../model/modal';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
 const INPUT_CONTAINER = 'input-container';
 
+const EDIT_PROPORTION_TEMPLATE = 'edit-proportion-template';
+
 const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item-with-checkbox';
 const LIST_COMPONENT = 'tags-list';
+const EDIT_PROPORTION_COMPONENT = 'recipe-proportion-edit';
 
 const template = `
   <style>
@@ -30,6 +35,10 @@ const template = `
          margin-right: 0.5rem;
       }
   </style>
+  
+  <template id='${EDIT_PROPORTION_TEMPLATE}'>
+    <${EDIT_PROPORTION_COMPONENT}></${EDIT_PROPORTION_COMPONENT}>
+  </template>
   
   <div id='${CONTAINER}'>
      <div id='${INPUT_CONTAINER}'>
@@ -90,7 +99,12 @@ class RecipeProportions extends WebElement {
                 this.$(LIST_COMPONENT).items = this.$recipe.proportions;
             },
             editItemCallback: prop => {
-                console.log(prop);
+                const editTemplate = this.getTemplateById(EDIT_PROPORTION_TEMPLATE);
+                editTemplate.byTag(EDIT_PROPORTION_COMPONENT).onConstruct = comp => {
+                    comp.recipe = this.$recipe;
+                    comp.proportion = prop;
+                }
+                mModal.open(editTemplate);
             }
         }
     }

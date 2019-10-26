@@ -9,8 +9,6 @@ import javax.validation.constraints.NotNull;
 
 import com.anna.recept.entity.Department;
 import com.anna.recept.entity.Detail;
-import com.anna.recept.entity.Ingredient;
-import com.anna.recept.entity.Proportion;
 import com.anna.recept.entity.Recipe;
 import com.anna.recept.entity.RecipeRef;
 import com.anna.recept.entity.Tag;
@@ -88,34 +86,6 @@ public class RecipeDto {
 					.recipeId(Optional.ofNullable(ref.getReferenceRecipe()).map(Recipe::getId).orElse(null))
 					.recipeName(Optional.ofNullable(ref.getReferenceRecipe()).map(Recipe::getName).orElse(null))
 					.optional(ref.isOptional())
-					.alternativeProportionId(ref.getAlternativeProportionId())
-					.alternativeRefId(ref.getAlternativeRefId())
-					.build();
-		}
-	}
-
-	@Builder
-	@Getter
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class ProportionDto {
-		private Long id;
-		private String norma;
-		private Long ingredientId;
-		private String ingredientName;
-		private boolean optional;
-		private Long alternativeProportionId;
-		private Long alternativeRefId;
-
-		public static ProportionDto of(Proportion proportion) {
-			return ProportionDto.builder()
-					.id(proportion.getId())
-					.norma(proportion.getNorma())
-					.ingredientId(Optional.ofNullable(proportion.getIngredient()).map(Ingredient::getId).orElse(null))
-					.ingredientName(Optional.ofNullable(proportion.getIngredient()).map(Ingredient::getName).orElse(null))
-					.optional(proportion.isOptional())
-					.alternativeProportionId(proportion.getAlternativeProportionId())
-					.alternativeRefId(proportion.getAlternativeRefId())
 					.build();
 		}
 	}

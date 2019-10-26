@@ -24,6 +24,9 @@ const template = `
       
       #${CONTENT_WRAPPER} {
           width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
       }
       
       #${CONTENT_WRAPPER} > img {

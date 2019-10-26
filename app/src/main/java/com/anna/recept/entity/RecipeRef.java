@@ -17,7 +17,7 @@ import lombok.Setter;
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "reference")
-public class RecipeRef extends BaseRecipeRef {
+public class RecipeRef extends BaseRecipeProportion {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "recept_reference_id")
