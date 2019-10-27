@@ -145,7 +145,7 @@ const template = `
           <${PROPORTIONS_COMPONENT}></${PROPORTIONS_COMPONENT}>
       </div>  
       <div id='${REFERENCES}'>
-          <${LIST_COMPONENT}></${LIST_COMPONENT}>
+          <${LIST_COMPONENT} list-title='Recipe references:'></${LIST_COMPONENT}>
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
@@ -180,14 +180,13 @@ class RecipePage extends WebElement {
         const photoTemplate = this.getTemplateById(RECIPE_DETAIL_PHOTO_TEMPLATE);
         photoTemplate.byTag('img').src = imgPath;
         mModal.open(photoTemplate);
-        // this.$_id(CONTAINER).appendChild(photoTemplate);
     }
 
     _initReferences() {
         this.$_id(REFERENCES).querySelector(LIST_COMPONENT).props = {
             items: this.$recipe.refs,
-            clickItemCallback: ref => goTo(`/recipe/${ref.id}`),
-            renderItem: (item) => `${item.name} ${item.norma ? '-' : ''} ${item.norma || ''}`
+            clickItemCallback: ref => goTo(`/recipe/${ref.recipeId}`),
+            renderItem: (item) => `${item.recipeName} ${item.norma ? '-' : ''} ${item.norma || ''}`
         }
     }
 
@@ -208,10 +207,7 @@ class RecipePage extends WebElement {
             this.$_id(MAIN_PHOTO).src =  this.$recipe.imgPathFull || noImage;
             this.$_id(DESCRIPTION).textContent = this.$recipe.text || '';
             this.$(PROPORTIONS_COMPONENT).proportions = this.$recipe.proportions;
-
-            if (this.$recipe.refs) {
-                this._initReferences();
-            }
+            this._initReferences();
 
             if (this.$recipe.details && this.$recipe.details.length) {
                 this.$_id(DETAILS).style.display = 'grid';

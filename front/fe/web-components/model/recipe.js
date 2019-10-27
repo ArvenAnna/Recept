@@ -32,10 +32,12 @@ export class Recipe extends Model {
             return null;
         }
         return this._recipe.refs.map(ref => ({
-           id: ref.recipeId,
-           name: ref.recipeName,
-           optional: ref.optional,
-           // imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath),
+            ...ref
+           // id: ref.recipeId,
+           // name: ref.recipeName,
+           // optional: ref.optional,
+           // [`${INTERNAL_ID_KEY}`]: detail[`${INTERNAL_ID_KEY}`],
+            // imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath),
            // imgPathFull: ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath
         }));
     }
@@ -56,12 +58,14 @@ export class Recipe extends Model {
     }
 
     get details() {
-        return this._recipe.details && this._recipe.details.map(({id, description, order, filePath}) => {
+        return this._recipe.details && this._recipe.details.map((detail) => {
+            const {filePath, id, order, description} = detail;
             const isTempImage = filePath && `/${filePath}`.startsWith(routes.TEMP_CATALOG);
             return {
                 id,
                 description,
                 order,
+                [`${INTERNAL_ID_KEY}`]: detail[`${INTERNAL_ID_KEY}`],
                 imgPath: isTempImage ? filePath : getImageSmallCopy(routes.IMAGE_CATALOG + filePath),
                 imgPathFull: isTempImage ? filePath : routes.IMAGE_CATALOG + filePath
             }

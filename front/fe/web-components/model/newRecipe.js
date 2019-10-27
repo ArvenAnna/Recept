@@ -5,11 +5,23 @@ import {INTERNAL_ID_KEY} from '../../constants/common';
 
 class NewRecipe extends Recipe {
 
+    static _getByInternalId(array, objToFind) {
+        return array.find(item => item[`${INTERNAL_ID_KEY}`] === objToFind[`${INTERNAL_ID_KEY}`]);
+    }
+
+    static _getNextInternalId(array) {
+        const internalKeys = array.map(item => item[`${INTERNAL_ID_KEY}`]);
+        return internalKeys.length ? Math.max(...internalKeys) + 1 : 0;
+    }
+
+    static _getWithoutByInternalId(array, objToFind) {
+        return array.filter(item => item[`${INTERNAL_ID_KEY}`] !== objToFind[`${INTERNAL_ID_KEY}`]);
+    }
+
     constructor() {
         super();
 
         this._calculateDetailOrder = this._calculateDetailOrder.bind(this);
-        this._findDetailInList = this._findDetailInList.bind(this);
         this.reorderDetails = this.reorderDetails.bind(this);
         this.setAlternativeProportions = this.setAlternativeProportions.bind(this);
     }
@@ -30,6 +42,14 @@ class NewRecipe extends Recipe {
         return super.text;
     }
 
+    set imgPath(path) {
+        this._recipe.imgPath = path;
+    }
+
+    get imgPath() {
+        return super.imgPath;
+    }
+
     set department(department) {
         if (!this._recipe.department) {
             this._recipe.department = {};
@@ -46,23 +66,27 @@ class NewRecipe extends Recipe {
         if (!this._recipe.refs) {
             this._recipe.refs = [];
         }
-        if (!this._recipe.refs.find(r => r.id === ref.id)) {
-            this._recipe.refs.push(ref);
+        // if (!this._recipe.refs.find(r => r.id === ref.id)) {
+        //     this._recipe.refs.push(ref);
+        // }
+        const oldRef = NewRecipe._getByInternalId(this._recipe.refs, ref);
+        if (oldRef) {
+            // allowed to update only these fields ??
+            oldRef.optional = ref.optional;
+            oldRef.norma = ref.norma;
+        } else {
+            this._recipe.refs.push({
+                ...ref,
+                [`${INTERNAL_ID_KEY}`]: NewRecipe._getByInternalId(this._recipe.refs)
+            });
         }
+
     }
 
     removeRef(ref) {
         if (this._recipe.refs) {
-            this._recipe.refs = this._recipe.refs.filter(r => r.id !== ref.id);
+            this._recipe.refs = NewRecipe._getWithoutByInternalId(this._recipe.refs, ref);
         }
-    }
-
-    set imgPath(path) {
-        this._recipe.imgPath = path;
-    }
-
-    get imgPath() {
-        return super.imgPath;
     }
 
     set proportion(proportion) {
@@ -70,31 +94,29 @@ class NewRecipe extends Recipe {
             this._recipe.proportions = [];
         }
 
-        const oldProportion = this._recipe.proportions.find(p => p[`${INTERNAL_ID_KEY}`] === proportion[`${INTERNAL_ID_KEY}`]);
+        const oldProportion = NewRecipe._getByInternalId(this._recipe.proportions, proportion);
 
         if (oldProportion) {
+            // allowed to update only these fields
             oldProportion.optional = proportion.optional;
             oldProportion.norma = proportion.norma;
         } else {
-            const internalKeys = this._recipe.proportions.map(p => p[`${INTERNAL_ID_KEY}`]);
-            const maximumKey = internalKeys.length ? Math.max(...internalKeys) : 0;
-
             this._recipe.proportions.push({
                 ...proportion,
-                [`${INTERNAL_ID_KEY}`]: maximumKey + 1
+                [`${INTERNAL_ID_KEY}`]: NewRecipe._getByInternalId(this._recipe.proportions)
             });
         }
     }
 
     removeProportion(prop) {
         if (this._recipe.proportions) {
-            this._recipe.proportions = this._recipe.proportions.filter(p => p[`${INTERNAL_ID_KEY}`] !== prop[`${INTERNAL_ID_KEY}`]);
+            this._recipe.proportions = NewRecipe._getWithoutByInternalId(this._recipe.proportions, prop);
         }
     }
 
     setAlternativeProportions(proportion, altProportions) {
-        const prop = this._recipe.proportions.find(p => p[`${INTERNAL_ID_KEY}`] === proportion[`${INTERNAL_ID_KEY}`]);
-        prop.alternativeProportions = altProportions.map(altP => ({
+        const foundProportion = NewRecipe._getByInternalId(this._recipe.proportions, proportion);
+        foundProportion.alternativeProportions = altProportions.map(altP => ({
             ...altP
         }))
     }
@@ -104,11 +126,10 @@ class NewRecipe extends Recipe {
             this._recipe.details = [];
         }
 
-        let oldDetail = this._findDetailInList(detail);
+        let oldDetail = NewRecipe._getByInternalId(this._recipe.details, detail);
 
-        // img path can not be changed
         if (oldDetail) {
-            //then update
+            //then update these fields, img path can not be changed
             oldDetail.description = detail.description;
             oldDetail.order = this._calculateDetailOrder(detail);
         } else {
@@ -116,25 +137,17 @@ class NewRecipe extends Recipe {
             this._recipe.details.push({
                 description: detail.description,
                 filePath: detail.imgPath,
-                order: this._calculateDetailOrder(detail)
+                order: this._calculateDetailOrder(detail),
+                [`${INTERNAL_ID_KEY}`]: NewRecipe._getByInternalId(this._recipe.details)
             });
         }
     }
 
     reorderDetails(detailFrom, detailTo) {
-        let oldDetailFrom = this._findDetailInList(detailFrom);
-        // let oldDetailTo = this._findDetailInList(detailTo);
+        let oldDetailFrom = NewRecipe._getByInternalId(this._recipe.details, detailFrom);
         this._recipe.details.filter(d => d.order >= detailTo.order).forEach(d => d.order = d.order + 1);
         oldDetailFrom.order = detailTo.order;
         this._recipe.details = this._recipe.details.sort((d1,d2) => d1.order - d2.order);
-    }
-
-    _findDetailInList(detail) {
-        if (detail.id) {
-            return this._recipe.details.find(p => p.id == detail.id);
-        } else {
-            return this._recipe.details.find(p => detail.imgPathFull && p.filePath == detail.imgPathFull);
-        }
     }
 
     _calculateDetailOrder(detail) {
@@ -148,11 +161,7 @@ class NewRecipe extends Recipe {
 
     removeDetail(detail) {
         if (this._recipe.details) {
-            if (detail.id) {
-                this._recipe.details = this._recipe.details.filter(p => p.id !== detail.id);
-            } else {
-                this._recipe.details = this._recipe.details.filter(p => p.filePath !== detail.imgPath);
-            }
+            this._recipe.details = NewRecipe._getWithoutByInternalId(this._recipe.details, detail);
         }
     }
 

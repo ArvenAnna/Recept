@@ -76,8 +76,6 @@ public class RecipeDto {
 		private Long recipeId;
 		private String recipeName;
 		private boolean optional;
-		private Long alternativeProportionId;
-		private Long alternativeRefId;
 
 		public static RefDto of(RecipeRef ref) {
 			return RefDto.builder()

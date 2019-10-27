@@ -23,7 +23,7 @@ const template = `
           <${LIST_COMPONENT} id='${PROPORTIONS_LIST}'></${LIST_COMPONENT}>
       </div> 
       <div id='${PROPORTIONS_OPTIONAL}'>
-          <${LIST_COMPONENT} list-title='Опционально:' id='${PROPORTIONS_LIST_OPTIONAL}'></${LIST_COMPONENT}>
+          <${LIST_COMPONENT} list-title='Optional:' id='${PROPORTIONS_LIST_OPTIONAL}'></${LIST_COMPONENT}>
       </div>   
   </div>
 `;

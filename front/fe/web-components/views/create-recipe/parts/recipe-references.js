@@ -1,17 +1,19 @@
 import WebElement from '../../../abstract/web-element';
 
-import '../../../components/suggestions-chooser';
+import '../../../components/two-fields-add-item-with-checkbox';
 import '../../../components/lists/tags-list';
 
 import {retrieveRecipesByKeyword} from '../../../utils/asyncRequests';
+import mModal from '../../../model/modal';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
 const INPUT_CONTAINER = 'input-container';
 const LIST_CONTAINER = 'list-container';
 
-const SUGGESTION_INPUT_COMPONENT = 'suggestions-chooser';
+const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item-with-checkbox';
 const LIST_COMPONENT = 'tags-list';
+
 
 const template = `
   <style>
@@ -35,7 +37,7 @@ const template = `
   <div id='${CONTAINER}'>
      <div id='${INPUT_CONTAINER}'>
        <div id='${CAPTION}'>Add recipe reference:</div>
-       <${SUGGESTION_INPUT_COMPONENT}></${SUGGESTION_INPUT_COMPONENT}>
+       <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
      </div>
      <div id='${LIST_CONTAINER}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
   </div>
@@ -62,31 +64,50 @@ class RecipeReferences extends WebElement {
     }
 
     _render() {
-        this.$(SUGGESTION_INPUT_COMPONENT).props = {
+        this.$(TWO_FIELD_LIST_COMPONENT).props = {
             getSuggestionsPromise: this._retrieveRecipesByKeyword,
             renderSuggestionCallback: suggestion => suggestion.name,
-            addItemCallback: (item) => {
-                this._retrieveRecipesByKeyword(item).then(recipes => {
+            addItemCallback: ({first, second, optional}) => {
+                this._retrieveRecipesByKeyword(first).then(recipes => {
                     // find with exact name matching
-                    const recipe = recipes.find(r => r.name === item);
+                    const recipe = recipes.find(r => r.name === first);
                     if (recipe) {
-                        this.$recipe.ref = recipe;
+                        const ref = {
+                            recipeId: recipe.id,
+                            recipeName: recipe.name,
+                            norma: second,
+                            optional
+                        }
+                        this.$recipe.ref = ref;
                         this.$(LIST_COMPONENT).items = this.$recipe.refs;
-                        this.$(LIST_COMPONENT).title = 'List of recipe references:';
                     }
                 })
             },
-            placeholder: 'Add new reference'
+            placeholders: {first: 'Add recipe ref', second: 'Add norma'},
+            defaultChecked: true,
+            tooltipContent: 'Is mandatory?'
         }
 
         this.$(LIST_COMPONENT).props = {
-            title: this.$recipe.refs && this.$recipe.refs.length ? 'List of recipe references:' : null,
+            title: 'List of recipe references:',
             items: this.$recipe.refs,
-            renderItem: ref => ref.name,
+            renderItem: (item) => `${item.recipeName} - ${item.norma || ''}`,
             removeItemCallback: ref => {
                 this.$recipe.removeRef(ref);
                 this.$(LIST_COMPONENT).items = this.$recipe.refs;
-            }
+            },
+            editItemCallback: ref => {
+                //todo own component
+                // const editTemplate = this.getTemplateById(EDIT_PROPORTION_TEMPLATE);
+                // editTemplate.byTag(EDIT_PROPORTION_COMPONENT).onConstruct = comp => {
+                //     comp.recipe = this.$recipe;
+                //     comp.proportion = prop;
+                //     comp.saveCallback = () => {
+                //         this.$(LIST_COMPONENT).items = this.$recipe.proportions;
+                //     }
+                // }
+                // mModal.open(editTemplate);
+            },
         }
     }
 
