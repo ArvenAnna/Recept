@@ -2,6 +2,7 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/two-fields-add-item-with-checkbox';
 import '../../../components/lists/tags-list';
+import '../../trans-item';
 import './recipe-proportion-edit';
 import {retrieveIngredientsByKeyword} from '../../../utils/asyncRequests';
 import {MAX_SUGGESTIONS_NUMBER} from "../../../../constants/limits";
@@ -16,6 +17,7 @@ const EDIT_PROPORTION_TEMPLATE = 'edit-proportion-template';
 const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item-with-checkbox';
 const LIST_COMPONENT = 'tags-list';
 const EDIT_PROPORTION_COMPONENT = 'recipe-proportion-edit';
+const TRANSLATION_COMPONENT = 'trans-item';
 
 const template = `
   <style>
@@ -114,7 +116,7 @@ class RecipeProportions extends WebElement {
             renderTooltip: prop => {
                 let tooltipContent = ''
                 if (prop.optional) {
-                    tooltipContent = tooltipContent + '<div>This proportion is optional.</div>';
+                    tooltipContent = `${tooltipContent}<${TRANSLATION_COMPONENT} key='create-recipe.optional_proportion'></${TRANSLATION_COMPONENT}>`;
                 }
                 if (prop.alternativeProportions && prop.alternativeProportions.length) {
                     tooltipContent = tooltipContent + '<div>Alternative to this could be:</div>'

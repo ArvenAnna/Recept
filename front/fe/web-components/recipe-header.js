@@ -1,11 +1,25 @@
 import mHeader from './model/header';
 import WebElement from './abstract/web-element';
 import './components/menu/horizontal-menu';
+import './views/lang-switcher';
 
+const CONTAINER = 'container';
 const MENU_COMPONENT = 'horizontal-menu';
+const LANG_SWITCHER_COMPONENT = 'lang-switcher';
 
 const template = `
-  <${MENU_COMPONENT}></${MENU_COMPONENT}>
+    <style>
+        #${CONTAINER} {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--menu-background);
+        }
+    </style>
+    <div id='${CONTAINER}'>
+        <${MENU_COMPONENT}></${MENU_COMPONENT}>
+        <${LANG_SWITCHER_COMPONENT}></${LANG_SWITCHER_COMPONENT}>
+    </div>
 `;
 
 class RecipeHeader extends WebElement {

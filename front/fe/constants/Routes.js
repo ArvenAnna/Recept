@@ -17,6 +17,8 @@ const routes = {
 
     UPLOAD_FILE: httpPrefix + '/file',
 
+    GET_TRANSLATION: (context, bundle) => `/translations/${context}/${bundle}.json`,
+
     IMAGE_CATALOG: `/${process.env.FOTO_CATALOG}/`,
     TEMP_CATALOG: `/${process.env.TEMP_CATALOG}/`,
     PREVIEW_IMAGE_PREFIX: process.env.PREVIEW_IMAGE_PREFIX
