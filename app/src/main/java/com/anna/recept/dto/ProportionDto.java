@@ -26,7 +26,7 @@ public class ProportionDto {
     private String ingredientName;
     private boolean optional;
     private List<AlternativeProportionDto> alternativeProportions;
-    private List<AlternativeProportionFromRecipesDto> alternativeProportionsFromRecipes;
+    private List<AlternativeProportionFromRecipesDto> alternativeRefs;
 
     @Builder
     @Getter
@@ -78,7 +78,7 @@ public class ProportionDto {
                 .alternativeProportions(Optional.ofNullable(proportion.getAlternativeProportions())
                         .map(altProps -> altProps.stream().map(AlternativeProportionDto::of).collect(Collectors.toList()))
                         .orElse(null))
-                .alternativeProportionsFromRecipes(Optional.ofNullable(proportion.getAlternativeProportionsFromRecipes())
+                .alternativeRefs(Optional.ofNullable(proportion.getAlternativeProportionsFromRecipes())
                         .map(altProps -> altProps.stream().map(AlternativeProportionFromRecipesDto::of).collect(Collectors.toList()))
                         .orElse(null))
                 .build();

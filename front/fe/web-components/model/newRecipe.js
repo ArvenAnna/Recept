@@ -77,7 +77,7 @@ class NewRecipe extends Recipe {
         } else {
             this._recipe.refs.push({
                 ...ref,
-                [`${INTERNAL_ID_KEY}`]: NewRecipe._getByInternalId(this._recipe.refs)
+                [`${INTERNAL_ID_KEY}`]: NewRecipe._getNextInternalId(this._recipe.refs)
             });
         }
 
@@ -103,7 +103,7 @@ class NewRecipe extends Recipe {
         } else {
             this._recipe.proportions.push({
                 ...proportion,
-                [`${INTERNAL_ID_KEY}`]: NewRecipe._getByInternalId(this._recipe.proportions)
+                [`${INTERNAL_ID_KEY}`]: NewRecipe._getNextInternalId(this._recipe.proportions)
             });
         }
     }
@@ -117,6 +117,13 @@ class NewRecipe extends Recipe {
     setAlternativeProportions(proportion, altProportions) {
         const foundProportion = NewRecipe._getByInternalId(this._recipe.proportions, proportion);
         foundProportion.alternativeProportions = altProportions.map(altP => ({
+            ...altP
+        }))
+    }
+
+    setAlternativeRefs(proportion, altRefs) {
+        const foundProportion = NewRecipe._getByInternalId(this._recipe.proportions, proportion);
+        foundProportion.alternativeRefs = altRefs.map(altP => ({
             ...altP
         }))
     }
@@ -138,7 +145,7 @@ class NewRecipe extends Recipe {
                 description: detail.description,
                 filePath: detail.imgPath,
                 order: this._calculateDetailOrder(detail),
-                [`${INTERNAL_ID_KEY}`]: NewRecipe._getByInternalId(this._recipe.details)
+                [`${INTERNAL_ID_KEY}`]: NewRecipe._getNextInternalId(this._recipe.details)
             });
         }
     }

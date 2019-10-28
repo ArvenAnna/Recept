@@ -103,10 +103,10 @@ class RecipeProportions extends WebElement {
             editItemCallback: prop => {
                 const editTemplate = this.getTemplateById(EDIT_PROPORTION_TEMPLATE);
                 editTemplate.byTag(EDIT_PROPORTION_COMPONENT).onConstruct = comp => {
-                    comp.recipe = this.$recipe;
-                    comp.proportion = prop;
-                    comp.saveCallback = () => {
-                        this.$(LIST_COMPONENT).items = this.$recipe.proportions;
+                    comp.props = {
+                        recipe: this.$recipe,
+                        proportion: prop,
+                        saveCallback: () => this.$(LIST_COMPONENT).items = this.$recipe.proportions
                     }
                 }
                 mModal.open(editTemplate);
@@ -120,6 +120,12 @@ class RecipeProportions extends WebElement {
                     tooltipContent = tooltipContent + '<div>Alternative to this could be:</div>'
                     prop.alternativeProportions.forEach(p => {
                         tooltipContent = tooltipContent + `<div>${p.ingredientName} - ${p.norma || ''}</div>`;
+                    })
+                }
+                if (prop.alternativeRefs && prop.alternativeRefs.length) {
+                    tooltipContent = tooltipContent + '<div>Alternative to this among recipes could be:</div>'
+                    prop.alternativeRefs.forEach(p => {
+                        tooltipContent = tooltipContent + `<div>${p.recipeName} - ${p.norma || ''}</div>`;
                     })
                 }
                 return tooltipContent;

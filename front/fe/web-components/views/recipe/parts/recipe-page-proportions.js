@@ -56,6 +56,12 @@ class RecipePageProportions extends WebElement {
                         tooltipContent = tooltipContent + `<div>${p.ingredientName} - ${p.norma || ''}</div>`;
                     })
                 }
+                if (prop.alternativeRefs && prop.alternativeRefs.length) {
+                    tooltipContent = tooltipContent + '<div>Alternative to this among recipes could be:</div>'
+                    prop.alternativeRefs.forEach(p => {
+                        tooltipContent = tooltipContent + `<div>${p.recipeName} - ${p.norma || ''}</div>`;
+                    })
+                }
                 return tooltipContent;
             }
         };

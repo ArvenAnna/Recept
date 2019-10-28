@@ -33,12 +33,6 @@ export class Recipe extends Model {
         }
         return this._recipe.refs.map(ref => ({
             ...ref
-           // id: ref.recipeId,
-           // name: ref.recipeName,
-           // optional: ref.optional,
-           // [`${INTERNAL_ID_KEY}`]: detail[`${INTERNAL_ID_KEY}`],
-            // imgPath: getImageSmallCopy(ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath),
-           // imgPathFull: ref.imgPath && routes.IMAGE_CATALOG + ref.imgPath
         }));
     }
 
@@ -53,7 +47,8 @@ export class Recipe extends Model {
     get proportions() {
         return this._recipe.proportions
             && this._recipe.proportions.map(prop => ({ ...prop,
-                alternativeProportions: prop.alternativeProportions && prop.alternativeProportions.map(altP => ({...altP}))
+                alternativeProportions: prop.alternativeProportions && prop.alternativeProportions.map(altP => ({...altP})),
+                alternativeRefs: prop.alternativeRefs && prop.alternativeRefs.map(altP => ({...altP}))
             }));
     }
 
@@ -86,8 +81,9 @@ export class Recipe extends Model {
         // check and fix orders of details
         this._recipe.details = this._recipe.details.sort((d1,d2) => d1.order - d2.order);
         this._recipe.details.forEach((d, i) => d.order = i + 1);
-        // todo: set internalId's for detail's search
         this._recipe.proportions = this._recipe.proportions.map((p, i) => ({...p, [`${INTERNAL_ID_KEY}`]: i}));
+        this._recipe.details = this._recipe.details.map((p, i) => ({...p, [`${INTERNAL_ID_KEY}`]: i}));
+        this._recipe.refs = this._recipe.refs.map((p, i) => ({...p, [`${INTERNAL_ID_KEY}`]: i}));
         this.notifySubscribers();
     }
 }

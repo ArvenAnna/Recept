@@ -2,6 +2,7 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/two-fields-add-item-with-checkbox';
 import '../../../components/lists/tags-list';
+import './recipe-refs-edit';
 
 import {retrieveRecipesByKeyword} from '../../../utils/asyncRequests';
 import mModal from '../../../model/modal';
@@ -11,9 +12,12 @@ const CAPTION = 'caption';
 const INPUT_CONTAINER = 'input-container';
 const LIST_CONTAINER = 'list-container';
 
+const EDIT_REFS_TEMPLATE = 'edit-refs-template';
+
 const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item-with-checkbox';
 const LIST_COMPONENT = 'tags-list';
 
+const EDIT_REFS_COMPONENT = 'recipe-refs-edit';
 
 const template = `
   <style>
@@ -33,6 +37,10 @@ const template = `
          margin-right: 0.5rem;
       }
   </style>
+  
+  <template id='${EDIT_REFS_TEMPLATE}'>
+    <${EDIT_REFS_COMPONENT}></${EDIT_REFS_COMPONENT}>
+  </template>
   
   <div id='${CONTAINER}'>
      <div id='${INPUT_CONTAINER}'>
@@ -97,16 +105,15 @@ class RecipeReferences extends WebElement {
                 this.$(LIST_COMPONENT).items = this.$recipe.refs;
             },
             editItemCallback: ref => {
-                //todo own component
-                // const editTemplate = this.getTemplateById(EDIT_PROPORTION_TEMPLATE);
-                // editTemplate.byTag(EDIT_PROPORTION_COMPONENT).onConstruct = comp => {
-                //     comp.recipe = this.$recipe;
-                //     comp.proportion = prop;
-                //     comp.saveCallback = () => {
-                //         this.$(LIST_COMPONENT).items = this.$recipe.proportions;
-                //     }
-                // }
-                // mModal.open(editTemplate);
+                const editTemplate = this.getTemplateById(EDIT_REFS_TEMPLATE);
+                editTemplate.byTag(EDIT_REFS_COMPONENT).onConstruct = comp => {
+                    comp.props = {
+                        ref,
+                        recipe: this.$recipe,
+                        saveCallback: () => this.$(LIST_COMPONENT).items = this.$recipe.refs
+                    }
+                }
+                mModal.open(editTemplate);
             },
         }
     }

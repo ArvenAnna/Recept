@@ -5,16 +5,17 @@ import '../../../components/lists/tags-list';
 import '../../../styled/input-text';
 import '../../../styled/check-box';
 import {MAX_SUGGESTIONS_NUMBER} from '../../../../constants/limits';
-import {retrieveIngredientsByKeyword} from '../../../utils/asyncRequests';
+import {retrieveIngredientsByKeyword, retrieveRecipesByKeyword} from '../../../utils/asyncRequests';
 
 import mNewRecipe from '../../../model/newRecipe';
 import mModal from '../../../model/modal';
 
 const CONTAINER = 'container';
 const BUTTON_CONTAINER = 'button-container';
-const CAPTION = 'caption';
 const CHECKBOX_CONTAINER = 'checkbox-container';
 const ROW_CONTAINER = 'row-container';
+const ALTERNATIVE_PROPORTIONS = 'alternative-proportions';
+const ALTERNATIVE_REFS = 'alternative-refs';
 
 const NAME = 'name';
 const NORMA = 'norma';
@@ -78,12 +79,21 @@ const template = `
             <div>required ingredient</div>
         </div>
      </div>
-     <div>
+     <div id='${ALTERNATIVE_PROPORTIONS}'>
         <div class='${VERTICAL_PADDING}'>Add alternative proportions:</div>
         <div>
             <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
             <div class='${VERTICAL_PADDING}'>
                 <${LIST_COMPONENT} class='${VERTICAL_PADDING}'></${LIST_COMPONENT}>
+            </div>
+        </div>
+     </div>
+     <div id='${ALTERNATIVE_REFS}'>
+        <div class='${VERTICAL_PADDING}'>Add alternative reference proportions:</div>
+        <div>
+            <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
+            <div class='${VERTICAL_PADDING}'>
+                <${LIST_COMPONENT}></${LIST_COMPONENT}>
             </div>
         </div>
      </div>
@@ -96,19 +106,13 @@ const template = `
 
 class RecipeProportionEdit extends WebElement {
 
-    set proportion(newProportion) {
-        this.$proportion = newProportion;
-        this.alternativeProportions = newProportion.alternativeProportions || [];
-        this._render();
-    }
-
-    set recipe(newRecipe) {
-        this.$recipe = newRecipe;
-        // this._render();
-    }
-
-    set saveCallback(saveCallback) {
+    set props({proportion, recipe, saveCallback}) {
         this.$saveCallback = saveCallback;
+        this.$recipe = recipe;
+        this.$proportion = proportion;
+        this.alternativeProportions = proportion.alternativeProportions || [];
+        this.alternativeRefs = proportion.alternativeRefs || [];
+        this._render();
     }
 
     async _retrieveIngredientsByKeyword(keyword) {
@@ -120,13 +124,25 @@ class RecipeProportionEdit extends WebElement {
         return ingredients;
     }
 
+    async _retrieveRecipesByKeyword(keyword) {
+        let recipes = await retrieveRecipesByKeyword(keyword);
+        const maxSuggestionsNumber = 10;
+
+        //exclude current recipe itself
+        // exclude also already checked
+        recipes = recipes.filter(ref => ref.id !== this.$recipe.id)
+            .filter(ref => !this.$recipe.refs || !this.$recipe.refs.some(r => r.id === ref.id));
+        recipes.slice(0, maxSuggestionsNumber);
+        return recipes;
+    }
+
     _render() {
         if (this.$proportion) {
             this.$_id(NAME).textContent = this.$proportion.ingredientName;
             this.$_id(NORMA).value = this.$proportion.norma;
             this.$(CHECKBOX_COMPONENT).value = !this.$proportion.optional;
 
-            this.$(TWO_FIELD_LIST_COMPONENT).props = {
+            this.$_id(ALTERNATIVE_PROPORTIONS).querySelector(TWO_FIELD_LIST_COMPONENT).props = {
                 addItemCallback: ({first, second}) => {
                     this._retrieveIngredientsByKeyword(first).then(ingredients => {
                         // find with exact name matching
@@ -137,25 +153,55 @@ class RecipeProportionEdit extends WebElement {
                                 ingredientName: ingredient.name,
                                 norma: second
                             });
-                            this.$(LIST_COMPONENT).items = this.alternativeProportions;
+                            this.$_id(ALTERNATIVE_PROPORTIONS).querySelector(LIST_COMPONENT).items = this.alternativeProportions;
                         }
                     })
 
                 },
                 getSuggestionsPromise: this._retrieveIngredientsByKeyword,
                 renderSuggestionCallback: suggestion => suggestion.name,
-                placeholders: {first: 'Add ingredient', second: 'Add norma'},
-                defaultChecked: true,
-                tooltipContent: 'Is mandatory?'
+                placeholders: {first: 'Add ingredient', second: 'Add norma'}
             }
 
-            this.$(LIST_COMPONENT).props = {
+            this.$_id(ALTERNATIVE_PROPORTIONS).querySelector(LIST_COMPONENT).props = {
                 title: 'Alternative proportions list:',
                 items: this.alternativeProportions,
                 renderItem: (item) => `${item.ingredientName} - ${item.norma || ''}`,
                 removeItemCallback: prop => {
                     this.alternativeProportions = this.alternativeProportions.filter(p => p.ingredientId !== prop.ingredientId);
-                    this.$(LIST_COMPONENT).items = this.alternativeProportions;
+                    this.$_id(ALTERNATIVE_PROPORTIONS).querySelector(LIST_COMPONENT).items = this.alternativeProportions;
+                }
+            }
+
+
+            this.$_id(ALTERNATIVE_REFS).querySelector(TWO_FIELD_LIST_COMPONENT).props = {
+                addItemCallback: ({first, second}) => {
+                    this._retrieveRecipesByKeyword(first).then(refs => {
+                        // find with exact name matching
+                        const ref = refs.find(r => r.name === first);
+                        if (ref) {
+                            this.alternativeRefs.push({
+                                recipeId: ref.id,
+                                recipeName: ref.name,
+                                norma: second
+                            });
+                            this.$_id(ALTERNATIVE_REFS).querySelector(LIST_COMPONENT).items = this.alternativeRefs;
+                        }
+                    })
+
+                },
+                getSuggestionsPromise: this._retrieveRecipesByKeyword,
+                renderSuggestionCallback: suggestion => suggestion.name,
+                placeholders: {first: 'Add recipe ref', second: 'Add norma'}
+            }
+
+            this.$_id(ALTERNATIVE_REFS).querySelector(LIST_COMPONENT).props = {
+                title: 'Alternative references list:',
+                items: this.alternativeRefs,
+                renderItem: (item) => `${item.recipeName} - ${item.norma || ''}`,
+                removeItemCallback: prop => {
+                    this.alternativeRefs = this.alternativeRefs.filter(p => p.recipeId !== prop.recipeId);
+                    this.$_id(ALTERNATIVE_REFS).querySelector(LIST_COMPONENT).items = this.alternativeRefs;
                 }
             }
         }
@@ -166,6 +212,7 @@ class RecipeProportionEdit extends WebElement {
         this.$proportion.optional = !this.$(CHECKBOX_COMPONENT).value;
         mNewRecipe.proportion = this.$proportion;
         mNewRecipe.setAlternativeProportions(this.$proportion, this.alternativeProportions);
+        mNewRecipe.setAlternativeRefs(this.$proportion, this.alternativeRefs);
         mModal.close();
         this.$saveCallback && this.$saveCallback();
     }
@@ -173,8 +220,10 @@ class RecipeProportionEdit extends WebElement {
     constructor() {
         super(template, true);
         this.alternativeProportions = [];
+        this.alternativeRefs = [];
 
         this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
+        this._retrieveRecipesByKeyword = this._retrieveRecipesByKeyword.bind(this);
         this._render = this._render.bind(this);
         this._saveProportion = this._saveProportion.bind(this);
 

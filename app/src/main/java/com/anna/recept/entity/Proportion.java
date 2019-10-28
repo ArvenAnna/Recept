@@ -42,7 +42,7 @@ public class Proportion extends BaseRecipeProportion {
                 .map(altProps -> altProps.stream().map(altProp -> AlternativeProportion.of(altProp, proportion)).collect(Collectors.toList()))
                 .orElse(null));
 
-        proportion.setAlternativeProportionsFromRecipes(Optional.ofNullable(dto.getAlternativeProportionsFromRecipes())
+        proportion.setAlternativeProportionsFromRecipes(Optional.ofNullable(dto.getAlternativeRefs())
                 .map(altProps -> altProps.stream().map(altProp -> AlternativeProportionFromRecipes.of(altProp, proportion)).collect(Collectors.toList()))
                 .orElse(null));
 
