@@ -3,6 +3,7 @@ import WebElement from '../../../abstract/web-element';
 import '../../../components/lists/draggable-image-list';
 import './recipe-detail';
 import {noImage} from '../../../../constants/themes';
+import {t} from '../../../utils/translateUtils';
 
 const CONTAINER = 'container';
 const LIST_CONTAINER = 'list-container';
@@ -24,7 +25,9 @@ const template = `
   
   <div id='${CONTAINER}'>
        <${DETAIL_COMPONENT}></${DETAIL_COMPONENT}>
-       <div id="${LIST_CONTAINER}"><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
+       <div id='${LIST_CONTAINER}'>
+            <${LIST_COMPONENT} list-title='${t('create-recipe.details_list')}'></${LIST_COMPONENT}>
+       </div>
   </div>
   
 `;
@@ -41,7 +44,6 @@ class RecipeDetails extends WebElement {
             addDetail: detail => {
                 this.$recipe.detail = detail;
                 this.$(LIST_COMPONENT).data = this._constructDataForList();
-                this.$(LIST_COMPONENT).title = 'List of details'
             }
         };
         this.$(LIST_COMPONENT).props = {
@@ -50,7 +52,6 @@ class RecipeDetails extends WebElement {
                 this.$recipe.removeDetail(detail);
                 this.$(LIST_COMPONENT).data = this._constructDataForList();
             },
-            title: this.$recipe.details && this.$recipe.details.length && 'List of details:',
             defaultSrc: noImage,
             editTextCallback: (dataItem, newText) => {
                 dataItem.description = newText;

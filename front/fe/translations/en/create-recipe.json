@@ -1,3 +1,34 @@
 {
-  "optional_proportion": "This proportion is optional."
+  "recipe_name": "Recipe name:",
+  "enter_name": "enter name:",
+  "add_description": "Add description",
+  "error_empty_recipe": "Recipe name should not be empty",
+
+  "add_main_photo": "Add main photo:",
+
+  "recipe_department": "Recipe department:",
+
+  "add_description_with_photo": "Add description with photo in free form:",
+  "add_details_description": "Add detail's description",
+  "add_button": "Add",
+  "details_list": "List of details:",
+
+  "optional_proportion": "This proportion is optional.",
+  "add_recipe_proportions": "Add recipe proportion:",
+  "list_recipe_proportions": "List of recipe proportions:",
+  "add_ingredient": "Add ingredient",
+  "add_norma": "Add norma",
+  "is_mandatory": "Is mandatory?",
+  "alternative_could_be": "Alternative to this could be:",
+  "alternative_among_recipes_could_be": "Alternative to this among recipes could be:",
+
+  "add_alternative_proportions": "Add alternative proportions:",
+  "add_alternative_refs": "Add alternative reference proportions:",
+  "required_ingredient": "Required ingredient",
+  "alternative_proportions_list": "Alternative proportions list",
+  "alternative_refs_list": "Alternative references list:",
+  "add_ref": "Add recipe ref",
+
+  "add_references": "Add recipe references:",
+  "refs_list": "List of recipe references:"
 }

@@ -15,6 +15,10 @@ const IMAGE_COMPONENT = 'removable-image-with-editable-text';
 
 const template = `
   <style>
+  
+    #${CONTAINER} {
+        display: none;
+    }
     
     #${ITEMS_CONTAINER} {
         display: flex;
@@ -50,7 +54,7 @@ const template = `
 `;
 
 const supportedAttributes = {
-    TITLE: 'title'
+    TITLE: 'list-title'
 }
 
 class DraggableImageList extends WebElement {
@@ -121,6 +125,11 @@ class DraggableImageList extends WebElement {
 
     _renderItems() {
         this.$_id(ITEMS_CONTAINER).innerHTML = "";
+        if (this.$transformedData.length) {
+            this.reveal_id(CONTAINER);
+        } else {
+            this.hide_id(CONTAINER);
+        }
         this.$transformedData.forEach(this._renderItem);
     }
 

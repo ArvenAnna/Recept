@@ -1,3 +1,34 @@
 {
-  "optional_proportion": "Эта пропорция опциональна."
+  "recipe_name": "Название рецепта:",
+  "enter_name": "Введите название:",
+  "add_description": "Добавить описание",
+  "error_empty_recipe": "Название рецепта не должно быть пустым",
+
+  "add_main_photo": "Добавте главное фото:",
+
+  "recipe_department": "Recipe department:",
+
+  "add_description_with_photo": "Добавьте описание с фото в свободной форме:",
+  "add_details_description": "добавить описание",
+  "add_button": "Добавить",
+  "details_list": "Список деталей:",
+
+  "optional_proportion": "Эта пропорция опциональна.",
+  "add_recipe_proportions": "Добавить пропорцию:",
+  "list_recipe_proportions": "Список пропорций:",
+  "add_ingredient": "Добавить ингридиент",
+  "add_norma": "Добавить норму",
+  "is_mandatory": "Обязательный?",
+  "alternative_could_be": "Альтернативно к этому может быть:",
+  "alternative_among_recipes_could_be": "Альтернативно к этому среди рецептов может быть:",
+
+  "add_alternative_proportions": "Добавить альтернативные пропорции:",
+  "add_alternative_refs": "Добавить альтернативные пропорции среди рецептов:",
+  "required_ingredient": "Обязательный ингридиент",
+  "alternative_proportions_list": "Список альтернативных пропорций",
+  "alternative_refs_list": "Список альтернативных пропорций среди рецептов:",
+  "add_ref": "Добавить ссылку на рецепт",
+
+  "add_references": "Добавить ссылки на рецепты:",
+  "refs_list": "Список ссылок на рецепты:"
 }

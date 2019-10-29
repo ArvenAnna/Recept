@@ -1,0 +1,9 @@
+{
+  "ingredient_name": "Название ингридиента:",
+  "ingredient_description": "Описание ингридиента:",
+  "ingredient_photo": "Фото ингридиента:",
+  "ingredient_parent": "Родительский ингридиент:",
+  "add_ingredient": "Добавьте новый ингридиент",
+  "add_description": "Добавить описание",
+  "add_parent_ingredient": "Добавить родительский ингридиент"
+}

@@ -2,11 +2,12 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/two-fields-add-item-with-checkbox';
 import '../../../components/lists/tags-list';
-import '../../trans-item';
 import './recipe-proportion-edit';
 import {retrieveIngredientsByKeyword} from '../../../utils/asyncRequests';
-import {MAX_SUGGESTIONS_NUMBER} from "../../../../constants/limits";
+import {MAX_SUGGESTIONS_NUMBER} from '../../../../constants/limits';
 import mModal from '../../../model/modal';
+import mTranslations from '../../../model/translations';
+import {t} from '../../../utils/translateUtils';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
@@ -17,7 +18,6 @@ const EDIT_PROPORTION_TEMPLATE = 'edit-proportion-template';
 const TWO_FIELD_LIST_COMPONENT = 'two-fields-add-item-with-checkbox';
 const LIST_COMPONENT = 'tags-list';
 const EDIT_PROPORTION_COMPONENT = 'recipe-proportion-edit';
-const TRANSLATION_COMPONENT = 'trans-item';
 
 const template = `
   <style>
@@ -44,10 +44,12 @@ const template = `
   
   <div id='${CONTAINER}'>
      <div id='${INPUT_CONTAINER}'>
-       <div id='${CAPTION}'>Add recipe proportion:</div>
+       <div id='${CAPTION}'>
+            ${t('create-recipe.add_recipe_proportions')}
+       </div>
        <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
      </div>
-     <${LIST_COMPONENT}></${LIST_COMPONENT}>
+     <${LIST_COMPONENT} list-title='${t('create-recipe.list_recipe_proportions')}'></${LIST_COMPONENT}>
   </div>
   
 `;
@@ -67,7 +69,9 @@ class RecipeProportions extends WebElement {
         return ingredients;
     }
 
-    _render() {
+    async _render() {
+        const firstPlaceholder = await mTranslations.getTranslation('create-recipe.add_ingredient');
+        const secondPlaceholder = await mTranslations.getTranslation('create-recipe.add_norma');
         this.$(TWO_FIELD_LIST_COMPONENT).props = {
             addItemCallback: ({first, second, optional}) => {
                 this._retrieveIngredientsByKeyword(first).then(ingredients => {
@@ -82,20 +86,18 @@ class RecipeProportions extends WebElement {
                         };
                         this.$recipe.proportion = proportion;
                         this.$(LIST_COMPONENT).items = this.$recipe.proportions;
-                        this.$(LIST_COMPONENT).title = 'List of recipe proportions:';
                     }
                 })
 
             },
             getSuggestionsPromise: this._retrieveIngredientsByKeyword,
             renderSuggestionCallback: suggestion => suggestion.name,
-            placeholders: {first: 'Add ingredient', second: 'Add norma'},
+            placeholders: {first: firstPlaceholder, second: secondPlaceholder},
             defaultChecked: true,
-            tooltipContent: 'Is mandatory?'
+            tooltipContent: t('create-recipe.is_mandatory')
         }
 
         this.$(LIST_COMPONENT).props = {
-            title: this.$recipe.proportions && this.$recipe.proportions.length ? 'List of recipe proportions:' : null,
             items: this.$recipe.proportions,
             renderItem: (item) => `${item.ingredientName} - ${item.norma || ''}`,
             removeItemCallback: prop => {
@@ -114,18 +116,18 @@ class RecipeProportions extends WebElement {
                 mModal.open(editTemplate);
             },
             renderTooltip: prop => {
-                let tooltipContent = ''
+                let tooltipContent = '';
                 if (prop.optional) {
-                    tooltipContent = `${tooltipContent}<${TRANSLATION_COMPONENT} key='create-recipe.optional_proportion'></${TRANSLATION_COMPONENT}>`;
+                    tooltipContent = `${tooltipContent}${t('create-recipe.optional_proportion')}`;
                 }
                 if (prop.alternativeProportions && prop.alternativeProportions.length) {
-                    tooltipContent = tooltipContent + '<div>Alternative to this could be:</div>'
+                    tooltipContent = `${tooltipContent}${t('create-recipe.alternative_could_be')}`
                     prop.alternativeProportions.forEach(p => {
                         tooltipContent = tooltipContent + `<div>${p.ingredientName} - ${p.norma || ''}</div>`;
                     })
                 }
                 if (prop.alternativeRefs && prop.alternativeRefs.length) {
-                    tooltipContent = tooltipContent + '<div>Alternative to this among recipes could be:</div>'
+                    tooltipContent = `${tooltipContent}${t('create-recipe.alternative_among_recipes_could_be')}`
                     prop.alternativeRefs.forEach(p => {
                         tooltipContent = tooltipContent + `<div>${p.recipeName} - ${p.norma || ''}</div>`;
                     })

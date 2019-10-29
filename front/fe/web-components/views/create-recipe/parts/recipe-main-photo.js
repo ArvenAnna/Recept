@@ -4,13 +4,14 @@ import '../../../components/file-upload/photo-upload';
 import '../../../components/expandable-block';
 import routes from '../../../../constants/Routes';
 import {noImage} from '../../../../constants/themes';
+import {t} from '../../../utils/translateUtils';
 
 const PHOTO_UPLOAD_COMPONENT = 'photo-upload';
 const EXPANDABLE_BLOCK_COMPONENT = 'expandable-block';
 
 const template = `
-  <${EXPANDABLE_BLOCK_COMPONENT} caption="Add main photo:">
-        <${PHOTO_UPLOAD_COMPONENT} slot="content"></${PHOTO_UPLOAD_COMPONENT}>
+  <${EXPANDABLE_BLOCK_COMPONENT} caption='${t('create-recipe.add_main_photo')}'>
+        <${PHOTO_UPLOAD_COMPONENT} slot='content'></${PHOTO_UPLOAD_COMPONENT}>
   </${EXPANDABLE_BLOCK_COMPONENT}>
 `;
 

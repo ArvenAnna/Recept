@@ -9,6 +9,8 @@ import {retrieveIngredientsByKeyword, retrieveRecipesByKeyword} from '../../../u
 
 import mNewRecipe from '../../../model/newRecipe';
 import mModal from '../../../model/modal';
+import {t} from '../../../utils/translateUtils';
+import mTranslations from '../../../model/translations';
 
 const CONTAINER = 'container';
 const BUTTON_CONTAINER = 'button-container';
@@ -71,34 +73,34 @@ const template = `
   </style>
   
   <div id='${CONTAINER}'>
-     <div id="${NAME}"></div>
+     <div id='${NAME}'></div>
      <div class='${ROW_CONTAINER}'>
         <${INPUT_COMPONENT} id='${NORMA}' placeholder='norma'></${INPUT_COMPONENT}>
         <div id='${CHECKBOX_CONTAINER}'>
             <${CHECKBOX_COMPONENT}></${CHECKBOX_COMPONENT}>
-            <div>required ingredient</div>
+            <div>${t('create-recipe.required_ingredient')}</div>
         </div>
      </div>
      <div id='${ALTERNATIVE_PROPORTIONS}'>
-        <div class='${VERTICAL_PADDING}'>Add alternative proportions:</div>
+        <div class='${VERTICAL_PADDING}'>${t('create-recipe.add_alternative_proportions')}</div>
         <div>
             <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
             <div class='${VERTICAL_PADDING}'>
-                <${LIST_COMPONENT} class='${VERTICAL_PADDING}'></${LIST_COMPONENT}>
+                <${LIST_COMPONENT} class='${VERTICAL_PADDING}' list-title='${t('create-recipe.alternative_proportions_list')}'></${LIST_COMPONENT}>
             </div>
         </div>
      </div>
      <div id='${ALTERNATIVE_REFS}'>
-        <div class='${VERTICAL_PADDING}'>Add alternative reference proportions:</div>
+        <div class='${VERTICAL_PADDING}'>${t('create-recipe.add_alternative_refs')}</div>
         <div>
             <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
             <div class='${VERTICAL_PADDING}'>
-                <${LIST_COMPONENT}></${LIST_COMPONENT}>
+                <${LIST_COMPONENT} list-title='${t('create-recipe.alternative_refs_list')}'></${LIST_COMPONENT}>
             </div>
         </div>
      </div>
      <div id='${BUTTON_CONTAINER}'>
-            <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
+            <${BUTTON_COMPONENT} text=${t('common.save')}></${BUTTON_COMPONENT}>
       </div>
   </div>
   
@@ -136,11 +138,14 @@ class RecipeProportionEdit extends WebElement {
         return recipes;
     }
 
-    _render() {
+    async _render() {
         if (this.$proportion) {
             this.$_id(NAME).textContent = this.$proportion.ingredientName;
             this.$_id(NORMA).value = this.$proportion.norma;
             this.$(CHECKBOX_COMPONENT).value = !this.$proportion.optional;
+
+            const firstPlaceholder = await mTranslations.getTranslation('create-recipe.add_ingredient');
+            const secondPlaceholder = await mTranslations.getTranslation('create-recipe.add_norma');
 
             this.$_id(ALTERNATIVE_PROPORTIONS).querySelector(TWO_FIELD_LIST_COMPONENT).props = {
                 addItemCallback: ({first, second}) => {
@@ -160,11 +165,10 @@ class RecipeProportionEdit extends WebElement {
                 },
                 getSuggestionsPromise: this._retrieveIngredientsByKeyword,
                 renderSuggestionCallback: suggestion => suggestion.name,
-                placeholders: {first: 'Add ingredient', second: 'Add norma'}
+                placeholders: {first: firstPlaceholder, second: secondPlaceholder}
             }
 
             this.$_id(ALTERNATIVE_PROPORTIONS).querySelector(LIST_COMPONENT).props = {
-                title: 'Alternative proportions list:',
                 items: this.alternativeProportions,
                 renderItem: (item) => `${item.ingredientName} - ${item.norma || ''}`,
                 removeItemCallback: prop => {
@@ -173,6 +177,7 @@ class RecipeProportionEdit extends WebElement {
                 }
             }
 
+            const refsPlaceholder = await mTranslations.getTranslation('create-recipe.add_ref');
 
             this.$_id(ALTERNATIVE_REFS).querySelector(TWO_FIELD_LIST_COMPONENT).props = {
                 addItemCallback: ({first, second}) => {
@@ -192,11 +197,10 @@ class RecipeProportionEdit extends WebElement {
                 },
                 getSuggestionsPromise: this._retrieveRecipesByKeyword,
                 renderSuggestionCallback: suggestion => suggestion.name,
-                placeholders: {first: 'Add recipe ref', second: 'Add norma'}
+                placeholders: {first: refsPlaceholder, second: secondPlaceholder}
             }
 
             this.$_id(ALTERNATIVE_REFS).querySelector(LIST_COMPONENT).props = {
-                title: 'Alternative references list:',
                 items: this.alternativeRefs,
                 renderItem: (item) => `${item.recipeName} - ${item.norma || ''}`,
                 removeItemCallback: prop => {
@@ -228,6 +232,9 @@ class RecipeProportionEdit extends WebElement {
         this._saveProportion = this._saveProportion.bind(this);
 
         this.$(BUTTON_COMPONENT).onClick = this._saveProportion;
+
+        mTranslations.getTranslation('create-recipe.add_norma').then(value => this.$_id(NORMA).placeholder = value)
+
     }
 }
 

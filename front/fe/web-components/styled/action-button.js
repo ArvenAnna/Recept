@@ -63,7 +63,7 @@ class ActionButton extends WebElement {
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case buttonAttributes.TEXT:
-                this.$_id(BUTTON).textContent = newValue || '';
+                this.$_id(BUTTON).innerHTML = newValue || '';
                 break;
         }
     }

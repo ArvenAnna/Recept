@@ -10,7 +10,9 @@ import '../../components/file-upload/photo-upload';
 
 import {noImage} from '../../../constants/themes';
 import routes from '../../../constants/Routes';
-import {retrieveIngredientsByKeyword} from "../../utils/asyncRequests";
+import {retrieveIngredientsByKeyword} from '../../utils/asyncRequests';
+import {t} from '../../utils/translateUtils';
+import mTranslations from '../../model/translations';
 
 const CONTAINER = 'ingredient-create';
 
@@ -59,23 +61,23 @@ const template = `
   
   <div id='${CONTAINER}' class='flex-column'>
       <div class='flex'>
-        <span class='label'>Ingredient name:</span> 
+        <span class='label'>${t('ingredients.ingredient_name')}</span> 
         <${INPUT_COMPONENT}></${INPUT_COMPONENT}>
       </div>
       <div class='flex-column'>
-        <span class='label-column'>Ingredient description:</span> 
+        <span class='label-column'>${t('ingredients.ingredient_description')}</span> 
         <${TEXT_COMPONENT}></${TEXT_COMPONENT}>
       </div>
       <div class='flex-column'>
-        <span class='label-column'>Ingredient photo:</span>
+        <span class='label-column'>${t('ingredients.ingredient_photo')}</span>
         <${PHOTO_UPLOAD_COMPONENT}></${PHOTO_UPLOAD_COMPONENT}> 
       </div>
       <div class='flex'>
-        <span class='label'>Parent ingredient:</span> 
+        <span class='label'>${t('ingredients.ingredient_parent')}</span> 
         <${SUGGESTION_INPUT_COMPONENT}></${SUGGESTION_INPUT_COMPONENT}>
         <${REMOVABLE_TAG_COMPONENT}></${REMOVABLE_TAG_COMPONENT}>
       </div>
-      <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
+      <${BUTTON_COMPONENT} text='${t('common.save')}'></${BUTTON_COMPONENT}>
   </div>
 `;
 
@@ -103,12 +105,18 @@ class CreateIngredientPage extends WebElement {
         this.$(BUTTON_COMPONENT).onClick = this._saveIngredient;
     }
 
-    _renderPage() {
+    async _renderPage() {
 
-        this.$(INPUT_COMPONENT).placeholder = 'Add new ingredient';
+        const ingPlaceholder = await mTranslations.getTranslation('ingredients.add_ingredient');
+        const descriptionPlaceholder = await mTranslations.getTranslation('ingredients.add_description');
+        const parentPlaceholder = await mTranslations.getTranslation('ingredients.add_parent_ingredient');
+
+        this.$(INPUT_COMPONENT).placeholder = ingPlaceholder;
         this.$(INPUT_COMPONENT).value = this.$ingredient.name;
-        this.$(TEXT_COMPONENT).placeholder = 'Add description';
+        this.$(TEXT_COMPONENT).placeholder = descriptionPlaceholder;
         this.$(TEXT_COMPONENT).value = this.$ingredient.description;
+
+        this.$(SUGGESTION_INPUT_COMPONENT).placeholder = parentPlaceholder;
 
         this.$(PHOTO_UPLOAD_COMPONENT).props = {
             uploadFileCallback: path => {
@@ -118,7 +126,6 @@ class CreateIngredientPage extends WebElement {
             src: this.$ingredient.imgPath,
             defaultSrc: noImage
         }
-
 
         this.$(REMOVABLE_TAG_COMPONENT).props = {
             removeItemCallback: this._removeParentCallback
@@ -146,8 +153,7 @@ class CreateIngredientPage extends WebElement {
                             this.$(SUGGESTION_INPUT_COMPONENT).style.display = 'none';
                         }
                     })
-                },
-                placeholder: 'Add parent ingredient'
+                }
             }
         }
     }

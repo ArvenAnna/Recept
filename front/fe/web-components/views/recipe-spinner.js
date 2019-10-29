@@ -1,6 +1,7 @@
 import WebElement from '../abstract/web-element';
 import mSpinner from '../model/spinner';
 import {loader} from '../../constants/themes';
+import {t} from "../utils/translateUtils";
 
 const CONTAINER = 'container';
 const CONTENT_WRAPPER = 'content-wrapper';
@@ -31,18 +32,16 @@ const template = `
       }
       
       img {
-            /*width: 100%;*/
-          /*height: 100%;*/
-          /*object-fit: contain;*/
+       
       }
       
   </style>
   
   <div id='${CONTAINER}'>
         <div id='${CONTENT_WRAPPER}'>
-            ... обработка ...
+            ... ${t('common.processing')} ...
             <img src='${loader}'/>
-            ... обработка ...
+            ... ${t('common.processing')} ...
         </div>
   </div>
   
@@ -59,14 +58,7 @@ class RecipeSpinner extends WebElement {
     }
 
     _spin(spinner) {
-        if (spinner.loading) {
-            // this.$_id(CONTENT_WRAPPER).innerHTML = '';
-            // this.$_id(CONTENT_WRAPPER).appendChild(modal.template);
-            this.$_id(CONTAINER).style.display = 'flex';
-        } else {
-            // this.$_id(CONTENT_WRAPPER).innerHTML = '';
-            this.$_id(CONTAINER).style.display = 'none';
-        }
+        this.$_id(CONTAINER).style.display = spinner.loading ? 'flex' : 'none';
     }
 
     disconnectedCallback() {

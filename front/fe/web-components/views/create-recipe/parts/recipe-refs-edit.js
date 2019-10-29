@@ -5,6 +5,8 @@ import '../../../styled/check-box';
 
 import mNewRecipe from '../../../model/newRecipe';
 import mModal from '../../../model/modal';
+import {t} from '../../../utils/translateUtils';
+import mTranslations from '../../../model/translations';
 
 const CONTAINER = 'container';
 const BUTTON_CONTAINER = 'button-container';
@@ -56,16 +58,16 @@ const template = `
   </style>
   
   <div id='${CONTAINER}'>
-     <div id="${NAME}"></div>
+     <div id='${NAME}'></div>
      <div class='${ROW_CONTAINER}'>
-        <${INPUT_COMPONENT} id='${NORMA}' placeholder='norma'></${INPUT_COMPONENT}>
+        <${INPUT_COMPONENT} id='${NORMA}'></${INPUT_COMPONENT}>
         <div id='${CHECKBOX_CONTAINER}'>
             <${CHECKBOX_COMPONENT}></${CHECKBOX_COMPONENT}>
             <div>required ingredient</div>
         </div>
      </div>
      <div id='${BUTTON_CONTAINER}'>
-            <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
+            <${BUTTON_COMPONENT} text=${t('common.save')}></${BUTTON_COMPONENT}>
       </div>
   </div>
   
@@ -103,6 +105,8 @@ class RecipeRefsEdit extends WebElement {
         this._saveRef = this._saveRef.bind(this);
 
         this.$(BUTTON_COMPONENT).onClick = this._saveRef;
+        mTranslations.getTranslation('create-recipe.add_norma').then(value => this.$_id(NORMA).placeholder = value)
+
     }
 }
 

@@ -19,6 +19,7 @@ services:
         - recept_app
       volumes:
         - ./front/fe/svg:/usr/src/app/fe/svg
+        - ./front/fe/translations:/usr/src/app/fe/translations
         - ./front/fe/utils:/usr/src/app/fe/utils
         - ./front/fe/dev-server.js:/usr/src/app/fe/dev-server.js
         - ./front/fe/bin:/usr/src/app/fe/bin

@@ -1,0 +1,9 @@
+{
+  "ingredient_name": "Ingredient name:",
+  "ingredient_description": "Ingredient description:",
+  "ingredient_photo": "Ingredient photo:",
+  "ingredient_parent": "Parent ingredient:",
+  "add_ingredient": "Add new ingredient",
+  "add_description": "Add description",
+  "add_parent_ingredient": "Add parent ingredient"
+}

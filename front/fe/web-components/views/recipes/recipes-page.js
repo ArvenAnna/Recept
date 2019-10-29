@@ -1,5 +1,6 @@
 import WebElement from '../../abstract/web-element';
 import { noImage } from '../../../constants/themes';
+import {t} from "../../utils/translateUtils";
 
 const CONTAINER = 'recipe_list_page';
 const RECIPE_TEMPLATE = 'recipe_template';
@@ -94,7 +95,7 @@ class RecipesPage extends WebElement {
             });
 
         } else {
-            this.$_id(CONTAINER).textContent = 'No recipes found';
+            this.$_id(CONTAINER).innerHTML = t('recipe.no_recipes_found');
         }
     }
 

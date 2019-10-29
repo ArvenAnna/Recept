@@ -2,6 +2,8 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/drop-down/drop-down';
 
+import {t} from '../../../utils/translateUtils';
+
 const CONTAINER = 'container';
 const CAPTION = 'caption';
 
@@ -21,7 +23,9 @@ const template = `
   </style>
   
   <div id='${CONTAINER}'>
-       <div id='${CAPTION}'>Recipe department:</div>
+       <div id='${CAPTION}'>
+            ${t('create-recipe.recipe_department')}
+       </div>
        <${DROP_DOWN_COMPONENT}></${DROP_DOWN_COMPONENT}>
   </div>
   

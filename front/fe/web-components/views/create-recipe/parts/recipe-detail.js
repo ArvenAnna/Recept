@@ -2,11 +2,14 @@ import WebElement from '../../../abstract/web-element';
 import '../../../components/file-upload/photo-upload';
 import '../../../components/expandable-block';
 import '../../../components/step-blocks';
-
 import '../../../styled/text-area';
 import '../../../styled/action-button';
+
 import routes from '../../../../constants/Routes';
 import {noImage} from '../../../../constants/themes';
+
+import mTranslations from '../../../model/translations';
+import {t} from '../../../utils/translateUtils';
 
 const CONTAINER = 'container';
 const ADD_ICON = 'add-icon';
@@ -42,11 +45,11 @@ const template = `
    
   </style>
   
-    <${EXPANDABLE_BLOCK_COMPONENT} caption="Add description with photo in free form:">
-        <${STEPS_COMPONENT} slot="content">
-            <${PHOTO_UPLOAD_COMPONENT} slot="${STEPS.ADD_PHOTO_STEP}"></${PHOTO_UPLOAD_COMPONENT}>
-            <${TEXT_COMPONENT} placeholder="Add detail's description" value="" slot="${STEPS.ADD_DESCRIPTION_STEP}"></${TEXT_COMPONENT}>
-            <${BUTTON_COMPONENT} text="Add" slot="${STEPS.PRESS_ADD_BUTTON_STEP}"></${BUTTON_COMPONENT}> 
+    <${EXPANDABLE_BLOCK_COMPONENT} caption='${t('create-recipe.add_description_with_photo')}'> 
+        <${STEPS_COMPONENT} slot='content'>
+            <${PHOTO_UPLOAD_COMPONENT} slot='${STEPS.ADD_PHOTO_STEP}'></${PHOTO_UPLOAD_COMPONENT}>
+            <${TEXT_COMPONENT} value='' slot='${STEPS.ADD_DESCRIPTION_STEP}'></${TEXT_COMPONENT}>
+            <${BUTTON_COMPONENT} text='${t('create-recipe.add_button')}' slot='${STEPS.PRESS_ADD_BUTTON_STEP}'></${BUTTON_COMPONENT}> 
         </${STEPS_COMPONENT}>
    </${EXPANDABLE_BLOCK_COMPONENT}>
 `;
@@ -63,13 +66,20 @@ class RecipeDetail extends WebElement {
 
         this._onAdd = this._onAdd.bind(this);
         this._render = this._render.bind(this);
+        this._init = this._init.bind(this);
 
         this.$file = null;
 
+        this._init();
+    }
+
+    async _init() {
         this.$(BUTTON_COMPONENT).onClick = this._onAdd;
         this.$(STEPS_COMPONENT).props = {
             blockNames: Object.values(STEPS)
         }
+        const placeholder = await mTranslations.getTranslation('create-recipe.add_details_description');
+        this.$(TEXT_COMPONENT).placeholder = placeholder;
     }
 
     _render() {

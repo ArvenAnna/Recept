@@ -118,7 +118,7 @@ class InputText extends WebElement {
             this.$validationErrors.forEach(error => {
                 if (!error.pattern.test(this.value)) {
                     this.$(INPUT).classList.add('error');
-                    this.$_id(ERROR_TEXT).textContent = error.errorText;
+                    this.$_id(ERROR_TEXT).innerHTML = error.errorText;
                     isErrorPresent = true;
                 }
             });

@@ -8,6 +8,8 @@ import './parts/recipe-proportions';
 import './parts/recipe-department';
 import './parts/recipe-main-photo';
 import './parts/recipe-details';
+import {t} from '../../utils/translateUtils';
+import mTranslations from '../../model/translations';
 
 const CONTAINER = 'create-recipe-page';
 
@@ -57,8 +59,8 @@ const template = `
   
   <div id='${CONTAINER}'>
       <div id='${RECIPE_NAME_CONTAINER}'>
-        <div id='${RECIPE_NAME_CAPTION}'>Recipe name:</div>
-        <input-text id='${RECIPE_NAME}' placeholder='Enter name'/>
+        <div id='${RECIPE_NAME_CAPTION}'>${t('create-recipe.recipe_name')}</div>
+        <input-text id='${RECIPE_NAME}'/>
       </div>
       
       <${RECIPE_MAIN_PHOTO_COMPONENT}></${RECIPE_MAIN_PHOTO_COMPONENT}>
@@ -72,11 +74,11 @@ const template = `
       <${RECIPE_DETAILS_COMPONENT}></${RECIPE_DETAILS_COMPONENT}>
       
       <div id='${RECIPE_NAME_CONTAINER}'>
-            <${RECIPE_DESCRIPTION_COMPONENT} placeholder="Add description"></${RECIPE_DESCRIPTION_COMPONENT}>
+            <${RECIPE_DESCRIPTION_COMPONENT}></${RECIPE_DESCRIPTION_COMPONENT}>
       </div>
       
       <div id='${BUTTON_CONTAINER}'>
-            <${BUTTON_COMPONENT} text="Save"></${BUTTON_COMPONENT}>
+            <${BUTTON_COMPONENT} text='${t('common.save')}'></${BUTTON_COMPONENT}>
       </div>
   </div>
 `;
@@ -108,8 +110,12 @@ class CreateRecipePage extends WebElement {
         this.$(BUTTON_COMPONENT).onClick = this._saveRecipe;
         this.$_id(RECIPE_NAME).validationErrorsOnBlur = [{
             pattern: /.+/,
-            errorText: 'Recipe name should not be empty'
+            errorText: t('create-recipe.error_empty_recipe')
         }];
+
+        mTranslations.getTranslation('create-recipe.enter_name').then(value => this.$_id(RECIPE_NAME).placeholder = value)
+        mTranslations.getTranslation('create-recipe.add_description').then(value => this.$(RECIPE_DESCRIPTION_COMPONENT).placeholder = value)
+
     }
 
     _saveRecipe() {

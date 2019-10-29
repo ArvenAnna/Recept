@@ -8,6 +8,8 @@ import './components/drop-down/drop-down';
 import {retrieveIngredientsByIds, retrieveIngredientsByKeyword, retrieveRecipesByIds, retrieveRecipesByKeyword} from './utils/asyncRequests';
 import mDepartments from './model/departments';
 import mRecipeSearch from './model/recipeSearch';
+import {t} from "./utils/translateUtils";
+import mTranslations from "./model/translations";
 
 const CONTAINER = 'search-container';
 
@@ -57,20 +59,20 @@ const template = `
     </style>
 
     <div id="${CONTAINER}">
-        <${INPUT_COMPONENT} placeholder='search'></${INPUT_COMPONENT}>
-        <${EXPANDABLE_COMPONENT} caption='Additional search params' open>
+        <${INPUT_COMPONENT}></${INPUT_COMPONENT}>
+        <${EXPANDABLE_COMPONENT} caption='${t('search.additional_params')}' open>
             <div id='${ADDITIONAL_SEARCH_PARAMS}' slot='content'>
                 <${DROP_DOWN_COMPONENT} ></${DROP_DOWN_COMPONENT}>
             
-                <${SUGGESTIONS_COMPONENT} id='${INGREDIENT_CHOOSER}' placeholder='add ingredient'></${SUGGESTIONS_COMPONENT}>
+                <${SUGGESTIONS_COMPONENT} id='${INGREDIENT_CHOOSER}'></${SUGGESTIONS_COMPONENT}>
                 <${LIST_COMPONENT} id='${INGREDIENT_LIST}'></${LIST_COMPONENT}>
 
-                <${SUGGESTIONS_COMPONENT} id='${REF_CHOOSER}' placeholder='add reference'></${SUGGESTIONS_COMPONENT}>
+                <${SUGGESTIONS_COMPONENT} id='${REF_CHOOSER}'></${SUGGESTIONS_COMPONENT}>
                 <${LIST_COMPONENT} id='${REF_LIST}'></${LIST_COMPONENT}>
             
                 <div id='${BUTTONS_CONTAINER}'>
-                    <${BUTTON_COMPONENT} text='Apply' id='${APPLY_BUTTON}'></${BUTTON_COMPONENT}>
-                    <${BUTTON_COMPONENT} text='Reset' id='${RESET_BUTTON}'></${BUTTON_COMPONENT}>
+                    <${BUTTON_COMPONENT} text='${t('search.apply')}' id='${APPLY_BUTTON}'></${BUTTON_COMPONENT}>
+                    <${BUTTON_COMPONENT} text='${t('search.reset')}' id='${RESET_BUTTON}'></${BUTTON_COMPONENT}>
                 </div>
                
             </div>
@@ -104,6 +106,15 @@ class RecipeSearch extends WebElement {
     }
 
     async _render() {
+        const ingPlaceholder = await mTranslations.getTranslation('create-recipe.add_ingredient');
+        const refPlaceholder = await mTranslations.getTranslation('create-recipe.add_ref');
+        const searchPlaceholder = await mTranslations.getTranslation('search.search');
+        const allName = await mTranslations.getTranslation('search.all');
+
+        this.$(INPUT_COMPONENT).placeholder = searchPlaceholder;
+        this.$_id(INGREDIENT_CHOOSER).placeholder = ingPlaceholder;
+        this.$_id(REF_CHOOSER).placeholder = refPlaceholder;
+
         this.$chosenIngredients = mRecipeSearch.ingredients && mRecipeSearch.ingredients.length
             ? await retrieveIngredientsByIds(mRecipeSearch.ingredients) : [];
         this.$chosenRefs = mRecipeSearch.refs && mRecipeSearch.refs.length ? await retrieveRecipesByIds(mRecipeSearch.refs) : [];
@@ -114,10 +125,11 @@ class RecipeSearch extends WebElement {
             chooseItemCallback: item => {
                 this.$chosenDepartment = item;
                 },
-            items: [{id: null, name: 'All'}, ...mDepartments.departments],
+            items: [{id: null, name: allName}, ...mDepartments.departments],
             renderItem: item => item.name,
             chosenItemIndex: this.$chosenDepartment ? mDepartments.departments.indexOf(this.$chosenDepartment) + 1 : 0
         }
+
         this.$_id(INGREDIENT_CHOOSER).props = {
             getSuggestionsPromise: retrieveIngredientsByKeyword,
             renderSuggestionCallback: suggestion => suggestion.name,
@@ -130,8 +142,7 @@ class RecipeSearch extends WebElement {
                         this.$_id(INGREDIENT_LIST).items = this.$chosenIngredients;
                     }
                 })
-            },
-            placeholder: 'add ingredient'
+            }
         }
         this.$_id(INGREDIENT_LIST).props = {
             renderItem: item => item.name,
@@ -152,8 +163,7 @@ class RecipeSearch extends WebElement {
                         this.$_id(REF_LIST).items = this.$chosenRefs;
                     }
                 })
-            },
-            placeholder: 'add reference'
+            }
         }
         this.$_id(REF_LIST).props = {
             renderItem: item => item.name,

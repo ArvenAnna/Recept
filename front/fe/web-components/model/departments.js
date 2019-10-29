@@ -1,7 +1,7 @@
 import routes from '../../constants/Routes';
 import Model from '../abstract/model';
-import {getResponse} from "../utils/httpUtils";
-import mNotification from "./notification";
+import {getResponse} from '../utils/httpUtils';
+import mNotification from './notification';
 
 class Departments extends Model {
 

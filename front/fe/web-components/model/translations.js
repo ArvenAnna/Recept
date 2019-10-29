@@ -8,7 +8,7 @@ export const SUPPORTED_LANGUAGES = {
     EN: 'en'
 }
 
-export const DEFAULT_LANGUAGE = SUPPORTED_LANGUAGES.RU;
+export const DEFAULT_LANGUAGE = SUPPORTED_LANGUAGES.EN;
 ;
 class Translations extends Model {
 
@@ -31,25 +31,45 @@ class Translations extends Model {
         return this.$bundles[`${bundle}`][`${transKey}`];
     }
 
+    // async wrap(key, fn) {
+    //     this.addSubscriber(this._callWrappedFunction.bind(null, key, fn))
+    //     // const trans = await this.getTranslation(key);
+    //     // fn(trans);
+    // }
+    //
+    // async _callWrappedFunction(key, fn) {
+    //     const trans = await this.getTranslation(key);
+    //     fn(trans);
+    // }
+
     constructor() {
         super();
 
         this.$lang = DEFAULT_LANGUAGE;
         this.$bundles = {};
+        this.$bundlePromises = {}
 
         this._getBundle = this._getBundle.bind(this);
         this.getTranslation = this.getTranslation.bind(this);
+        // this.wrap = this.wrap.bind(this);
+        // this._callWrappedFunction = this._callWrappedFunction.bind(this);
     }
 
     async _getBundle(bundle) {
-        return fetch(routes.GET_TRANSLATION(this.$lang, bundle))
+        if (this.$bundlePromises[`${bundle}`]) {
+            return await this.$bundlePromises[`${bundle}`];
+        }
+        this.$bundlePromises[`${bundle}`] = fetch(routes.GET_TRANSLATION(this.$lang, bundle))
             .then(getResponse)
             .then(resp => {
                 this.$bundles[`${bundle}`] = resp;
+                this.$bundlePromises[`${bundle}`] = null;
             })
             .catch(e => {
                 mNotification.message = e.message;
+                this.$bundlePromises[`${bundle}`] = null;
             });
+        return await this.$bundlePromises[`${bundle}`];
     }
 
 }

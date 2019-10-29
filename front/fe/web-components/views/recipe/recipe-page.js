@@ -6,6 +6,7 @@ import '../../components/lists/tags-list';
 import './parts/recipe-page-proportions';
 import { noImage } from '../../../constants/themes';
 import { goTo } from '../../router/utils';
+import {t} from "../../utils/translateUtils";
 
 const CONTAINER = 'recipe_page';
 const RECIPE_DETAIL_TEMPLATE = 'recipe_detail_template';
@@ -145,7 +146,7 @@ const template = `
           <${PROPORTIONS_COMPONENT}></${PROPORTIONS_COMPONENT}>
       </div>  
       <div id='${REFERENCES}'>
-          <${LIST_COMPONENT} list-title='Recipe references:'></${LIST_COMPONENT}>
+          <${LIST_COMPONENT} list-title='${t('recipe.recipe_refs')}'></${LIST_COMPONENT}>
       </div>      
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  

@@ -2,6 +2,7 @@ import WebElement from '../../../abstract/web-element';
 
 import '../../../components/lists/tags-list';
 import { goTo } from '../../../router/utils';
+import {t} from "../../../utils/translateUtils";
 
 const CONTAINER = 'recipe-page-proportions-container';
 const PROPORTIONS = 'recipe-page-proportions';
@@ -23,7 +24,7 @@ const template = `
           <${LIST_COMPONENT} id='${PROPORTIONS_LIST}'></${LIST_COMPONENT}>
       </div> 
       <div id='${PROPORTIONS_OPTIONAL}'>
-          <${LIST_COMPONENT} list-title='Optional:' id='${PROPORTIONS_LIST_OPTIONAL}'></${LIST_COMPONENT}>
+          <${LIST_COMPONENT} list-title='${t('recipe.optional')}' id='${PROPORTIONS_LIST_OPTIONAL}'></${LIST_COMPONENT}>
       </div>   
   </div>
 `;
@@ -51,15 +52,15 @@ class RecipePageProportions extends WebElement {
             renderTooltip: prop => {
                 let tooltipContent = ''
                 if (prop.alternativeProportions && prop.alternativeProportions.length) {
-                    tooltipContent = tooltipContent + '<div>Alternative to this could be:</div>'
+                    tooltipContent = `${tooltipContent}<div>${t('create-recipe.alternative_could_be')}</div>`
                     prop.alternativeProportions.forEach(p => {
-                        tooltipContent = tooltipContent + `<div>${p.ingredientName} - ${p.norma || ''}</div>`;
+                        tooltipContent = `${tooltipContent}<div>${p.ingredientName} - ${p.norma || ''}</div>`;
                     })
                 }
                 if (prop.alternativeRefs && prop.alternativeRefs.length) {
-                    tooltipContent = tooltipContent + '<div>Alternative to this among recipes could be:</div>'
+                    tooltipContent = `${tooltipContent}<div>${t('create-recipe.alternative_among_recipes_could_be')}</div>`
                     prop.alternativeRefs.forEach(p => {
-                        tooltipContent = tooltipContent + `<div>${p.recipeName} - ${p.norma || ''}</div>`;
+                        tooltipContent = `${tooltipContent}<div>${p.recipeName} - ${p.norma || ''}</div>`;
                     })
                 }
                 return tooltipContent;

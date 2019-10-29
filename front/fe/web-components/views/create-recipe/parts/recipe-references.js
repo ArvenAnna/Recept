@@ -6,6 +6,8 @@ import './recipe-refs-edit';
 
 import {retrieveRecipesByKeyword} from '../../../utils/asyncRequests';
 import mModal from '../../../model/modal';
+import {t} from '../../../utils/translateUtils';
+import mTranslations from '../../../model/translations';
 
 const CONTAINER = 'container';
 const CAPTION = 'caption';
@@ -44,10 +46,10 @@ const template = `
   
   <div id='${CONTAINER}'>
      <div id='${INPUT_CONTAINER}'>
-       <div id='${CAPTION}'>Add recipe reference:</div>
+       <div id='${CAPTION}'>${t('create-recipe.add_references')}</div>
        <${TWO_FIELD_LIST_COMPONENT}></${TWO_FIELD_LIST_COMPONENT}>
      </div>
-     <div id='${LIST_CONTAINER}'><${LIST_COMPONENT}></${LIST_COMPONENT}></div>
+     <div id='${LIST_CONTAINER}'><${LIST_COMPONENT} list-title='${t('create-recipe.refs_list')}'></${LIST_COMPONENT}></div>
   </div>
   
 `;
@@ -71,7 +73,10 @@ class RecipeReferences extends WebElement {
         return recipes;
     }
 
-    _render() {
+    async _render() {
+        const firstPlaceholder = await mTranslations.getTranslation('create-recipe.add_ref');
+        const secondPlaceholder = await mTranslations.getTranslation('create-recipe.add_norma');
+
         this.$(TWO_FIELD_LIST_COMPONENT).props = {
             getSuggestionsPromise: this._retrieveRecipesByKeyword,
             renderSuggestionCallback: suggestion => suggestion.name,
@@ -91,13 +96,12 @@ class RecipeReferences extends WebElement {
                     }
                 })
             },
-            placeholders: {first: 'Add recipe ref', second: 'Add norma'},
+            placeholders: {first: firstPlaceholder, second: secondPlaceholder},
             defaultChecked: true,
-            tooltipContent: 'Is mandatory?'
+            tooltipContent: t('create-recipe.is_mandatory')
         }
 
         this.$(LIST_COMPONENT).props = {
-            title: 'List of recipe references:',
             items: this.$recipe.refs,
             renderItem: (item) => `${item.recipeName} - ${item.norma || ''}`,
             removeItemCallback: ref => {
