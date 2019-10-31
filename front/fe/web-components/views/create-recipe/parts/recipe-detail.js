@@ -68,16 +68,19 @@ class RecipeDetail extends WebElement {
         this._render = this._render.bind(this);
         this._init = this._init.bind(this);
 
+        mTranslations.addSubscriber(this._init);
+
         this.$file = null;
+
+        this.$(BUTTON_COMPONENT).onClick = this._onAdd;
+        this.$(STEPS_COMPONENT).props = {
+            blockNames: Object.values(STEPS)
+        };
 
         this._init();
     }
 
     async _init() {
-        this.$(BUTTON_COMPONENT).onClick = this._onAdd;
-        this.$(STEPS_COMPONENT).props = {
-            blockNames: Object.values(STEPS)
-        }
         const placeholder = await mTranslations.getTranslation('create-recipe.add_details_description');
         this.$(TEXT_COMPONENT).placeholder = placeholder;
     }
@@ -105,6 +108,10 @@ class RecipeDetail extends WebElement {
 
             this.$addDetail(detail);
         }
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._init);
     }
 }
 

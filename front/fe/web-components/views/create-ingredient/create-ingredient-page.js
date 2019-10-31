@@ -102,7 +102,13 @@ class CreateIngredientPage extends WebElement {
         this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
         this._removeParentCallback = this._removeParentCallback.bind(this);
 
+        mTranslations.addSubscriber(this._renderPage);
+
         this.$(BUTTON_COMPONENT).onClick = this._saveIngredient;
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._renderPage);
     }
 
     async _renderPage() {

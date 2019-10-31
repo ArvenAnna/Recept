@@ -1,5 +1,7 @@
 import Model from '../abstract/model';
 import mTranslations from "./translations";
+import mRecipeSearch from "./recipeSearch";
+import mDepartments from "./departments";
 
 const NEW_RECIPE_ID = 1;
 const INGREDIENTS_ID = 2;
@@ -16,6 +18,8 @@ class Header extends Model {
     constructor() {
         super();
 
+        mTranslations.addSubscriber(this._setTranslations);
+
         this.$menu = {
             NEW_RECIPE: { trans: mTranslations.getTranslation('common.new_recipe'), id: NEW_RECIPE_ID, linkFn: () => '/recipe', active: true },
             INGREDIENTS: { trans: mTranslations.getTranslation('common.ingredients'), id: INGREDIENTS_ID, linkFn: () =>'/ingredients', active: true },
@@ -29,16 +33,25 @@ class Header extends Model {
         this.addIngredientEditButton = this.addIngredientEditButton.bind(this);
         this.removeIngredientEditButton = this.removeIngredientEditButton.bind(this);
         this._initButtons = this._initButtons.bind(this);
+        this._setTranslations = this._setTranslations.bind(this);
 
         this._initButtons();
     }
 
-    async _initButtons() {
+    async _setTranslations() {
         const translations = await Promise.all(Object.values(this.$menu).map(v => v.trans));
-
         Object.values(this.$menu).forEach((value, i) => {
             value.name = translations[i];
         });
+    }
+
+    async _initButtons() {
+        // const translations = await Promise.all(Object.values(this.$menu).map(v => v.trans));
+
+        await this._setTranslations();
+        // Object.values(this.$menu).forEach((value, i) => {
+        //     value.name = translations[i];
+        // });
 
         this.$menu.NEW_RECIPE.to = this.$menu.NEW_RECIPE.linkFn();
         this.$menu.INGREDIENTS.to = this.$menu.INGREDIENTS.linkFn();
@@ -66,6 +79,10 @@ class Header extends Model {
     removeIngredientEditButton() {
         this.$menu.EDIT_INGREDIENT.active = false;
         this.notifySubscribers();
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._setTranslations);
     }
 }
 

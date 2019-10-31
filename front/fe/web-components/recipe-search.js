@@ -92,11 +92,13 @@ class RecipeSearch extends WebElement {
         this._onKeyPress = this._onKeyPress.bind(this);
         this._onApplyAdditionalSearch = this._onApplyAdditionalSearch.bind(this);
         this._onResetAdditionalSearch = this._onResetAdditionalSearch.bind(this);
+        this._renderDropdown = this._renderDropdown.bind(this);
 
         mDepartments.addSubscriber(this._render);
         mDepartments.retrieve();
 
         mRecipeSearch.addSubscriber(this._render);
+        mTranslations.addSubscriber(this._render);
 
         this.$(INPUT_COMPONENT).addEventListener('keydown', this._onKeyPress);
         this.$_id(APPLY_BUTTON).addEventListener('click', this._onApplyAdditionalSearch);
@@ -203,6 +205,7 @@ class RecipeSearch extends WebElement {
     disconnectedCallback() {
         mDepartments.removeSubscriber(this._render);
         mRecipeSearch.removeSubscriber(this._render);
+        mTranslations.removeSubscriber(this._render);
     }
 }
 

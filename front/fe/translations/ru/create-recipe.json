@@ -4,9 +4,9 @@
   "add_description": "Добавить описание",
   "error_empty_recipe": "Название рецепта не должно быть пустым",
 
-  "add_main_photo": "Добавте главное фото:",
+  "add_main_photo": "Добавьте главное фото:",
 
-  "recipe_department": "Recipe department:",
+  "recipe_department": "Раздел рецепта:",
 
   "add_description_with_photo": "Добавьте описание с фото в свободной форме:",
   "add_details_description": "добавить описание",

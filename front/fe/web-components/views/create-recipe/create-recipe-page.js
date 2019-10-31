@@ -106,6 +106,9 @@ class CreateRecipePage extends WebElement {
 
         this._renderPage = this._renderPage.bind(this);
         this._saveRecipe = this._saveRecipe.bind(this);
+        this._init = this._init.bind(this);
+
+        mTranslations.addSubscriber(this._init);
 
         this.$(BUTTON_COMPONENT).onClick = this._saveRecipe;
         this.$_id(RECIPE_NAME).validationErrorsOnBlur = [{
@@ -113,9 +116,13 @@ class CreateRecipePage extends WebElement {
             errorText: t('create-recipe.error_empty_recipe')
         }];
 
+        this._init();
+
+    }
+
+    _init() {
         mTranslations.getTranslation('create-recipe.enter_name').then(value => this.$_id(RECIPE_NAME).placeholder = value)
         mTranslations.getTranslation('create-recipe.add_description').then(value => this.$(RECIPE_DESCRIPTION_COMPONENT).placeholder = value)
-
     }
 
     _saveRecipe() {
@@ -144,6 +151,10 @@ class CreateRecipePage extends WebElement {
         this.$(RECIPE_PROPORTIONS_COMPONENT).recipe = this.$recipe;
         this.$(RECIPE_MAIN_PHOTO_COMPONENT).recipe = this.$recipe;
         this.$(RECIPE_DETAILS_COMPONENT).recipe = this.$recipe;
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._init);
     }
 
 }

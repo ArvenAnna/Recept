@@ -127,6 +127,12 @@ class RecipeReferences extends WebElement {
 
         this._retrieveRecipesByKeyword = this._retrieveRecipesByKeyword.bind(this);
         this._render = this._render.bind(this);
+
+        mTranslations.addSubscriber(this._render);
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._render);
     }
 }
 

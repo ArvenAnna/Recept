@@ -93,9 +93,9 @@ class RemovableImageWithEditableText extends WebElement {
 
         this.$_id(ADD_ICON).addEventListener('click', this._editText);
         this.$_id(TEXT).addEventListener('click', this._openEditMode);
-        this.$(TEXT_COMPONENT).callbacks = {
-            blur: this._closeEditMode
-        }
+        // this.$(TEXT_COMPONENT).callbacks = {
+        //     blur: this._closeEditMode
+        // }
     }
 
     _openEditMode() {

@@ -1,7 +1,7 @@
 import WebElement from '../../abstract/web-element';
 import '../image/removable-image-with-editable-text';
 
-const CONTAINER = 'items_container';
+const CONTAINER = 'container';
 const TITLE = 'title';
 
 const ITEM_TEMPLATE = 'item_template';
@@ -126,7 +126,8 @@ class DraggableImageList extends WebElement {
     _renderItems() {
         this.$_id(ITEMS_CONTAINER).innerHTML = "";
         if (this.$transformedData.length) {
-            this.reveal_id(CONTAINER);
+            this.$_id(CONTAINER).style.display = 'block';
+            // this.reveal_id(CONTAINER);
         } else {
             this.hide_id(CONTAINER);
         }

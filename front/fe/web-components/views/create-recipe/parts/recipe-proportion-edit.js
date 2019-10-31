@@ -139,6 +139,7 @@ class RecipeProportionEdit extends WebElement {
     }
 
     async _render() {
+        mTranslations.getTranslation('create-recipe.add_norma').then(value => this.$_id(NORMA).placeholder = value);
         if (this.$proportion) {
             this.$_id(NAME).textContent = this.$proportion.ingredientName;
             this.$_id(NORMA).value = this.$proportion.norma;
@@ -231,10 +232,13 @@ class RecipeProportionEdit extends WebElement {
         this._render = this._render.bind(this);
         this._saveProportion = this._saveProportion.bind(this);
 
+        mTranslations.addSubscriber(this._render);
+
         this.$(BUTTON_COMPONENT).onClick = this._saveProportion;
+    }
 
-        mTranslations.getTranslation('create-recipe.add_norma').then(value => this.$_id(NORMA).placeholder = value)
-
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._render);
     }
 }
 

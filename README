@@ -20,9 +20,7 @@ Features:
 - recipe pagination
 - add possibility to get menu made by ingredients (with separate list of always present ingredients)
 - add possibility to separate set of details
-- localization
 
 Next bugs/features
 - textarea make it autoresizable, remove content jumping when try to edit detail's text
-- instead of tooltip about alternative ingredient add expander on view page
 - localization - static translate not working

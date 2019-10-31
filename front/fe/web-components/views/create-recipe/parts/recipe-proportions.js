@@ -142,6 +142,12 @@ class RecipeProportions extends WebElement {
 
         this._retrieveIngredientsByKeyword = this._retrieveIngredientsByKeyword.bind(this);
         this._render = this._render.bind(this);
+
+        mTranslations.addSubscriber(this._render);
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._render);
     }
 }
 

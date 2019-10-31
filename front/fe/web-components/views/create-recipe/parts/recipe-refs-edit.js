@@ -83,6 +83,8 @@ class RecipeRefsEdit extends WebElement {
     }
 
     _render() {
+        mTranslations.getTranslation('create-recipe.add_norma').then(value => this.$_id(NORMA).placeholder = value)
+
         if (this.$ref) {
             this.$_id(NAME).textContent = this.$ref.recipeName;
             this.$_id(NORMA).value = this.$ref.norma;
@@ -104,9 +106,13 @@ class RecipeRefsEdit extends WebElement {
         this._render = this._render.bind(this);
         this._saveRef = this._saveRef.bind(this);
 
-        this.$(BUTTON_COMPONENT).onClick = this._saveRef;
-        mTranslations.getTranslation('create-recipe.add_norma').then(value => this.$_id(NORMA).placeholder = value)
+        mTranslations.addSubscriber(this._render);
 
+        this.$(BUTTON_COMPONENT).onClick = this._saveRef;
+    }
+
+    disconnectedCallback() {
+        mTranslations.removeSubscriber(this._render);
     }
 }
 
