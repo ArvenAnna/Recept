@@ -34,7 +34,7 @@ const template = `
 class CheckBoxWithTooltip extends WebElement {
 
     set content(content) {
-        this.$_id(TOOLTIP_CONTENT).textContent = content;
+        this.$_id(TOOLTIP_CONTENT).innerHTML = content;
     }
 
     set value(v) {

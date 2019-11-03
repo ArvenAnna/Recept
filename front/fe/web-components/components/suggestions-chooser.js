@@ -27,8 +27,11 @@ const template = `
   
 `;
 
-//todo: make support of placeholder as attribute
 class SuggestionsChooser extends WebElement {
+
+    set placeholder(placeholder) {
+        this.$(INPUT_COMPONENT).placeholder = placeholder;
+    }
 
     set props({getSuggestionsPromise, renderSuggestionCallback, placeholder, addItemCallback}) {
 
@@ -43,7 +46,9 @@ class SuggestionsChooser extends WebElement {
             }
         }
 
-        this.$(INPUT_COMPONENT).placeholder = placeholder;
+        if (placeholder) {
+            this.$(INPUT_COMPONENT).placeholder = placeholder;
+        }
         this.$(INPUT_COMPONENT).iconClick = addItemCallback;
     }
 

@@ -92,7 +92,6 @@ class RecipeSearch extends WebElement {
         this._onKeyPress = this._onKeyPress.bind(this);
         this._onApplyAdditionalSearch = this._onApplyAdditionalSearch.bind(this);
         this._onResetAdditionalSearch = this._onResetAdditionalSearch.bind(this);
-        this._renderDropdown = this._renderDropdown.bind(this);
 
         mDepartments.addSubscriber(this._render);
         mDepartments.retrieve();

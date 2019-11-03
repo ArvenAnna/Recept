@@ -29,6 +29,7 @@ const template = `
     #${DESCRIPTION} {
         text-align: justify;
         margin: 1rem;
+        white-space: pre-wrap;
     }
     
     #${MAIN_PHOTO} {

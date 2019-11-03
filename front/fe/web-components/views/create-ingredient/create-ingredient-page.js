@@ -57,6 +57,10 @@ const template = `
        margin: 0.5rem; 
     }
     
+    ${TEXT_COMPONENT} {
+        --control-width: 100%;
+    }
+    
   </style>
   
   <div id='${CONTAINER}' class='flex-column'>

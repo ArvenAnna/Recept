@@ -85,7 +85,7 @@ recipe-search {
 
 create-recipe-page {
     --create-recipe-font-color: var(--dark-dark-background);
-    --control-width: 10rem;
+    --control-width: 12rem;
 
     /*for photo upload*/
     /*--image-border: 2px solid var(--dark-background);*/
@@ -94,7 +94,7 @@ create-recipe-page {
 }
 
 ingredients-page {
-    --control-width: 10rem;
+    --control-width: 12rem;
 }
 
 common-notification {

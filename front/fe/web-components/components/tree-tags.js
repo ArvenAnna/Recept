@@ -44,12 +44,12 @@ const template = `
     .${EXPAND_ICON} {
         width: 0.5rem;
         height: 0.5rem;
-        cursor: pointer;
         margin-right: 0.2rem;
      }
     
     .${ARROW_CONTAINER} {
         display: flex;
+        cursor: pointer;
         align-items: center;
         background-color: #A7A7A7;
         padding: 0.2rem;
