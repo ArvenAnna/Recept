@@ -26,16 +26,20 @@ const template = `
         padding: 0.2rem;
         box-sizing: border-box;
         min-height: 1.5rem;
+        white-space: pre-wrap;
      }
      
      #${EDIT_TEXT} {
         display: none;
+        position: relative;
      }
      
      #${ADD_ICON} {
         width: 1rem;
         height: 1rem;
         cursor: pointer;
+        position: absolute;
+        right: 0.1rem;
      }
      
      ${TEXT_COMPONENT} {
@@ -93,6 +97,8 @@ class RemovableImageWithEditableText extends WebElement {
 
         this.$_id(ADD_ICON).addEventListener('click', this._editText);
         this.$_id(TEXT).addEventListener('click', this._openEditMode);
+
+        // this.$(TEXT_COMPONENT).autoResize = true;
         // this.$(TEXT_COMPONENT).callbacks = {
         //     blur: this._closeEditMode
         // }

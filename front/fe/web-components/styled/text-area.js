@@ -19,6 +19,7 @@ const template = `
         resize: none;
         height: var(--textarea-height);
         box-shadow: var(--input-shadow);
+        overflow: hidden;
     }
     
     #${INPUT}::placeholder {
@@ -72,6 +73,10 @@ class TextArea extends WebElement {
         return this.getAttribute(inputTextAttributes.PLACEHOLDER);
     }
 
+    // set autoResize(autoresize) {
+    //     this.$autoResize = autoresize
+    // }
+
     get innerRef() {
         return this.$_id(INPUT);
     }
@@ -80,10 +85,24 @@ class TextArea extends WebElement {
         super(template, true);
 
         this._onInput = this._onInput.bind(this);
+        this._onKeyDown = this._onKeyDown.bind(this);
 
         this.$callbacks = {};
+        // this.$autoResize = false;
 
         this.$_id(INPUT).addEventListener('input', this._onInput);
+        this.$_id(INPUT).addEventListener('keydown', this._onKeyDown);
+    }
+
+    _onKeyDown() {
+        // if (!this.$autoResize) return;
+        var el = this.$_id(INPUT);
+        setTimeout(function(){
+            el.style.cssText = 'height:auto; padding:0';
+            // for box-sizing other than "content-box" use:
+            // el.style.cssText = '-moz-box-sizing:content-box';
+            el.style.cssText = 'height:' + el.scrollHeight + 'px';
+        },0);
     }
 
     _onInput({target}) {
