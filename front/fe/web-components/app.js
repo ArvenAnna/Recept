@@ -13,6 +13,7 @@ import './views/create-recipe/edit-recipe-page-renderer';
 import './views/ingredient/ingredient-page-renderer';
 import './views/create-ingredient/edit-ingredient-page-renderer';
 import './views/create-ingredient/create-ingredient-page-renderer';
+import './views/menu/recipe-menu-page-renderer';
 
 import './recipe-header';
 import './recipe-sidebar';
@@ -87,6 +88,7 @@ const template = `
             <recipe-route path="/ingredients/:id" component="ingredient-page-renderer"></recipe-route>
             <recipe-route path="/ingredients/:id/edit" component="edit-ingredient-page-renderer"></recipe-route>
             <recipe-route path="/ingredient" component="create-ingredient-page-renderer"></recipe-route>
+            <recipe-route path="/menu" component="recipe-menu-page-renderer"></recipe-route>
         </div>
         <div id="${SIDE}">
             <recipe-sidebar></recipe-sidebar>

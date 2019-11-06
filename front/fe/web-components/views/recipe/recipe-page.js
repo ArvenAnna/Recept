@@ -3,10 +3,12 @@ import WebElement from '../../abstract/web-element';
 import mModal from '../../model/modal';
 
 import '../../components/lists/tags-list';
+import '../../styled/action-button';
 import './parts/recipe-page-proportions';
 import { noImage } from '../../../constants/themes';
 import { goTo } from '../../router/utils';
 import {t} from "../../utils/translateUtils";
+import mMenu from '../../model/menu';
 
 const CONTAINER = 'recipe_page';
 const RECIPE_DETAIL_TEMPLATE = 'recipe_detail_template';
@@ -23,9 +25,11 @@ const DETAILS_PHOTO_FULL = 'recipe_page_details_photo_full';
 const DETAILS_DESCRIPTION = 'recipe_page_details_description';
 const PROPORTIONS = 'recipe-proportions';
 const REFERENCES = 'recipe-references';
+const ADD_MENU = 'add-to-menu';
 
 const LIST_COMPONENT = 'tags-list';
 const PROPORTIONS_COMPONENT = 'recipe-page-proportions';
+const BUTTON_COMPONENT = 'action-button';
 
 const template = `
   <style>
@@ -100,6 +104,16 @@ const template = `
         padding: 1rem;
     }
     
+    #${ADD_MENU} {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 7;
+        grid-row-end: 8;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 1rem;
+    }
+    
     .${DETAIL} {
        display: flex;
        flex-direction: column;
@@ -151,6 +165,7 @@ const template = `
       <img src='${noImage}' id='${MAIN_PHOTO}'/>
       <div id='${DESCRIPTION}'></div>  
       <div id='${DETAILS}'></div>
+      <div id='${ADD_MENU}'><${BUTTON_COMPONENT} text='${t('recipe.add_to_menu')}'></${BUTTON_COMPONENT}></div>
   </div>
 `;
 
@@ -173,6 +188,10 @@ class RecipePage extends WebElement {
         this._clearPage = this._clearPage.bind(this);
         this._initReferences = this._initReferences.bind(this);
         this._openFullPhoto = this._openFullPhoto.bind(this);
+
+        this.$(BUTTON_COMPONENT).onClick = () => {
+            mMenu.addRecipe(this.$recipe && this.$recipe.id);
+        }
 
         this._renderPage();
     }

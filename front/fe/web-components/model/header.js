@@ -8,6 +8,7 @@ const INGREDIENTS_ID = 2;
 const NEW_INGREDIENT_ID = 3;
 const EDIT_RECIPE_ID = 4;
 const EDIT_INGREDIENT_ID = 5;
+const MENU_ID = 6;
 
 class Header extends Model {
 
@@ -25,7 +26,9 @@ class Header extends Model {
             INGREDIENTS: { trans: mTranslations.getTranslation('common.ingredients'), id: INGREDIENTS_ID, linkFn: () =>'/ingredients', active: true },
             NEW_INGREDIENT: { trans: mTranslations.getTranslation('common.new_ingredient'), id: NEW_INGREDIENT_ID, linkFn: () =>'/ingredient', active: true },
             EDIT_RECIPE: { trans: mTranslations.getTranslation('common.edit_recipe'), id: EDIT_RECIPE_ID, linkFn: (id) => `/recipe/${id}/edit`, active: false},
-            EDIT_INGREDIENT:  { trans: mTranslations.getTranslation('common.edit_ingredient'), id: EDIT_INGREDIENT_ID, linkFn: (id) => `/ingredients/${id}/edit`, active: false}
+            EDIT_INGREDIENT:  { trans: mTranslations.getTranslation('common.edit_ingredient'), id: EDIT_INGREDIENT_ID, linkFn: (id) => `/ingredients/${id}/edit`, active: false},
+            MENU: {trans: mTranslations.getTranslation('common.menu'), id: MENU_ID, linkFn: () => `/menu`, active: true}
+
         };
 
         this.addRecipeEditButton = this.addRecipeEditButton.bind(this);
@@ -56,6 +59,7 @@ class Header extends Model {
         this.$menu.NEW_RECIPE.to = this.$menu.NEW_RECIPE.linkFn();
         this.$menu.INGREDIENTS.to = this.$menu.INGREDIENTS.linkFn();
         this.$menu.NEW_INGREDIENT.to = this.$menu.NEW_INGREDIENT.linkFn();
+        this.$menu.MENU.to = this.$menu.MENU.linkFn();
         this.notifySubscribers();
     }
 
