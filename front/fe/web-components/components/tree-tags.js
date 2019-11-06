@@ -51,9 +51,9 @@ const template = `
         display: flex;
         cursor: pointer;
         align-items: center;
-        background-color: #A7A7A7;
+        background-color: var(--tree-tags-background);
         padding: 0.2rem;
-        border: solid 2px #414141;
+        border: var(--tree-tags-border);
         border-radius: var(--theme-border-radius);
         margin-left: 0.5rem;
     }

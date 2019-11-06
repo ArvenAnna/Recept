@@ -35,7 +35,8 @@ class RecipeSidebar extends WebElement {
             this.$(MENU_COMPONENT).items = newDepartments.map(dep => ({
                 onClick: () => {
                     mRecipeSearch.searchParams = {
-                        department: dep.id
+                        department: dep.id,
+                        pageNumber: 0
                     }
                 },
                 text: dep.name

@@ -1,10 +1,13 @@
 package com.anna.recept.controller;
 
 import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.dto.RecipePage;
 import com.anna.recept.dto.SearchByKeywordRequest;
 import com.anna.recept.dto.SearchRecipeParams;
 import com.anna.recept.service.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +58,11 @@ public class MainController {
     @RequestMapping(value = {"/keyword"}, method = RequestMethod.POST)
     public List<RecipeDto> findRecipesNameByKeyword(@RequestBody @NotNull SearchByKeywordRequest request) {
         return recipeService.findRecipesNameByKeyword(request.getKeyword());
+    }
+
+    @RequestMapping(value = {"/page"}, method = RequestMethod.GET)
+    public RecipePage findRecipesBySearchParamsPaginated(SearchRecipeParams params, @NotNull final Pageable pageable) {
+        return recipeService.findRecipesByParamsPageable(params, pageable);
     }
 
 }

@@ -5,12 +5,13 @@ import com.anna.recept.entity.Recipe;
 import com.anna.recept.entity.Tag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeCriteriaRepository {
+public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeCriteriaRepository, JpaSpecificationExecutor {
 
    // @Query("select distinct room.type from Room room")
     boolean existsByNameIgnoreCase(String name);

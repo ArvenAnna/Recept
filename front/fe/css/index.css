@@ -39,6 +39,15 @@ body {
     --tag-font-size: var(--small-font-size);
     --tag-shadow: var(--inset-shadow);
 
+    /*for tree-tags*/
+    --tree-tags-background: var(--light-background);
+    --tree-tags-border: var(--main-border);
+
+    /*for page-list*/
+    --page-list-background: var(--light-background);
+    --page-list-background-active: var(--dark-background);
+    --page-list-border: var(--main-border);
+
     /*for button*/
     --button-border: var(--main-border);
     --button-background: var(--light-background);

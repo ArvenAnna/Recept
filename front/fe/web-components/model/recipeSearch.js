@@ -1,5 +1,6 @@
 import Model from '../abstract/model';
 import {goTo} from "../router/utils";
+import {PAGE_SIZE} from "../../constants/limits";
 
 class RecipeSearch extends Model {
 
@@ -12,6 +13,10 @@ class RecipeSearch extends Model {
         this.$searchString = '';
 
         this.$searchUrl = '';
+        this.$pageSize = PAGE_SIZE;
+        this.$pageNumber = 0;
+
+        this._search = this._search.bind(this);
     }
 
     get searchUrl() {
@@ -34,18 +39,26 @@ class RecipeSearch extends Model {
         return [...this.$ingredients];
     }
 
+    get page() {
+        return this.$pageNumber;
+    }
+
     set search(searchUrl) {
         // for direct opening from url
         const PARAMS = {
             VALUE: 'value',
             REFS: 'refs',
             INGREDIENTS: 'ingredients',
-            DEPARTMENT: 'departmentId'
+            DEPARTMENT: 'departmentId',
+            PAGE_SIZE: 'pageSize',
+            PAGE_NUMBER: 'pageNumber'
         }
         this.$ingredients = [];
         this.$refs = [];
         this.$department = null;
         this.$searchString = '';
+        this.$pageSize = PAGE_SIZE;
+        this.$pageNumber = 0;
 
         let search = searchUrl.startsWith('?') ? searchUrl.substr(1) : searchUrl;
 
@@ -67,34 +80,54 @@ class RecipeSearch extends Model {
                 case PARAMS.DEPARTMENT:
                     this.$department = parseInt(paramValue);
                     break;
+                case PARAMS.PAGE_SIZE:
+                    this.$pageSize = parseInt(paramValue);
+                    break;
+                case PARAMS.PAGE_NUMBER:
+                    this.$pageNumber = parseInt(paramValue);
+                    break;
             }
         });
         this.$searchUrl = searchUrl;
     }
 
-    set searchParams(params) {
-        let searchUrl = '';
-        this.$searchString = params.value;
-        this.$department = params.department;
-        this.$refs = params.refs || [];
-        this.$ingredients = params.ingredients || [];
+    set newPage(newPage) {
+        this.$pageNumber = newPage;
+        this._search();
+    }
 
-        if (params.value) {
-            searchUrl = `?search=${params.value}`;
+    set searchParams(params) {
+        this.$searchString = params.value || this.$searchString;
+        this.$department = params.department || this.$department;
+        this.$refs = params.refs || this.$refs;
+        this.$ingredients = params.ingredients || this.$ingredients;
+        this.$pageSize = params.pageSize || this.$pageSize;
+        this.$pageNumber = params.pageNumber || this.$pageNumber;
+
+        this._search();
+    }
+
+    _search() {
+        // mandatory params:
+        let searchUrl = `?page=${this.$pageNumber}&size=${this.$pageSize}`;
+
+        if (this.$searchString) {
+            searchUrl = `${searchUrl}&search=${this.$searchString}`;
         }
-        if (params.department) {
-            searchUrl = `${searchUrl ? searchUrl + '&' : '?'}departmentId=${params.department}`
+        if (this.$department) {
+            searchUrl = `${searchUrl}&departmentId=${this.$department}`
         }
-        if (params.refs && params.refs.length) {
-            params.refs.forEach(ref => {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}refs=${ref}`
+        if (this.$refs && this.$refs.length) {
+            this.$refs.forEach(ref => {
+                searchUrl = `${searchUrl}&refs=${ref}`
             });
         }
-        if (params.ingredients && params.ingredients.length) {
-            params.ingredients.forEach(ing => {
-                searchUrl = `${searchUrl ? searchUrl + '&' : '?'}ingredients=${ing}`
+        if (this.$ingredients && this.$ingredients.length) {
+            this.$ingredients.forEach(ing => {
+                searchUrl = `${searchUrl}&ingredients=${ing}`
             });
         }
+
         this.$searchUrl = searchUrl;
         goTo(`/recipes${searchUrl}`);
         this.notifySubscribers();

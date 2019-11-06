@@ -1,16 +1,26 @@
 import WebElement from '../../abstract/web-element';
 import { noImage } from '../../../constants/themes';
 import {t} from "../../utils/translateUtils";
+import '../../components/page-list';
+import mRecipeSearch from "../../model/recipeSearch";
+import mRecipeList from "../../model/recipeList";
 
 const CONTAINER = 'recipe_list_page';
 const RECIPE_TEMPLATE = 'recipe_template';
 const RECIPE = 'recipe';
 const RECIPE_NAME = 'recipe_name';
 const RECIPE_PHOTO = 'recipe_photo';
+const CONTENT = 'recipes-content';
+
+const PAGE_COMPONENT = 'page-list';
 
 const template = `
   <style>
     #${CONTAINER} {
+        padding: 1rem;
+    }
+    
+    #${CONTENT} {
        display: grid;
        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
        justify-items: center;
@@ -40,7 +50,6 @@ const template = `
         height: 200px;
         object-fit: contain;
     }
-   
     
   </style>
   
@@ -53,9 +62,12 @@ const template = `
       </recipe-link>    
   </template>
   
-  <div id='${CONTAINER}'></div>
+  <div id='${CONTAINER}'>
+    <div id='${CONTENT}'></div>
+    <${PAGE_COMPONENT}></${PAGE_COMPONENT}>
+  </div>
 `;
-// TODO: move recipe on grid to separate component
+
 class RecipesPage extends WebElement {
 
     set recipes(newRecipes) {
@@ -72,7 +84,7 @@ class RecipesPage extends WebElement {
     }
 
     _renderPage() {
-        this.$_id(CONTAINER).innerHTML = ''; // clear all content
+        this.$_id(CONTENT).innerHTML = ''; // clear all content
 
         if (this.$recipes && this.$recipes.length) {
 
@@ -90,12 +102,23 @@ class RecipesPage extends WebElement {
                     link.path = `/recipe/${recipe.id}`
                 }
 
-                this.$_id(CONTAINER).appendChild(template);
+                this.$_id(CONTENT).appendChild(template);
 
             });
 
         } else {
-            this.$_id(CONTAINER).innerHTML = t('recipe.no_recipes_found');
+            this.$_id(CONTENT).innerHTML = t('recipe.no_recipes_found');
+        }
+
+        this.$(PAGE_COMPONENT).props = {
+            pages: {
+                count: mRecipeList.totalPages,
+                currentPage: mRecipeList.currentPage
+            },
+            onClickCallback: (newPage) => {
+                mRecipeSearch.newPage = newPage;
+                this.$(PAGE_COMPONENT).currentPage = newPage;
+            }
         }
     }
 

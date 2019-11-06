@@ -1,8 +1,8 @@
 import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
-import {getResponse} from "../utils/httpUtils";
-import mNotification from "./notification";
-import mRecipeSearch from "./recipeSearch";
+import {getResponse} from '../utils/httpUtils';
+import mNotification from './notification';
+import mRecipeSearch from './recipeSearch';
 
 class RecipeList extends Model {
 
@@ -10,6 +10,7 @@ class RecipeList extends Model {
         super();
 
         this._recipes = [];
+        this._page = {};
 
         this.search = this.search.bind(this);
         this._setRecipes = this._setRecipes.bind(this);
@@ -24,9 +25,21 @@ class RecipeList extends Model {
         }))
     }
 
+    get currentPage() {
+        return this._page.currentPage;
+    }
+
+    get totalElements() {
+        return this._page.totalElements;
+    }
+
+    get totalPages() {
+        return this._page.totalPages;
+    }
+
     search() {
         const searchUrl = mRecipeSearch.searchUrl;
-        fetch(routes.SEARCH_RECIPES(searchUrl))
+        fetch(routes.SEARCH_RECIPES_PAGEABLE(searchUrl))
             .then(getResponse)
             .then(this._setRecipes)
             .catch(e => {
@@ -34,8 +47,9 @@ class RecipeList extends Model {
             });
     }
 
-    _setRecipes(newRecipes) {
-        this._recipes = newRecipes;
+    _setRecipes(recipePage) {
+        this._recipes = recipePage.recipes;
+        this._page = recipePage;
         this.notifySubscribers();
     }
 }

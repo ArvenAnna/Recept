@@ -6,12 +6,15 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
 import com.anna.recept.dto.RecipeDto;
+import com.anna.recept.dto.RecipePage;
 import com.anna.recept.dto.SearchRecipeParams;
 import com.anna.recept.entity.Recipe;
 import com.anna.recept.exception.Errors;
@@ -19,6 +22,7 @@ import com.anna.recept.exception.RecipeApplicationException;
 import com.anna.recept.repository.DepartmentRepository;
 import com.anna.recept.repository.IngredientRepository;
 import com.anna.recept.repository.RecipeRepository;
+import com.anna.recept.repository.RecipeSpecification;
 import com.anna.recept.repository.TagRepository;
 import com.anna.recept.service.IRecipeService;
 
@@ -149,5 +153,23 @@ public class RecipeService implements IRecipeService {
 	@Override
 	public List<RecipeDto> getRecipes(List<Long> ids) {
 		return recipeRep.findAllById(ids).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
+	}
+
+	@Override
+	public RecipePage findRecipesByParamsPageable(SearchRecipeParams params, Pageable pageable) {
+		Page<Recipe> page = recipeRep.findAll(new RecipeSpecification(params), pageable);
+		RecipePage recipePage = RecipePage.builder()
+				.recipes(convert(page.getContent()))
+				.totalElements(page.getTotalElements())
+				.totalPages(page.getTotalPages())
+				.currentPage(page.getNumber())
+				.pageSize(page.getSize())
+				.build();
+		return recipePage;
+	}
+
+	private List<RecipeDto> convert(List<Recipe> recipes) {
+		return recipes.stream()
+				.map(RecipeDto::withBasicFields).collect(Collectors.toList());
 	}
 }
