@@ -1,7 +1,5 @@
 import Model from '../abstract/model';
-import mTranslations from "./translations";
-import mRecipeSearch from "./recipeSearch";
-import mDepartments from "./departments";
+import {retrieveRecipesByIds} from "../utils/asyncRequests";
 
 class Menu extends Model {
 
@@ -9,16 +7,33 @@ class Menu extends Model {
         super();
 
         this.$recipes = [];
+        this.$ids = [];
 
         this.addRecipe = this.addRecipe.bind(this);
+        this.retrieve = this.retrieve.bind(this);
     }
 
     get recipes() {
-        return [...this.$recipes];
+        return [...this.$recipes.map(recipe => {
+            return {
+                id: recipe.id,
+                name: recipe.name,
+                proportions: recipe.proportions.map(p => ({
+                    norma: p.norma,
+                    ingredientId: p.ingredientId,
+                    ingredientName: p.ingredientName
+                }))
+            }
+        })];
     }
 
     addRecipe(id) {
-        this.$recipes.push(id);
+        this.$ids.push(id);
+    }
+
+    async retrieve() {
+        this.$recipes = await retrieveRecipesByIds(this.$ids);
+        this.notifySubscribers();
     }
 
 }

@@ -78,7 +78,6 @@ export class Recipe extends Model {
 
     _setRecipe(newRecipe) {
         this._recipe = newRecipe;
-        // check and fix orders of details
         this._recipe.details = this._recipe.details.sort((d1,d2) => d1.order - d2.order);
         this._recipe.details.forEach((d, i) => d.order = i + 1);
         this._recipe.proportions = this._recipe.proportions.map((p, i) => ({...p, [`${INTERNAL_ID_KEY}`]: i}));

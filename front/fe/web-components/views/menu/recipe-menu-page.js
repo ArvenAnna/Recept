@@ -1,10 +1,8 @@
 import WebElement from '../../abstract/web-element';
-// import '../../components/tree-tags';
-// import {goTo} from '../../router/utils';
 
 const CONTAINER = 'ingredients_page';
-
-// const TREE_COMPONENT = 'tree-tags';
+const NAME = 'name';
+const RECIPE_TEMPLATE = 'recipe-template';
 
 const template = `
   <style>
@@ -12,7 +10,13 @@ const template = `
         padding: 1rem;
     }
   </style>
+  
+  <template id='${RECIPE_TEMPLATE}'>
+    <div class='${NAME}'></div>
+  </template>
+  
   <div id='${CONTAINER}'>
+  
   </div>
 `;
 
@@ -30,13 +34,14 @@ class RecipeMenuPage extends WebElement {
     }
 
     _renderPage() {
+        this.$_id(CONTAINER).innerHTML = '';
         if (this.$recipes) {
-            console.log(this.$recipes)
-            // this.$(TREE_COMPONENT).props = {
-            //     items: this.$ingredients,
-            //     onClick: item => goTo(`/ingredients/${item.id}`),
-            //     renderItem: item => item.name
-            // }
+            this.$recipes.forEach(recipe => {
+                const recipeTemplate = this.getTemplateById(RECIPE_TEMPLATE);
+
+                recipeTemplate.byClass(NAME).textContent = recipe.name;
+                this.$_id(CONTAINER).appendChild(recipeTemplate);
+            });
         }
     }
 

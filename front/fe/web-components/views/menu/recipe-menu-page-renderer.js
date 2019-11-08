@@ -12,23 +12,26 @@ class RecipeMenuPageRenderer extends WebElement {
     constructor() {
         super(template);
 
-        // this._ingredientsChanged = this._ingredientsChanged.bind(this);
-        //
-        // mMenu.addSubscriber(this._ingredientsChanged);
+        this._menuChanged = this._menuChanged.bind(this);
+
+        mMenu.addSubscriber(this._menuChanged);
+        mMenu.retrieve();
 
         this.querySelector('recipe-menu-page').props = {
             recipes: mMenu.recipes
         };
     }
 
-    // _ingredientsChanged (model) {
-    //     this.querySelector('ingredients-page').ingredients = model.ingredients;
-    // }
-    //
-    //
-    // disconnectedCallback() {
-    //     mIngredients.removeSubscriber(this._ingredientsChanged);
-    // }
+    _menuChanged (model) {
+        this.querySelector('recipe-menu-page').props = {
+            recipes: mMenu.recipes
+        };
+    }
+
+
+    disconnectedCallback() {
+        mMenu.removeSubscriber(this._menuChanged);
+    }
 
 }
 
