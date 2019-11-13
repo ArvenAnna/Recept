@@ -17,15 +17,11 @@ class RecipeMenuPageRenderer extends WebElement {
         mMenu.addSubscriber(this._menuChanged);
         mMenu.retrieve();
 
-        this.querySelector('recipe-menu-page').props = {
-            recipes: mMenu.recipes
-        };
+        this.querySelector('recipe-menu-page').recipes = mMenu.recipes;
     }
 
     _menuChanged (model) {
-        this.querySelector('recipe-menu-page').props = {
-            recipes: mMenu.recipes
-        };
+        this.querySelector('recipe-menu-page').recipes = mMenu.recipes;
     }
 
 

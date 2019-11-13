@@ -33,12 +33,7 @@ class RecipeSidebar extends WebElement {
         if (newDepartments.length) {
 
             this.$(MENU_COMPONENT).items = newDepartments.map(dep => ({
-                onClick: () => {
-                    mRecipeSearch.searchParams = {
-                        department: dep.id,
-                        pageNumber: 0
-                    }
-                },
+                onClick: () => mRecipeSearch.searchByDepartment(dep.id),
                 text: dep.name
             }));
         }

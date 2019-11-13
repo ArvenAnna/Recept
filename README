@@ -21,5 +21,4 @@ Features:
 - add possibility to separate set of details
 
 Bugs:
-- search by ref is not working
-- can't search by all after searching by one department
+- textarea has no scroll in description at first time opened edit page

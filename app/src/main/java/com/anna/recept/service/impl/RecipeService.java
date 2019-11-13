@@ -151,8 +151,9 @@ public class RecipeService implements IRecipeService {
 	}
 
 	@Override
+	@Transactional
 	public List<RecipeDto> getRecipes(List<Long> ids) {
-		return recipeRep.findAllById(ids).stream().map(RecipeDto::withBasicFields).collect(Collectors.toList());
+		return recipeRep.findAllById(ids).stream().map(RecipeDto::withAllFields).collect(Collectors.toList());
 	}
 
 	@Override

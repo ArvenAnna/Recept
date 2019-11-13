@@ -46,7 +46,7 @@ public class RecipeCriteriaRepositoryImpl implements RecipeCriteriaRepository {
             Predicate containAllRefsPredicate = null;
             for (Long ref : params.getRefs()) {
                 Join<Recipe, Recipe> recipeJoin = recipe.join("refs", JoinType.INNER);
-                Predicate refPredicate = cb.equal(recipeJoin.get("id"), ref);
+                Predicate refPredicate = cb.equal(recipeJoin.get("referenceRecipe"), ref);
                 if (containAllRefsPredicate == null) {
                     containAllRefsPredicate = refPredicate;
                 } else {

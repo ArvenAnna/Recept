@@ -2,21 +2,29 @@ import Model from '../abstract/model';
 import {goTo} from "../router/utils";
 import {PAGE_SIZE} from "../../constants/limits";
 
+const DEFAULT_EMPTY_ARRAY = [];
+const DEFAULT_SEARCH_STRING = '';
+const DEFAULT_PAGE_NUMBER = 0;
+
 class RecipeSearch extends Model {
 
     constructor() {
         super();
 
-        this.$ingredients = [];
-        this.$refs = [];
+        this.$ingredients = DEFAULT_EMPTY_ARRAY;
+        this.$refs = DEFAULT_EMPTY_ARRAY;
         this.$department = null;
-        this.$searchString = '';
+        this.$searchString = DEFAULT_SEARCH_STRING;
 
-        this.$searchUrl = '';
+        this.$searchUrl = DEFAULT_SEARCH_STRING;
         this.$pageSize = PAGE_SIZE;
-        this.$pageNumber = 0;
+        this.$pageNumber = DEFAULT_PAGE_NUMBER;
 
         this._search = this._search.bind(this);
+        this.searchByDepartment = this.searchByDepartment.bind(this);
+        this._reset = this._reset.bind(this);
+        this.reset = this.reset.bind(this);
+        this.searchByParams = this.searchByParams.bind(this);
     }
 
     get searchUrl() {
@@ -96,15 +104,37 @@ class RecipeSearch extends Model {
         this._search();
     }
 
-    set searchParams(params) {
+    searchByParams(params) {
         this.$searchString = params.value || this.$searchString;
-        this.$department = params.department || this.$department;
+        // department should be reset anyway
+        this.$department = params.department;
         this.$refs = params.refs || this.$refs;
         this.$ingredients = params.ingredients || this.$ingredients;
         this.$pageSize = params.pageSize || this.$pageSize;
         this.$pageNumber = params.pageNumber || this.$pageNumber;
 
         this._search();
+    }
+
+    searchByDepartment(id) {
+        this._reset();
+        this.$department = id;
+
+        this._search();
+    }
+
+    reset() {
+        this._reset();
+        this._search();
+    }
+
+    _reset() {
+        this.$searchString = DEFAULT_SEARCH_STRING;
+        this.$department = null;
+        this.$refs = DEFAULT_EMPTY_ARRAY;
+        this.$ingredients = DEFAULT_EMPTY_ARRAY;
+        this.$pageSize = PAGE_SIZE;
+        this.$pageNumber = DEFAULT_PAGE_NUMBER;
     }
 
     _search() {

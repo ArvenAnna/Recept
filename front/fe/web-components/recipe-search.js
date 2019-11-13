@@ -91,7 +91,6 @@ class RecipeSearch extends WebElement {
         this._render = this._render.bind(this);
         this._onKeyPress = this._onKeyPress.bind(this);
         this._onApplyAdditionalSearch = this._onApplyAdditionalSearch.bind(this);
-        this._onResetAdditionalSearch = this._onResetAdditionalSearch.bind(this);
 
         mDepartments.addSubscriber(this._render);
         mDepartments.retrieve();
@@ -101,7 +100,7 @@ class RecipeSearch extends WebElement {
 
         this.$(INPUT_COMPONENT).addEventListener('keydown', this._onKeyPress);
         this.$_id(APPLY_BUTTON).addEventListener('click', this._onApplyAdditionalSearch);
-        this.$_id(RESET_BUTTON).addEventListener('click', this._onResetAdditionalSearch);
+        this.$_id(RESET_BUTTON).addEventListener('click', mRecipeSearch.reset);
 
         this._render();
     }
@@ -175,22 +174,13 @@ class RecipeSearch extends WebElement {
         }
     }
 
-    _onResetAdditionalSearch() {
-        mRecipeSearch.searchParams = {
-            value: this.$(INPUT_COMPONENT).value && this.$(INPUT_COMPONENT).value.trim(),
-            department: null,
-            refs: [],
-            ingredients: []
-        }
-    }
-
     _onApplyAdditionalSearch() {
-        mRecipeSearch.searchParams = {
+        mRecipeSearch.searchByParams ({
             value: this.$(INPUT_COMPONENT).value && this.$(INPUT_COMPONENT).value.trim(),
             department: this.$chosenDepartment && this.$chosenDepartment.id,
             refs: this.$chosenRefs.map(ref => ref.id),
             ingredients: this.$chosenIngredients.map(ing => ing.id)
-        }
+        });
     }
 
     _onKeyPress(e) {

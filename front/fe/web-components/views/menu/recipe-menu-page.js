@@ -1,8 +1,13 @@
 import WebElement from '../../abstract/web-element';
+import '../recipe/parts/recipe-page-proportions';
+import {t} from "../../utils/translateUtils";
 
 const CONTAINER = 'ingredients_page';
 const NAME = 'name';
 const RECIPE_TEMPLATE = 'recipe-template';
+const SUMMARY_TEMPLATE = 'summary-template';
+
+const PROPORTIONS_COMPONENT = 'recipe-page-proportions';
 
 const template = `
   <style>
@@ -12,7 +17,12 @@ const template = `
   </style>
   
   <template id='${RECIPE_TEMPLATE}'>
-    <div class='${NAME}'></div>
+    <recipe-link><div class='${NAME}'></div></recipe-link>
+    <${PROPORTIONS_COMPONENT}></${PROPORTIONS_COMPONENT}>
+  </template>
+  
+  <template id='${SUMMARY_TEMPLATE}'>
+  
   </template>
   
   <div id='${CONTAINER}'>
@@ -40,8 +50,16 @@ class RecipeMenuPage extends WebElement {
                 const recipeTemplate = this.getTemplateById(RECIPE_TEMPLATE);
 
                 recipeTemplate.byClass(NAME).textContent = recipe.name;
+                recipeTemplate.byTag(PROPORTIONS_COMPONENT).onConstruct = (comp) => {
+                    comp.proportions = recipe.proportions;
+                }
+                recipeTemplate.byTag('recipe-link').onConstruct = (link) => {
+                    link.path = `/recipe/${recipe.id}`
+                }
                 this.$_id(CONTAINER).appendChild(recipeTemplate);
             });
+        } else {
+            this.$_id(CONTAINER).innerHTML = t('menu.no_menu');
         }
     }
 
