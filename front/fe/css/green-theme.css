@@ -11,6 +11,16 @@
     --error-border: 1px solid var(--error-color);
     --error-shadow: 1px 1px 1px 0 var(--error-color), -1px -1px 1px 0 var(--error-color);
 
+    --success-color: #219310;
+    --success-background: #559358;
+    --success-border: 1px solid var(--success-color);
+    --success-shadow: 1px 1px 1px 0 var(--success-color), -1px -1px 1px 0 var(--success-color);
+
+    --info-color: #0C7493;
+    --info-background: #4B7B93;
+    --info-border: 1px solid var(--info-color);
+    --info-shadow: 1px 1px 1px 0 var(--info-color), -1px -1px 1px 0 var(--info-color);
+
     --main-border: 2px solid var(--dark-background);
 
     --normal-font-size: 1rem;

@@ -2,6 +2,7 @@ import routes, {getImageSmallCopy} from '../../constants/Routes';
 import Model from '../abstract/model';
 import {doJsonRequest, getResponse} from '../utils/httpUtils';
 import mNotification from "./notification";
+import {SEVERITY_TYPES} from "../common-notification";
 
 export class Ingredient extends Model {
 
@@ -54,7 +55,7 @@ export class Ingredient extends Model {
                 return parentPromise.then(parent => this._setIngredient(ing, parent))
             })
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
                 console.error(e);
             });
     }
@@ -63,7 +64,7 @@ export class Ingredient extends Model {
         return fetch(routes.GET_INGREDIENT(id))
             .then(getResponse)
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
                 console.error(e);
             })
     }

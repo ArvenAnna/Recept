@@ -4,7 +4,7 @@ import {removeIcon} from '../constants/themes';
 
 const CONTAINER = 'container';
 const INNER_CONTAINER = 'inner-container';
-const ERROR_TEXT = 'error-text';
+const CONTENT = 'content-text';
 const REMOVE_ICON = 'remove-icon';
 
 const DEFAULT_TIMEOUT = 5000;
@@ -24,8 +24,21 @@ const template = `
         align-items: center;
         margin: auto;
         padding: 0.5rem;
+    }
+    
+    .error {
         background-color: var(--notification-error-color);
         border: var(--notification-error-border);
+    }
+    
+    .info {
+        background-color: var(--notification-info-color);
+        border: var(--notification-info-border);
+    }
+    
+    .success {
+        background-color: var(--notification-success-color);
+        border: var(--notification-success-border);
     }
     
     #${REMOVE_ICON} {
@@ -46,17 +59,21 @@ const template = `
   
   <div id='${CONTAINER}' class='hidden'>
     <div id='${INNER_CONTAINER}'>
-        <div id='${ERROR_TEXT}'></div>
+        <div id='${CONTENT}'></div>
         <img src="${removeIcon}" id="${REMOVE_ICON}"/>
     </div>     
   </div>
 `;
 
-class CommonNotification extends WebElement {
+export const SEVERITY_TYPES = {
+    ERROR: 'error',
+    INFO: 'info',
+    SUCCESS: 'success'
+}
 
-    // set timeout(newTimeout) {
-    //     this.$timeout = newTimeout;
-    // }
+const DEFAULT_SEVERITY = SEVERITY_TYPES.INFO;
+
+class CommonNotification extends WebElement {
 
     constructor() {
         super(template, true);
@@ -69,7 +86,7 @@ class CommonNotification extends WebElement {
 
         mNotification.addSubscriber(this._showNotification);
 
-
+        this.$_id(INNER_CONTAINER).classList.add(DEFAULT_SEVERITY);
     }
 
     disconnectedCallback() {
@@ -87,8 +104,12 @@ class CommonNotification extends WebElement {
     }
 
     _showNotification(notification) {
+        if (notification.severity) {
+            this.$_id(INNER_CONTAINER).classList.remove(...this.$_id(INNER_CONTAINER).classList);
+            this.$_id(INNER_CONTAINER).classList.add(notification.severity);
+        }
         if (notification.message) {
-            this.$_id(ERROR_TEXT).textContent = notification.message;
+            this.$_id(CONTENT).innerHTML = notification.message;
             this.$_id(CONTAINER).classList.remove('hidden');
             this.$timeoutId = setTimeout(() => {
                 this.$_id(CONTAINER).classList.add('hidden');

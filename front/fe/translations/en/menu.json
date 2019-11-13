@@ -1,3 +1,5 @@
 {
-  "no_menu": "No recipes in menu"
+  "no_menu": "No recipes in menu",
+  "added_to_menu": "Recipe has been added to menu",
+  "already_in_menu": "Recipe is already in menu"
 }

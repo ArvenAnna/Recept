@@ -2,6 +2,7 @@ import Model from '../abstract/model';
 import mNotification from "./notification";
 import routes from "../../constants/Routes";
 import {getResponse} from "../utils/httpUtils";
+import {SEVERITY_TYPES} from "../common-notification";
 
 export const SUPPORTED_LANGUAGES = {
     RU: 'ru',
@@ -66,7 +67,7 @@ class Translations extends Model {
                 this.$bundlePromises[`${bundle}`] = null;
             })
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
                 this.$bundlePromises[`${bundle}`] = null;
             });
         return await this.$bundlePromises[`${bundle}`];

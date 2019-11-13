@@ -3,6 +3,7 @@ import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
 import {INTERNAL_ID_KEY} from '../../constants/common';
+import {SEVERITY_TYPES} from "../common-notification";
 
 export class Recipe extends Model {
 
@@ -72,7 +73,7 @@ export class Recipe extends Model {
             .then(getResponse)
             .then(this._setRecipe)
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
             });
     }
 

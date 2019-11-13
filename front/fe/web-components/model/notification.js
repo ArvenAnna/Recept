@@ -13,10 +13,26 @@ class Notification extends Model {
         return this.$message;
     }
 
+    get severity() {
+        return this.$severity;
+    }
+
+    showMessage(newMessage, newSeverity) {
+        this.$message = newMessage;
+        this.$severity = newSeverity;
+        if (this.$message) {
+            this.notifySubscribers();
+        }
+    }
+
+
     constructor() {
         super();
 
-        this._message = null;
+        this.$message = null;
+        this.$severity = null;
+
+        this.showMessage = this.showMessage.bind(this);
     }
 }
 

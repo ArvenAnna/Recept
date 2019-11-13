@@ -1,5 +1,6 @@
 import mSpinner from '../model/spinner';
 import mNotification from '../model/notification';
+import {SEVERITY_TYPES} from "../common-notification";
 
 export const getResponse = (response) => {
     if (!response.ok) {
@@ -15,7 +16,7 @@ export const processResponse = (promise) => {
     return promise
         .then(getResponse)
         .catch(e => {
-            mNotification.message = e.message;
+            mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
             console.error(e);
         })
         .finally(() => mSpinner.loading = false);

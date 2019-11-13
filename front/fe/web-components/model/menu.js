@@ -27,6 +27,10 @@ class Menu extends Model {
         })];
     }
 
+    get ids() {
+        return [...this.$ids];
+    }
+
     addRecipe(id) {
         this.$ids.push(id);
     }

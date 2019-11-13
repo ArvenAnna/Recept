@@ -1,6 +1,7 @@
 import mNotification from '../model/notification';
 import routes from '../../constants/Routes';
 import {getResponse} from './httpUtils';
+import {SEVERITY_TYPES} from "../common-notification";
 
 export const retrieveRecipesByKeyword = async (keyword) => {
     return await fetch(routes.GET_RECIPES_BY_KEYWORD, {method: 'POST',
@@ -10,7 +11,7 @@ export const retrieveRecipesByKeyword = async (keyword) => {
         body: JSON.stringify({keyword})})
         .then(getResponse)
         .catch(e => {
-            mNotification.message = e.message;
+            mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
         });
 }
 
@@ -22,7 +23,7 @@ export const retrieveIngredientsByKeyword = async (keyword) => {
         body: JSON.stringify({keyword})})
         .then(getResponse)
         .catch(e => {
-            mNotification.message = e.message;
+            mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
         });
 }
 
@@ -34,7 +35,7 @@ export const retrieveRecipesByIds = async (ids) => {
         body: JSON.stringify(ids)})
         .then(getResponse)
         .catch(e => {
-            mNotification.message = e.message;
+            mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
         });
 }
 
@@ -46,6 +47,6 @@ export const retrieveIngredientsByIds = async (ids) => {
         body: JSON.stringify(ids)})
         .then(getResponse)
         .catch(e => {
-            mNotification.message = e.message;
+            mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
         });
 }

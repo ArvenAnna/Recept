@@ -2,6 +2,7 @@ import routes from '../../constants/Routes';
 import Model from '../abstract/model';
 import {getResponse} from "../utils/httpUtils";
 import mNotification from "./notification";
+import {SEVERITY_TYPES} from "../common-notification";
 
 class Ingredients extends Model {
 
@@ -46,7 +47,7 @@ class Ingredients extends Model {
             .then(getResponse)
             .then(newIngredients => this._setIngredients(newIngredients))
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
                 console.error(e);
             });
     }

@@ -109,6 +109,10 @@ ingredients-page {
 common-notification {
     --notification-error-border: var(--error-border);
     --notification-error-color: var(--error-background);
+    --notification-success-border: var(--success-border);
+    --notification-success-color: var(--success-background);
+    --notification-info-border: var(--info-border);
+    --notification-info-color: var(--info-background);
 }
 
 modal-window {

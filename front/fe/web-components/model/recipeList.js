@@ -3,6 +3,7 @@ import Model from '../abstract/model';
 import {getResponse} from '../utils/httpUtils';
 import mNotification from './notification';
 import mRecipeSearch from './recipeSearch';
+import {SEVERITY_TYPES} from "../common-notification";
 
 class RecipeList extends Model {
 
@@ -43,7 +44,7 @@ class RecipeList extends Model {
             .then(getResponse)
             .then(this._setRecipes)
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
             });
     }
 

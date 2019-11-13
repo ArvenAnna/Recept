@@ -27,6 +27,7 @@ class RecipeHeader extends WebElement {
     constructor() {
         super(template, true);
         this._renderHeader = this._renderHeader.bind(this);
+        this._getNameWithCount = this._getNameWithCount.bind(this);
 
         this._renderHeader();
 
@@ -35,8 +36,12 @@ class RecipeHeader extends WebElement {
 
     _renderHeader() {
         if (mHeader.buttons) {
-            this.$(MENU_COMPONENT).items = mHeader.buttons.map(({to, name}) => ({link: to, text: name}));
+            this.$(MENU_COMPONENT).items = mHeader.buttons.map(({to, name, count}) => ({link: to, text: this._getNameWithCount(name, count)}));
         }
+    }
+
+    _getNameWithCount(name, count) {
+        return count == null ? name : `<style>.counter{color:var(--light-background);}</style>${name} <span class='counter'>${count}</span>`;
     }
 
     disconnectedCallback() {

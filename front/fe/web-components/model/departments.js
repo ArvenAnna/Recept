@@ -2,6 +2,7 @@ import routes from '../../constants/Routes';
 import Model from '../abstract/model';
 import {getResponse} from '../utils/httpUtils';
 import mNotification from './notification';
+import {SEVERITY_TYPES} from "../common-notification";
 
 class Departments extends Model {
 
@@ -22,7 +23,7 @@ class Departments extends Model {
             .then(getResponse)
             .then(newDepartments => this._setDepartments(newDepartments))
             .catch(e => {
-                mNotification.message = e.message;
+                mNotification.showMessage(e.message, SEVERITY_TYPES.ERROR);
             });
     }
 

@@ -1,6 +1,9 @@
 import WebElement from '../../abstract/web-element';
 
 import mModal from '../../model/modal';
+import mHeader from '../../model/header';
+import mMenu from '../../model/menu';
+import mNotification from '../../model/notification';
 
 import '../../components/lists/tags-list';
 import '../../styled/action-button';
@@ -8,7 +11,7 @@ import './parts/recipe-page-proportions';
 import { noImage } from '../../../constants/themes';
 import { goTo } from '../../router/utils';
 import {t} from "../../utils/translateUtils";
-import mMenu from '../../model/menu';
+import {SEVERITY_TYPES} from "../../common-notification";
 
 const CONTAINER = 'recipe_page';
 const RECIPE_DETAIL_TEMPLATE = 'recipe_detail_template';
@@ -190,7 +193,13 @@ class RecipePage extends WebElement {
         this._openFullPhoto = this._openFullPhoto.bind(this);
 
         this.$(BUTTON_COMPONENT).onClick = () => {
-            mMenu.addRecipe(this.$recipe && this.$recipe.id);
+            if (!mMenu.ids.includes(this.$recipe.id)) {
+                mMenu.addRecipe(this.$recipe && this.$recipe.id);
+                mHeader.addRecipeToMenu();
+                mNotification.showMessage(t('menu.added_to_menu'), SEVERITY_TYPES.SUCCESS);
+            } else {
+                mNotification.showMessage(t('menu.already_in_menu'), SEVERITY_TYPES.INFO);
+            }
         }
 
         this._renderPage();

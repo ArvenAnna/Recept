@@ -11,11 +11,17 @@ const MENU_ID = 6;
 class Header extends Model {
 
     get buttons() {
-        return Object.values(this.$menu).filter(button => button.active).map(button => ({name: button.name, to: button.to}));
+        return Object.values(this.$menu).filter(button => button.active).map(button => ({
+            name: button.name,
+            to: button.to,
+            count: button.id == MENU_ID ? this.$recipeInMenu : null
+        }));
     }
 
     constructor() {
         super();
+
+        this.$recipeInMenu = 0;
 
         this.$menu = {
             NEW_RECIPE: { trans: () => mTranslations.getTranslation('common.new_recipe'), id: NEW_RECIPE_ID, linkFn: () => '/recipe', active: true },
@@ -24,7 +30,6 @@ class Header extends Model {
             EDIT_RECIPE: { trans: () => mTranslations.getTranslation('common.edit_recipe'), id: EDIT_RECIPE_ID, linkFn: (id) => `/recipe/${id}/edit`, active: false},
             EDIT_INGREDIENT:  { trans: () => mTranslations.getTranslation('common.edit_ingredient'), id: EDIT_INGREDIENT_ID, linkFn: (id) => `/ingredients/${id}/edit`, active: false},
             MENU: {trans: () => mTranslations.getTranslation('common.menu'), id: MENU_ID, linkFn: () => `/menu`, active: true}
-
         };
 
         this.addRecipeEditButton = this.addRecipeEditButton.bind(this);
@@ -33,6 +38,9 @@ class Header extends Model {
         this.removeIngredientEditButton = this.removeIngredientEditButton.bind(this);
         this._initButtons = this._initButtons.bind(this);
         this._setTranslations = this._setTranslations.bind(this);
+
+        this.addRecipeToMenu = this.addRecipeToMenu.bind(this);
+        this.removeRecipeFromMenu = this.removeRecipeFromMenu.bind(this);
 
         mTranslations.addSubscriber(this._setTranslations);
 
@@ -81,6 +89,16 @@ class Header extends Model {
 
     disconnectedCallback() {
         mTranslations.removeSubscriber(this._setTranslations);
+    }
+
+    addRecipeToMenu() {
+        this.$recipeInMenu++;
+        this.notifySubscribers();
+    }
+
+    removeRecipeFromMenu() {
+        this.$recipeInMenu--;
+        this.notifySubscribers();
     }
 }
 
