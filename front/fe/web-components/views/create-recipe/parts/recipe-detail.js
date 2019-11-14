@@ -41,6 +41,11 @@ const template = `
 
     ${TEXT_COMPONENT} {
         --control-width: 100%;
+        flex-grow: 1;
+    }
+    
+    ${STEPS_COMPONENT} {
+        width: 100%;
     }
    
   </style>

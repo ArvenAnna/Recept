@@ -17,8 +17,4 @@ To start application you need:
     drop database recipe
 
 Features:
-- add possibility to get menu made by ingredients (with separate list of always present ingredients)
 - add possibility to separate set of details
-
-Bugs:
-- textarea has no scroll in description at first time opened edit page
