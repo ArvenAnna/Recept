@@ -67,7 +67,7 @@ const template = `
         </div>
      </div>
      <div id='${BUTTON_CONTAINER}'>
-            <${BUTTON_COMPONENT} text=${t('common.save')}></${BUTTON_COMPONENT}>
+            <${BUTTON_COMPONENT} text='${t('common.save')}'></${BUTTON_COMPONENT}>
       </div>
   </div>
   
