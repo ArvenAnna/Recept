@@ -27,6 +27,7 @@ public class RecipeRef extends BaseRecipeProportion {
 		RecipeRef ref = new RecipeRef();
 		ref.setId(dto.getId());
 		ref.setNorma(dto.getNorma());
+		ref.setOptional(dto.isOptional());
 
 		Recipe recipe = new Recipe();
 		recipe.setId(dto.getRecipeId());

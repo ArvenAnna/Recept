@@ -114,11 +114,20 @@ class RecipeReferences extends WebElement {
                     comp.props = {
                         ref,
                         recipe: this.$recipe,
-                        saveCallback: () => this.$(LIST_COMPONENT).items = this.$recipe.refs
+                        saveCallback: () => {
+                            this.$(LIST_COMPONENT).items = this.$recipe.refs;
+                        }
                     }
                 }
                 mModal.open(editTemplate);
             },
+            renderTooltip: prop => {
+                let tooltipContent = '';
+                if (prop.optional) {
+                    tooltipContent = `${tooltipContent}${t('create-recipe.optional_proportion')}`;
+                }
+                return tooltipContent;
+            }
         }
     }
 

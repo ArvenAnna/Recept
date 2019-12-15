@@ -215,7 +215,14 @@ class RecipePage extends WebElement {
         this.$_id(REFERENCES).querySelector(LIST_COMPONENT).props = {
             items: this.$recipe.refs,
             clickItemCallback: ref => goTo(`/recipe/${ref.recipeId}`),
-            renderItem: (item) => `${item.recipeName} ${item.norma ? '-' : ''} ${item.norma || ''}`
+            renderItem: (item) => `${item.recipeName} ${item.norma ? '-' : ''} ${item.norma || ''}`,
+            renderTooltip: prop => {
+                let tooltipContent = ''
+                if (prop.optional) {
+                    tooltipContent = `${tooltipContent}${t('create-recipe.optional_proportion')}`;
+                }
+                return tooltipContent;
+            }
         }
     }
 
