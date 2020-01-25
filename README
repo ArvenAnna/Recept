@@ -8,7 +8,7 @@ To start application you need:
    \c recept
    \i /docker-entrypoint-initdb.d/recept_plain.sql
 4. Run docker-compose down && docker-compose up
-5. To make dump use inside postgres container
+5. To make dump use inside postgres container (docker exec -ti recept_db /bin/bash)
     pg_dump -U postgres recept > docker-entrypoint-initdb.d/recept_plain.sql
 
 6. Useful actions with db using psql
